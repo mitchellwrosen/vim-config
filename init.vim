@@ -245,9 +245,9 @@ nnoremap <silent> <Space>s m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``
 nnoremap <silent> <Space>S m`:silent w !repld-send<CR>``
 vnoremap <silent> <Space>s m`<Esc>:silent '<,'>w !repld-send<CR>``
 
-" command! -complete=shellcmd -nargs=1 Fg lua require'init'.run_floating(<args>)
-" nnoremap <silent> <Space>rg :Fg lazygit<CR>
-nnoremap <silent> <Space>rg :lua require'init'.run_floating('lazygit')<CR>
+command! -complete=shellcmd -nargs=1 Fg lua require'init'.run_floating(<f-args>)
+nnoremap <silent> <Space>rg :Fg lazygit<CR>
+nnoremap <silent> <Space>rt :Fg htop<CR>
 
 " <C-v> to paste from * register
 inoremap <C-v> <C-r>*

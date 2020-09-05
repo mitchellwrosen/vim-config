@@ -1,5 +1,5 @@
-local nvim_lsp = require'nvim_lsp'
 local configs = require'nvim_lsp/configs'
+local nvim_lsp = require'nvim_lsp'
 
 configs.ghcide = {
   default_config = {
@@ -10,5 +10,5 @@ configs.ghcide = {
   };
 };
 
-nvim_lsp.ghcide.setup{}
-nvim_lsp.vimls.setup{}
+nvim_lsp.ghcide.setup {}
+nvim_lsp.vimls.setup {}

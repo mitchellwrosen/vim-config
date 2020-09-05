@@ -13,7 +13,6 @@ Plug 'mcchrish/nnn.vim'                                " File browser thingy, ki
 Plug 'mengelbrecht/lightline-bufferline'               "
 Plug 'mhinz/vim-startify'                              " Startup screen
 Plug 'morhetz/gruvbox'                                 " best color scheme
-" Plug 'neoclide/coc.nvim', { 'branch': 'release' }                   "
 Plug 'neovim/nvim-lsp'
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' } "
 Plug 'psliwka/vim-smoothie'                            " Smooth paging up and down
@@ -681,7 +680,8 @@ nnoremap <silent> <Space>lin :lua vim.lsp.buf.incoming_calls()<CR>
 nnoremap <silent> <Space>lo :lua vim.lsp.buf.outgoing_calls()<CR>
 nnoremap <silent> <Space>lref :lua vim.lsp.buf.references()<CR>
 nnoremap <silent> <Space>lren :lua vim.lsp.buf.rename()<CR>
-nnoremap <silent> <Space>ls :lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> <Space>lsh :lua vim.lsp.util.show_line_diagnostics()<CR>
+nnoremap <silent> <Space>lsi :lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> <Space>lt :lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> <Space>lw :lua vim.lsp.buf.workspace_symbol()<CR>
 

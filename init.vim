@@ -44,8 +44,6 @@ Plug 'unblevable/quick-scope'                          " Highlight characters fo
 
 call plug#end() " Automatically calls syntax on, filetype plugin indent on
 
-lua require('init')
-
 augroup mitchellwrosen
   autocmd!
 augroup END
@@ -92,6 +90,8 @@ set undofile                         " persist undo history across buffer exits
 set updatetime=100                   " fire CursorHold after 100ms (default 4000ms)
 set wildmenu                         " complete commands with a little menu
 set wildmode=list:longest,full       " wild menu completion behavior
+
+lua require('init')
 
 " ==============================================================================
 " Key mappings
@@ -670,7 +670,6 @@ let g:multi_cursor_quit_key = '<Esc>'
 " endfunction
 
 " [neovim/nvim-lspconfig]
-
 nnoremap <silent> <Space>lcl :lua vim.lsp.buf.clear_references()<CR>
 nnoremap <silent> <Space>lco :lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> <Space>ldec :lua vim.lsp.buf.declaration()<CR>
@@ -685,6 +684,11 @@ nnoremap <silent> <Space>lren :lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> <Space>ls :lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> <Space>lt :lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> <Space>lw :lua vim.lsp.buf.workspace_symbol()<CR>
+
+sign define LspDiagnosticsErrorSign text=✗ texthl=LspDiagnosticsError linehl= numhl=
+sign define LspDiagnosticsWarningSign text=⚠ texthl=LspDiagnosticsWarning linehl= numhl=
+sign define LspDiagnosticsInformationSign text=ⓘ texthl=LspDiagnosticsInformation linehl= numhl=
+sign define LspDiagnosticsHintSign text=H texthl=LspDiagnosticsHint linehl= numhl=
 
 " [neovimhaskell/haskell-vim]
 let g:haskell_indent_disable = 1

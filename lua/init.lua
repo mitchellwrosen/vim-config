@@ -9,4 +9,6 @@ configs.ghcide = {
     settings = {};
   };
 };
+
 nvim_lsp.ghcide.setup{}
+nvim_lsp.vimls.setup{}

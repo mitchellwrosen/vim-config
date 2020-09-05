@@ -87,7 +87,7 @@ set termguicolors                    "
 set title                            " put filename in window title
 set timeoutlen=200                   " only wait this many ms for key sequence to complete
 set undofile                         " persist undo history across buffer exits
-set updatetime=100                   " fire CursorHold after 100ms (default 4000ms)
+" set updatetime=100                 " fire CursorHold after 100ms (default 4000ms)
 set wildmenu                         " complete commands with a little menu
 set wildmode=list:longest,full       " wild menu completion behavior
 
@@ -685,10 +685,12 @@ nnoremap <silent> <Space>ls :lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> <Space>lt :lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> <Space>lw :lua vim.lsp.buf.workspace_symbol()<CR>
 
+" autocmd mitchellwrosen Filetype haskell autocmd CursorHold <buffer> lua vim.lsp.buf.hover()
+
 sign define LspDiagnosticsErrorSign text=✗ texthl=LspDiagnosticsError linehl= numhl=
 sign define LspDiagnosticsWarningSign text=⚠ texthl=LspDiagnosticsWarning linehl= numhl=
-sign define LspDiagnosticsInformationSign text=ⓘ texthl=LspDiagnosticsInformation linehl= numhl=
-sign define LspDiagnosticsHintSign text=H texthl=LspDiagnosticsHint linehl= numhl=
+sign define LspDiagnosticsInformationSign text=ℹ texthl=LspDiagnosticsInformation linehl= numhl=
+sign define LspDiagnosticsHintSign text=➤ texthl=LspDiagnosticsHint linehl= numhl=
 
 " [neovimhaskell/haskell-vim]
 let g:haskell_indent_disable = 1
@@ -779,6 +781,8 @@ nmap xw <Plug>(Exchange)e
 nmap xW <Plug>(Exchange)E
 " xx to exchange-yank the whole line (and return cursor to where it was)
 nmap xx m`<Plug>(ExchangeLine)``
+" X to exchange-yank the rest of the line
+nmap X <Plug>(Exchange)$
 " xc to clear the exchange
 nmap xc <Plug>(ExchangeClear)
 vmap x <Plug>(Exchange)

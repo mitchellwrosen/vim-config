@@ -9,7 +9,6 @@ Plug 'godlygeek/tabular'                               " Align on words
 Plug 'itchyny/lightline.vim'                           "
 Plug 'junegunn/fzf.vim'                                " Fuzzy search source code, files, etc
 Plug 'liuchengxu/vim-which-key'                        " thingy to tell me my own hotkeys (requires manual work)
-Plug 'mcchrish/nnn.vim'                                " File browser thingy, kinda sucks, what's better?
 Plug 'mengelbrecht/lightline-bufferline'               "
 Plug 'mhinz/vim-startify'                              " Startup screen
 Plug 'morhetz/gruvbox'                                 " best color scheme
@@ -245,6 +244,10 @@ nnoremap <silent> <C-k> :bp<CR>
 nnoremap <silent> <Space>s m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``
 nnoremap <silent> <Space>S m`:silent w !repld-send<CR>``
 vnoremap <silent> <Space>s m`<Esc>:silent '<,'>w !repld-send<CR>``
+
+" command! -complete=shellcmd -nargs=1 Fg lua require'init'.run_floating(<args>)
+" nnoremap <silent> <Space>rg :Fg lazygit<CR>
+nnoremap <silent> <Space>rg :lua require'init'.run_floating('lazygit')<CR>
 
 " <C-v> to paste from * register
 inoremap <C-v> <C-r>*
@@ -623,11 +626,6 @@ nnoremap <silent> <Space> :WhichKey '<Space>'<CR>
 vnoremap <silent> <Space> :WhichKeyVisual '<Space>'<CR>
 nnoremap <silent> ? :WhichKey '?'<CR>
 
-" [mcchrish/nnn.vim]
-let g:nnn#set_default_mappings = 0
-let g:nnn#command = 'nnn -c -n'
-let g:nnn#layout = { 'window': { 'height': 0.9, 'width': 0.5, 'xoffset': 0.99 }}
-
 " [mengelbrecht/lightline-bufferline]
 let g:lightline#bufferline#modified = '+'
 
@@ -711,9 +709,6 @@ let g:haskell_enable_typeroles = 1
 let g:ormolu_disable = 1
 
 autocmd mitchellwrosen FileType haskell nnoremap <buffer> <silent> <Space>p :call RunOrmolu()<CR>
-
-" [mcchrish/nnn.vim]
-nnoremap <silent> <Space>n :NnnPicker<CR>
 
 " [mhinz/signify]
 let g:signify_sign_change = 'Δ'

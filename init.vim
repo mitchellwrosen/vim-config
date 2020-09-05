@@ -44,6 +44,8 @@ Plug 'unblevable/quick-scope'                          " Highlight characters fo
 
 call plug#end() " Automatically calls syntax on, filetype plugin indent on
 
+lua require('init')
+
 augroup mitchellwrosen
   autocmd!
 augroup END
@@ -283,20 +285,6 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 inoremap <C-u> <Nop>
 
-lua <<EOF
-local nvim_lsp = require'nvim_lsp'
-local configs = require'nvim_lsp/configs'
-configs.ghcide = {
-  default_config = {
-    cmd = { 'ghcide-wrapper', '--lsp' };
-    filetypes = { 'haskell' };
-    root_dir = nvim_lsp.util.root_pattern(".git", "cabal.project", "stack.yaml");
-    settings = {};
-  };
-};
-nvim_lsp.ghcide.setup{}
-EOF
-
 function! s:getSelectedText() abort
   let [l:lnum1, l:col1] = getpos("'<")[1:2]
   let [l:lnum2, l:col2] = getpos("'>")[1:2]
@@ -334,7 +322,7 @@ function! s:mitchell_term_opts.on_exit(jobid, data, event) abort
   let s:mitchell_term_jobid = v:null
 endfunction
 
-function! MitchellTerm()
+function! MitchellTerm() abort
   " We're in the terminal, so toggling it would require knowing some other
   " window to jump to. Too much work.
   if nvim_get_current_buf() ==# s:mitchell_term_bufid

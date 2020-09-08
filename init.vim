@@ -1,5 +1,6 @@
 " TODO
 " figure out why vim-cool + fzf is broken in neovim
+" switch to vim-packager?
 
 call plug#begin(stdpath('data') . '/plugged')
 
@@ -14,6 +15,7 @@ Plug 'morhetz/gruvbox'                                    " best color scheme
 Plug 'neovim/nvim-lsp'                                    "
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }    "
 Plug 'nvim-lua/completion-nvim'                           "
+Plug 'nvim-lua/lsp-status.nvim'                           "
 Plug 'psliwka/vim-smoothie'                               " Smooth paging up and down
 Plug 'rhysd/git-messenger.vim'                            " git blame the line under the cursor
 Plug 'romainl/vim-cool'                                   " Automatically unhighlight when cursor moves
@@ -553,16 +555,21 @@ function! LightlineFilename()
   return filename . modified
 endfunction
 
+function! LightlineLspStatus() abort
+  return luaeval("require('init').lightline_status()")
+endfunction
+
 let g:lightline = {}
 let g:lightline.active = {}
 let g:lightline.active.left = [ [ 'mode', 'paste' ], [ 'branch' ] ]
-let g:lightline.active.right = [ [ 'lineinfo' ], [ 'percent' ], [ 'filetype' ] ]
+let g:lightline.active.right = [ [ 'lineinfo' ], [ 'percent' ], [ 'filetype' ], [ 'lsp' ] ]
 let g:lightline.colorscheme = 'gruvbox'
 let g:lightline.component_expand = {}
 let g:lightline.component_expand.buffers = 'lightline#bufferline#buffers'
 let g:lightline.component_function = {}
 let g:lightline.component_function.branch = 'FugitiveHead'
 let g:lightline.component_function.filename = 'LightlineFilename'
+let g:lightline.component_function.lsp = 'LightlineLspStatus'
 let g:lightline.component_type = {}
 let g:lightline.component_type.buffers = 'tabsel'
 let g:lightline.mode_map = {

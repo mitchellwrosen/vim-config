@@ -1,19 +1,38 @@
 local completion = require('completion')
 local configs = require('nvim_lsp/configs')
-local nvim_lsp = require('nvim_lsp')
+local lsp = require('nvim_lsp')
+local status = require('lsp-status')
+
+-- Uh, just kind of following https://github.com/nvim-lua/lsp-status.nvim here...
+status.register_progress()
 
 configs.ghcide = {
   default_config = {
     cmd = { 'ghcide-wrapper', '--lsp' };
     filetypes = { 'haskell' };
-    root_dir = nvim_lsp.util.root_pattern(".git", "cabal.project", "stack.yaml");
+    root_dir = lsp.util.root_pattern(".git", "cabal.project", "stack.yaml");
     settings = {};
   };
 };
 
-nvim_lsp.ghcide.setup { on_attach = completion.on_attach }
-nvim_lsp.sumneko_lua.setup { on_attach = completion.on_attach }
-nvim_lsp.vimls.setup { on_attach = completion.on_attach }
+local capabilities = function(config)
+  return vim.tbl_extend('keep', config.capabilities or {}, status.capabilities)
+end
+local on_attach = function(client)
+  status.on_attach(client)
+  completion.on_attach(client)
+end
+lsp.ghcide.setup { capabilities = capabilities(lsp.ghcide), on_attach = on_attach }
+lsp.sumneko_lua.setup { capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach }
+lsp.vimls.setup { capabilities = capabilities(lsp.vimls), on_attach = on_attach }
+
+local function lightline_status()
+  if #vim.lsp.buf_get_clients() > 0 then
+    return status.status()
+  else
+    return ''
+  end
+end
 
 -- Run the given command in a centered floating terminal.
 local function run_floating(command)
@@ -48,4 +67,4 @@ local function run_floating(command)
   return win
 end
 
-return { run_floating = run_floating }
+return { lightline_status = lightline_status, run_floating = run_floating }

@@ -3,30 +3,32 @@
 
 call plug#begin(stdpath('data') . '/plugged')
 
-Plug 'RRethy/vim-illuminate'                           " Highlight occurrences of the word under the cursor
-Plug 'Yggdroot/indentLine'                             " show markers every 2 columns of leading whitespace
-Plug 'godlygeek/tabular'                               " Align on words
-Plug 'itchyny/lightline.vim'                           "
-Plug 'junegunn/fzf.vim'                                " Fuzzy search source code, files, etc
-Plug 'liuchengxu/vim-which-key'                        " thingy to tell me my own hotkeys (requires manual work)
-Plug 'mengelbrecht/lightline-bufferline'               "
-Plug 'mhinz/vim-startify'                              " Startup screen
-Plug 'morhetz/gruvbox'                                 " best color scheme
-Plug 'neovim/nvim-lsp'
-Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' } "
-Plug 'psliwka/vim-smoothie'                            " Smooth paging up and down
-Plug 'rhysd/git-messenger.vim'                         " git blame the line under the cursor
-Plug 'romainl/vim-cool'                                " Automatically unhighlight when cursor moves
-Plug 'romainl/vim-qf'                                  " Vim quickfix improvements
-Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }         "
-Plug 'terryma/vim-multiple-cursors'                    " Multiple cursors for quick and dirty renaming
-Plug 'tommcdo/vim-exchange'                            " Swap the location of two selections
-Plug 'tpope/vim-characterize'                          " Improved 'ga'
-Plug 'tpope/vim-commentary'                            " Quick (un-)commenting
-Plug 'tpope/vim-fugitive'                              "
-Plug 'tpope/vim-repeat'                                " Make '.' repeat more things out of the box
-Plug 'tpope/vim-surround'                              " Some surround helpers
-Plug 'unblevable/quick-scope'                          " Highlight characters for f, F, t, T
+Plug 'Yggdroot/indentLine'                                " show markers every 2 columns of leading whitespace
+Plug 'godlygeek/tabular'                                  " Align on words
+Plug 'itchyny/lightline.vim'                              "
+Plug 'junegunn/fzf.vim'                                   " Fuzzy search source code, files, etc
+Plug 'liuchengxu/vim-which-key'                           " thingy to tell me my own hotkeys (requires manual work)
+Plug 'mengelbrecht/lightline-bufferline'                  "
+Plug 'mhinz/vim-startify'                                 " Startup screen
+Plug 'morhetz/gruvbox'                                    " best color scheme
+Plug 'neovim/nvim-lsp'                                    "
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }    "
+Plug 'nvim-lua/completion-nvim'                           "
+Plug 'psliwka/vim-smoothie'                               " Smooth paging up and down
+Plug 'rhysd/git-messenger.vim'                            " git blame the line under the cursor
+Plug 'romainl/vim-cool'                                   " Automatically unhighlight when cursor moves
+Plug 'romainl/vim-qf'                                     " Vim quickfix improvements
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' } " show colored pips by #abcdef things
+Plug 'rrethy/vim-illuminate'                              " Highlight occurrences of the word under the cursor
+Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }            "
+Plug 'terryma/vim-multiple-cursors'                       " Multiple cursors for quick and dirty renaming
+Plug 'tommcdo/vim-exchange'                               " Swap the location of two selections
+Plug 'tpope/vim-characterize'                             " Improved 'ga'
+Plug 'tpope/vim-commentary'                               " Quick (un-)commenting
+Plug 'tpope/vim-fugitive'                                 "
+Plug 'tpope/vim-repeat'                                   " Make '.' repeat more things out of the box
+Plug 'tpope/vim-surround'                                 " Some surround helpers
+Plug 'unblevable/quick-scope'                             " Highlight characters for f, F, t, T
 
 " Plug 'ElmCast/elm-vim', { 'for': 'elm' }
 " Plug 'LnL7/vim-nix', { 'for': 'nix' }
@@ -53,41 +55,42 @@ augroup END
 colo gruvbox
 
 set autowriteall
-set clipboard=unnamed,unnamedplus    " yank also copies to both clipboards
-set cursorline                       " higlight the current line
-set expandtab                        " convert tabs to spaces
-set grepprg=rg\ --vimgrep            " use rg to grep
-set hidden                           " don't abandon out-of-sight buffers
-set ignorecase                       " case-insensitive searching
-set inccommand=split                 " show live command substitutions
-set lazyredraw                       " don't draw during e.g. applying a macro
-set linebreak                        " wrap lines in a more visually pleasing way
-set listchars=tab:>\ ,trail:·,nbsp:+ " trailing whitespace markers
-set list                             " show trailing whitespace, tabs, etc.
-set nofoldenable                     " never fold
-set nojoinspaces                     " insert one space after ., ?, ! chars when joining
-set nomodeline                       " disable modelines
-set noshowmode                       " don't show mode, since lightline handle that
-set nostartofline                    " don't jump cursor to start of line when moving
-set number                           " show line number gutter
-set report=0                         " always repeat the number of lines changed
-set scrolloff=10                     " start scrolling before the cursor reaches the edge
-set shiftround                       " shift to multiple of shiftwidth
-set shiftwidth=2                     "
-set sidescrolloff=16                 " start scrolling before the cursor reaches the edge
-set signcolumn=yes                   " always draw signcolumn because it's jarring when it appears otherwise
-set smartcase                        " don't ignore case if search contains uppercase char
-set smartindent                      " smart autoindenting when starting a new line
-set synmaxcol=180                    " dont bother syntax-highlighting past this column
-set showtabline=2                    " always show the tabline
-set softtabstop=2                    " tab key makes 2 spaces
-set termguicolors                    "
-set title                            " put filename in window title
-set timeoutlen=200                   " only wait this many ms for key sequence to complete
-set undofile                         " persist undo history across buffer exits
-" set updatetime=100                 " fire CursorHold after 100ms (default 4000ms)
-set wildmenu                         " complete commands with a little menu
-set wildmode=list:longest,full       " wild menu completion behavior
+set clipboard=unnamed,unnamedplus         " yank also copies to both clipboards
+set completeopt=menuone,noinsert,noselect " sane completion behavior...
+set cursorline                            " higlight the current line
+set expandtab                             " convert tabs to spaces
+set grepprg=rg\ --vimgrep                 " use rg to grep
+set hidden                                " don't abandon out-of-sight buffers
+set ignorecase                            " case-insensitive searching
+set inccommand=split                      " show live command substitutions
+set lazyredraw                            " don't draw during e.g. applying a macro
+set linebreak                             " wrap lines in a more visually pleasing way
+set listchars=tab:>\ ,trail:·,nbsp:+      " trailing whitespace markers
+set list                                  " show trailing whitespace, tabs, etc.
+set nofoldenable                          " never fold
+set nojoinspaces                          " insert one space after ., ?, ! chars when joining
+set nomodeline                            " disable modelines
+set noshowmode                            " don't show mode, since lightline handle that
+set nostartofline                         " don't jump cursor to start of line when moving
+set number                                " show line number gutter
+set report=0                              " always repeat the number of lines changed
+set scrolloff=10                          " start scrolling before the cursor reaches the edge
+set shiftround                            " shift to multiple of shiftwidth
+set shiftwidth=2                          "
+set sidescrolloff=16                      " start scrolling before the cursor reaches the edge
+set signcolumn=yes                        " always draw signcolumn because it's jarring when it appears otherwise
+set smartcase                             " don't ignore case if search contains uppercase char
+set smartindent                           " smart autoindenting when starting a new line
+set synmaxcol=180                         " dont bother syntax-highlighting past this column
+set showtabline=2                         " always show the tabline
+set softtabstop=2                         " tab key makes 2 spaces
+set termguicolors                         "
+set title                                 " put filename in window title
+set timeoutlen=200                        " only wait this many ms for key sequence to complete
+set undofile                              " persist undo history across buffer exits
+                                          " set updatetime=100                                                    " fire CursorHold after 100ms (default 4000ms)
+set wildmenu                              " complete commands with a little menu
+set wildmode=list:longest,full            " wild menu completion behavior
 
 lua require('init')
 
@@ -527,6 +530,9 @@ command! -nargs=* Rgu
   \   fzf#vim#with_preview({'options': ['--border', '--info=inline', '--layout=reverse']}, 'down:60%'),
   \   0)
 
+" keep this in sync with the language servers I have enabled in lua/init.vim
+autocmd mitchellwrosen FileType lua,haskell,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
+
 autocmd mitchellwrosen FileType fzf setlocal laststatus=0
   \| autocmd BufLeave <buffer> setlocal laststatus=2
 " Escape to quit little annoying temporary buffers
@@ -534,7 +540,6 @@ autocmd mitchellwrosen FileType fzf nnoremap <silent> <buffer> <Esc> :q<CR>
 " Unmap Esc quitting terminal mode, so fzf handles it (result: one Esc closes fzf)
 autocmd mitchellwrosen FileType fzf tunmap <buffer> <Esc>
 
-autocmd mitchellwrosen FileType haskell setlocal omnifunc=v:lua.vim.lsp.omnifunc
 " <Space>ff to find-function (ag can match over multiple lines)
 " <Space>ft to find-type (ripgrep is faster)
 autocmd mitchellwrosen FileType haskell nnoremap <buffer> <Space>ff :Ag (<Bslash>b)<C-r><C-w><Bslash>b[ <Bslash>t<Bslash>n]+::<CR>
@@ -691,12 +696,13 @@ sign define LspDiagnosticsInformationSign text=ℹ texthl=LspDiagnosticsInformat
 sign define LspDiagnosticsHintSign text=➤ texthl=LspDiagnosticsHint linehl= numhl=
 
 " [neovimhaskell/haskell-vim]
-let g:haskell_indent_disable = 1
 let g:haskell_enable_backpack = 1
 let g:haskell_enable_pattern_synonyms = 1
 let g:haskell_enable_quantification = 1
 let g:haskell_enable_recursivedo = 1
+let g:haskell_enable_static_pointers = 1
 let g:haskell_enable_typeroles = 1
+let g:haskell_indent_disable = 1
 
 " [romainl/vim-qf]
 " Toggle the quickfix ("location") menu; move thru quickfix items with Alt+jk
@@ -759,7 +765,11 @@ function! <SID>init_gitmessengerpopup() abort
 endfunction
 autocmd mitchellwrosen FileType gitmessengerpopup call <SID>init_gitmessengerpopup()
 
-" [RRethy/vim-illuminate]
+" [rrethy/vim-hexokinase]
+" only enable color preview pip when looking at vim (colorscheme) files
+let g:Hexokinase_ftEnabled = ['vim']
+
+" [rrethy/vim-illuminate]
 " highlight immediately
 let g:Illuminate_delay = 0
 " don't highlight the word under the cursor

@@ -1,5 +1,6 @@
-local configs = require'nvim_lsp/configs'
-local nvim_lsp = require'nvim_lsp'
+local completion = require('completion')
+local configs = require('nvim_lsp/configs')
+local nvim_lsp = require('nvim_lsp')
 
 configs.ghcide = {
   default_config = {
@@ -10,8 +11,9 @@ configs.ghcide = {
   };
 };
 
-nvim_lsp.ghcide.setup {}
-nvim_lsp.vimls.setup {}
+nvim_lsp.ghcide.setup { on_attach = completion.on_attach }
+nvim_lsp.sumneko_lua.setup { on_attach = completion.on_attach }
+nvim_lsp.vimls.setup { on_attach = completion.on_attach }
 
 -- Run the given command in a centered floating terminal.
 local function run_floating(command)

@@ -75,6 +75,7 @@ set nomodeline                            " disable modelines
 set noshowmode                            " don't show mode, since lightline handle that
 set nostartofline                         " don't jump cursor to start of line when moving
 set number                                " show line number gutter
+set relativenumber                        "
 set report=0                              " always repeat the number of lines changed
 set scrolloff=10                          " start scrolling before the cursor reaches the edge
 set shiftround                            " shift to multiple of shiftwidth
@@ -532,9 +533,6 @@ command! -nargs=* Rgu
   \   fzf#vim#with_preview({'options': ['--border', '--info=inline', '--layout=reverse']}, 'down:60%'),
   \   0)
 
-" keep this in sync with the language servers I have enabled in lua/init.vim
-autocmd mitchellwrosen FileType lua,haskell,vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
-
 autocmd mitchellwrosen FileType fzf setlocal laststatus=0
   \| autocmd BufLeave <buffer> setlocal laststatus=2
 " Escape to quit little annoying temporary buffers
@@ -677,23 +675,6 @@ let g:multi_cursor_quit_key = '<Esc>'
 "     call CocAction('doHover')
 "   endif
 " endfunction
-
-" [neovim/nvim-lspconfig]
-nnoremap <silent> <Space>lcl :lua vim.lsp.buf.clear_references()<CR>
-nnoremap <silent> <Space>lco :lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent> <Space>ldec :lua vim.lsp.buf.declaration()<CR>
-nnoremap <silent> <Space>ldef :lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> <Space>ldo :lua vim.lsp.buf.document_symbol()<CR>
-nnoremap <silent> <Space>lh :lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> <Space>lim :lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <Space>lin :lua vim.lsp.buf.incoming_calls()<CR>
-nnoremap <silent> <Space>lo :lua vim.lsp.buf.outgoing_calls()<CR>
-nnoremap <silent> <Space>lref :lua vim.lsp.buf.references()<CR>
-nnoremap <silent> <Space>lren :lua vim.lsp.buf.rename()<CR>
-nnoremap <silent> <Space>lsh :lua vim.lsp.util.show_line_diagnostics()<CR>
-nnoremap <silent> <Space>lsi :lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> <Space>lt :lua vim.lsp.buf.type_definition()<CR>
-nnoremap <silent> <Space>lw :lua vim.lsp.buf.workspace_symbol()<CR>
 
 " autocmd mitchellwrosen Filetype haskell autocmd CursorHold <buffer> lua vim.lsp.buf.hover()
 

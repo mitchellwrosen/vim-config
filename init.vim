@@ -54,8 +54,6 @@ augroup END
 " Basic settings
 " ==============================================================================
 
-colo gruvbox
-
 set autowriteall
 set clipboard=unnamed,unnamedplus         " yank also copies to both clipboards
 set completeopt=menuone,noinsert,noselect " sane completion behavior...
@@ -91,7 +89,7 @@ set termguicolors                         "
 set title                                 " put filename in window title
 set timeoutlen=200                        " only wait this many ms for key sequence to complete
 set undofile                              " persist undo history across buffer exits
-                                          " set updatetime=100                                                    " fire CursorHold after 100ms (default 4000ms)
+" set updatetime=100                                                    " fire CursorHold after 100ms (default 4000ms)
 set wildmenu                              " complete commands with a little menu
 set wildmode=list:longest,full            " wild menu completion behavior
 
@@ -642,6 +640,7 @@ let g:lightline#bufferline#modified = '+'
 " [morhetz/gruvbox]
 let g:gruvbox_italic = 1 " enable italics
 let g:gruvbox_improved_strings = 1 " thought this was supposed to extra-highlight strings?
+colo gruvbox
 
 " [multiple-cursors]
 let g:multi_cursor_use_default_mapping = 0
@@ -721,12 +720,11 @@ let g:startify_files_number = 30
 let g:startify_lists = [{ 'type': 'files' }]
 let g:startify_relative_path = 1
 
-" make floaterm not leave an empty buffer in startify
-" autocmd User Startified setlocal buflisted
-
 " In startify screen, undo my j=gj, k=gk mappings, because they press 'g'
 autocmd mitchellwrosen FileType startify nnoremap <buffer> j j
 autocmd mitchellwrosen FileType startify nnoremap <buffer> k k
+
+autocmd mitchellwrosen FileType startify setlocal cursorline
 
 " [psliwka/vim-smoothie]
 let g:smoothie_base_speed = 15
@@ -849,6 +847,37 @@ let g:qs_max_chars = 120
 " [Yggdroot/indentLine]
 let g:indentLine_color_term = 239
 let g:indentLine_char = '┊'
+
+" Gruvbox haskell settings suck apparently, so these are custom
+hi! link haskellSeparator GruvboxFg1
+hi! link haskellDelimiter GruvboxFg4
+
+hi! link haskellType GruvboxYellow
+
+hi! link haskellBacktick GruvboxBlue
+hi! link haskellOperators GruvboxBlue
+
+hi! link haskellIdentifier GruvboxRedBold
+
+hi! link haskellConditional GruvboxAqua
+hi! link haskellAssocType GruvboxAqua
+hi! link haskellBlockKeywords GruvboxAqua
+hi! link haskellBottom GruvboxAqua
+hi! link haskellDeclKeyword GruvboxAqua
+hi! link haskellDefault GruvboxAqua
+hi! link haskellDeriving GruvboxAqua
+hi! link haskellForall GruvboxAqua
+hi! link haskellImportKeywords GruvboxAqua
+hi! link haskellKeyword GruvboxAqua
+hi! link haskellLet GruvboxAqua
+hi! link haskellStatic GruvboxAqua
+hi! link haskellWhere GruvboxAqua
+
+hi! link haskellNumber GruvboxPurple
+hi! link haskellPragma GruvboxPurple
+
+hi! link haskellChar GruvboxGreen
+hi! link haskellString GruvboxGreen
 
 " ==============================================================================
 " nvim-gtk settings

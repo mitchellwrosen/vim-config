@@ -11,7 +11,7 @@ Plug 'junegunn/fzf.vim'                                   " Fuzzy search source 
 Plug 'liuchengxu/vim-which-key'                           " thingy to tell me my own hotkeys (requires manual work)
 Plug 'mengelbrecht/lightline-bufferline'                  "
 Plug 'mhinz/vim-startify'                                 " Startup screen
-Plug 'morhetz/gruvbox'                                    " best color scheme
+" Plug 'morhetz/gruvbox'                                    " best color scheme
 Plug 'neovim/nvim-lsp'                                    "
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }    "
 Plug 'nvim-lua/completion-nvim'                           "
@@ -638,8 +638,14 @@ nnoremap <silent> ? :WhichKey '?'<CR>
 let g:lightline#bufferline#modified = '+'
 
 " [morhetz/gruvbox]
-let g:gruvbox_italic = 1 " enable italics
+let g:gruvbox_underline = 1
+let g:gruvbox_bold = 1
+let g:gruvbox_undercurl = 1
+let g:gruvbox_inverse = 1
+let g:gruvbox_contrast_dark = 'soft'
 let g:gruvbox_improved_strings = 1 " thought this was supposed to extra-highlight strings?
+let g:gruvbox_invert_signs = 1
+let g:gruvbox_italic = 1 " enable italics
 colo gruvbox
 
 " [multiple-cursors]
@@ -828,15 +834,8 @@ vmap sp <Plug>VSurround)
 " [unblevable/quick-scope]
 " let g:qs_lazy_highlight = 1 " only kick in after updatetime ms
 let g:qs_max_chars = 120
-
-" [voldikss/vim-floaterm]
-" let g:floaterm_autoclose = 2
-" let g:floaterm_title = ''
-" nnoremap <Space>tl :FloatermNew --height=0.9 --position=right --width=0.5<CR>
-" nnoremap <silent> <Space>tt :Tt --height=0.9 --position=right --width=0.5<CR>
-
-" autocmd mitchellwrosen FileType floaterm nnoremap <buffer> <silent> <C-j> :FloatermNext<CR>
-" autocmd mitchellwrosen FileType floaterm nnoremap <buffer> <silent> <C-k> :FloatermPrev<CR>
+let g:qs_second_highlight = 0 " don't highlight second occurrence
+hi! link QuickScopePrimary GruvboxGreenBold
 
 " [wellle/targets.vim]
 " nmap cil9 cil)
@@ -846,38 +845,7 @@ let g:qs_max_chars = 120
 
 " [Yggdroot/indentLine]
 let g:indentLine_color_term = 239
-let g:indentLine_char = '┊'
-
-" Gruvbox haskell settings suck apparently, so these are custom
-hi! link haskellSeparator GruvboxFg1
-hi! link haskellDelimiter GruvboxFg4
-
-hi! link haskellType GruvboxYellow
-
-hi! link haskellBacktick GruvboxBlue
-hi! link haskellOperators GruvboxBlue
-
-hi! link haskellIdentifier GruvboxRedBold
-
-hi! link haskellConditional GruvboxAqua
-hi! link haskellAssocType GruvboxAqua
-hi! link haskellBlockKeywords GruvboxAqua
-hi! link haskellBottom GruvboxAqua
-hi! link haskellDeclKeyword GruvboxAqua
-hi! link haskellDefault GruvboxAqua
-hi! link haskellDeriving GruvboxAqua
-hi! link haskellForall GruvboxAqua
-hi! link haskellImportKeywords GruvboxAqua
-hi! link haskellKeyword GruvboxAqua
-hi! link haskellLet GruvboxAqua
-hi! link haskellStatic GruvboxAqua
-hi! link haskellWhere GruvboxAqua
-
-hi! link haskellNumber GruvboxPurple
-hi! link haskellPragma GruvboxPurple
-
-hi! link haskellChar GruvboxGreen
-hi! link haskellString GruvboxGreen
+let g:indentLine_char = '│'
 
 " ==============================================================================
 " nvim-gtk settings

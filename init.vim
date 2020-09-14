@@ -4,6 +4,7 @@
 
 call plug#begin(stdpath('data') . '/plugged')
 
+Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }
 Plug 'Yggdroot/indentLine'                                " show markers every 2 columns of leading whitespace
 Plug 'godlygeek/tabular'                                  " Align on words
 Plug 'itchyny/lightline.vim'                              "
@@ -11,7 +12,6 @@ Plug 'junegunn/fzf.vim'                                   " Fuzzy search source 
 Plug 'liuchengxu/vim-which-key'                           " thingy to tell me my own hotkeys (requires manual work)
 Plug 'mengelbrecht/lightline-bufferline'                  "
 Plug 'mhinz/vim-startify'                                 " Startup screen
-" Plug 'morhetz/gruvbox'                                    " best color scheme
 Plug 'neovim/nvim-lsp'                                    "
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }    "
 Plug 'nvim-lua/completion-nvim'                           "
@@ -50,48 +50,12 @@ augroup mitchellwrosen
   autocmd!
 augroup END
 
-" ==============================================================================
-" Basic settings
-" ==============================================================================
-
-set autowriteall
-set clipboard=unnamed,unnamedplus         " yank also copies to both clipboards
-set completeopt=menuone,noinsert,noselect " sane completion behavior...
-set cursorline                            " higlight the current line
-set expandtab                             " convert tabs to spaces
-set grepprg=rg\ --vimgrep                 " use rg to grep
-set hidden                                " don't abandon out-of-sight buffers
-set ignorecase                            " case-insensitive searching
-set inccommand=split                      " show live command substitutions
-set lazyredraw                            " don't draw during e.g. applying a macro
-set linebreak                             " wrap lines in a more visually pleasing way
-set listchars=tab:>\ ,trail:·,nbsp:+      " trailing whitespace markers
-set list                                  " show trailing whitespace, tabs, etc.
-set nofoldenable                          " never fold
-set nojoinspaces                          " insert one space after ., ?, ! chars when joining
-set nomodeline                            " disable modelines
-set noshowmode                            " don't show mode, since lightline handle that
-set nostartofline                         " don't jump cursor to start of line when moving
-set number                                " show line number gutter
-set relativenumber                        "
-set report=0                              " always repeat the number of lines changed
-set scrolloff=10                          " start scrolling before the cursor reaches the edge
-set shiftround                            " shift to multiple of shiftwidth
-set shiftwidth=2                          "
-set sidescrolloff=16                      " start scrolling before the cursor reaches the edge
-set signcolumn=yes                        " always draw signcolumn because it's jarring when it appears otherwise
-set smartcase                             " don't ignore case if search contains uppercase char
-set smartindent                           " smart autoindenting when starting a new line
-set synmaxcol=180                         " dont bother syntax-highlighting past this column
-set showtabline=2                         " always show the tabline
-set softtabstop=2                         " tab key makes 2 spaces
-set termguicolors                         "
-set title                                 " put filename in window title
-set timeoutlen=200                        " only wait this many ms for key sequence to complete
-set undofile                              " persist undo history across buffer exits
-" set updatetime=100                                                    " fire CursorHold after 100ms (default 4000ms)
-set wildmenu                              " complete commands with a little menu
-set wildmode=list:longest,full            " wild menu completion behavior
+" Colorscheme stuff has to come before lua.init, I guess
+let g:gruvbox_inverse = 1
+let g:gruvbox_contrast_dark = 'soft'
+let g:gruvbox_improved_strings = 1 " thought this was supposed to extra-highlight strings?
+let g:gruvbox_invert_signs = 1
+colorscheme gruvbox
 
 lua require('init')
 
@@ -425,13 +389,13 @@ autocmd mitchellwrosen FileType qf nnoremap <silent> <buffer> <CR> <CR>:ccl<CR>
 
 autocmd mitchellwrosen FileType unison setlocal commentstring=--\ %s
 
+" start a terminal in insert mode
+autocmd mitchellwrosen TermEnter * startinsert
 " Esc escapes terminal mode
 autocmd mitchellwrosen TermOpen * tnoremap <buffer> <Esc> <C-\><C-n>
 autocmd mitchellwrosen TermOpen * setlocal nonumber norelativenumber
 " forcibly exit a terminal buffer, because there's nothing to save
 autocmd mitchellwrosen TermOpen * nnoremap <silent> <buffer> <Space>d :bw!<CR>
-" start a terminal in insert mode
-autocmd mitchellwrosen TermOpen * startinsert
 
 " Briefly highlight yanks
 autocmd mitchellwrosen TextYankPost * silent! lua vim.highlight.on_yank {higroup="Visual", timeout=600}
@@ -636,17 +600,6 @@ nnoremap <silent> ? :WhichKey '?'<CR>
 
 " [mengelbrecht/lightline-bufferline]
 let g:lightline#bufferline#modified = '+'
-
-" [morhetz/gruvbox]
-let g:gruvbox_underline = 1
-let g:gruvbox_bold = 1
-let g:gruvbox_undercurl = 1
-let g:gruvbox_inverse = 1
-let g:gruvbox_contrast_dark = 'soft'
-let g:gruvbox_improved_strings = 1 " thought this was supposed to extra-highlight strings?
-let g:gruvbox_invert_signs = 1
-let g:gruvbox_italic = 1 " enable italics
-colo gruvbox
 
 " [multiple-cursors]
 let g:multi_cursor_use_default_mapping = 0

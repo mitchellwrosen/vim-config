@@ -25,22 +25,6 @@ endif
 " }}}
 " Global Settings: {{{
 
-if !exists('g:gruvbox_bold')
-  let g:gruvbox_bold=1
-endif
-if !exists('g:gruvbox_italic')
-  if has('gui_running') || $TERM_ITALICS == 'true'
-    let g:gruvbox_italic=1
-  else
-    let g:gruvbox_italic=0
-  endif
-endif
-if !exists('g:gruvbox_undercurl')
-  let g:gruvbox_undercurl=1
-endif
-if !exists('g:gruvbox_underline')
-  let g:gruvbox_underline=1
-endif
 if !exists('g:gruvbox_inverse')
   let g:gruvbox_inverse=1
 endif
@@ -135,24 +119,9 @@ let s:gb.faded_orange   = ['#af3a03', 130]     " 175-58-3
 " Setup Emphasis: {{{
 
 let s:bold = 'bold,'
-if g:gruvbox_bold == 0
-  let s:bold = ''
-endif
-
 let s:italic = 'italic,'
-if g:gruvbox_italic == 0
-  let s:italic = ''
-endif
-
 let s:underline = 'underline,'
-if g:gruvbox_underline == 0
-  let s:underline = ''
-endif
-
 let s:undercurl = 'undercurl,'
-if g:gruvbox_undercurl == 0
-  let s:undercurl = ''
-endif
 
 let s:inverse = 'inverse,'
 if g:gruvbox_inverse == 0
@@ -355,18 +324,8 @@ if exists('g:gruvbox_invert_tabline')
 endif
 
 let s:italicize_comments = s:italic
-if exists('g:gruvbox_italicize_comments')
-  if g:gruvbox_italicize_comments == 0
-    let s:italicize_comments = ''
-  endif
-endif
-
-let s:italicize_strings = ''
-if exists('g:gruvbox_italicize_strings')
-  if g:gruvbox_italicize_strings == 1
-    let s:italicize_strings = s:italic
-  endif
-endif
+" let s:italicize_strings = ''
+let s:italicize_strings = s:italic
 
 " }}}
 " Highlighting Function: {{{

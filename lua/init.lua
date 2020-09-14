@@ -1,3 +1,44 @@
+vim.o.autowriteall = true   --
+vim.o.cursorline = true     -- higlight the current line
+vim.o.expandtab = true      -- convert tabs to spaces
+vim.o.hidden = true         -- don't abandon out-of-sight buffers
+vim.o.ignorecase = true     -- case-insensitive searching
+vim.o.lazyredraw = true     -- don't draw during e.g. applying a macro
+vim.o.linebreak = true      -- wrap lines in a more visually pleasing way
+vim.o.list = true           -- show trailing whitespace, tabs, etc.
+vim.o.foldenable = false    -- never fold
+vim.o.joinspaces = false    -- insert one space after ., ?, ! chars when joining
+vim.o.modeline = false      -- disable modelines
+vim.o.showmode = false      -- don't show mode, since lightline handle that
+vim.o.startofline = false   -- don't jump cursor to start of line when moving
+vim.o.number = true         -- show line number gutter
+vim.o.relativenumber = true --
+vim.o.shiftround = true     -- shift to multiple of shiftwidth
+vim.o.smartcase = true      -- don't ignore case if search contains uppercase char
+vim.o.smartindent = true    -- smart autoindenting when starting a new line
+vim.o.termguicolors = true  --
+vim.o.title = true          -- put filename in window title
+vim.o.undofile = true       -- persist undo history across buffer exits
+vim.o.wildmenu = true       -- complete commands with a little menu
+
+vim.o.report = 0         -- always repeat the number of lines changed
+vim.o.scrolloff = 10     -- start scrolling before the cursor reaches the edge
+vim.o.shiftwidth = 2     --
+vim.o.sidescrolloff = 16 -- start scrolling before the cursor reaches the edge
+vim.o.synmaxcol = 180    -- dont bother syntax-highlighting past this column
+vim.o.showtabline = 2    -- always show the tabline
+vim.o.softtabstop = 2    -- tab key makes 2 spaces
+vim.o.timeoutlen = 200   -- only wait this many ms for key sequence to complete
+vim.o.updatetime = 1000  -- fire CursorHold after this many ms (default 4000ms)
+
+vim.o.clipboard = 'unnamed,unnamedplus'         -- yank also copies to both clipboards
+vim.o.completeopt = 'menuone,noinsert,noselect' -- sane completion behavior...
+vim.o.grepprg = 'rg --vimgrep'                  -- use rg to grep
+vim.o.inccommand = 'split'                      -- show live command substitutions
+vim.o.listchars = 'tab:> ,trail:·,nbsp:+'       -- trailing whitespace markers
+vim.o.signcolumn = 'yes'                        -- always draw signcolumn because it's jarring when it appears otherwise
+vim.o.wildmode = 'list:longest,full'            -- wild menu completion behavior
+
 local completion = require('completion')
 local configs = require('nvim_lsp/configs')
 local lsp = require('nvim_lsp')

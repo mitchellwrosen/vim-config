@@ -2,50 +2,6 @@
 " figure out why vim-cool + fzf is broken in neovim
 " switch to vim-packager?
 
-call plug#begin(stdpath('data') . '/plugged')
-
-Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }
-Plug 'Yggdroot/indentLine'                                " show markers every 2 columns of leading whitespace
-Plug 'godlygeek/tabular'                                  " Align on words
-Plug 'itchyny/lightline.vim'                              "
-Plug 'junegunn/fzf.vim'                                   " Fuzzy search source code, files, etc
-Plug 'liuchengxu/vim-which-key'                           " thingy to tell me my own hotkeys (requires manual work)
-Plug 'mengelbrecht/lightline-bufferline'                  "
-Plug 'mhinz/vim-startify'                                 " Startup screen
-Plug 'neovim/nvim-lsp'                                    "
-Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }    "
-Plug 'nvim-lua/completion-nvim'                           "
-Plug 'nvim-lua/lsp-status.nvim'                           "
-Plug 'psliwka/vim-smoothie'                               " Smooth paging up and down
-Plug 'rhysd/git-messenger.vim'                            " git blame the line under the cursor
-Plug 'romainl/vim-cool'                                   " Automatically unhighlight when cursor moves
-Plug 'romainl/vim-qf'                                     " Vim quickfix improvements
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' } " show colored pips by #abcdef things
-Plug 'rrethy/vim-illuminate'                              " Highlight occurrences of the word under the cursor
-Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }            "
-Plug 'terryma/vim-multiple-cursors'                       " Multiple cursors for quick and dirty renaming
-Plug 'tommcdo/vim-exchange'                               " Swap the location of two selections
-Plug 'tpope/vim-characterize'                             " Improved 'ga'
-Plug 'tpope/vim-commentary'                               " Quick (un-)commenting
-Plug 'tpope/vim-fugitive'                                 "
-Plug 'tpope/vim-repeat'                                   " Make '.' repeat more things out of the box
-Plug 'tpope/vim-surround'                                 " Some surround helpers
-Plug 'unblevable/quick-scope'                             " Highlight characters for f, F, t, T
-
-" Plug 'ElmCast/elm-vim', { 'for': 'elm' }
-" Plug 'LnL7/vim-nix', { 'for': 'nix' }
-" Plug 'purescript-contrib/purescript-vim', { 'for': 'purescript' }
-" Plug 'vmchale/dhall-vim', { 'for': 'dhall' }
-
-" Cool stuff in here but it defines way too many bindings for me and it
-" doesn't seem easy to disable them all and customize the ones I do want
-" Plug 'wellle/targets.vim'
-
-" Bad performance
-" Plug 'mhinz/vim-signify'
-
-call plug#end() " Automatically calls syntax on, filetype plugin indent on
-
 augroup mitchellwrosen
   autocmd!
 augroup END
@@ -59,43 +15,15 @@ colorscheme gruvbox
 
 lua require('init')
 
-" ==============================================================================
-" Key mappings
-" ==============================================================================
-
-noremap ; :
-noremap : ;
-nnoremap r; r:
-nnoremap r: r;
-inoremap ; :
-inoremap : ;
-cnoremap : ;
-cnoremap ; :
-
-" make ' jump back to mark's exact position, not just line
-nnoremap ' `
-
-" very magic mode search
-nnoremap / /\v
-vnoremap / /\v
-
-" Don't highlight matches *and* jump at the same time; only highlight
-nnoremap * *``
-nnoremap # #``
-
-" Wean myself off tab for now...
-nnoremap <Tab> <Nop>
-
-" Backspace to switch to the previously edited buffer
-nnoremap <BS> <C-^>
-
 " Prevent the cursor from jumping past a wrapped line when moving up and down
 nnoremap j gj
 nnoremap k gk
 
-" HJKL to move around the file. JK are put in the vim-smoothie plugin section.
-vnoremap J <C-D>
-vnoremap K <C-U>
+" HJKL to move around the file.
+nmap J 5j
+nmap K 5k
+vnoremap J 5j
+vnoremap K 5k
 nnoremap H ^
 nnoremap L $
 onoremap H ^
@@ -105,9 +33,10 @@ vnoremap L g_
 
 " Make Y yank to the end of line, similar to how C and D behave
 nnoremap Y y$
-" After visual mode yank, leave cursor at the end of the highlight
-" This gives me two ways to yank after making a selection: y and Y
-vnoremap Y y`]
+
+" After visual mode delete/yank, leave cursor at the end of the highlight
+vnoremap D d`>
+vnoremap Y y`>
 
 " Select last changed or yanked area
 nnoremap <expr> gV '`[' . strpart(getregtype(), 0, 1) . '`]'
@@ -118,8 +47,8 @@ nnoremap U <C-r>
 nnoremap <C-r> <Nop>
 
 " Refactor word under cursor
-nnoremap c* /\<<C-r>=expand('<cWORD>')<CR>\>\C<CR>``cgn
-nnoremap c# ?\<<C-r>=expand('<cWORD>')<CR>\>\C<CR>``cgN
+" nnoremap c* /\<<C-r>=expand('<cWORD>')<CR>\>\C<CR>``cgn
+" nnoremap c# ?\<<C-r>=expand('<cWORD>')<CR>\>\C<CR>``cgN
 
 " Center after every search movement
 nnoremap n nzz
@@ -209,7 +138,7 @@ nnoremap <silent> <C-k> :bp<CR>
 " nnoremap <C-l> <C-w>l
 
 " github.com/mitchellwrosen/repld stuff
-nnoremap <silent> <Space>s m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``
+noremap <silent> <Space>s m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``
 nnoremap <silent> <Space>S m`:silent w !repld-send<CR>``
 vnoremap <silent> <Space>s m`<Esc>:silent '<,'>w !repld-send<CR>``
 
@@ -387,8 +316,6 @@ autocmd CursorHold,FocusGained ?* if getcmdwintype() == '' | checktime | endif
 " On <Enter>, go to error and close quickfix list
 autocmd mitchellwrosen FileType qf nnoremap <silent> <buffer> <CR> <CR>:ccl<CR>
 
-autocmd mitchellwrosen FileType unison setlocal commentstring=--\ %s
-
 " start a terminal in insert mode
 autocmd mitchellwrosen TermEnter * startinsert
 " Esc escapes terminal mode
@@ -401,16 +328,7 @@ autocmd mitchellwrosen TermOpen * nnoremap <silent> <buffer> <Space>d :bw!<CR>
 autocmd mitchellwrosen TextYankPost * silent! lua vim.highlight.on_yank {higroup="Visual", timeout=600}
 
 " Save the buffer after changing it
-function! s:save() abort
-  if empty(&buftype) && !empty(bufname('')) && &filetype !=# 'gitcommit'
-    let yank0 = getpos("'[")
-    let yank1 = getpos("']")
-    silent! update
-    call setpos("'[", yank0)
-    call setpos("']", yank1)
-  endif
-endfunction
-autocmd mitchellwrosen InsertLeave,TextChanged * call s:save()
+autocmd mitchellwrosen InsertLeave,TextChanged * if empty(&buftype) && !empty(bufname('')) | silent! update | endif
 
 " Highlight merge conflict markers
 match ErrorMsg '^\(<\||\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -495,18 +413,12 @@ command! -nargs=* Rgu
   \   fzf#vim#with_preview({'options': ['--border', '--info=inline', '--layout=reverse']}, 'down:60%'),
   \   0)
 
-autocmd mitchellwrosen FileType fzf setlocal laststatus=0
-  \| autocmd BufLeave <buffer> setlocal laststatus=2
-" Escape to quit little annoying temporary buffers
-autocmd mitchellwrosen FileType fzf nnoremap <silent> <buffer> <Esc> :q<CR>
-" Unmap Esc quitting terminal mode, so fzf handles it (result: one Esc closes fzf)
-autocmd mitchellwrosen FileType fzf tunmap <buffer> <Esc>
-
-" <Space>ff to find-function (ag can match over multiple lines)
-" <Space>ft to find-type (ripgrep is faster)
-autocmd mitchellwrosen FileType haskell nnoremap <buffer> <Space>ff :Ag (<Bslash>b)<C-r><C-w><Bslash>b[ <Bslash>t<Bslash>n]+::<CR>
-autocmd mitchellwrosen FileType haskell nnoremap <buffer> <Space>ft :Rg (((data<Bar>newtype<Bar>type)\s+)<Bar>class .*)\b<C-r><C-w>\b<CR>
-autocmd mitchellwrosen FileType haskell nnoremap <buffer> <Space>fa :Rgu (<C-r><C-w>\b\s+::)<Bar>((data(\sfamily)?<Bar>newtype<Bar>type(\sfamily)?)\s+<C-r><C-w>\b)<Bar>(class\s+(\(.*\)\s+=>\s+)?<C-r><C-w>\b\s+where)<CR>
+" autocmd mitchellwrosen FileType fzf setlocal laststatus=0
+"   \| autocmd BufLeave <buffer> setlocal laststatus=2
+" " Escape to quit little annoying temporary buffers
+" autocmd mitchellwrosen FileType fzf nnoremap <silent> <buffer> <Esc> :q<CR>
+" " Unmap Esc quitting terminal mode, so fzf handles it (result: one Esc closes fzf)
+" autocmd mitchellwrosen FileType fzf tunmap <buffer> <Esc>
 
 " [itchyny/lightline.vim]
 function! LightlineFilename()
@@ -660,8 +572,6 @@ let g:haskell_indent_disable = 1
 " [sdiehl/vim-ormolu]
 let g:ormolu_disable = 1
 
-autocmd mitchellwrosen FileType haskell nnoremap <buffer> <silent> <Space>p :call RunOrmolu()<CR>
-
 " [mhinz/signify]
 let g:signify_sign_change = 'Δ'
 let g:signify_sign_delete = '-'
@@ -679,21 +589,6 @@ let g:startify_files_number = 30
 let g:startify_lists = [{ 'type': 'files' }]
 let g:startify_relative_path = 1
 
-" In startify screen, undo my j=gj, k=gk mappings, because they press 'g'
-autocmd mitchellwrosen FileType startify nnoremap <buffer> j j
-autocmd mitchellwrosen FileType startify nnoremap <buffer> k k
-
-autocmd mitchellwrosen FileType startify setlocal cursorline
-
-" [psliwka/vim-smoothie]
-let g:smoothie_base_speed = 15
-let g:smoothie_no_default_mappings = 1
-let g:smoothie_update_interval = 10
-
-" very unfortunate: vmap variants don't work here...
-nmap J <Plug>(SmoothieForwards)
-nmap K <Plug>(SmoothieBackwards)
-
 " [rhysd/git-messenger.vim]
 let g:git_messenger_always_into_popup = v:true
 let g:git_messenger_extra_blame_args = '-w'
@@ -702,17 +597,9 @@ let g:git_messenger_no_default_mappings = v:true
 " blame the line under the cursor
 nmap <Space>b <Plug>(git-messenger)
 
-function! <SID>init_gitmessengerpopup() abort
-  nmap <buffer><Enter> q
-  nmap <buffer><Esc> q
-  nmap <buffer>h o
-  nmap <buffer>l O
-endfunction
-autocmd mitchellwrosen FileType gitmessengerpopup call <SID>init_gitmessengerpopup()
-
 " [rrethy/vim-hexokinase]
 " only enable color preview pip when looking at vim (colorscheme) files
-let g:Hexokinase_ftEnabled = ['vim']
+let g:Hexokinase_ftEnabled = ['gitconfig', 'vim']
 
 " [rrethy/vim-illuminate]
 " highlight immediately

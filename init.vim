@@ -1,6 +1,9 @@
 " TODO
 " figure out why vim-cool + fzf is broken in neovim
 " switch to vim-packager?
+" insert when focus terminal
+" Space-/ BLines
+" cabbrev rg Rg?
 
 augroup mitchellwrosen
   autocmd!

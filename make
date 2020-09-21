@@ -1,3 +1,6 @@
 #!/bin/sh
 
-fennel --compile fennel/init.fnl > lua/init.lua
+set -e
+
+fennel --compile fennel/init.fnl > /tmp/init.lua
+mv /tmp/init.lua lua/init.lua

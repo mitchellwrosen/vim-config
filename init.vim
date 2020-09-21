@@ -4,6 +4,7 @@
 " insert when focus terminal
 " Space-/ BLines
 " cabbrev rg Rg?
+" don't cd with startify
 
 augroup mitchellwrosen
   autocmd!
@@ -17,59 +18,6 @@ let g:gruvbox_invert_signs = 1
 colorscheme gruvbox
 
 lua require('init')
-
-" Prevent the cursor from jumping past a wrapped line when moving up and down
-nnoremap j gj
-nnoremap k gk
-
-" HJKL to move around the file.
-nmap J 5j
-nmap K 5k
-vnoremap J 5j
-vnoremap K 5k
-nnoremap H ^
-nnoremap L $
-onoremap H ^
-onoremap L $
-vnoremap H ^
-vnoremap L g_
-
-" Make Y yank to the end of line, similar to how C and D behave
-nnoremap Y y$
-
-" After visual mode delete/yank, leave cursor at the end of the highlight
-vnoremap D d`>
-vnoremap Y y`>
-
-" Select last changed or yanked area
-nnoremap <expr> gV '`[' . strpart(getregtype(), 0, 1) . '`]'
-
-" U to redo. <C-r> comes from some plugin, maybe vim-repeat? (annoying)
-nnoremap U <C-r>
-" Weaning myself of <C-R> to redo
-nnoremap <C-r> <Nop>
-
-" Refactor word under cursor
-" nnoremap c* /\<<C-r>=expand('<cWORD>')<CR>\>\C<CR>``cgn
-" nnoremap c# ?\<<C-r>=expand('<cWORD>')<CR>\>\C<CR>``cgN
-
-" Center after every search movement
-nnoremap n nzz
-nnoremap N Nzz
-vnoremap n nzz
-vnoremap N Nzz
-
-" q to quit the current buffer, or quit vim if there's only 1 listed buffer
-nnoremap <expr> <silent> q len(getbufinfo({'buflisted': 1})) ==? 1 ? ":q\<CR>" : ":bd\<CR>"
-
-" Disable annoying command search 'q:' that I never use
-" nnoremap q: <Nop>
-
-" ,q to record a macro
-nnoremap ,q q
-
-" Q to apply macro recorded into q
-nnoremap Q @q
 
 " Make *, # work in visual mode, too
 function! s:visualSearch(cmdtype, ...)

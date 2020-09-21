@@ -1,100 +1,10 @@
-; ----------------------------------------------------------------------------------------------------------------------
-; Plugins
-; ----------------------------------------------------------------------------------------------------------------------
+(local { "event" event "mode" mode } (include "fennel/nvim"))
 
-((. vim.fn "plug#begin") (.. (vim.fn.stdpath "data") "/plugged"))
+(include "fennel/plugins")
+(include "fennel/options")
 
-(vim.cmd "Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
-(vim.cmd "Plug 'Yggdroot/indentLine'")                                ; show markers every 2 columns of leading whitespace
-(vim.cmd "Plug 'godlygeek/tabular'")                                  ; align on words
-(vim.cmd "Plug 'itchyny/lightline.vim'")                              ;
-(vim.cmd "Plug 'junegunn/fzf.vim'")                                   ; fuzzy search source code, files, etc
-(vim.cmd "Plug 'liuchengxu/vim-which-key'")                           ; thingy to tell me my own hotkeys (requires manual work)
-(vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")                  ;
-(vim.cmd "Plug 'mhinz/vim-startify'")                                 ; startup screen
-(vim.cmd "Plug 'neovim/nvim-lsp'")                                    ;
-(vim.cmd "Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")    ;
-(vim.cmd "Plug 'nvim-lua/completion-nvim'")                           ;
-(vim.cmd "Plug 'nvim-lua/lsp-status.nvim'")                           ;
-(vim.cmd "Plug 'rhysd/git-messenger.vim'")                            ; git blame the line under the cursor
-(vim.cmd "Plug 'romainl/vim-cool'")                                   ; automatically unhighlight when cursor moves
-(vim.cmd "Plug 'romainl/vim-qf'")                                     ; vim quickfix improvements
-(vim.cmd "Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }") ; show colored pips by #abcdef things
-(vim.cmd "Plug 'rrethy/vim-illuminate'")                              ; highlight occurrences of the word under the cursor
-(vim.cmd "Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }")            ;
-(vim.cmd "Plug 'terryma/vim-multiple-cursors'")                       ; multiple cursors for quick and dirty renaming
-(vim.cmd "Plug 'tommcdo/vim-exchange'")                               ; swap the location of two selections
-(vim.cmd "Plug 'tpope/vim-characterize'")                             ; improved "ga"
-(vim.cmd "Plug 'tpope/vim-commentary'")                               ; quick (un-)commenting
-(vim.cmd "Plug 'tpope/vim-fugitive'")                                 ;
-(vim.cmd "Plug 'tpope/vim-repeat'")                                   ; make "." repeat more things out of the box
-(vim.cmd "Plug 'tpope/vim-surround'")                                 ; some surround helpers
-(vim.cmd "Plug 'unblevable/quick-scope'")                             ; highlight characters for f, F, t, T
-
-; Cool stuff in here but it defines way too many bindings for me and it
-; doesn't seem easy to disable them all and customize the ones I do want
-; Plug 'wellle/targets.vim'
-
-((. vim.fn "plug#end"))
-
-; ----------------------------------------------------------------------------------------------------------------------
-; Options
-; ----------------------------------------------------------------------------------------------------------------------
-
-(set vim.o.autowriteall true)   ;
-(set vim.o.hidden true)         ; don't abandon out-of-sight buffers
-(set vim.o.ignorecase true)     ; case-insensitive searching
-(set vim.o.lazyredraw true)     ; don't draw during e.g. applying a macro
-(set vim.o.joinspaces false)    ; insert one space after ., ?, ! chars when joining
-(set vim.o.showmode false)      ; don't show mode, since lightline handle that
-(set vim.o.startofline false)   ; don't jump cursor to start of line when moving
-(set vim.o.shiftround true)     ; shift to multiple of shiftwidth
-(set vim.o.smartcase true)      ; don't ignore case if search contains uppercase char
-(set vim.o.termguicolors true)  ;
-(set vim.o.title true)          ; put filename in window title
-(set vim.o.wildmenu true)       ; complete commands with a little menu
-
-(set vim.o.report 0)         ; always repeat the number of lines changed
-(set vim.o.scrolloff 10)     ; start scrolling before the cursor reaches the edge
-(set vim.o.sidescrolloff 16) ; start scrolling before the cursor reaches the edge
-(set vim.o.showtabline 2)    ; always show the tabline
-(set vim.o.timeoutlen 400)   ; only wait this many ms for key sequence to complete
-(set vim.o.updatetime 300)   ; fire CursorHold after this many ms (default 4000ms)
-
-(set vim.o.clipboard "unnamed,unnamedplus")         ; yank also copies to both clipboards
-(set vim.o.completeopt "menuone,noinsert,noselect") ; sane completion behavior...
-(set vim.o.grepprg "rg --vimgrep")                  ; use rg to grep
-(set vim.o.inccommand "split")                      ; show live command substitutions
-(set vim.o.listchars "tab:> ,trail:·,nbsp:+")       ; trailing whitespace markers
-(set vim.o.wildmode "list:longest,full")            ; wild menu completion behavior
-
-(set vim.wo.cursorline true)    ; higlight the current line
-(set vim.wo.linebreak true)     ; wrap lines in a more visually pleasing way
-(set vim.wo.list true)          ; show trailing whitespace, tabs, etc.
-(set vim.wo.foldenable false)   ; never fold
-(set vim.wo.number true)        ; show line number gutter
-
-(set vim.wo.signcolumn "yes") ; always draw signcolumn because it's jarring when it appears otherwise
-
-(macro set-bo [name value]
-  `(do
-     (tset vim.bo ,name ,value)
-     (tset vim.o ,name ,value)))
-
-(set-bo "expandtab" true)   ; convert tabs to spaces
-(set-bo "modeline" false)   ; disable modelines
-(set-bo "smartindent" true) ; smart autoindenting when starting a new line
-(set-bo "undofile" true)    ; persist undo history across buffer exits
-
-(set-bo "shiftwidth" 2)
-(set-bo "synmaxcol" 180) ; dont bother syntax-highlighting past this column
-(set-bo "softtabstop" 2)
-
-; ----------------------------------------------------------------------------------------------------------------------
-; Mappings
-; ----------------------------------------------------------------------------------------------------------------------
-
-; local utils = require('utils')
+(macro map [mode lhs rhs]
+  `(vim.api.nvim_set_keymap ,mode ,lhs ,rhs {}))
 
 (macro noremap [mode lhs rhs]
   `(vim.api.nvim_set_keymap ,mode ,lhs ,rhs { "noremap" true }))
@@ -105,8 +15,17 @@
 (macro inoremap [lhs rhs]
   `(noremap "i" ,lhs ,rhs))
 
+(macro nmap [lhs rhs]
+  `(map "n" ,lhs ,rhs))
+
 (macro nnoremap [lhs rhs]
   `(noremap "n" ,lhs ,rhs))
+
+(macro nnoremap-expr [lhs rhs]
+  `(vim.api.nvim_set_keymap "n" ,lhs ,rhs { "expr" true "noremap" true }))
+
+(macro nnoremap-expr-silent [lhs rhs]
+  `(vim.api.nvim_set_keymap "n" ,lhs ,rhs { "expr" true "noremap" true "silent" true }))
 
 (macro onoremap [lhs rhs]
   `(noremap "o" ,lhs ,rhs))
@@ -147,21 +66,73 @@
 ; Backspace to switch to the previously edited buffer
 (nnoremap "<BS>" "<C-^>")
 
-(local event (require "event"))
+; Prevent the cursor from jumping past a wrapped line when moving up and down
+(nnoremap "j" "gj")
+(nnoremap "k" "gk")
+
+; HJKL to move around the file.
+(nmap "J" "5j")
+(nmap "K" "5k")
+(vnoremap "J" "5j")
+(vnoremap "K" "5k")
+(nnoremap "H" "^")
+(nnoremap "L" "$")
+(onoremap "H" "^")
+(onoremap "L" "$")
+(vnoremap "H" "^")
+(vnoremap "L" "g_")
+
+; Make Y yank to the end of line, similar to how C and D behave
+(nnoremap "Y" "y$")
+
+; After visual mode delete/yank, leave cursor at the end of the highlight
+(vnoremap "D" "d`>")
+(vnoremap "Y" "y`>")
+
+; Select last changed or yanked area
+(nnoremap-expr "gV" "'`[' . strpart(getregtype(), 0, 1) . '`]'")
+
+; U to redo. <C-r> comes from some plugin, maybe vim-repeat? (annoying)
+(nnoremap "U" "<C-r>")
+; Weaning myself of <C-R> to redo
+(nnoremap "<C-r>" "<Nop>")
+
+; Refactor word under cursor
+; nnoremap c* /\<<C-r>=expand('<cWORD>')<CR>\>\C<CR>``cgn
+; nnoremap c# ?\<<C-r>=expand('<cWORD>')<CR>\>\C<CR>``cgN
+
+; Center after every search movement
+(nnoremap "n" "nzz")
+(nnoremap "N" "Nzz")
+(vnoremap "n" "nzz")
+(vnoremap "N" "Nzz")
+
+; q to quit the current buffer, or quit vim if there's only 1 listed buffer
+(nnoremap-expr-silent "q" "len(getbufinfo({'buflisted': 1})) ==? 1 ? \":q\\<CR>\" : \":bd\\<CR>\"")
+
+; Disable annoying command search 'q:' that I never use
+; (nnoremap "q:" "<Nop>")
+
+; ,q to record a macro
+(nnoremap ",q" "q")
+
+; Q to apply macro recorded into q
+(nnoremap "Q" "@q")
+
 (local utils (require "utils"))
 
 (macro autocmd [events pattern action]
   `(utils.autocmd "mitchellwrosen" ,events ,pattern ,action))
 
-(autocmd [event.bufEnter event.focusGained event.insertLeave] "*" (lambda [] (set vim.wo.relativenumber true)))
-(autocmd [event.bufLeave event.focusLost   event.insertEnter] "*" (lambda [] (set vim.wo.relativenumber false)))
+(autocmd [event.bufEnter event.insertLeave] "*" (lambda [] (set vim.wo.relativenumber true)))
+(autocmd [event.bufLeave event.insertEnter] "*" (lambda [] (set vim.wo.relativenumber false)))
 
 (fn lsp-setup []
   (let
     [completion (require "completion")
-    configs    (require "nvim_lsp/configs")
-    lsp        (require "nvim_lsp")
-    status     (require "lsp-status")]
+     configs    (require "nvim_lsp/configs")
+     lsp        (require "nvim_lsp")
+     status     (require "lsp-status")]
 
     ; Uh, just kind of following https://github.com/nvim-lua/lsp-status.nvim here...
     (status.register_progress)
@@ -226,11 +197,11 @@
         row (math.floor (+ (/ (- lines height) 2) 0.5))
         width (math.floor (+ (* columns 0.8) 0.5))
         col (math.floor (+ (/ (- columns width) 2) 0.5))
-        win (vim.api.nvim_open_win 
-              buf 
-              true 
-              { "col" col 
-                "height" height 
+        win (vim.api.nvim_open_win
+              buf
+              true
+              { "col" col
+                "height" height
                 "relative" "editor"
                 "row" row
                 "style" "minimal"

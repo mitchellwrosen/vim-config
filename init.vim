@@ -5,6 +5,7 @@
 " Space-/ BLines
 " cabbrev rg Rg?
 " don't cd with startify
+" make surrounding with quotes repeatable
 
 augroup mitchellwrosen
   autocmd!
@@ -35,22 +36,6 @@ endfunction
 vnoremap * :<C-u>call <SID>visualSearch('/')<CR>/<C-r>=@/<CR><CR>``
 vnoremap # :<C-u>call <SID>visualSearch('?')<CR>?<C-r>=@/<CR><CR>``
 
-" Follow >>/<< shifted text around with the cursor
-nmap >> <Plug>MyNmapLl
-nmap << <Plug>MyNmapHh
-" Get it to repeat with '.'
-nnoremap <silent> <Plug>MyNmapLl >>ll:call repeat#set("\<Plug>MyNmapLl")<CR>
-nnoremap <silent> <Plug>MyNmapHh <<hh:call repeat#set("\<Plug>MyNmapHh")<CR>
-
-" ,j to join (since J moves down)
-nnoremap ,j m`J``
-
-" inner/around line text objects
-vnoremap <silent> al $o0
-onoremap <silent> al :<C-u>normal val<CR>
-vnoremap <silent> il g_o^
-onoremap <silent> il :<C-u>normal vil<CR>
-
 " inner/around number text objects (with forward-seeking behavior)
 " 123 123.456 0b1010 0xff
 let s:number_regex = '0b[01]\+\|0x\x\+\|\d\+\(\.\d\+\)\='
@@ -75,19 +60,6 @@ onoremap <silent> in :<C-u>call <SID>innerNumberTextObject()<cr>
 xnoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 onoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 
-" Ctrl+S to search-and-replace in the file
-nnoremap <C-s> :%s/\v//cg<Left><Left><Left><Left>
-vnoremap <C-s> :s/\v//cg<Left><Left><Left><Left>
-
-" Move buffers with Ctrl+jk
-nnoremap <silent> <C-j> :bn<CR>
-nnoremap <silent> <C-k> :bp<CR>
-
-" Move vertical splits with Ctrl+hl
-" I never use vertical splits anyway so these should be repurposed.
-" nnoremap <C-h> <C-w>h
-" nnoremap <C-l> <C-w>l
-
 " github.com/mitchellwrosen/repld stuff
 noremap <silent> <Space>s m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``
 nnoremap <silent> <Space>S m`:silent w !repld-send<CR>``
@@ -96,18 +68,6 @@ vnoremap <silent> <Space>s m`<Esc>:silent '<,'>w !repld-send<CR>``
 command! -complete=shellcmd -nargs=1 Fg lua require'init'.run_floating(<f-args>)
 nnoremap <silent> <Space>rg :Fg lazygit<CR>
 nnoremap <silent> <Space>rt :Fg htop<CR>
-
-" <C-v> to paste from * register
-inoremap <C-v> <C-r>*
-
-" Ctrl+space for omnicomplete
-imap <C-Space> <C-x><C-o>
-
-" Command mode movement
-cnoremap <C-h> <Left>
-cnoremap <C-j> <Down>
-cnoremap <C-k> <Up>
-cnoremap <C-l> <Right>
 
 " Hm... can't figure out how to "fall through" to normal tab (autocomplete)
 " behavior
@@ -127,13 +87,6 @@ cnoremap <C-l> <Right>
 " endfunction
 " cnoremap <expr> <Tab> <SID>commandModeTab()
 " cnoremap <expr> <S-Tab> <SID>commandModeShiftTab()
-
-" When a popup menu is visible, move thru it with tab and select with enter
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : coc#refresh()
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-
-inoremap <C-u> <Nop>
 
 function! s:getSelectedText() abort
   let [l:lnum1, l:col1] = getpos("'<")[1:2]

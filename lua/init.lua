@@ -222,7 +222,7 @@ local function lsp_setup()
       return status.on_attach(client)
     end
     on_attach = _4_
-    lsp.hls.setup({capabilities = capabilities(lsp.hls), on_attach = on_attach})
+    lsp.hls.setup({capabilities = capabilities(lsp.hls), init_options = {haskell = {completionSnippetsOn = true, diagnosticsOnChange = true, formatOnImportOn = true, formattingProvider = "ormolu", hlintOn = false, liquidOn = false}}, on_attach = on_attach})
     lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
     lsp.vimls.setup({capabilities = capabilities(lsp.vimls), on_attach = on_attach})
   end
@@ -237,7 +237,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 69))
+  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 81))
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

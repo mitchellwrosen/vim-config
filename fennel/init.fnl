@@ -49,6 +49,18 @@
             (status.on_attach client))]
       (lsp.hls.setup
         { "capabilities" (capabilities lsp.hls)
+          "init_options" {
+            "haskell" {
+              "completionSnippetsOn" true
+              ; diagnosticsDebounceDuration 350000
+              "diagnosticsOnChange" true
+              "formatOnImportOn" true
+              "formattingProvider" "ormolu"
+              "hlintOn" false
+              "liquidOn" false
+              ; "maxNumberOfProblems" 100
+            }
+          }
           "on_attach" on-attach })
       (lsp.sumneko_lua.setup
         { "capabilities" (capabilities lsp.sumneko_lua)

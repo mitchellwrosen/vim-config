@@ -4,4 +4,4 @@ nnoremap <buffer> <Space>ff :Ag (<Bslash>b)<C-r><C-w><Bslash>b[ <Bslash>t<Bslash
 nnoremap <buffer> <Space>ft :Rg (((data<Bar>newtype<Bar>type)\s+)<Bar>class .*)\b<C-r><C-w>\b<CR>
 nnoremap <buffer> <Space>fa :Rgu (<C-r><C-w>\b\s+::)<Bar>((data(\sfamily)?<Bar>newtype<Bar>type(\sfamily)?)\s+<C-r><C-w>\b)<Bar>(class\s+(\(.*\)\s+=>\s+)?<C-r><C-w>\b\s+where)<CR>
 
-nnoremap <buffer> <silent> <Space>p :call RunOrmolu()<CR>
+nnoremap <buffer> <silent> <Space>d :call RunOrmolu()<CR>

@@ -184,16 +184,38 @@ local function _2_()
   return nil
 end
 utils.autocmd("mitchellwrosen", {event.bufLeave, event.insertEnter}, "*", _2_)
+do
+  local default_code_action_callback = vim.lsp.callbacks["textDocument/codeAction"]
+  local function _3_(x, y, actions)
+    if (#actions == 1) then
+      local action = actions[1]
+      local command = (type(action.command) == "table")
+      local edit = action.edit
+      if (edit or (type(command) == "table")) then
+        if edit then
+          vim.lsp.util.apply_workspace_edit(edit)
+        end
+        if (type(command) == "table") then
+          return vim.lsp.buf.execute_command(command)
+        end
+      else
+        return vim.lsp.buf.execute_command(action)
+      end
+    else
+      return default_code_action_callback(x, y, actions)
+    end
+  end
+  vim.lsp.callbacks["textDocument/codeAction"] = _3_
+end
 local function lsp_setup()
   local completion = require("completion")
-  local configs = require("nvim_lsp/configs")
   local lsp = require("nvim_lsp")
   local status = require("lsp-status")
   status.register_progress()
   do
     local capabilities = nil
     local function _3_(config)
-      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 29))
+      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 54))
       local x_0_ = (config.capabilities or {})
       local y_0_ = status.capabilities
       return vim.tbl_extend("keep", x_0_, y_0_)
@@ -201,12 +223,13 @@ local function lsp_setup()
     capabilities = _3_
     local on_attach = nil
     local function _4_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 31))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 56))
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lca", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldef", ":lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lds", ":lua vim.lsp.buf.document_symbol()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(0, "n", "<Space>d", ":lua vim.lsp.buf.formatting()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lh", ":lua vim.lsp.buf.hover()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lic", ":lua vim.lsp.buf.incoming_calls()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lim", ":lua vim.lsp.buf.implementation()<CR>", {noremap = true, silent = true})
@@ -237,7 +260,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 81))
+  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 107))
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

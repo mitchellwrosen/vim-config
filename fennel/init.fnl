@@ -13,10 +13,36 @@
 (autocmd [event.bufEnter event.insertLeave] "*" (lambda [] (set vim.wo.relativenumber true)))
 (autocmd [event.bufLeave event.insertEnter] "*" (lambda [] (set vim.wo.relativenumber false)))
 
+(let
+  [default-code-action-callback (. vim.lsp.callbacks "textDocument/codeAction")]
+  (tset
+    vim.lsp.callbacks
+    "textDocument/codeAction"
+    (fn [x y actions]
+      (if
+        (= (length actions) 1)
+        ; Below was translated directly from default code action callback.
+        ;
+        ; textDocument/codeAction can return either Command[] or CodeAction[].
+        ; If it is a CodeAction, it can have either an edit, a command or both.
+        ; Edits should be executed first
+        (let
+          [ action (. actions 1)
+            command (= (type action.command) "table")
+            edit action.edit
+          ]
+          (if
+            (or edit (= (type command) "table"))
+            (do
+              (when edit (vim.lsp.util.apply_workspace_edit edit))
+              (when (= (type command) "table") (vim.lsp.buf.execute_command command)))
+            (vim.lsp.buf.execute_command action)))
+        (default-code-action-callback x y actions)))))
+
 (fn lsp-setup []
   (let
     [completion (require "completion")
-     configs (require "nvim_lsp/configs")
+     ; configs (require "nvim_lsp/configs")
      lsp (require "nvim_lsp")
      status (require "lsp-status")]
 
@@ -25,7 +51,6 @@
 
     (let
       [
-        ; capabilities (lambda [config] (vim.tbl_extend "keep" (or config.capabilities {}) status.capabilities))
         capabilities (lambda [config] (left-merge (or config.capabilities {}) status.capabilities))
         on-attach
           (lambda [client]
@@ -34,6 +59,7 @@
             (buf-map [ "n" ] "<Space>ldec" ":lua vim.lsp.buf.declaration()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>ldef" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lds" ":lua vim.lsp.buf.document_symbol()<CR>" { "noremap" true "silent" true })
+            (buf-map [ "n" ] "<Space>d" ":lua vim.lsp.buf.formatting()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lh" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lic" ":lua vim.lsp.buf.incoming_calls()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lim" ":lua vim.lsp.buf.implementation()<CR>" { "noremap" true "silent" true })

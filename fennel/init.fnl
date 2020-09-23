@@ -23,17 +23,6 @@
     ; Uh, just kind of following https://github.com/nvim-lua/lsp-status.nvim here...
     (status.register_progress)
 
-    (set
-      configs.ghcide
-      { "default_config"
-        { "cmd" [ "ghcide-wrapper" "--lsp" ]
-          "filetypes" [ "haskell" ]
-          "root_dir" (lsp.util.root_pattern ".git" "cabal.project" "stack.yaml")
-          "settings" {}
-        }
-      }
-    )
-
     (let
       [
         ; capabilities (lambda [config] (vim.tbl_extend "keep" (or config.capabilities {}) status.capabilities))
@@ -58,8 +47,8 @@
             (vim.cmd "setlocal omnifunc=v:lua.vim.lsp.omnifunc")
             (completion.on_attach client)
             (status.on_attach client))]
-      (lsp.ghcide.setup
-        { "capabilities" (capabilities lsp.ghcide)
+      (lsp.hls.setup
+        { "capabilities" (capabilities lsp.hls)
           "on_attach" on-attach })
       (lsp.sumneko_lua.setup
         { "capabilities" (capabilities lsp.sumneko_lua)

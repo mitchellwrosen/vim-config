@@ -27,8 +27,8 @@
 (vim.cmd "Plug 'tpope/vim-surround'")                                 ; some surround helpers
 (vim.cmd "Plug 'unblevable/quick-scope'")                             ; highlight characters for f, F, t, T
 
-(vim.cmd "Plug 'nvim-lua/plenary.nvim'")
-(vim.cmd "Plug 'nvim-lua/popup.nvim'")
+; (vim.cmd "Plug 'nvim-lua/plenary.nvim'")
+; (vim.cmd "Plug 'nvim-lua/popup.nvim'")
 
 ; Cool stuff in here but it defines way too many bindings for me and it
 ; doesn't seem easy to disable them all and customize the ones I do want

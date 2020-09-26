@@ -1,3 +1,4 @@
+(local { "autocmd" autocmd "event" event } (include "fennel/nvim"))
 (import-macros { "buf-map" buf-map "left-merge" left-merge } "fennel/nvim-macros")
 
 (include "fennel/colors")
@@ -44,8 +45,7 @@
     (status.register_progress)
 
     (let
-      [
-        capabilities (lambda [config] (left-merge (or config.capabilities {}) status.capabilities))
+      [ capabilities (lambda [config] (left-merge (or config.capabilities {}) status.capabilities))
         on-attach
           (lambda [client]
             (buf-map [ "n" ] "<Space>a" ":lua vim.lsp.buf.code_action()<CR>" { "noremap" true "silent" true })
@@ -65,6 +65,61 @@
             (buf-map [ "n" ] "<Space>lt" ":lua vim.lsp.buf.type_definition()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lw" ":lua vim.lsp.buf.workspace_symbol()<CR>" { "noremap" true "silent" true })
             (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
+
+            (let
+              [ ; extract the "meaningful head" of a list of (markdown) strings, where "meaningful" means not the empty
+                ; string, and not beginning with ```
+                meaningful-head
+                  (fn [lines]
+                    (var ret "")
+                    (var i 1)
+                    (while (<= i (length lines))
+                      (let [l (. lines i)]
+                        (if
+                          (or (= l "") (= 0 (vim.fn.match l "^```")))
+                          (set i (+ i 1))
+                          (do
+                            (set i (+ (length lines) 1))
+                            (set ret l)))))
+                    ret)
+
+                ; filter : io (string -> string)
+                ;
+                ; Per the current buffer's filetype, return a function that mutates a line to set as virtual text, where
+                ; the empty string means "don't annotate".
+                ;
+                ; For example, in Haskell we only care about lines that contain "::" (type signatures), because
+                ; otherwise we'd end up annotating types with their own names on hover (for whatever reason,
+                ; haskell-language-server currently returns "Bool" as the first line of a hover request, rather than
+                ; something like "Bool :: Type")
+                filter
+                  (match vim.bo.filetype
+                    "haskell"
+                      (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
+                    _ (fn [line] line))
+
+                ; virtual-hover : io (string -> string) -> io ()
+                ;
+                ; Call "textDocument/hover" and set the first meaningful line of the returned markdown (after filtering)
+                ; as virtual text of the current line (namespace "hover"). Clears any previously set virtual text.
+                virtual-hover
+                  (fn [filter]
+                    (local position (vim.lsp.util.make_position_params))
+                    (vim.lsp.buf_request 0 "textDocument/hover" position
+                      (fn [_err _method result _client]
+                        (local namespace (vim.api.nvim_create_namespace "hover"))
+                        (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
+                        (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
+                        (when (not (= (filter line) ""))
+                          (vim.api.nvim_buf_set_virtual_text
+                            0
+                            namespace
+                            position.position.line
+                            [ [ (.. "∙ " line) "Comment" ] ] {})))))
+
+              ]
+              (autocmd "mitchellwrosen" [event.cursor-moved] "<buffer>" (fn [] (virtual-hover filter))))
+
             (completion.on_attach client)
             (status.on_attach client))]
       (lsp.hls.setup
@@ -121,4 +176,5 @@
     win))
 
 { "lightline_status" lightline-status
-  "run_floating" run-floating }
+  "run_floating" run-floating
+  "virtual_hover" virtual-hover }

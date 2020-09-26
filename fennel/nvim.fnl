@@ -1,6 +1,7 @@
 (local event
   { "bufEnter" "BufEnter"
     "bufLeave" "BufLeave"
+    "cursor-moved" "CursorMoved"
     "focusGained" "FocusGained"
     "focusLost" "FocusLost"
     "insertEnter" "InsertEnter"
@@ -23,6 +24,7 @@
     (set n (+ n 1))
     name))
 
+; autocmd : string -> list string -> string -> io () -> io ()
 (lambda autocmd [group events pattern f]
   (let [name (register-lambda f)]
     (vim.cmd
@@ -42,13 +44,15 @@
     (each [_ mode (ipairs modes)]
       (vim.api.nvim_buf_set_keymap 0 (. modes 1) lhs (.. ":lua require('fennel/nvim').lambdas." name "()<CR>") opts))))
 
-(lambda overwrite-buffer [lines]
+; overwrite-buffer : string -> io ()
+(lambda overwrite-buffer [s]
   (if vim.bo.modifiable
     (let [w (vim.fn.winsaveview)]
-      (vim.api.nvim_buf_set_lines 0 0 -1 false lines)
+      (vim.api.nvim_buf_set_lines 0 0 -1 false s)
       (vim.fn.winrestview w))
     (print "Cannot write to non-modifiable buffer")))
 
+; sys-format-buffer : exename -> io ()
 (lambda sys-format-buffer [program]
   (let [output (vim.fn.system (.. program " " (vim.api.nvim_buf_get_name 0)))]
     (when (= vim.v.shell_error 0)

@@ -11,13 +11,6 @@ augroup mitchellwrosen
   autocmd!
 augroup END
 
-" Colorscheme stuff has to come before lua.init, I guess
-let g:gruvbox_inverse = 1
-let g:gruvbox_contrast_dark = 'soft'
-let g:gruvbox_improved_strings = 1 " thought this was supposed to extra-highlight strings?
-let g:gruvbox_invert_signs = 1
-colorscheme gruvbox
-
 lua require('init')
 
 " Make *, # work in visual mode, too
@@ -481,17 +474,6 @@ let g:signify_sign_change = 'Δ'
 let g:signify_sign_delete = '-'
 " I only use git, so only bother integrating with it (performance win!)
 let g:signify_vcs_list = [ 'git' ]
-
-" [mhinz/vim-startify]
-let g:startify_custom_footer = ['   [e]  empty buffer', '   [q]  quit']
-let g:startify_custom_header = []
-let g:startify_custom_indices = ['a', 's', 'd', 'f', 'l', 'g', 'h', 'w', 'r', 'u', 'o', 'p', 't', 'y', 'z', 'x', 'c', 'v', 'm', ',', '.', '/', 'b', 'n', '1', '2', '3', '4', '5', '6']
-let g:startify_enable_special = 0
-" faster startup
-let g:startify_enable_unsafe = 1
-let g:startify_files_number = 30
-let g:startify_lists = [{ 'type': 'files' }]
-let g:startify_relative_path = 1
 
 " [rhysd/git-messenger.vim]
 let g:git_messenger_always_into_popup = v:true

@@ -134,6 +134,18 @@ package.preload["fennel/options"] = package.preload["fennel/options"] or functio
   vim.o["softtabstop"] = 2
   return nil
 end
+package.preload["fennel/plugin-startify"] = package.preload["fennel/plugin-startify"] or function(...)
+  vim.g.startify_custom_footer = {"   [e]  empty buffer", "   [q]  quit"}
+  vim.g.startify_custom_header = {}
+  vim.g.startify_custom_indices = {"a", "s", "d", "f", "l", "g", "h", "w", "r", "u", "o", "p", "t", "y", "z", "x", "c", "v", "m", "", ".", "/", "b", "n", "1", "2", "3", "4", "5", "6"}
+  vim.g.startify_enable_special = 0
+  vim.g.startify_enable_unsafe = 1
+  vim.g.startify_change_to_dir = 0
+  vim.g.startify_files_number = 30
+  vim.g.startify_lists = {{type = "files"}}
+  vim.g.startify_relative_path = 1
+  return nil
+end
 package.preload["fennel/plugins"] = package.preload["fennel/plugins"] or function(...)
   vim.fn["plug#begin"]((vim.fn.stdpath("data") .. "/plugged"))
   vim.cmd("Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
@@ -162,7 +174,15 @@ package.preload["fennel/plugins"] = package.preload["fennel/plugins"] or functio
   vim.cmd("Plug 'tpope/vim-repeat'")
   vim.cmd("Plug 'tpope/vim-surround'")
   vim.cmd("Plug 'unblevable/quick-scope'")
-  return vim.fn["plug#end"]()
+  vim.fn["plug#end"]()
+  return require("fennel/plugin-startify")
+end
+package.preload["fennel/colors"] = package.preload["fennel/colors"] or function(...)
+  vim.g.gruvbox_inverse = 1
+  vim.g.gruvbox_contrast_dark = "soft"
+  vim.g.gruvbox_improved_strings = 1
+  vim.g.gruvbox_invert_signs = 1
+  return vim.cmd("colorscheme gruvbox")
 end
 package.preload["fennel/nvim"] = package.preload["fennel/nvim"] or function(...)
   return {event = {bufEnter = "BufEnter", bufLeave = "BufLeave", focusGained = "FocusGained", focusLost = "FocusLost", insertEnter = "InsertEnter", insertLeave = "InsertLeave"}, mode = {["operator-pending"] = "operator-pending", command = "command", insert = "insert", normal = "normal", visual = "visual"}}
@@ -170,6 +190,7 @@ end
 local _0_ = require("fennel/nvim")
 local event = _0_["event"]
 local mode = _0_["mode"]
+require("fennel/colors")
 require("fennel/plugins")
 require("fennel/options")
 require("fennel/mappings")
@@ -215,7 +236,7 @@ local function lsp_setup()
   do
     local capabilities = nil
     local function _3_(config)
-      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 54))
+      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 55))
       local x_0_ = (config.capabilities or {})
       local y_0_ = status.capabilities
       return vim.tbl_extend("keep", x_0_, y_0_)
@@ -223,7 +244,7 @@ local function lsp_setup()
     capabilities = _3_
     local on_attach = nil
     local function _4_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 56))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 57))
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lca", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
@@ -260,7 +281,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 107))
+  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 108))
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

@@ -1,6 +1,7 @@
 (local { "event" event "mode" mode } (include "fennel/nvim"))
 (import-macros { "buf-map" buf-map "left-merge" left-merge } "fennel/nvim-macros")
 
+(include "fennel/colors")
 (include "fennel/plugins")
 (include "fennel/options")
 (include "fennel/mappings")

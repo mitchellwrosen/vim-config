@@ -48,13 +48,13 @@
         capabilities (lambda [config] (left-merge (or config.capabilities {}) status.capabilities))
         on-attach
           (lambda [client]
-            (buf-map [ "n" ] "<Space>lca" ":lua vim.lsp.buf.code_action()<CR>" { "noremap" true "silent" true })
+            (buf-map [ "n" ] "<Space>a" ":lua vim.lsp.buf.code_action()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lcr" ":lua vim.lsp.buf.clear_references<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>ldec" ":lua vim.lsp.buf.declaration()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>ldef" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lds" ":lua vim.lsp.buf.document_symbol()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>d" ":lua vim.lsp.buf.formatting()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lh" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
+            (buf-map [ "n" ] "<Enter>" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lic" ":lua vim.lsp.buf.incoming_calls()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lim" ":lua vim.lsp.buf.implementation()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lo" ":lua vim.lsp.buf.outgoing_calls()<CR>" { "noremap" true "silent" true })
@@ -64,7 +64,7 @@
             (buf-map [ "n" ] "<Space>lsl" ":lua vim.lsp.util.show_line_diagnostics()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lt" ":lua vim.lsp.buf.type_definition()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lw" ":lua vim.lsp.buf.workspace_symbol()<CR>" { "noremap" true "silent" true })
-            (vim.cmd "setlocal omnifunc=v:lua.vim.lsp.omnifunc")
+            (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
             (completion.on_attach client)
             (status.on_attach client))]
       (lsp.hls.setup

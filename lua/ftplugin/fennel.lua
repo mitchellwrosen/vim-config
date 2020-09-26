@@ -4,4 +4,4 @@ local sys_format_buffer = _0_["sys-format-buffer"]
 local function _1_()
   return sys_format_buffer("fnlfmt")
 end
-return buf_map_fn({"n", "v"}, " p", _1_, {noremap = true, silent = true})
+return buf_map_fn({"n"}, " p", _1_, {noremap = true})

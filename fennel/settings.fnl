@@ -1,7 +1,10 @@
+(set vim.g.completion_enable_auto_popup 1)
+(set vim.g.completion_matching_ignore_case 1)
+
 (set vim.g.startify_custom_footer [ "   [e]  empty buffer" "   [q]  quit" ])
 (set vim.g.startify_custom_header {})
-(set vim.g.startify_custom_indices 
-  ["a" "s" "d" "f" "l" "g" "h" "w" "r" "u" "o" "p" "t" "y" "z" 
+(set vim.g.startify_custom_indices
+  ["a" "s" "d" "f" "l" "g" "h" "w" "r" "u" "o" "p" "t" "y" "z"
    "x" "c" "v" "m" "" "." "/" "b" "n" "1" "2" "3" "4" "5" "6"])
 (set vim.g.startify_enable_special 0)
 ; faster startup

@@ -6,6 +6,7 @@
 (set vim.o.showmode false)      ; don't show mode, since lightline handle that
 (set vim.o.startofline false)   ; don't jump cursor to start of line when moving
 (set vim.o.shiftround true)     ; shift to multiple of shiftwidth
+(set vim.o.shortmess "filnxtToOFIc")
 (set vim.o.smartcase true)      ; don't ignore case if search contains uppercase char
 (set vim.o.termguicolors true)  ;
 (set vim.o.title true)          ; put filename in window title

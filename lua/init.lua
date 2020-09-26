@@ -1,3 +1,69 @@
+package.preload["fennel/nvim"] = package.preload["fennel/nvim"] or function(...)
+  local event = {bufEnter = "BufEnter", bufLeave = "BufLeave", focusGained = "FocusGained", focusLost = "FocusLost", insertEnter = "InsertEnter", insertLeave = "InsertLeave"}
+  local mode = {["operator-pending"] = "operator-pending", command = "command", insert = "insert", normal = "normal", visual = "visual"}
+  local n = 0
+  local lambdas = {}
+  local function register_lambda(f)
+    assert((nil ~= f), string.format("Missing argument %s on %s:%s", "f", "./fennel/nvim.fnl", 20))
+    local name = ("f" .. tostring(n))
+    lambdas[name] = f
+    n = (n + 1)
+    return name
+  end
+  local function autocmd(group, events, pattern, f)
+    assert((nil ~= f), string.format("Missing argument %s on %s:%s", "f", "./fennel/nvim.fnl", 26))
+    assert((nil ~= pattern), string.format("Missing argument %s on %s:%s", "pattern", "./fennel/nvim.fnl", 26))
+    assert((nil ~= events), string.format("Missing argument %s on %s:%s", "events", "./fennel/nvim.fnl", 26))
+    assert((nil ~= group), string.format("Missing argument %s on %s:%s", "group", "./fennel/nvim.fnl", 26))
+    local name = register_lambda(f)
+    return vim.cmd(("autocmd " .. group .. " " .. table.concat(events, ",") .. " " .. pattern .. " lua require('fennel/nvim').lambdas." .. name .. "()"))
+  end
+  local function buf_map_fn(modes, lhs, f, opts)
+    assert((nil ~= opts), string.format("Missing argument %s on %s:%s", "opts", "./fennel/nvim.fnl", 40))
+    assert((nil ~= f), string.format("Missing argument %s on %s:%s", "f", "./fennel/nvim.fnl", 40))
+    assert((nil ~= lhs), string.format("Missing argument %s on %s:%s", "lhs", "./fennel/nvim.fnl", 40))
+    assert((nil ~= modes), string.format("Missing argument %s on %s:%s", "modes", "./fennel/nvim.fnl", 40))
+    local name = register_lambda(f)
+    for _, mode0 in ipairs(modes) do
+      vim.api.nvim_buf_set_keymap(0, modes[1], lhs, (":lua require('fennel/nvim').lambdas." .. name .. "()<CR>"), opts)
+    end
+    return nil
+  end
+  local function overwrite_buffer(lines)
+    assert((nil ~= lines), string.format("Missing argument %s on %s:%s", "lines", "./fennel/nvim.fnl", 45))
+    if vim.bo.modifiable then
+      local w = vim.fn.winsaveview()
+      vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+      return vim.fn.winrestview(w)
+    else
+      return print("Cannot write to non-modifiable buffer")
+    end
+  end
+  local function sys_format_buffer(program)
+    assert((nil ~= program), string.format("Missing argument %s on %s:%s", "program", "./fennel/nvim.fnl", 52))
+    local output = vim.fn.system((program .. " " .. vim.api.nvim_buf_get_name(0)))
+    if (vim.v.shell_error == 0) then
+      overwrite_buffer(vim.fn.split(output, "\n"))
+      return vim.cmd("update")
+    end
+  end
+  return {["buf-map-fn"] = buf_map_fn, ["sys-format-buffer"] = sys_format_buffer, autocmd = autocmd, event = event, lambdas = lambdas, mode = mode}
+end
+package.preload["fennel/autocommands"] = package.preload["fennel/autocommands"] or function(...)
+  local _0_ = require("fennel/nvim")
+  local autocmd = _0_["autocmd"]
+  local event = _0_["event"]
+  local function _1_()
+    vim.wo.relativenumber = true
+    return nil
+  end
+  autocmd("mitchellwrosen", {event.bufEnter, event.insertLeave}, "*", _1_)
+  local function _2_()
+    vim.wo.relativenumber = false
+    return nil
+  end
+  return autocmd("mitchellwrosen", {event.bufLeave, event.insertEnter}, "*", _2_)
+end
 package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or function(...)
   do
     vim.api.nvim_set_keymap("c", ";", ":", {noremap = true})
@@ -73,7 +139,7 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.api.nvim_set_keymap("c", "<C-k>", "<Up>", {noremap = true})
   vim.api.nvim_set_keymap("c", "<C-l>", "<Right>", {noremap = true})
   vim.api.nvim_set_keymap("i", "<Tab>", "pumvisible() ? \"\\<C-n>\" : \"\\<Tab>\"", {expr = true, noremap = true})
-  return vim.api.nvim_set_keymap("i", "<CR", "pumvisible() ? \"\\<C-y>\" : \"\\<CR>\"", {expr = true, noremap = true})
+  return vim.api.nvim_set_keymap("i", "<CR>", "pumvisible() ? \"\\<C-y>\" : \"\\<CR>\"", {expr = true, noremap = true})
 end
 package.preload["fennel/options"] = package.preload["fennel/options"] or function(...)
   vim.o.autowriteall = true
@@ -84,6 +150,7 @@ package.preload["fennel/options"] = package.preload["fennel/options"] or functio
   vim.o.showmode = false
   vim.o.startofline = false
   vim.o.shiftround = true
+  vim.o.shortmess = "filnxtToOFIc"
   vim.o.smartcase = true
   vim.o.termguicolors = true
   vim.o.title = true
@@ -134,18 +201,6 @@ package.preload["fennel/options"] = package.preload["fennel/options"] or functio
   vim.o["softtabstop"] = 2
   return nil
 end
-package.preload["fennel/plugin-startify"] = package.preload["fennel/plugin-startify"] or function(...)
-  vim.g.startify_custom_footer = {"   [e]  empty buffer", "   [q]  quit"}
-  vim.g.startify_custom_header = {}
-  vim.g.startify_custom_indices = {"a", "s", "d", "f", "l", "g", "h", "w", "r", "u", "o", "p", "t", "y", "z", "x", "c", "v", "m", "", ".", "/", "b", "n", "1", "2", "3", "4", "5", "6"}
-  vim.g.startify_enable_special = 0
-  vim.g.startify_enable_unsafe = 1
-  vim.g.startify_change_to_dir = 0
-  vim.g.startify_files_number = 30
-  vim.g.startify_lists = {{type = "files"}}
-  vim.g.startify_relative_path = 1
-  return nil
-end
 package.preload["fennel/plugins"] = package.preload["fennel/plugins"] or function(...)
   vim.fn["plug#begin"]((vim.fn.stdpath("data") .. "/plugged"))
   vim.cmd("Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
@@ -174,8 +229,21 @@ package.preload["fennel/plugins"] = package.preload["fennel/plugins"] or functio
   vim.cmd("Plug 'tpope/vim-repeat'")
   vim.cmd("Plug 'tpope/vim-surround'")
   vim.cmd("Plug 'unblevable/quick-scope'")
-  vim.fn["plug#end"]()
-  return require("fennel/plugin-startify")
+  return vim.fn["plug#end"]()
+end
+package.preload["fennel/settings"] = package.preload["fennel/settings"] or function(...)
+  vim.g.completion_enable_auto_popup = 1
+  vim.g.completion_matching_ignore_case = 1
+  vim.g.startify_custom_footer = {"   [e]  empty buffer", "   [q]  quit"}
+  vim.g.startify_custom_header = {}
+  vim.g.startify_custom_indices = {"a", "s", "d", "f", "l", "g", "h", "w", "r", "u", "o", "p", "t", "y", "z", "x", "c", "v", "m", "", ".", "/", "b", "n", "1", "2", "3", "4", "5", "6"}
+  vim.g.startify_enable_special = 0
+  vim.g.startify_enable_unsafe = 1
+  vim.g.startify_change_to_dir = 0
+  vim.g.startify_files_number = 30
+  vim.g.startify_lists = {{type = "files"}}
+  vim.g.startify_relative_path = 1
+  return nil
 end
 package.preload["fennel/colors"] = package.preload["fennel/colors"] or function(...)
   vim.g.gruvbox_inverse = 1
@@ -184,30 +252,15 @@ package.preload["fennel/colors"] = package.preload["fennel/colors"] or function(
   vim.g.gruvbox_invert_signs = 1
   return vim.cmd("colorscheme gruvbox")
 end
-package.preload["fennel/nvim"] = package.preload["fennel/nvim"] or function(...)
-  return {event = {bufEnter = "BufEnter", bufLeave = "BufLeave", focusGained = "FocusGained", focusLost = "FocusLost", insertEnter = "InsertEnter", insertLeave = "InsertLeave"}, mode = {["operator-pending"] = "operator-pending", command = "command", insert = "insert", normal = "normal", visual = "visual"}}
-end
-local _0_ = require("fennel/nvim")
-local event = _0_["event"]
-local mode = _0_["mode"]
 require("fennel/colors")
+require("fennel/settings")
 require("fennel/plugins")
 require("fennel/options")
 require("fennel/mappings")
-local utils = require("utils")
-local function _1_()
-  vim.wo.relativenumber = true
-  return nil
-end
-utils.autocmd("mitchellwrosen", {event.bufEnter, event.insertLeave}, "*", _1_)
-local function _2_()
-  vim.wo.relativenumber = false
-  return nil
-end
-utils.autocmd("mitchellwrosen", {event.bufLeave, event.insertEnter}, "*", _2_)
+require("fennel/autocommands")
 do
   local default_code_action_callback = vim.lsp.callbacks["textDocument/codeAction"]
-  local function _3_(x, y, actions)
+  local function _0_(x, y, actions)
     if (#actions == 1) then
       local action = actions[1]
       local command = (type(action.command) == "table")
@@ -226,7 +279,7 @@ do
       return default_code_action_callback(x, y, actions)
     end
   end
-  vim.lsp.callbacks["textDocument/codeAction"] = _3_
+  vim.lsp.callbacks["textDocument/codeAction"] = _0_
 end
 local function lsp_setup()
   local completion = require("completion")
@@ -235,16 +288,16 @@ local function lsp_setup()
   status.register_progress()
   do
     local capabilities = nil
-    local function _3_(config)
-      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 55))
+    local function _0_(config)
+      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 48))
       local x_0_ = (config.capabilities or {})
       local y_0_ = status.capabilities
       return vim.tbl_extend("keep", x_0_, y_0_)
     end
-    capabilities = _3_
+    capabilities = _0_
     local on_attach = nil
-    local function _4_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 57))
+    local function _1_(client)
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 50))
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lca", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
@@ -265,7 +318,7 @@ local function lsp_setup()
       completion.on_attach(client)
       return status.on_attach(client)
     end
-    on_attach = _4_
+    on_attach = _1_
     lsp.hls.setup({capabilities = capabilities(lsp.hls), init_options = {haskell = {completionSnippetsOn = true, diagnosticsOnChange = true, formatOnImportOn = true, formattingProvider = "ormolu", hlintOn = false, liquidOn = false}}, on_attach = on_attach})
     lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
     lsp.vimls.setup({capabilities = capabilities(lsp.vimls), on_attach = on_attach})
@@ -281,7 +334,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 108))
+  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 101))
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -290,10 +343,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.80000000000000004) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _3_()
+  local function _0_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _3_})
+  vim.fn.termopen(command, {on_exit = _0_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

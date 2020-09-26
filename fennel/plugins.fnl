@@ -32,5 +32,3 @@
 ; Plug 'wellle/targets.vim'
 
 ((. vim.fn "plug#end"))
-
-(include "fennel/plugin-startify")

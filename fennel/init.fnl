@@ -1,18 +1,11 @@
-(local { "event" event "mode" mode } (include "fennel/nvim"))
 (import-macros { "buf-map" buf-map "left-merge" left-merge } "fennel/nvim-macros")
 
 (include "fennel/colors")
+(include "fennel/settings")
 (include "fennel/plugins")
 (include "fennel/options")
 (include "fennel/mappings")
-
-(local utils (require "utils"))
-
-(macro autocmd [events pattern action]
-  `(utils.autocmd "mitchellwrosen" ,events ,pattern ,action))
-
-(autocmd [event.bufEnter event.insertLeave] "*" (lambda [] (set vim.wo.relativenumber true)))
-(autocmd [event.bufLeave event.insertEnter] "*" (lambda [] (set vim.wo.relativenumber false)))
+(include "fennel/autocommands")
 
 (let
   [default-code-action-callback (. vim.lsp.callbacks "textDocument/codeAction")]

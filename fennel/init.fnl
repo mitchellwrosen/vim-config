@@ -49,7 +49,7 @@
         on-attach
           (lambda [client]
             (buf-map [ "n" ] "<Space>a" ":lua vim.lsp.buf.code_action()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lcr" ":lua vim.lsp.buf.clear_references<CR>" { "noremap" true "silent" true })
+            (buf-map [ "n" ] "<Space>lcr" ":lua vim.lsp.buf.clear_references()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>ldec" ":lua vim.lsp.buf.declaration()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>ldef" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lds" ":lua vim.lsp.buf.document_symbol()<CR>" { "noremap" true "silent" true })
@@ -108,14 +108,15 @@
                     (vim.lsp.buf_request 0 "textDocument/hover" position
                       (fn [_err _method result _client]
                         (local namespace (vim.api.nvim_create_namespace "hover"))
-                        (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
-                        (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
-                        (when (not (= (filter line) ""))
-                          (vim.api.nvim_buf_set_virtual_text
-                            0
-                            namespace
-                            position.position.line
-                            [ [ (.. "∙ " line) "Comment" ] ] {})))))
+                        (when (not (= result nil))
+                          (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
+                          (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
+                          (when (not (= (filter line) ""))
+                            (vim.api.nvim_buf_set_virtual_text
+                              0
+                              namespace
+                              position.position.line
+                              [ [ (.. "∙ " line) "Comment" ] ] {}))))))
 
               ]
               (autocmd "mitchellwrosen" [event.cursor-moved] "<buffer>" (fn [] (virtual-hover filter))))

@@ -302,7 +302,7 @@ local function lsp_setup()
     local function _2_(client)
       assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 50))
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references<CR>", {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldef", ":lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lds", ":lua vim.lsp.buf.document_symbol()<CR>", {noremap = true, silent = true})
@@ -360,10 +360,12 @@ local function lsp_setup()
           local position = vim.lsp.util.make_position_params()
           local function _6_(_err, _method, result, _client)
             local namespace = vim.api.nvim_create_namespace("hover")
-            local line = meaningful_head(vim.lsp.util.convert_input_to_markdown_lines(result.contents))
-            vim.api.nvim_buf_clear_namespace(0, namespace, 0, -1)
-            if not (filter0(line) == "") then
-              return vim.api.nvim_buf_set_virtual_text(0, namespace, position.position.line, {{("\226\136\153 " .. line), "Comment"}}, {})
+            if not (result == nil) then
+              local line = meaningful_head(vim.lsp.util.convert_input_to_markdown_lines(result.contents))
+              vim.api.nvim_buf_clear_namespace(0, namespace, 0, -1)
+              if not (filter0(line) == "") then
+                return vim.api.nvim_buf_set_virtual_text(0, namespace, position.position.line, {{("\226\136\153 " .. line), "Comment"}}, {})
+              end
             end
           end
           return vim.lsp.buf_request(0, "textDocument/hover", position, _6_)
@@ -393,7 +395,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 156))
+  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 157))
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

@@ -360,7 +360,7 @@ local function lsp_setup()
           local position = vim.lsp.util.make_position_params()
           local function _6_(_err, _method, result, _client)
             local namespace = vim.api.nvim_create_namespace("hover")
-            if not (result == nil) then
+            if (not (result == nil) and (type(result) == "table")) then
               local line = meaningful_head(vim.lsp.util.convert_input_to_markdown_lines(result.contents))
               vim.api.nvim_buf_clear_namespace(0, namespace, 0, -1)
               if not (filter0(line) == "") then

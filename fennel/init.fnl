@@ -108,7 +108,7 @@
                     (vim.lsp.buf_request 0 "textDocument/hover" position
                       (fn [_err _method result _client]
                         (local namespace (vim.api.nvim_create_namespace "hover"))
-                        (when (not (= result nil))
+                        (when (and (not (= result nil)) (= (type result) "table"))
                           (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
                           (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
                           (when (not (= (filter line) ""))

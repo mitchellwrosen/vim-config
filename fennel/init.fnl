@@ -37,8 +37,8 @@
 (fn lsp-setup []
   (let
     [completion (require "completion")
-     ; configs (require "nvim_lsp/configs")
-     lsp (require "nvim_lsp")
+     ; configs (require "lspconfig/configs")
+     lsp (require "lspconfig")
      status (require "lsp-status")]
 
     ; Uh, just kind of following https://github.com/nvim-lua/lsp-status.nvim here...

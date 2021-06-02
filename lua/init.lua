@@ -286,7 +286,7 @@ do
 end
 local function lsp_setup()
   local completion = require("completion")
-  local lsp = require("nvim_lsp")
+  local lsp = require("lspconfig")
   local status = require("lsp-status")
   status.register_progress()
   do

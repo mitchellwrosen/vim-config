@@ -123,6 +123,14 @@
 
             (completion.on_attach client)
             (status.on_attach client))]
+      (lsp.elmls.setup
+        { "capabilities" (capabilities lsp.elmls)
+          "on_attach"
+            (lambda [client]
+              ; https://github.com/elm-tooling/elm-language-server/issues/503
+              (when client.config.flags (set client.config.flags.allow_incremental_sync true))
+              (on-attach client))
+        })
       (lsp.hls.setup
         { "capabilities" (capabilities lsp.hls)
           "init_options" {

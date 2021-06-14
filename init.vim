@@ -407,10 +407,6 @@ let g:git_messenger_no_default_mappings = v:true
 " blame the line under the cursor
 nmap <Space>b <Plug>(git-messenger)
 
-" [rrethy/vim-hexokinase]
-" only enable color preview pip when looking at vim (colorscheme) files
-let g:Hexokinase_ftEnabled = ['gitconfig', 'vim']
-
 " [rrethy/vim-illuminate]
 " highlight immediately
 let g:Illuminate_delay = 0

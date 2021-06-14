@@ -167,7 +167,6 @@ package.preload["fennel/plugins"] = package.preload["fennel/plugins"] or functio
   vim.cmd("Plug 'rhysd/git-messenger.vim'")
   vim.cmd("Plug 'romainl/vim-cool'")
   vim.cmd("Plug 'romainl/vim-qf'")
-  vim.cmd("Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }")
   vim.cmd("Plug 'rrethy/vim-illuminate'")
   vim.cmd("Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }")
   vim.cmd("Plug 'terryma/vim-multiple-cursors'")

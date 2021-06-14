@@ -15,7 +15,6 @@
 (vim.cmd "Plug 'rhysd/git-messenger.vim'")                            ; git blame the line under the cursor
 (vim.cmd "Plug 'romainl/vim-cool'")                                   ; automatically unhighlight when cursor moves
 (vim.cmd "Plug 'romainl/vim-qf'")                                     ; vim quickfix improvements
-(vim.cmd "Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }") ; show colored pips by #abcdef things
 (vim.cmd "Plug 'rrethy/vim-illuminate'")                              ; highlight occurrences of the word under the cursor
 (vim.cmd "Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }")            ;
 (vim.cmd "Plug 'terryma/vim-multiple-cursors'")                       ; multiple cursors for quick and dirty renaming

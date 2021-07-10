@@ -9,9 +9,9 @@
 (include "fennel/autocommands")
 
 (let
-  [default-code-action-callback (. vim.lsp.callbacks "textDocument/codeAction")]
+  [default-code-action-callback (. vim.lsp.handlers "textDocument/codeAction")]
   (tset
-    vim.lsp.callbacks
+    vim.lsp.handlers
     "textDocument/codeAction"
     (fn [x y actions]
       (if

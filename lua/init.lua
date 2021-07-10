@@ -261,7 +261,7 @@ require("fennel/options")
 require("fennel/mappings")
 require("fennel/autocommands")
 do
-  local default_code_action_callback = vim.lsp.callbacks["textDocument/codeAction"]
+  local default_code_action_callback = vim.lsp.handlers["textDocument/codeAction"]
   local function _1_(x, y, actions)
     if (#actions == 1) then
       local action = actions[1]
@@ -281,7 +281,7 @@ do
       return default_code_action_callback(x, y, actions)
     end
   end
-  vim.lsp.callbacks["textDocument/codeAction"] = _1_
+  vim.lsp.handlers["textDocument/codeAction"] = _1_
 end
 local function lsp_setup()
   local completion = require("completion")

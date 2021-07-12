@@ -150,55 +150,6 @@ package.preload["fennel/options"] = package.preload["fennel/options"] or functio
   vim.o["softtabstop"] = 2
   return nil
 end
-package.preload["fennel/plugins"] = package.preload["fennel/plugins"] or function(...)
-  vim.fn["plug#begin"]((vim.fn.stdpath("data") .. "/plugged"))
-  vim.cmd("Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
-  vim.cmd("Plug 'Yggdroot/indentLine'")
-  vim.cmd("Plug 'godlygeek/tabular'")
-  vim.cmd("Plug 'itchyny/lightline.vim'")
-  vim.cmd("Plug 'junegunn/fzf.vim'")
-  vim.cmd("Plug 'mengelbrecht/lightline-bufferline'")
-  vim.cmd("Plug 'mhinz/vim-startify'")
-  vim.cmd("Plug 'neovim/nvim-lsp'")
-  vim.cmd("Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")
-  vim.cmd("Plug 'nvim-lua/completion-nvim'")
-  vim.cmd("Plug 'nvim-lua/lsp-status.nvim'")
-  vim.cmd("Plug 'rhysd/git-messenger.vim'")
-  vim.cmd("Plug 'romainl/vim-cool'")
-  vim.cmd("Plug 'romainl/vim-qf'")
-  vim.cmd("Plug 'rrethy/vim-illuminate'")
-  vim.cmd("Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }")
-  vim.cmd("Plug 'terryma/vim-multiple-cursors'")
-  vim.cmd("Plug 'tommcdo/vim-exchange'")
-  vim.cmd("Plug 'tpope/vim-characterize'")
-  vim.cmd("Plug 'tpope/vim-commentary'")
-  vim.cmd("Plug 'tpope/vim-fugitive'")
-  vim.cmd("Plug 'tpope/vim-repeat'")
-  vim.cmd("Plug 'tpope/vim-surround'")
-  vim.cmd("Plug 'unblevable/quick-scope'")
-  return vim.fn["plug#end"]()
-end
-package.preload["fennel/settings"] = package.preload["fennel/settings"] or function(...)
-  vim.g.completion_enable_auto_popup = 1
-  vim.g.completion_matching_ignore_case = 1
-  vim.g.startify_custom_footer = {"   [e]  empty buffer", "   [q]  quit"}
-  vim.g.startify_custom_header = {}
-  vim.g.startify_custom_indices = {"a", "s", "d", "f", "l", "g", "h", "w", "r", "u", "o", "p", "t", "y", "z", "x", "c", "v", "m", "", ".", "/", "b", "n", "1", "2", "3", "4", "5", "6"}
-  vim.g.startify_enable_special = 0
-  vim.g.startify_enable_unsafe = 1
-  vim.g.startify_change_to_dir = 0
-  vim.g.startify_files_number = 30
-  vim.g.startify_lists = {{type = "files"}}
-  vim.g.startify_relative_path = 1
-  return nil
-end
-package.preload["fennel/colors"] = package.preload["fennel/colors"] or function(...)
-  vim.g.gruvbox_inverse = 1
-  vim.g.gruvbox_contrast_dark = "soft"
-  vim.g.gruvbox_improved_strings = 1
-  vim.g.gruvbox_invert_signs = 1
-  return vim.cmd("colorscheme gruvbox")
-end
 package.preload["fennel/nvim"] = package.preload["fennel/nvim"] or function(...)
   local event = {["cursor-moved"] = "CursorMoved", bufEnter = "BufEnter", bufLeave = "BufLeave", focusGained = "FocusGained", focusLost = "FocusLost", insertEnter = "InsertEnter", insertLeave = "InsertLeave"}
   local mode = {["operator-pending"] = "operator-pending", command = "command", insert = "insert", normal = "normal", visual = "visual"}
@@ -253,9 +204,48 @@ end
 local _0_ = require("fennel/nvim")
 local autocmd = _0_["autocmd"]
 local event = _0_["event"]
-require("fennel/colors")
-require("fennel/settings")
-require("fennel/plugins")
+vim.fn["plug#begin"]((vim.fn.stdpath("data") .. "/plugged"))
+vim.cmd("Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
+vim.cmd("Plug 'Yggdroot/indentLine'")
+vim.cmd("Plug 'godlygeek/tabular'")
+vim.cmd("Plug 'itchyny/lightline.vim'")
+vim.cmd("Plug 'junegunn/fzf.vim'")
+vim.cmd("Plug 'mengelbrecht/lightline-bufferline'")
+vim.cmd("Plug 'mhinz/vim-startify'")
+vim.cmd("Plug 'neovim/nvim-lsp'")
+vim.cmd("Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")
+vim.cmd("Plug 'nvim-lua/completion-nvim'")
+vim.cmd("Plug 'nvim-lua/lsp-status.nvim'")
+vim.cmd("Plug 'rhysd/git-messenger.vim'")
+vim.cmd("Plug 'romainl/vim-cool'")
+vim.cmd("Plug 'romainl/vim-qf'")
+vim.cmd("Plug 'rrethy/vim-illuminate'")
+vim.cmd("Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }")
+vim.cmd("Plug 'terryma/vim-multiple-cursors'")
+vim.cmd("Plug 'tommcdo/vim-exchange'")
+vim.cmd("Plug 'tpope/vim-characterize'")
+vim.cmd("Plug 'tpope/vim-commentary'")
+vim.cmd("Plug 'tpope/vim-fugitive'")
+vim.cmd("Plug 'tpope/vim-repeat'")
+vim.cmd("Plug 'tpope/vim-surround'")
+vim.cmd("Plug 'unblevable/quick-scope'")
+vim.fn["plug#end"]()
+vim.g.gruvbox_inverse = 1
+vim.g.gruvbox_contrast_dark = "soft"
+vim.g.gruvbox_improved_strings = 1
+vim.g.gruvbox_invert_signs = 1
+vim.cmd("colorscheme gruvbox")
+vim.g.completion_enable_auto_popup = 1
+vim.g.completion_matching_ignore_case = 1
+vim.g.startify_custom_footer = {"   [e]  empty buffer", "   [q]  quit"}
+vim.g.startify_custom_header = {}
+vim.g.startify_custom_indices = {"a", "s", "d", "f", "l", "g", "h", "w", "r", "u", "o", "p", "t", "y", "z", "x", "c", "v", "m", "", ".", "/", "b", "n", "1", "2", "3", "4", "5", "6"}
+vim.g.startify_enable_special = 0
+vim.g.startify_enable_unsafe = 1
+vim.g.startify_change_to_dir = 0
+vim.g.startify_files_number = 30
+vim.g.startify_lists = {{type = "files"}}
+vim.g.startify_relative_path = 1
 require("fennel/options")
 require("fennel/mappings")
 require("fennel/autocommands")
@@ -290,7 +280,7 @@ local function lsp_setup()
   do
     local capabilities = nil
     local function _1_(config)
-      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 48))
+      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 105))
       local x_0_ = (config.capabilities or {})
       local y_0_ = status.capabilities
       return vim.tbl_extend("keep", x_0_, y_0_)
@@ -298,7 +288,7 @@ local function lsp_setup()
     capabilities = _1_
     local on_attach = nil
     local function _2_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 50))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 107))
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
@@ -379,7 +369,7 @@ local function lsp_setup()
     end
     on_attach = _2_
     local function _3_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 129))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 186))
       if client.config.flags then
         client.config.flags.allow_incremental_sync = true
       end
@@ -401,7 +391,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 165))
+  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 222))
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

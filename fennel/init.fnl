@@ -1,9 +1,66 @@
-(local { "autocmd" autocmd "event" event } (include "fennel/nvim"))
-(import-macros { "buf-map" buf-map "left-merge" left-merge } "fennel/nvim-macros")
+(local
+  { "autocmd" autocmd
+    "event" event
+  }
+  (include "fennel/nvim"))
+(import-macros
+  { "buf-map" buf-map
+    "left-merge" left-merge
+  }
+  "fennel/nvim-macros")
 
-(include "fennel/colors")
-(include "fennel/settings")
-(include "fennel/plugins")
+; plugins
+((. vim.fn "plug#begin") (.. (vim.fn.stdpath "data") "/plugged"))
+
+(vim.cmd "Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
+(vim.cmd "Plug 'Yggdroot/indentLine'") ; show markers every 2 columns of leading whitespace
+(vim.cmd "Plug 'godlygeek/tabular'") ; align on words
+(vim.cmd "Plug 'itchyny/lightline.vim'")
+(vim.cmd "Plug 'junegunn/fzf.vim'") ; fuzzy search source code, files, etc
+(vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")
+(vim.cmd "Plug 'mhinz/vim-startify'") ; startup screen
+(vim.cmd "Plug 'neovim/nvim-lsp'")
+(vim.cmd "Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")
+(vim.cmd "Plug 'nvim-lua/completion-nvim'")
+(vim.cmd "Plug 'nvim-lua/lsp-status.nvim'")
+(vim.cmd "Plug 'rhysd/git-messenger.vim'") ; git blame the line under the cursor
+(vim.cmd "Plug 'romainl/vim-cool'") ; automatically unhighlight when cursor moves
+(vim.cmd "Plug 'romainl/vim-qf'") ; vim quickfix improvements
+(vim.cmd "Plug 'rrethy/vim-illuminate'") ; highlight occurrences of the word under the cursor
+(vim.cmd "Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }")
+(vim.cmd "Plug 'terryma/vim-multiple-cursors'") ; multiple cursors for quick and dirty renaming
+(vim.cmd "Plug 'tommcdo/vim-exchange'") ; swap the location of two selections
+(vim.cmd "Plug 'tpope/vim-characterize'") ; improved "ga"
+(vim.cmd "Plug 'tpope/vim-commentary'") ; quick (un-)commenting
+(vim.cmd "Plug 'tpope/vim-fugitive'")
+(vim.cmd "Plug 'tpope/vim-repeat'") ; make "." repeat more things out of the box
+(vim.cmd "Plug 'tpope/vim-surround'") ; some surround helpers
+(vim.cmd "Plug 'unblevable/quick-scope'") ; highlight characters for f, F, t, T
+; (vim.cmd "Plug 'nvim-lua/plenary.nvim'")
+; (vim.cmd "Plug 'nvim-lua/popup.nvim'")
+((. vim.fn "plug#end"))
+
+; colorscheme settings
+(set vim.g.gruvbox_inverse 1)
+(set vim.g.gruvbox_contrast_dark "soft")
+(set vim.g.gruvbox_improved_strings 1) ; extra-highlight strings
+(set vim.g.gruvbox_invert_signs 1)
+(vim.cmd "colorscheme gruvbox")
+
+(set vim.g.completion_enable_auto_popup 1)
+(set vim.g.completion_matching_ignore_case 1)
+(set vim.g.startify_custom_footer [ "   [e]  empty buffer" "   [q]  quit" ])
+(set vim.g.startify_custom_header {})
+(set vim.g.startify_custom_indices
+  ["a" "s" "d" "f" "l" "g" "h" "w" "r" "u" "o" "p" "t" "y" "z"
+   "x" "c" "v" "m" "" "." "/" "b" "n" "1" "2" "3" "4" "5" "6"])
+(set vim.g.startify_enable_special 0)
+(set vim.g.startify_enable_unsafe 1) ; faster startup
+(set vim.g.startify_change_to_dir 0) ; don't cd to where file is
+(set vim.g.startify_files_number 30)
+(set vim.g.startify_lists [{ "type" "files" }])
+(set vim.g.startify_relative_path 1)
+
 (include "fennel/options")
 (include "fennel/mappings")
 (include "fennel/autocommands")
@@ -37,7 +94,6 @@
 (fn lsp-setup []
   (let
     [completion (require "completion")
-     ; configs (require "lspconfig/configs")
      lsp (require "lspconfig")
      status (require "lsp-status")]
 

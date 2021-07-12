@@ -157,7 +157,6 @@ package.preload["fennel/plugins"] = package.preload["fennel/plugins"] or functio
   vim.cmd("Plug 'godlygeek/tabular'")
   vim.cmd("Plug 'itchyny/lightline.vim'")
   vim.cmd("Plug 'junegunn/fzf.vim'")
-  vim.cmd("Plug 'liuchengxu/vim-which-key'")
   vim.cmd("Plug 'mengelbrecht/lightline-bufferline'")
   vim.cmd("Plug 'mhinz/vim-startify'")
   vim.cmd("Plug 'neovim/nvim-lsp'")

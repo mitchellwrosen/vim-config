@@ -5,7 +5,6 @@
 (vim.cmd "Plug 'godlygeek/tabular'")                                  ; align on words
 (vim.cmd "Plug 'itchyny/lightline.vim'")                              ;
 (vim.cmd "Plug 'junegunn/fzf.vim'")                                   ; fuzzy search source code, files, etc
-(vim.cmd "Plug 'liuchengxu/vim-which-key'")                           ; thingy to tell me my own hotkeys (requires manual work)
 (vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")                  ;
 (vim.cmd "Plug 'mhinz/vim-startify'")                                 ; startup screen
 (vim.cmd "Plug 'neovim/nvim-lsp'")                                    ;

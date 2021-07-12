@@ -281,56 +281,6 @@ let g:lightline.tabline = {}
 let g:lightline.tabline.left = [ [ 'buffers' ] ]
 let g:lightline.tabline.right = [ [ ] ]
 
-" [liuchengxu/vim-which-key]
-let g:which_key_use_floating_win = 1
-let g:which_key_hspace = 1
-call which_key#register('<Space>', 'g:which_key_map_space')
-let g:which_key_map_space = {
-      \ 'a': 'align',
-      \ 'b': 'git-blame',
-      \ 'd': 'delete-buffer',
-      \ 'f': 'find',
-      \ 'h': 'history',
-      \ 'k': 'find-buffer',
-      \ 'm': 'comment',
-      \ 'n': 'file-browser',
-      \ 'o': 'find-file',
-      \ 'S': 'repld-send-buffer',
-      \ 's': 'repld-send',
-      \ }
-call which_key#register('?', 'g:which_key_map_question')
-" Why are some buffer things broken?
-let g:which_key_map_question = {
-      \ 'b':
-      \   { 'name': '+buffer',
-      \     'f': ['call feedkeys("<Space>k")', 'find-buffer (<Space>k)'],
-      \     'p': ['<C-k>', 'prev-buffer (<C-k>)'],
-      \     'n': ['<C-j>', 'next-buffer (<C-j>)'],
-      \     'd': ['<Space>d', 'delete-buffer (<Space>d)'],
-      \     's': ['<Tab>', 'swap-buffer (<Tab>)'],
-      \   },
-      \ 'e':
-      \   { 'name': '+edit',
-      \     'j': ['<C-s>', 'find-and-replace (<C-s>)'],
-      \     'x':
-      \       { 'name': '+exchange',
-      \         'c': ['call feedkeys("xc")', 'exchange-clear (xc)'],
-      \         'l': ['call feedkeys("xx")', 'exchange-line (xx)'],
-      \         'w': ['call feedkeys("xw")', 'exchange-word (xw)'],
-      \       },
-      \   },
-      \ 'w':
-      \   { 'name': '+window',
-      \     'h': ['<C-h>', 'window-left (<C-h>)'],
-      \     'l': ['<C-l>', 'window-right (<C-l>)'],
-      \   },
-      \ 'Q': ['call feedkeys("@q")', 'execute-macro-q'],
-      \ }
-
-nnoremap <silent> <Space> :WhichKey '<Space>'<CR>
-vnoremap <silent> <Space> :WhichKeyVisual '<Space>'<CR>
-nnoremap <silent> ? :WhichKey '?'<CR>
-
 " [mengelbrecht/lightline-bufferline]
 let g:lightline#bufferline#modified = '+'
 
@@ -343,21 +293,6 @@ let g:multi_cursor_next_key = '<C-n>'
 let g:multi_cursor_prev_key = '<C-p>'
 " let g:multi_cursor_skip_key = '<C-x>'
 let g:multi_cursor_quit_key = '<Esc>'
-
-" [neoclide/coc.nvim]
-" <Left>/<Right> to jump around warnings/errors (annoying that it's only buffer-local)
-" nmap <silent> <Left> <Plug>(coc-diagnostic-prev)
-" nmap <silent> <Right> <Plug>(coc-diagnostic-next)
-" gd to go to definition of thing under cursor
-" Also <Del> (trying it out since it's one key)
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> <Del> <Plug>(coc-definition)
-" <Enter> to show type of thing under cursor
-" nnoremap <silent> <Enter> :call <SID>HandleEnter()<CR>
-" <Space>i to open quickfix
-" nnoremap <silent> <Space>i :CocFix<CR>
-" Backspace to open all warnings/errors in a list
-" nnoremap <silent> <BS> :CocList diagnostics<CR>
 
 " function! s:HandleEnter()
 "   if coc#util#has_float()

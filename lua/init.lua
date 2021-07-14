@@ -204,9 +204,32 @@ end
 local _0_ = require("fennel/nvim")
 local autocmd = _0_["autocmd"]
 local event = _0_["event"]
+vim.api.nvim_set_keymap("o", "s", "<Plug>Lightspeed_s", {})
+vim.api.nvim_set_keymap("o", "S", "<Plug>Lightspeed_S", {})
+do
+  vim.api.nvim_set_keymap("n", "f", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_f' : 'f'", {expr = true})
+  vim.api.nvim_set_keymap("o", "f", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_f' : 'f'", {expr = true})
+  vim.api.nvim_set_keymap("v", "f", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_f' : 'f'", {expr = true})
+end
+do
+  vim.api.nvim_set_keymap("n", "F", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_F' : 'F'", {expr = true})
+  vim.api.nvim_set_keymap("o", "F", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_F' : 'F'", {expr = true})
+  vim.api.nvim_set_keymap("v", "F", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_F' : 'F'", {expr = true})
+end
+do
+  vim.api.nvim_set_keymap("n", "t", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_t' : 't'", {expr = true})
+  vim.api.nvim_set_keymap("o", "t", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_t' : 't'", {expr = true})
+  vim.api.nvim_set_keymap("v", "t", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_t' : 't'", {expr = true})
+end
+do
+  vim.api.nvim_set_keymap("n", "T", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_T' : 'T'", {expr = true})
+  vim.api.nvim_set_keymap("o", "T", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_T' : 'T'", {expr = true})
+  vim.api.nvim_set_keymap("v", "T", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_T' : 'T'", {expr = true})
+end
 vim.fn["plug#begin"]((vim.fn.stdpath("data") .. "/plugged"))
-vim.cmd("Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
 vim.cmd("Plug 'Yggdroot/indentLine'")
+vim.cmd("Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
+vim.cmd("Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b308e64dbefdf71' }")
 vim.cmd("Plug 'godlygeek/tabular'")
 vim.cmd("Plug 'itchyny/lightline.vim'")
 vim.cmd("Plug 'junegunn/fzf.vim'")
@@ -228,7 +251,6 @@ vim.cmd("Plug 'tpope/vim-commentary'")
 vim.cmd("Plug 'tpope/vim-fugitive'")
 vim.cmd("Plug 'tpope/vim-repeat'")
 vim.cmd("Plug 'tpope/vim-surround'")
-vim.cmd("Plug 'unblevable/quick-scope'")
 vim.fn["plug#end"]()
 vim.g.gruvbox_inverse = 1
 vim.g.gruvbox_contrast_dark = "soft"
@@ -237,6 +259,15 @@ vim.g.gruvbox_invert_signs = 1
 vim.cmd("colorscheme gruvbox")
 vim.g.completion_enable_auto_popup = 1
 vim.g.completion_matching_ignore_case = 1
+vim.g.exchange_no_mappings = 1
+vim.g.Illuminate_delay = 0
+vim.g.Illuminate_highlightUnderCursor = 0
+vim.g.indentLine_color_term = 239
+vim.g.indentLine_char = "\226\148\130"
+do
+  local lightspeed = require("lightspeed")
+  lightspeed.setup({grey_out_search_area = true, highlight_unique_chars = true, jump_on_partial_input_safety_timeout = 400, jump_to_first_match = true, match_only_the_start_of_same_char_seqs = true})
+end
 vim.g.startify_custom_footer = {"   [e]  empty buffer", "   [q]  quit"}
 vim.g.startify_custom_header = {}
 vim.g.startify_custom_indices = {"a", "s", "d", "f", "l", "g", "h", "w", "r", "u", "o", "p", "t", "y", "z", "x", "c", "v", "m", "", ".", "/", "b", "n", "1", "2", "3", "4", "5", "6"}
@@ -280,7 +311,7 @@ local function lsp_setup()
   do
     local capabilities = nil
     local function _1_(config)
-      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 105))
+      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 151))
       local x_0_ = (config.capabilities or {})
       local y_0_ = status.capabilities
       return vim.tbl_extend("keep", x_0_, y_0_)
@@ -288,7 +319,7 @@ local function lsp_setup()
     capabilities = _1_
     local on_attach = nil
     local function _2_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 107))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 153))
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
@@ -369,7 +400,7 @@ local function lsp_setup()
     end
     on_attach = _2_
     local function _3_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 186))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 232))
       if client.config.flags then
         client.config.flags.allow_incremental_sync = true
       end
@@ -391,7 +422,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 222))
+  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 268))
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

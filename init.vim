@@ -342,16 +342,6 @@ let g:git_messenger_no_default_mappings = v:true
 " blame the line under the cursor
 nmap <Space>b <Plug>(git-messenger)
 
-" [rrethy/vim-illuminate]
-" highlight immediately
-let g:Illuminate_delay = 0
-" don't highlight the word under the cursor
-let g:Illuminate_highlightUnderCursor = 0
-
-" [tommcdo/vim-exchange]
-" Don't make any key mappings
-let g:exchange_no_mappings = 1
-
 " x ("exchange") once to yank, x again to exchange with the first yank
 nmap x <Plug>(Exchange)
 " Manually make [exhange] replace 'w' with 'e', as vim does for e.g. 'c'
@@ -374,59 +364,49 @@ vmap <Space>m <Plug>Commentary
 " Don't let surround provide any magic mappings
 let g:surround_no_mappings = 1
 
-" ds to delete surround and restore cursor position
-" s to surround inner word and restore cursor position
-" S to surround inner WORD and restore cursor position
-" SS to surround current line restore cursor position
-nmap ds' mz<Plug>Dsurround'`zh
-nmap ds" mz<Plug>Dsurround"`zh
-nmap ds( mz<Plug>Dsurround)`zh
-nmap ds[ mz<Plug>Dsurround]`zh
-nmap ds{ mz<Plug>Dsurround}`zh
-nmap dsp mz<Plug>Dsurround)`zh
-nmap ds<Space> mz<Plug>Dsurround <Space>`zh
-nmap s' mz<Plug>Csurround w'`zl
-nmap s" mz<Plug>Csurround w"`zl
-nmap s( mz<Plug>Csurround w)`zl
-nmap s[ mz<Plug>Csurround w]`zl
-nmap s{ mz<Plug>Csurround w}`zl
-nmap sp mz<Plug>Csurround w)`zl
-nmap s<Space> mz<Plug>Csurround w <Space>`zl
-nmap S' mz<Plug>Csurround W'`zl
-nmap S" mz<Plug>Csurround W"`zl
-nmap S( mz<Plug>Csurround W)`zl
-nmap S[ mz<Plug>Csurround W]`zl
-nmap S{ mz<Plug>Csurround W}`zl
-nmap Sp mz<Plug>Csurround W)`zl
-nmap S<Space> mz<Plug>Csurround W <Space>`zl
-nmap SS' mz<Plug>Yssurround'`z
-nmap SS" mz<Plug>Yssurround"`z
-nmap SS( mz<Plug>Yssurround)`z
-nmap SS[ mz<Plug>Yssurround]`z
-nmap SS{ mz<Plug>Yssurround}`z
-nmap SSp mz<Plug>Yssurround)`z
-vmap s' <Plug>VSurround'
-vmap s" <Plug>VSurround"
-vmap s( <Plug>VSurround)
-vmap s[ <Plug>VSurround]
-vmap s{ <Plug>VSurround}
-vmap sp <Plug>VSurround)
+" dz to delete surround and restore cursor position
+nmap dz' mz<Plug>Dsurround'`zh
+nmap dz" mz<Plug>Dsurround"`zh
+nmap dz( mz<Plug>Dsurround)`zh
+nmap dz[ mz<Plug>Dsurround]`zh
+nmap dz{ mz<Plug>Dsurround}`zh
+nmap dzp mz<Plug>Dsurround)`zh
+nmap dz<Space> mz<Plug>Dsurround <Space>`zh
+" z to surround inner word and restore cursor position
+nmap z' mz<Plug>Csurround w'`zl
+nmap z" mz<Plug>Csurround w"`zl
+nmap z( mz<Plug>Csurround w)`zl
+nmap z[ mz<Plug>Csurround w]`zl
+nmap z{ mz<Plug>Csurround w}`zl
+nmap zp mz<Plug>Csurround w)`zl
+nmap z<Space> mz<Plug>Csurround w <Space>`zl
+vmap z' <Plug>VSurround'
+vmap z" <Plug>VSurround"
+vmap z( <Plug>VSurround)
+vmap z[ <Plug>VSurround]
+vmap z{ <Plug>VSurround}
+vmap zp <Plug>VSurround)
+" Z to surround inner WORD and restore cursor position
+nmap Z' mz<Plug>Csurround W'`zl
+nmap Z" mz<Plug>Csurround W"`zl
+nmap Z( mz<Plug>Csurround W)`zl
+nmap Z[ mz<Plug>Csurround W]`zl
+nmap Z{ mz<Plug>Csurround W}`zl
+nmap Zp mz<Plug>Csurround W)`zl
+nmap Z<Space> mz<Plug>Csurround W <Space>`zl
+" ZZ to surround current line restore cursor position
+nmap ZZ' mz<Plug>Yssurround'`z
+nmap ZZ" mz<Plug>Yssurround"`z
+nmap ZZ( mz<Plug>Yssurround)`z
+nmap ZZ[ mz<Plug>Yssurround]`z
+nmap ZZ{ mz<Plug>Yssurround}`z
+nmap ZZp mz<Plug>Yssurround)`z
 
 " [unblevable/quick-scope]
 " let g:qs_lazy_highlight = 1 " only kick in after updatetime ms
 let g:qs_max_chars = 120
 let g:qs_second_highlight = 0 " don't highlight second occurrence
 hi! link QuickScopePrimary GruvboxGreenBold
-
-" [wellle/targets.vim]
-" nmap cil9 cil)
-" nmap cil0 cil)
-" nmap cin9 cin)
-" nmap cin0 cin)
-
-" [Yggdroot/indentLine]
-let g:indentLine_color_term = 239
-let g:indentLine_char = '│'
 
 " ==============================================================================
 " nvim-gtk settings

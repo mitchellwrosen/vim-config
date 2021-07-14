@@ -2,18 +2,33 @@
   { "autocmd" autocmd
     "event" event
   }
-  (include "fennel/nvim"))
+  (include "fennel/nvim")
+)
 (import-macros
   { "buf-map" buf-map
     "left-merge" left-merge
+    "map" map
   }
-  "fennel/nvim-macros")
+  "fennel/nvim-macros"
+)
+
+; Some ggandor/lightspeed.nvim mappings. These need to come before the plugin is loaded, because that's how the plugin
+; documentation says you are meant to override the defaults.
+(map [ "o" ] "s" "<Plug>Lightspeed_s" {}) ; default = z (why?)
+(map [ "o" ] "S" "<Plug>Lightspeed_S" {}) ; default = Z (why?)
+; Workaround (documented in lightspeed readme) for the fact that when recording macros, we want normal fFtT, not
+; lightspeed's fancy fFtT.
+(map [ "n" "o" "v" ] "f" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_f' : 'f'" { "expr" true })
+(map [ "n" "o" "v" ] "F" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_F' : 'F'" { "expr" true })
+(map [ "n" "o" "v" ] "t" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_t' : 't'" { "expr" true })
+(map [ "n" "o" "v" ] "T" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_T' : 'T'" { "expr" true })
 
 ; plugins
 ((. vim.fn "plug#begin") (.. (vim.fn.stdpath "data") "/plugged"))
 
-(vim.cmd "Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
 (vim.cmd "Plug 'Yggdroot/indentLine'") ; show markers every 2 columns of leading whitespace
+(vim.cmd "Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
+(vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b308e64dbefdf71' }")
 (vim.cmd "Plug 'godlygeek/tabular'") ; align on words
 (vim.cmd "Plug 'itchyny/lightline.vim'")
 (vim.cmd "Plug 'junegunn/fzf.vim'") ; fuzzy search source code, files, etc
@@ -35,7 +50,7 @@
 (vim.cmd "Plug 'tpope/vim-fugitive'")
 (vim.cmd "Plug 'tpope/vim-repeat'") ; make "." repeat more things out of the box
 (vim.cmd "Plug 'tpope/vim-surround'") ; some surround helpers
-(vim.cmd "Plug 'unblevable/quick-scope'") ; highlight characters for f, F, t, T
+; (vim.cmd "Plug 'unblevable/quick-scope'") ; highlight characters for f, F, t, T
 ; (vim.cmd "Plug 'nvim-lua/plenary.nvim'")
 ; (vim.cmd "Plug 'nvim-lua/popup.nvim'")
 ((. vim.fn "plug#end"))
@@ -49,6 +64,36 @@
 
 (set vim.g.completion_enable_auto_popup 1)
 (set vim.g.completion_matching_ignore_case 1)
+
+; tommcdo/vim-exchange
+(set vim.g.exchange_no_mappings 1) ; Don't make any key mappings
+
+; rrethy/vim-illuminate
+(set vim.g.Illuminate_delay 0) ; highlight immediately
+(set vim.g.Illuminate_highlightUnderCursor 0) ; don't highlight the word under the cursor
+
+; Yggdroot/indentLine
+(set vim.g.indentLine_color_term 239)
+(set vim.g.indentLine_char "│")
+
+; ggandor/lightspeed.nvim
+(let
+  [lightspeed (require "lightspeed")]
+  (lightspeed.setup {
+    ; Milliseconds until the follow-up character is "swallowed" when jumping to a unique character right after the first
+    ; input
+    "jump_on_partial_input_safety_timeout" 400
+    ; Jump to the first match automatically, without having to select a label.
+    "jump_to_first_match" true
+    "grey_out_search_area" true
+    ; Before the first character is pressed, highlight characters that would be jumped to immediately. The docs say this
+    ; can get slow, so consider disabling.
+    "highlight_unique_chars" true
+    ; Only jump to e.g. the first '=' character in a sequence like '==='
+    "match_only_the_start_of_same_char_seqs" true
+  })
+)
+
 (set vim.g.startify_custom_footer [ "   [e]  empty buffer" "   [q]  quit" ])
 (set vim.g.startify_custom_header {})
 (set vim.g.startify_custom_indices
@@ -64,6 +109,8 @@
 (include "fennel/options")
 (include "fennel/mappings")
 (include "fennel/autocommands")
+
+; configure
 
 (let
   [default-code-action-callback (. vim.lsp.handlers "textDocument/codeAction")]

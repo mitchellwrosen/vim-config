@@ -16,9 +16,6 @@
 ; Don't highlight matches *and* jump at the same time; only highlight
 (map [ "n" ] "*" "*``" { "noremap" true })
 
-; Wean myself off tab for now... hm, find a use for this.
-(map [ "n" ] "<Tab>" "<Nop>" { "noremap" true })
-
 ; Backspace to switch to the previously edited buffer
 (map [ "n" ] "<BS>" "<C-^>" { "noremap" true })
 

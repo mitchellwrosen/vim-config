@@ -34,7 +34,6 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.api.nvim_set_keymap("n", "/", "/\\v", {noremap = true})
   vim.api.nvim_set_keymap("v", "/", "/\\v", {noremap = true})
   vim.api.nvim_set_keymap("n", "*", "*``", {noremap = true})
-  vim.api.nvim_set_keymap("n", "<Tab>", "<Nop>", {noremap = true})
   vim.api.nvim_set_keymap("n", "<BS>", "<C-^>", {noremap = true})
   vim.api.nvim_set_keymap("n", "j", "gj", {noremap = true})
   vim.api.nvim_set_keymap("n", "k", "gk", {noremap = true})

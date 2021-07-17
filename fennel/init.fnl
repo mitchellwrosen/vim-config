@@ -28,6 +28,7 @@
 
 (vim.cmd "Plug 'Yggdroot/indentLine'") ; show markers every 2 columns of leading whitespace
 (vim.cmd "Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
+(vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '7de8bc46164ec1f787dee34b6843b61251b1ea91' }")
 (vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b308e64dbefdf71' }")
 (vim.cmd "Plug 'godlygeek/tabular'") ; align on words
 (vim.cmd "Plug 'itchyny/lightline.vim'")
@@ -91,6 +92,15 @@
     "highlight_unique_chars" true
     ; Only jump to e.g. the first '=' character in a sequence like '==='
     "match_only_the_start_of_same_char_seqs" true
+  })
+)
+
+; folke/trouble.nvim
+(let
+  [trouble (require "trouble")]
+  (trouble.setup {
+    ; don't use some fancy icons that require a separate plugin
+    "icons" false
   })
 )
 

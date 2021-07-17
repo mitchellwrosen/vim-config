@@ -2,16 +2,7 @@ package.preload["fennel/autocommands"] = package.preload["fennel/autocommands"] 
   local _0_ = require("fennel/nvim")
   local autocmd = _0_["autocmd"]
   local event = _0_["event"]
-  local function _1_()
-    vim.wo.relativenumber = true
-    return nil
-  end
-  autocmd("mitchellwrosen", {event.bufEnter, event.insertLeave}, "*", _1_)
-  local function _2_()
-    vim.wo.relativenumber = false
-    return nil
-  end
-  return autocmd("mitchellwrosen", {event.bufLeave, event.insertEnter}, "*", _2_)
+  return nil
 end
 package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or function(...)
   do

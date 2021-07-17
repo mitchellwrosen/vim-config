@@ -9,3 +9,6 @@ mv $FILE lua/init.lua
 
 fennel --compile fennel/filetype-fennel.fnl > $FILE
 mv $FILE lua/ftplugin/fennel.lua
+
+fennel --compile fennel/filetype-Trouble.fnl > $FILE
+mv $FILE lua/ftplugin/Trouble.lua

@@ -224,12 +224,16 @@ vim.cmd("Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b
 vim.cmd("Plug 'godlygeek/tabular'")
 vim.cmd("Plug 'itchyny/lightline.vim'")
 vim.cmd("Plug 'junegunn/fzf.vim'")
+vim.cmd("Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
 vim.cmd("Plug 'mengelbrecht/lightline-bufferline'")
 vim.cmd("Plug 'mhinz/vim-startify'")
 vim.cmd("Plug 'neovim/nvim-lsp'")
 vim.cmd("Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")
 vim.cmd("Plug 'nvim-lua/completion-nvim'")
+vim.cmd("Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
+vim.cmd("Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
 vim.cmd("Plug 'nvim-lua/lsp-status.nvim'")
+vim.cmd("Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce71b45193117f6fb5626b' }")
 vim.cmd("Plug 'rhysd/git-messenger.vim'")
 vim.cmd("Plug 'romainl/vim-cool'")
 vim.cmd("Plug 'romainl/vim-qf'")
@@ -261,7 +265,7 @@ do
 end
 do
   local trouble = require("trouble")
-  trouble.setup({icons = false})
+  trouble.setup({auto_close = true, auto_open = true, icons = false, position = "right"})
 end
 vim.g.startify_custom_footer = {"   [e]  empty buffer", "   [q]  quit"}
 vim.g.startify_custom_header = {}
@@ -306,7 +310,7 @@ local function lsp_setup()
   do
     local capabilities = nil
     local function _1_(config)
-      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 161))
+      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 168))
       local x_0_ = (config.capabilities or {})
       local y_0_ = status.capabilities
       return vim.tbl_extend("keep", x_0_, y_0_)
@@ -314,7 +318,7 @@ local function lsp_setup()
     capabilities = _1_
     local on_attach = nil
     local function _2_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 163))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 170))
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
@@ -395,7 +399,7 @@ local function lsp_setup()
     end
     on_attach = _2_
     local function _3_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 242))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 249))
       if client.config.flags then
         client.config.flags.allow_incremental_sync = true
       end
@@ -417,7 +421,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 278))
+  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 285))
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

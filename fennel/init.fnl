@@ -33,12 +33,16 @@
 (vim.cmd "Plug 'godlygeek/tabular'") ; align on words
 (vim.cmd "Plug 'itchyny/lightline.vim'")
 (vim.cmd "Plug 'junegunn/fzf.vim'") ; fuzzy search source code, files, etc
+(vim.cmd "Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
 (vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")
 (vim.cmd "Plug 'mhinz/vim-startify'") ; startup screen
 (vim.cmd "Plug 'neovim/nvim-lsp'")
 (vim.cmd "Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")
 (vim.cmd "Plug 'nvim-lua/completion-nvim'")
+(vim.cmd "Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
+(vim.cmd "Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
 (vim.cmd "Plug 'nvim-lua/lsp-status.nvim'")
+(vim.cmd "Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce71b45193117f6fb5626b' }")
 (vim.cmd "Plug 'rhysd/git-messenger.vim'") ; git blame the line under the cursor
 (vim.cmd "Plug 'romainl/vim-cool'") ; automatically unhighlight when cursor moves
 (vim.cmd "Plug 'romainl/vim-qf'") ; vim quickfix improvements
@@ -99,8 +103,11 @@
 (let
   [trouble (require "trouble")]
   (trouble.setup {
+    "auto_open" true
+    "auto_close" true
     ; don't use some fancy icons that require a separate plugin
     "icons" false
+    "position" "right"
   })
 )
 

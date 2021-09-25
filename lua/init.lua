@@ -80,66 +80,6 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.api.nvim_set_keymap("i", "<Tab>", "pumvisible() ? \"\\<C-n>\" : \"\\<Tab>\"", {expr = true, noremap = true})
   return vim.api.nvim_set_keymap("i", "<CR>", "pumvisible() ? \"\\<C-y>\" : \"\\<CR>\"", {expr = true, noremap = true})
 end
-package.preload["fennel/options"] = package.preload["fennel/options"] or function(...)
-  vim.o.autowriteall = true
-  vim.o.hidden = true
-  vim.o.ignorecase = true
-  vim.o.lazyredraw = true
-  vim.o.joinspaces = false
-  vim.o.showmode = false
-  vim.o.startofline = false
-  vim.o.shiftround = true
-  vim.o.shortmess = "filnxtToOFIc"
-  vim.o.smartcase = true
-  vim.o.termguicolors = true
-  vim.o.title = true
-  vim.o.wildmenu = true
-  vim.o.report = 0
-  vim.o.scrolloff = 10
-  vim.o.sidescrolloff = 16
-  vim.o.showtabline = 2
-  vim.o.timeoutlen = 400
-  vim.o.updatetime = 300
-  vim.o.clipboard = "unnamed,unnamedplus"
-  vim.o.completeopt = "menuone,noinsert,noselect"
-  vim.o.grepprg = "rg --vimgrep"
-  vim.o.inccommand = "split"
-  vim.o.listchars = "tab:> ,trail:\194\183,nbsp:+"
-  vim.o.wildmode = "list:longest,full"
-  vim.wo.cursorline = true
-  vim.wo.linebreak = true
-  vim.wo.list = true
-  vim.wo.foldenable = false
-  vim.wo.number = true
-  vim.wo.signcolumn = "yes"
-  do
-    vim.bo["expandtab"] = true
-    vim.o["expandtab"] = true
-  end
-  do
-    vim.bo["modeline"] = false
-    vim.o["modeline"] = false
-  end
-  do
-    vim.bo["smartindent"] = true
-    vim.o["smartindent"] = true
-  end
-  do
-    vim.bo["undofile"] = true
-    vim.o["undofile"] = true
-  end
-  do
-    vim.bo["shiftwidth"] = 2
-    vim.o["shiftwidth"] = 2
-  end
-  do
-    vim.bo["synmaxcol"] = 180
-    vim.o["synmaxcol"] = 180
-  end
-  vim.bo["softtabstop"] = 2
-  vim.o["softtabstop"] = 2
-  return nil
-end
 package.preload["fennel/nvim"] = package.preload["fennel/nvim"] or function(...)
   local event = {["cursor-moved"] = "CursorMoved", bufEnter = "BufEnter", bufLeave = "BufLeave", focusGained = "FocusGained", focusLost = "FocusLost", insertEnter = "InsertEnter", insertLeave = "InsertLeave"}
   local mode = {["operator-pending"] = "operator-pending", command = "command", insert = "insert", normal = "normal", visual = "visual"}
@@ -263,10 +203,6 @@ do
   local lightspeed = require("lightspeed")
   lightspeed.setup({grey_out_search_area = true, highlight_unique_chars = true, jump_on_partial_input_safety_timeout = 400, jump_to_first_match = true, match_only_the_start_of_same_char_seqs = true})
 end
-do
-  local trouble = require("trouble")
-  trouble.setup({auto_close = true, auto_open = true, icons = false, position = "right"})
-end
 vim.g.startify_custom_footer = {"   [e]  empty buffer", "   [q]  quit"}
 vim.g.startify_custom_header = {}
 vim.g.startify_custom_indices = {"a", "s", "d", "f", "l", "g", "h", "w", "r", "u", "o", "p", "t", "y", "z", "x", "c", "v", "m", "", ".", "/", "b", "n", "1", "2", "3", "4", "5", "6"}
@@ -276,7 +212,74 @@ vim.g.startify_change_to_dir = 0
 vim.g.startify_files_number = 30
 vim.g.startify_lists = {{type = "files"}}
 vim.g.startify_relative_path = 1
-require("fennel/options")
+do
+  local trouble = require("trouble")
+  trouble.setup({icons = false, position = "right"})
+end
+do
+  local telescope = require("telescope")
+  local actions = require("telescope.actions")
+  telescope.setup({defaults = {mappings = {i = {["<C-j>"] = actions.move_selection_next, ["<C-k>"] = actions.move_selection_previous, ["<C-n>"] = false, ["<C-p>"] = false, ["<Esc>"] = actions.close}}}})
+end
+vim.o.autowriteall = true
+vim.o.hidden = true
+vim.o.ignorecase = true
+vim.o.lazyredraw = true
+vim.o.joinspaces = false
+vim.o.showmode = false
+vim.o.startofline = false
+vim.o.shiftround = true
+vim.o.shortmess = "filnxtToOFIc"
+vim.o.smartcase = true
+vim.o.termguicolors = true
+vim.o.title = true
+vim.o.wildmenu = true
+vim.o.report = 0
+vim.o.scrolloff = 10
+vim.o.sidescrolloff = 16
+vim.o.showtabline = 2
+vim.o.timeoutlen = 400
+vim.o.updatetime = 300
+vim.o.clipboard = "unnamed,unnamedplus"
+vim.o.completeopt = "menuone,noinsert,noselect"
+vim.o.grepprg = "rg --vimgrep"
+vim.o.inccommand = "split"
+vim.o.listchars = "tab:> ,trail:\194\183,nbsp:+"
+vim.o.wildmode = "list:longest,full"
+vim.wo.cursorline = true
+vim.wo.linebreak = true
+vim.wo.list = true
+vim.wo.foldenable = false
+vim.wo.number = true
+vim.wo.signcolumn = "yes"
+do
+  vim.bo["expandtab"] = true
+  vim.o["expandtab"] = true
+end
+do
+  vim.bo["modeline"] = false
+  vim.o["modeline"] = false
+end
+do
+  vim.bo["smartindent"] = true
+  vim.o["smartindent"] = true
+end
+do
+  vim.bo["undofile"] = true
+  vim.o["undofile"] = true
+end
+do
+  vim.bo["shiftwidth"] = 2
+  vim.o["shiftwidth"] = 2
+end
+do
+  vim.bo["synmaxcol"] = 180
+  vim.o["synmaxcol"] = 180
+end
+do
+  vim.bo["softtabstop"] = 2
+  vim.o["softtabstop"] = 2
+end
 require("fennel/mappings")
 require("fennel/autocommands")
 do
@@ -310,7 +313,7 @@ local function lsp_setup()
   do
     local capabilities = nil
     local function _1_(config)
-      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 168))
+      assert((nil ~= config), string.format("Missing argument %s on %s:%s", "config", "fennel/init.fnl", 236))
       local x_0_ = (config.capabilities or {})
       local y_0_ = status.capabilities
       return vim.tbl_extend("keep", x_0_, y_0_)
@@ -318,7 +321,7 @@ local function lsp_setup()
     capabilities = _1_
     local on_attach = nil
     local function _2_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 170))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 238))
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
@@ -399,7 +402,7 @@ local function lsp_setup()
     end
     on_attach = _2_
     local function _3_(client)
-      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 249))
+      assert((nil ~= client), string.format("Missing argument %s on %s:%s", "client", "fennel/init.fnl", 317))
       if client.config.flags then
         client.config.flags.allow_incremental_sync = true
       end
@@ -421,7 +424,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 285))
+  assert((nil ~= command), string.format("Missing argument %s on %s:%s", "command", "fennel/init.fnl", 353))
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

@@ -165,7 +165,7 @@ vim.fn["plug#begin"]((vim.fn.stdpath("data") .. "/plugged"))
 vim.cmd("Plug 'lukas-reineke/indent-blankline.nvim', { 'commit': '0f8df7e43f0cae4c44e0e8383436ad602f333419' }")
 vim.cmd("Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
 vim.cmd("Plug 'folke/trouble.nvim', { 'commit': '7de8bc46164ec1f787dee34b6843b61251b1ea91' }")
-vim.cmd("Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b308e64dbefdf71' }")
+vim.cmd("Plug 'ggandor/lightspeed.nvim', { 'commit': '9fddb6ebf4007eaa26f44cd31b5140cbd3bbb820' }")
 vim.cmd("Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa77e89cdd832b2' }")
 vim.cmd("Plug 'junegunn/fzf'")
 vim.cmd("Plug 'junegunn/fzf.vim'")
@@ -319,7 +319,7 @@ local function lsp_setup()
   do
     local capabilities
     local function _10_(config)
-      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:241")
+      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:242")
       local x_3_auto = (config.capabilities or {})
       local y_4_auto = status.capabilities
       return vim.tbl_extend("keep", x_3_auto, y_4_auto)
@@ -327,12 +327,11 @@ local function lsp_setup()
     capabilities = _10_
     local on_attach
     local function _11_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:243")
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:244")
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>gd", ":lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>d", ":lua vim.lsp.buf.formatting()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Enter>", ":lua vim.lsp.buf.hover()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lim", ":lua vim.lsp.buf.implementation()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>h", ":lua vim.diagnostic.goto_prev()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>l", ":lua vim.diagnostic.goto_next()<CR>", {noremap = true, silent = true})
       vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
@@ -378,7 +377,7 @@ local function lsp_setup()
         local virtual_hover
         local function _19_()
           local position = vim.lsp.util.make_position_params()
-          vim.diagnostic.open_float()
+          vim.diagnostic.open_float({scope = "cursor"})
           local function _20_(_err, result, _ctx, _config)
             if (not (result == nil) and (type(result) == "table")) then
               local namespace = vim.api.nvim_create_namespace("hover")
@@ -403,7 +402,7 @@ local function lsp_setup()
     end
     on_attach = _11_
     local function _23_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:326")
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:327")
       if client.config.flags then
         client.config.flags.allow_incremental_sync = true
       else
@@ -411,7 +410,7 @@ local function lsp_setup()
       return on_attach(client)
     end
     lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _23_})
-    lsp.hls.setup({capabilities = capabilities(lsp.hls), init_options = {haskell = {completionSnippetsOn = true, diagnosticsOnChange = true, formatOnImportOn = true, formattingProvider = "ormolu", hlintOn = false, liquidOn = false}}, on_attach = on_attach})
+    lsp.hls.setup({capabilities = capabilities(lsp.hls), settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}}, maxCompletions = 20}}, on_attach = on_attach})
     lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
     lsp.vimls.setup({capabilities = capabilities(lsp.vimls), on_attach = on_attach})
   end
@@ -426,7 +425,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:362")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:363")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

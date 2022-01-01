@@ -32,7 +32,8 @@
 (vim.cmd "Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
 ; open LSP diagnostics with :TroubleToggle
 (vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '7de8bc46164ec1f787dee34b6843b61251b1ea91' }")
-(vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b308e64dbefdf71' }")
+; vim-sneak thingy for moving to a specific character from far away
+(vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '9fddb6ebf4007eaa26f44cd31b5140cbd3bbb820' }")
 ; statusline
 (vim.cmd "Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa77e89cdd832b2' }")
 (vim.cmd "Plug 'junegunn/fzf'") ; fuzzy search source code, files, etc
@@ -249,12 +250,11 @@
             (buf-map [ "n" ] "<Space>d" ":lua vim.lsp.buf.formatting()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Enter>" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
             ; (buf-map [ "n" ] "<Space>lic" ":lua vim.lsp.buf.incoming_calls()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lim" ":lua vim.lsp.buf.implementation()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lim" ":lua vim.lsp.buf.implementation()<CR>" { "noremap" true "silent" true })
             ; (buf-map [ "n" ] "<Space>lo" ":lua vim.lsp.buf.outgoing_calls()<CR>" { "noremap" true "silent" true })
             ; (buf-map [ "n" ] "<Space>lref" ":lua vim.lsp.buf.references()<CR>" { "noremap" true "silent" true })
             ; (buf-map [ "n" ] "<Space>lren" ":lua vim.lsp.buf.rename()<CR>" { "noremap" true "silent" true })
             ; (buf-map [ "n" ] "<Space>lsh" ":lua vim.lsp.buf.signature_help()<CR>" { "noremap" true "silent" true })
-            ; (buf-map [ "n" ] "<Space>lsl" ":lua vim.lsp.util.show_line_diagnostics()<CR>" { "noremap" true "silent" true })
             ; (buf-map [ "n" ] "<Space>lt" ":lua vim.lsp.buf.type_definition()<CR>" { "noremap" true "silent" true })
             ; (buf-map [ "n" ] "<Space>lw" ":lua vim.lsp.buf.workspace_symbol()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>h" ":lua vim.diagnostic.goto_prev()<CR>" { "noremap" true "silent" true })
@@ -301,7 +301,8 @@
                   (fn []
                     (do
                       (local position (vim.lsp.util.make_position_params))
-                      (vim.diagnostic.open_float)
+                      ; open diagnostics underneath the cursor
+                      (vim.diagnostic.open_float { "scope" "cursor" })
                       (vim.lsp.buf_request 0 "textDocument/hover" position
                         (fn [_err result _ctx _config]
                           (when (and (not (= result nil)) (= (type result) "table"))
@@ -330,16 +331,16 @@
         })
       (lsp.hls.setup
         { "capabilities" (capabilities lsp.hls)
-          "init_options" {
+          "settings" {
             "haskell" {
-              "completionSnippetsOn" true
-              ; diagnosticsDebounceDuration 350000
-              "diagnosticsOnChange" true
-              "formatOnImportOn" true
               "formattingProvider" "ormolu"
-              "hlintOn" false
-              "liquidOn" false
-              ; "maxNumberOfProblems" 100
+              "plugin" {
+                "hlint" {
+                  "globalOn" false
+                }
+              }
+              ; max number of completions sent to client at one time
+              "maxCompletions" 20
             }
           }
           "on_attach" on-attach })

@@ -1,15 +1,10 @@
 " TODO
-" figure out why vim-cool + fzf is broken in neovim
 " switch to vim-packager?
 " insert when focus terminal
 " Space-/ BLines
 " cabbrev rg Rg?
 " don't cd with startify
 " make surrounding with quotes repeatable
-
-augroup mitchellwrosen
-  autocmd!
-augroup END
 
 lua require('init')
 
@@ -75,33 +70,6 @@ nnoremap <silent> <Space>rt :Fg htop<CR>
 " endfunction
 " cnoremap <expr> <Tab> <SID>commandModeTab()
 " cnoremap <expr> <S-Tab> <SID>commandModeShiftTab()
-
-function! s:getSelectedText() abort
-  let [l:lnum1, l:col1] = getpos("'<")[1:2]
-  let [l:lnum2, l:col2] = getpos("'>")[1:2]
-  if &selection ==# 'exclusive'
-    let l:col2 -= 1
-  endif
-  let l:lines = getline(l:lnum1, l:lnum2)
-  let l:lines[-1] = l:lines[-1][:l:col2 - 1]
-  let l:lines[0] = l:lines[0][l:col1 - 1:]
-  return l:lines
-endfunction
-
-" function! <SID>EchoQuickFixEntry()
-"   let entries = getqflist()
-"   let bufnr = bufnr('%')
-"   let lnum = line('.')
-"   for e in entries
-"     if e.bufnr == bufnr && e.lnum == lnum
-"       echo e.text
-"       return
-"     endif
-"   endfor
-" endfunction
-
-" Disallow edits to read-only files
-autocmd mitchellwrosen BufReadPost * let &l:modifiable = !&readonly
 
 " Jump to last cursor position on file open
 function! s:jumpToLastPosition() abort

@@ -1,6 +1,8 @@
 (local event
-  { "bufEnter" "BufEnter"
+  { "after-read" "BufReadPost"
+    "bufEnter" "BufEnter"
     "bufLeave" "BufLeave"
+    "before-write" "BufWritePre"
     "cursor-moved" "CursorMoved"
     "focusGained" "FocusGained"
     "focusLost" "FocusLost"

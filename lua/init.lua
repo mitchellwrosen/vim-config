@@ -376,14 +376,15 @@ local function lsp_setup()
           end
         end
         local virtual_hover
-        local function _19_(filter0)
+        local function _19_()
           local position = vim.lsp.util.make_position_params()
+          vim.diagnostic.open_float()
           local function _20_(_err, result, _ctx, _config)
             if (not (result == nil) and (type(result) == "table")) then
               local namespace = vim.api.nvim_create_namespace("hover")
               local line = meaningful_head(vim.lsp.util.convert_input_to_markdown_lines(result.contents))
               vim.api.nvim_buf_clear_namespace(0, namespace, 0, -1)
-              if not (filter0(line) == "") then
+              if not (filter(line) == "") then
                 return vim.api.nvim_buf_set_virtual_text(0, namespace, position.position.line, {{("\226\136\153 " .. line), "Comment"}}, {})
               else
                 return nil
@@ -395,24 +396,21 @@ local function lsp_setup()
           return vim.lsp.buf_request(0, "textDocument/hover", position, _20_)
         end
         virtual_hover = _19_
-        local function _23_()
-          return virtual_hover(filter)
-        end
-        autocmd("mitchellwrosen", {event["cursor-moved"]}, "<buffer>", _23_)
+        autocmd("mitchellwrosen", {event["cursor-moved"]}, "<buffer>", virtual_hover)
       end
       completion.on_attach(client)
       return status.on_attach(client)
     end
     on_attach = _11_
-    local function _24_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:324")
+    local function _23_(client)
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:326")
       if client.config.flags then
         client.config.flags.allow_incremental_sync = true
       else
       end
       return on_attach(client)
     end
-    lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _24_})
+    lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _23_})
     lsp.hls.setup({capabilities = capabilities(lsp.hls), init_options = {haskell = {completionSnippetsOn = true, diagnosticsOnChange = true, formatOnImportOn = true, formattingProvider = "ormolu", hlintOn = false, liquidOn = false}}, on_attach = on_attach})
     lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
     lsp.vimls.setup({capabilities = capabilities(lsp.vimls), on_attach = on_attach})
@@ -428,7 +426,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:360")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:362")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -437,10 +435,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.8) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _27_()
+  local function _26_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _27_})
+  vim.fn.termopen(command, {on_exit = _26_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

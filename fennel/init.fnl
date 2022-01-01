@@ -278,7 +278,7 @@
                             (set ret l)))))
                     ret)
 
-                ; filter : io (string -> string)
+                ; filter : string -> string
                 ;
                 ; Per the current buffer's filetype, return a function that mutates a line to set as virtual text, where
                 ; the empty string means "don't annotate".
@@ -293,28 +293,30 @@
                       (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
                     _ (fn [line] line))
 
-                ; virtual-hover : io (string -> string) -> io ()
+                ; virtual-hover : () -> io ()
                 ;
                 ; Call "textDocument/hover" and set the first meaningful line of the returned markdown (after filtering)
                 ; as virtual text of the current line (namespace "hover"). Clears any previously set virtual text.
                 virtual-hover
-                  (fn [filter]
-                    (local position (vim.lsp.util.make_position_params))
-                    (vim.lsp.buf_request 0 "textDocument/hover" position
-                      (fn [_err result _ctx _config]
-                        (when (and (not (= result nil)) (= (type result) "table"))
-                          (local namespace (vim.api.nvim_create_namespace "hover"))
-                          (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
-                          (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
-                          (when (not (= (filter line) ""))
-                            (vim.api.nvim_buf_set_virtual_text
-                              0
-                              namespace
-                              position.position.line
-                              [ [ (.. "∙ " line) "Comment" ] ] {}))))))
+                  (fn []
+                    (do
+                      (local position (vim.lsp.util.make_position_params))
+                      (vim.diagnostic.open_float)
+                      (vim.lsp.buf_request 0 "textDocument/hover" position
+                        (fn [_err result _ctx _config]
+                          (when (and (not (= result nil)) (= (type result) "table"))
+                            (local namespace (vim.api.nvim_create_namespace "hover"))
+                            (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
+                            (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
+                            (when (not (= (filter line) ""))
+                              (vim.api.nvim_buf_set_virtual_text
+                                0
+                                namespace
+                                position.position.line
+                                [ [ (.. "∙ " line) "Comment" ] ] {})))))))
 
               ]
-              (autocmd "mitchellwrosen" [event.cursor-moved] "<buffer>" (fn [] (virtual-hover filter))))
+              (autocmd "mitchellwrosen" [event.cursor-moved] "<buffer>" virtual-hover))
 
             (completion.on_attach client)
             (status.on_attach client))]

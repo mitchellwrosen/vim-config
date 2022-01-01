@@ -32,6 +32,7 @@
 (vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b308e64dbefdf71' }")
 (vim.cmd "Plug 'godlygeek/tabular'") ; align on words
 (vim.cmd "Plug 'itchyny/lightline.vim'")
+(vim.cmd "Plug 'junegunn/fzf'") ; fuzzy search source code, files, etc
 (vim.cmd "Plug 'junegunn/fzf.vim'") ; fuzzy search source code, files, etc
 (vim.cmd "Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
 (vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")

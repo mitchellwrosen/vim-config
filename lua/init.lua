@@ -168,6 +168,7 @@ vim.cmd("Plug 'folke/trouble.nvim', { 'commit': '7de8bc46164ec1f787dee34b6843b61
 vim.cmd("Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b308e64dbefdf71' }")
 vim.cmd("Plug 'godlygeek/tabular'")
 vim.cmd("Plug 'itchyny/lightline.vim'")
+vim.cmd("Plug 'junegunn/fzf'")
 vim.cmd("Plug 'junegunn/fzf.vim'")
 vim.cmd("Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
 vim.cmd("Plug 'mengelbrecht/lightline-bufferline'")
@@ -321,7 +322,7 @@ local function lsp_setup()
   do
     local capabilities
     local function _10_(config)
-      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:236")
+      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:237")
       local x_3_auto = (config.capabilities or {})
       local y_4_auto = status.capabilities
       return vim.tbl_extend("keep", x_3_auto, y_4_auto)
@@ -329,7 +330,7 @@ local function lsp_setup()
     capabilities = _10_
     local on_attach
     local function _11_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:238")
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:239")
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
@@ -416,7 +417,7 @@ local function lsp_setup()
     end
     on_attach = _11_
     local function _24_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:317")
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:318")
       if client.config.flags then
         client.config.flags.allow_incremental_sync = true
       else
@@ -439,7 +440,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:353")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:354")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

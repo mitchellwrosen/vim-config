@@ -144,7 +144,9 @@ autocmd mitchellwrosen TermOpen * nnoremap <silent> <buffer> <Space>d :bw!<CR>
 autocmd mitchellwrosen TextYankPost * silent! lua vim.highlight.on_yank {higroup="Visual", timeout=600}
 
 " Save the buffer after changing it
-autocmd mitchellwrosen InsertLeave,TextChanged * if empty(&buftype) && !empty(bufname('')) | silent! update | endif
+" nested means do run other autocommands as if we saved manually, i.e. do
+" strip whitespace, format buffer, etc.
+autocmd mitchellwrosen InsertLeave,TextChanged * nested if empty(&buftype) && !empty(bufname('')) | silent! update | endif
 
 " Highlight merge conflict markers
 match ErrorMsg '^\(<\||\|=\|>\)\{7\}\([^=].\+\)\?$'

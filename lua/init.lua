@@ -282,10 +282,6 @@ do
 end
 require("fennel/mappings")
 require("fennel/autocommands")
-vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
-vim.cmd("highlight! link LspReferenceText LspReference")
-vim.cmd("highlight! link LspReferenceRead LspReference")
-vim.cmd("highlight! link LspReferenceWrite LspReference")
 do
   local default_code_action_callback = vim.lsp.handlers["textDocument/codeAction"]
   local function _5_(x, y, actions)
@@ -320,7 +316,7 @@ local function lsp_setup()
   do
     local capabilities
     local function _10_(config)
-      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:238")
+      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:230")
       local x_3_auto = (config.capabilities or {})
       local y_4_auto = status.capabilities
       return vim.tbl_extend("keep", x_3_auto, y_4_auto)
@@ -328,7 +324,12 @@ local function lsp_setup()
     capabilities = _10_
     local on_attach
     local function _11_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:240")
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:232")
+      vim.cmd("autocmd mitchellwrosen BufWritePre *.hs lua vim.lsp.buf.formatting_sync(nil, 1000)")
+      vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
+      vim.cmd("highlight! link LspReferenceText LspReference")
+      vim.cmd("highlight! link LspReferenceRead LspReference")
+      vim.cmd("highlight! link LspReferenceWrite LspReference")
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>gd", ":lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>d", ":lua vim.lsp.buf.formatting()<CR>", {noremap = true, silent = true})

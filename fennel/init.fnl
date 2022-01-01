@@ -60,9 +60,6 @@
 (vim.cmd "Plug 'tpope/vim-fugitive'")
 (vim.cmd "Plug 'tpope/vim-repeat'") ; make "." repeat more things out of the box
 (vim.cmd "Plug 'tpope/vim-surround'") ; some surround helpers
-; (vim.cmd "Plug 'unblevable/quick-scope'") ; highlight characters for f, F, t, T
-; (vim.cmd "Plug 'nvim-lua/plenary.nvim'")
-; (vim.cmd "Plug 'nvim-lua/popup.nvim'")
 ((. vim.fn "plug#end"))
 
 ; colorscheme settings
@@ -192,11 +189,6 @@
 (include "fennel/mappings")
 (include "fennel/autocommands")
 
-(vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
-(vim.cmd "highlight! link LspReferenceText LspReference")
-(vim.cmd "highlight! link LspReferenceRead LspReference")
-(vim.cmd "highlight! link LspReferenceWrite LspReference")
-
 ; configure
 
 (let
@@ -238,6 +230,14 @@
       [ capabilities (lambda [config] (left-merge (or config.capabilities {}) status.capabilities))
         on-attach
           (lambda [client]
+            ; Format on save
+            (vim.cmd "autocmd mitchellwrosen BufWritePre *.hs lua vim.lsp.buf.formatting_sync(nil, 1000)")
+
+            (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
+            (vim.cmd "highlight! link LspReferenceText LspReference")
+            (vim.cmd "highlight! link LspReferenceRead LspReference")
+            (vim.cmd "highlight! link LspReferenceWrite LspReference")
+
             (buf-map [ "n" ] "<Space>a" ":lua vim.lsp.buf.code_action()<CR>" { "noremap" true "silent" true })
             ; (buf-map [ "n" ] "<Space>lcr" ":lua vim.lsp.buf.clear_references()<CR>" { "noremap" true "silent" true })
             ; (buf-map [ "n" ] "<Space>ldec" ":lua vim.lsp.buf.declaration()<CR>" { "noremap" true "silent" true })

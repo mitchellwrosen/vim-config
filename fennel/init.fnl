@@ -52,7 +52,6 @@
 (vim.cmd "Plug 'rhysd/git-messenger.vim'") ; git blame the line under the cursor
 (vim.cmd "Plug 'romainl/vim-cool'") ; automatically unhighlight when cursor moves
 (vim.cmd "Plug 'romainl/vim-qf'") ; vim quickfix improvements
-(vim.cmd "Plug 'rrethy/vim-illuminate'") ; highlight occurrences of the word under the cursor
 (vim.cmd "Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }")
 (vim.cmd "Plug 'terryma/vim-multiple-cursors'") ; multiple cursors for quick and dirty renaming
 (vim.cmd "Plug 'tommcdo/vim-exchange'") ; swap the location of two selections
@@ -78,14 +77,6 @@
 
 ; tommcdo/vim-exchange
 (set vim.g.exchange_no_mappings 1) ; Don't make any key mappings
-
-; rrethy/vim-illuminate
-(set vim.g.Illuminate_delay 0) ; highlight immediately
-(set vim.g.Illuminate_highlightUnderCursor 0) ; don't highlight the word under the cursor
-
-; Yggdroot/indentLine
-; (set vim.g.indentLine_color_term 239)
-; (set vim.g.indentLine_char "│")
 
 ; ggandor/lightspeed.nvim
 (let
@@ -201,6 +192,11 @@
 (include "fennel/mappings")
 (include "fennel/autocommands")
 
+(vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
+(vim.cmd "highlight! link LspReferenceText LspReference")
+(vim.cmd "highlight! link LspReferenceRead LspReference")
+(vim.cmd "highlight! link LspReferenceWrite LspReference")
+
 ; configure
 
 (let
@@ -293,16 +289,21 @@
                       (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
                     _ (fn [line] line))
 
-                ; virtual-hover : () -> io ()
+                ; on-hover : () -> io ()
                 ;
                 ; Call "textDocument/hover" and set the first meaningful line of the returned markdown (after filtering)
                 ; as virtual text of the current line (namespace "hover"). Clears any previously set virtual text.
-                virtual-hover
+                on-hover
                   (fn []
                     (do
                       (local position (vim.lsp.util.make_position_params))
+                      ; highlight other occurrences of the thing under the cursor
+                      ; the colors are determined by LspReferenceText, etc. highlight groups
+                      (vim.lsp.buf.clear_references)
+                      (vim.lsp.buf.document_highlight)
                       ; open diagnostics underneath the cursor
                       (vim.diagnostic.open_float { "scope" "cursor" })
+                      ; try to put a type sig in the virtual text area
                       (vim.lsp.buf_request 0 "textDocument/hover" position
                         (fn [_err result _ctx _config]
                           (when (and (not (= result nil)) (= (type result) "table"))
@@ -317,7 +318,7 @@
                                 [ [ (.. "∙ " line) "Comment" ] ] {})))))))
 
               ]
-              (autocmd "mitchellwrosen" [event.cursor-moved] "<buffer>" virtual-hover))
+              (autocmd "mitchellwrosen" [event.cursor-moved] "<buffer>" on-hover))
 
             (completion.on_attach client)
             (status.on_attach client))]

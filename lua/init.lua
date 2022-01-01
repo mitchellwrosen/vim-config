@@ -182,7 +182,6 @@ vim.cmd("Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce
 vim.cmd("Plug 'rhysd/git-messenger.vim'")
 vim.cmd("Plug 'romainl/vim-cool'")
 vim.cmd("Plug 'romainl/vim-qf'")
-vim.cmd("Plug 'rrethy/vim-illuminate'")
 vim.cmd("Plug 'sdiehl/vim-ormolu', { 'for': 'haskell' }")
 vim.cmd("Plug 'terryma/vim-multiple-cursors'")
 vim.cmd("Plug 'tommcdo/vim-exchange'")
@@ -200,8 +199,6 @@ vim.cmd("colorscheme gruvbox")
 vim.g.completion_enable_auto_popup = 1
 vim.g.completion_matching_ignore_case = 1
 vim.g.exchange_no_mappings = 1
-vim.g.Illuminate_delay = 0
-vim.g.Illuminate_highlightUnderCursor = 0
 do
   local lightspeed = require("lightspeed")
   lightspeed.setup({jump_on_partial_input_safety_timeout = 400, jump_to_first_match = true, grey_out_search_area = true, highlight_unique_chars = true, match_only_the_start_of_same_char_seqs = true})
@@ -285,6 +282,10 @@ do
 end
 require("fennel/mappings")
 require("fennel/autocommands")
+vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
+vim.cmd("highlight! link LspReferenceText LspReference")
+vim.cmd("highlight! link LspReferenceRead LspReference")
+vim.cmd("highlight! link LspReferenceWrite LspReference")
 do
   local default_code_action_callback = vim.lsp.handlers["textDocument/codeAction"]
   local function _5_(x, y, actions)
@@ -319,7 +320,7 @@ local function lsp_setup()
   do
     local capabilities
     local function _10_(config)
-      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:242")
+      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:238")
       local x_3_auto = (config.capabilities or {})
       local y_4_auto = status.capabilities
       return vim.tbl_extend("keep", x_3_auto, y_4_auto)
@@ -327,7 +328,7 @@ local function lsp_setup()
     capabilities = _10_
     local on_attach
     local function _11_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:244")
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:240")
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>gd", ":lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>d", ":lua vim.lsp.buf.formatting()<CR>", {noremap = true, silent = true})
@@ -374,9 +375,11 @@ local function lsp_setup()
             filter = nil
           end
         end
-        local virtual_hover
+        local on_hover
         local function _19_()
           local position = vim.lsp.util.make_position_params()
+          vim.lsp.buf.clear_references()
+          vim.lsp.buf.document_highlight()
           vim.diagnostic.open_float({scope = "cursor"})
           local function _20_(_err, result, _ctx, _config)
             if (not (result == nil) and (type(result) == "table")) then
@@ -394,15 +397,15 @@ local function lsp_setup()
           end
           return vim.lsp.buf_request(0, "textDocument/hover", position, _20_)
         end
-        virtual_hover = _19_
-        autocmd("mitchellwrosen", {event["cursor-moved"]}, "<buffer>", virtual_hover)
+        on_hover = _19_
+        autocmd("mitchellwrosen", {event["cursor-moved"]}, "<buffer>", on_hover)
       end
       completion.on_attach(client)
       return status.on_attach(client)
     end
     on_attach = _11_
     local function _23_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:327")
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:328")
       if client.config.flags then
         client.config.flags.allow_incremental_sync = true
       else
@@ -425,7 +428,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:363")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:364")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

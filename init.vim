@@ -53,11 +53,6 @@ onoremap <silent> in :<C-u>call <SID>innerNumberTextObject()<cr>
 xnoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 onoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 
-" github.com/mitchellwrosen/repld stuff
-noremap <silent> <Space>s m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``
-nnoremap <silent> <Space>S m`:silent w !repld-send<CR>``
-vnoremap <silent> <Space>s m`<Esc>:silent '<,'>w !repld-send<CR>``
-
 command! -complete=shellcmd -nargs=1 Fg lua require'init'.run_floating(<f-args>)
 nnoremap <silent> <Space>rg :Fg lazygit<CR>
 nnoremap <silent> <Space>rt :Fg htop<CR>

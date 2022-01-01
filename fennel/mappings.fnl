@@ -138,9 +138,9 @@
 ; nnoremap <C-l> <C-w>l
 
 ; " github.com/mitchellwrosen/repld stuff
-; noremap <silent> <Space>s m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``
-; nnoremap <silent> <Space>S m`:silent w !repld-send<CR>``
-; vnoremap <silent> <Space>s m`<Esc>:silent '<,'>w !repld-send<CR>``
+(map [ "n" ] "<Space>s" "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``" { "silent" true })
+(map [ "n" ] "<Space>S" "m`:silent w !repld-send<CR>``" { "noremap" true "silent" true })
+(map [ "v" ] "<Space>s" "m`<Esc>:silent '<,'>w !repld-send<CR>``" { "noremap" true "silent" true })
 
 ; command! -complete=shellcmd -nargs=1 Fg lua require'init'.run_floating(<f-args>)
 ; nnoremap <silent> <Space>rg :Fg lazygit<CR>

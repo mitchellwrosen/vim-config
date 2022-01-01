@@ -163,10 +163,6 @@ match ErrorMsg '\%>120v.\+'
 let g:elm_setup_keybindings = 0 " Don't make any key mappings
 let g:elm_format_autosave = 1 " Run elm-format on save
 
-" [godlygeek/tabular]
-" Space-a to align on the word under the cursor
-nnoremap <silent> <Space>a m`:exe "Tabularize /" . expand("<cWORD>")<CR>``
-
 " [junegunn/fzf.vim]
 " If the buffer is already open in another tab or window, jump to it rather
 " than replace the current buffer (which would open 2 copies)
@@ -178,12 +174,8 @@ let g:fzf_layout = { 'window': { 'height': 0.9, 'width': 0.9 } }
 nnoremap <expr> <Space>o (len(system('git rev-parse')) ? ':Files' : ':GFiles')."\<CR>"
 " Space-f ("find") the word under the cursor
 nnoremap <Space>f :Rg <C-r><C-w><CR>
-" Would be nice to do this without yanking?
-vnoremap <Space>f y:Rg <C-r>"<CR>
 " Space-k (because it's a home-row key) to fuzzy-search buffers
 nnoremap <Space>k :Buffers<CR>
-" Space-h to see the git history of the current file
-nnoremap <Space>h :BCommits<CR>
 
 command! -bar BCommits call fzf#vim#buffer_commits(1)
 

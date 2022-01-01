@@ -26,17 +26,21 @@
 ; plugins
 ((. vim.fn "plug#begin") (.. (vim.fn.stdpath "data") "/plugged"))
 
-(vim.cmd "Plug 'Yggdroot/indentLine'") ; show markers every 2 columns of leading whitespace
+; show markers every 2 columns of leading whitespace
+(vim.cmd "Plug 'lukas-reineke/indent-blankline.nvim', { 'commit': '0f8df7e43f0cae4c44e0e8383436ad602f333419' }")
+; (vim.cmd "Plug 'Yggdroot/indentLine', { 'commit': '5617a1cf7d315e6e6f84d825c85e3b669d220bfa' }")
 (vim.cmd "Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
+; open LSP diagnostics with :TroubleToggle
 (vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '7de8bc46164ec1f787dee34b6843b61251b1ea91' }")
 (vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b308e64dbefdf71' }")
-(vim.cmd "Plug 'godlygeek/tabular'") ; align on words
-(vim.cmd "Plug 'itchyny/lightline.vim'")
+; statusline
+(vim.cmd "Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa77e89cdd832b2' }")
 (vim.cmd "Plug 'junegunn/fzf'") ; fuzzy search source code, files, etc
 (vim.cmd "Plug 'junegunn/fzf.vim'") ; fuzzy search source code, files, etc
 (vim.cmd "Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
 (vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")
 (vim.cmd "Plug 'mhinz/vim-startify'") ; startup screen
+; lsp configs
 (vim.cmd "Plug 'neovim/nvim-lsp'")
 (vim.cmd "Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")
 (vim.cmd "Plug 'nvim-lua/completion-nvim'")
@@ -79,8 +83,8 @@
 (set vim.g.Illuminate_highlightUnderCursor 0) ; don't highlight the word under the cursor
 
 ; Yggdroot/indentLine
-(set vim.g.indentLine_color_term 239)
-(set vim.g.indentLine_char "│")
+; (set vim.g.indentLine_color_term 239)
+; (set vim.g.indentLine_char "│")
 
 ; ggandor/lightspeed.nvim
 (let
@@ -238,21 +242,23 @@
         on-attach
           (lambda [client]
             (buf-map [ "n" ] "<Space>a" ":lua vim.lsp.buf.code_action()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lcr" ":lua vim.lsp.buf.clear_references()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>ldec" ":lua vim.lsp.buf.declaration()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>ldef" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lds" ":lua vim.lsp.buf.document_symbol()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lcr" ":lua vim.lsp.buf.clear_references()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>ldec" ":lua vim.lsp.buf.declaration()<CR>" { "noremap" true "silent" true })
+            (buf-map [ "n" ] "<Space>gd" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lds" ":lua vim.lsp.buf.document_symbol()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>d" ":lua vim.lsp.buf.formatting()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Enter>" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lic" ":lua vim.lsp.buf.incoming_calls()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lic" ":lua vim.lsp.buf.incoming_calls()<CR>" { "noremap" true "silent" true })
             (buf-map [ "n" ] "<Space>lim" ":lua vim.lsp.buf.implementation()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lo" ":lua vim.lsp.buf.outgoing_calls()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lref" ":lua vim.lsp.buf.references()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lren" ":lua vim.lsp.buf.rename()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lsh" ":lua vim.lsp.buf.signature_help()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lsl" ":lua vim.lsp.util.show_line_diagnostics()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lt" ":lua vim.lsp.buf.type_definition()<CR>" { "noremap" true "silent" true })
-            (buf-map [ "n" ] "<Space>lw" ":lua vim.lsp.buf.workspace_symbol()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lo" ":lua vim.lsp.buf.outgoing_calls()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lref" ":lua vim.lsp.buf.references()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lren" ":lua vim.lsp.buf.rename()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lsh" ":lua vim.lsp.buf.signature_help()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lsl" ":lua vim.lsp.util.show_line_diagnostics()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lt" ":lua vim.lsp.buf.type_definition()<CR>" { "noremap" true "silent" true })
+            ; (buf-map [ "n" ] "<Space>lw" ":lua vim.lsp.buf.workspace_symbol()<CR>" { "noremap" true "silent" true })
+            (buf-map [ "n" ] "<Space>h" ":lua vim.diagnostic.goto_prev()<CR>" { "noremap" true "silent" true })
+            (buf-map [ "n" ] "<Space>l" ":lua vim.diagnostic.goto_next()<CR>" { "noremap" true "silent" true })
             (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
 
             (let

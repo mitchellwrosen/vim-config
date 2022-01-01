@@ -162,12 +162,11 @@ do
   vim.api.nvim_set_keymap("v", "T", "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_T' : 'T'", {expr = true})
 end
 vim.fn["plug#begin"]((vim.fn.stdpath("data") .. "/plugged"))
-vim.cmd("Plug 'Yggdroot/indentLine'")
+vim.cmd("Plug 'lukas-reineke/indent-blankline.nvim', { 'commit': '0f8df7e43f0cae4c44e0e8383436ad602f333419' }")
 vim.cmd("Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
 vim.cmd("Plug 'folke/trouble.nvim', { 'commit': '7de8bc46164ec1f787dee34b6843b61251b1ea91' }")
 vim.cmd("Plug 'ggandor/lightspeed.nvim', { 'commit': '1cbd25bd666f2bfbad480a5b9b308e64dbefdf71' }")
-vim.cmd("Plug 'godlygeek/tabular'")
-vim.cmd("Plug 'itchyny/lightline.vim'")
+vim.cmd("Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa77e89cdd832b2' }")
 vim.cmd("Plug 'junegunn/fzf'")
 vim.cmd("Plug 'junegunn/fzf.vim'")
 vim.cmd("Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
@@ -203,8 +202,6 @@ vim.g.completion_matching_ignore_case = 1
 vim.g.exchange_no_mappings = 1
 vim.g.Illuminate_delay = 0
 vim.g.Illuminate_highlightUnderCursor = 0
-vim.g.indentLine_color_term = 239
-vim.g.indentLine_char = "\226\148\130"
 do
   local lightspeed = require("lightspeed")
   lightspeed.setup({jump_on_partial_input_safety_timeout = 400, jump_to_first_match = true, grey_out_search_area = true, highlight_unique_chars = true, match_only_the_start_of_same_char_seqs = true})
@@ -322,7 +319,7 @@ local function lsp_setup()
   do
     local capabilities
     local function _10_(config)
-      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:237")
+      _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:241")
       local x_3_auto = (config.capabilities or {})
       local y_4_auto = status.capabilities
       return vim.tbl_extend("keep", x_3_auto, y_4_auto)
@@ -330,23 +327,14 @@ local function lsp_setup()
     capabilities = _10_
     local on_attach
     local function _11_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:239")
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:243")
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>a", ":lua vim.lsp.buf.code_action()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lcr", ":lua vim.lsp.buf.clear_references()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldec", ":lua vim.lsp.buf.declaration()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>ldef", ":lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lds", ":lua vim.lsp.buf.document_symbol()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(0, "n", "<Space>gd", ":lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>d", ":lua vim.lsp.buf.formatting()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Enter>", ":lua vim.lsp.buf.hover()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lic", ":lua vim.lsp.buf.incoming_calls()<CR>", {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(0, "n", "<Space>lim", ":lua vim.lsp.buf.implementation()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lo", ":lua vim.lsp.buf.outgoing_calls()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lref", ":lua vim.lsp.buf.references()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lren", ":lua vim.lsp.buf.rename()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lsh", ":lua vim.lsp.buf.signature_help()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lsl", ":lua vim.lsp.util.show_line_diagnostics()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lt", ":lua vim.lsp.buf.type_definition()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(0, "n", "<Space>lw", ":lua vim.lsp.buf.workspace_symbol()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(0, "n", "<Space>h", ":lua vim.diagnostic.goto_prev()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(0, "n", "<Space>l", ":lua vim.diagnostic.goto_next()<CR>", {noremap = true, silent = true})
       vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
       do
         local meaningful_head
@@ -390,9 +378,9 @@ local function lsp_setup()
         local virtual_hover
         local function _19_(filter0)
           local position = vim.lsp.util.make_position_params()
-          local function _20_(_err, _method, result, _client)
-            local namespace = vim.api.nvim_create_namespace("hover")
+          local function _20_(_err, result, _ctx, _config)
             if (not (result == nil) and (type(result) == "table")) then
+              local namespace = vim.api.nvim_create_namespace("hover")
               local line = meaningful_head(vim.lsp.util.convert_input_to_markdown_lines(result.contents))
               vim.api.nvim_buf_clear_namespace(0, namespace, 0, -1)
               if not (filter0(line) == "") then
@@ -417,7 +405,7 @@ local function lsp_setup()
     end
     on_attach = _11_
     local function _24_(client)
-      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:318")
+      _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:324")
       if client.config.flags then
         client.config.flags.allow_incremental_sync = true
       else
@@ -440,7 +428,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:354")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:360")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

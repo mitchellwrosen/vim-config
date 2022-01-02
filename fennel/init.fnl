@@ -11,8 +11,6 @@
   "fennel/nvim-macros"
 )
 
-(vim.cmd "augroup mitchellwrosen\nautocmd!\naugroup END")
-
 ; Some ggandor/lightspeed.nvim mappings. These need to come before the plugin is loaded, because that's how the plugin
 ; documentation says you are meant to override the defaults.
 (map [ "o" ] "s" "<Plug>Lightspeed_s" {}) ; default = z (why?)
@@ -72,8 +70,17 @@
 (set vim.g.completion_enable_auto_popup 1)
 (set vim.g.completion_matching_ignore_case 1)
 
-; tommcdo/vim-exchange
-(set vim.g.exchange_no_mappings 1) ; Don't make any key mappings
+; folke/trouble.nvim
+(let
+  [trouble (require "trouble")]
+  (trouble.setup {
+    ; "auto_open" true
+    ; "auto_close" true
+    ; don't use some fancy icons that require a separate plugin
+    "icons" false
+    "position" "right"
+  })
+)
 
 ; ggandor/lightspeed.nvim
 (let
@@ -106,17 +113,14 @@
 (set vim.g.startify_lists [{ "type" "files" }])
 (set vim.g.startify_relative_path 1)
 
-; folke/trouble.nvim
-(let
-  [trouble (require "trouble")]
-  (trouble.setup {
-    ; "auto_open" true
-    ; "auto_close" true
-    ; don't use some fancy icons that require a separate plugin
-    "icons" false
-    "position" "right"
-  })
-)
+; neovimhaskell/haskell-vim
+(set vim.g.haskell_enable_backpack 1)
+(set vim.g.haskell_enable_pattern_synonyms 1)
+(set vim.g.haskell_enable_quantification 1)
+(set vim.g.haskell_enable_recursivedo 1)
+(set vim.g.haskell_enable_static_pointers 1)
+(set vim.g.haskell_enable_typeroles 1)
+(set vim.g.haskell_indent_disable 1)
 
 ; nvim-telescope/telescope.nvim
 (let
@@ -139,6 +143,31 @@
     }
   })
 )
+
+; rhysd/git-messenger.vim
+(set vim.g.git_messenger_always_into_popup true)
+(set vim.g.git_messenger_extra_blame_args "-w")
+(set vim.g.git_messenger_no_default_mappings true)
+; blame the line under the cursor
+(vim.api.nvim_set_keymap "n" "<Space>b" "<Plug>(git-messenger)" {})
+
+; tommcdo/vim-exchange
+(set vim.g.exchange_no_mappings 1) ; Don't make any key mappings
+; x ("exchange") once to yank, x again to exchange with the first yank
+(map [ "n" "v" ] "x" "<Plug>(Exchange)" {})
+; Manually make exhange replace 'w' with 'e', as vim does for e.g. 'c'
+(map [ "n" ] "xw" "<Plug>(Exchange)e" {})
+(map [ "n" ] "xW" "<Plug>(Exchange)E" {})
+(map [ "n" ] "xx" "m`<Plug>(ExchangeLine)``" {}) ; exchange the entire line
+(map [ "n" ] "X" "<Plug>(Exchange)$" {}) ; exchange from here to the end of line
+(map [ "n" ] "xc" "<Plug>(ExchangeClear)" {}) ; clear the exchange highlight
+
+; tpope/vim-commentary
+(map [ "n" ] "-" "m`<Plug>CommentaryLine``" {})
+(map [ "v" ] "-" "<Plug>Commentary" {})
+
+; tpope/vim-surround
+(set vim.g.surround_no_mappings 1) ; don't let surround map anything
 
 (set vim.o.autowriteall true)
 (set vim.o.hidden true) ; don't abandon out-of-sight buffers
@@ -191,35 +220,26 @@
 ; autocommands
 
 ; Disallow edits to read-only files
-(autocmd "mitchellwrosen" [event.after-read] "*" (fn [] (set vim.bo.modifiable (not vim.bo.readonly))))
+(autocmd [event.after-read] "*" (fn [] (set vim.bo.modifiable (not vim.bo.readonly))))
 
-; configure
+; Briefly highlight yanks
+(autocmd [event.after-yank] "* silent!" (fn [] (vim.highlight.on_yank { "higroup" "Visual" "timeout" 600 })))
 
-(let
-  [default-code-action-callback (. vim.lsp.handlers "textDocument/codeAction")]
-  (tset
-    vim.lsp.handlers
-    "textDocument/codeAction"
-    (fn [x y actions]
-      (if
-        (= (length actions) 1)
-        ; Below was translated directly from default code action callback.
-        ;
-        ; textDocument/codeAction can return either Command[] or CodeAction[].
-        ; If it is a CodeAction, it can have either an edit, a command or both.
-        ; Edits should be executed first
-        (let
-          [ action (. actions 1)
-            command (= (type action.command) "table")
-            edit action.edit
-          ]
-          (if
-            (or edit (= (type command) "table"))
-            (do
-              (when edit (vim.lsp.util.apply_workspace_edit edit))
-              (when (= (type command) "table") (vim.lsp.buf.execute_command command)))
-            (vim.lsp.buf.execute_command action)))
-        (default-code-action-callback x y actions)))))
+; on cursor hold or focus gained, read the buffer in case it has been modified externally
+(autocmd [event.cursor-hold event.focus-gained] "?*"
+  (fn []
+    (when
+      (= (vim.fn.getcmdwintype) "")
+      (vim.cmd "checktime"))))
+
+; Save the buffer after changing it
+; nested means do run other autocommands as if we saved manually, i.e. do
+; strip whitespace, format buffer, etc.
+(autocmd [event.leave-insert-mode event.text-changed] "* nested"
+  (fn []
+    (when
+      (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
+      (vim.cmd "silent! update"))))
 
 (do
   (local completion (require "completion"))
@@ -231,7 +251,7 @@
   (local on-attach
     (lambda [client buf]
       ; Format on save
-      (autocmd "mitchellwrosen" [event.before-write] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
+      (autocmd [event.before-write] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
 
       (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
       (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -277,7 +297,7 @@
             (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
           _ (fn [line] line)))
 
-      (autocmd "mitchellwrosen" [event.cursor-moved] "<buffer>"
+      (autocmd [event.cursor-moved] "<buffer>"
         (fn []
           (do
             (local position (vim.lsp.util.make_position_params))
@@ -337,10 +357,6 @@
 
   (lsp.sumneko_lua.setup
     { "capabilities" (capabilities lsp.sumneko_lua)
-      "on_attach" on-attach })
-
-  (lsp.vimls.setup
-    { "capabilities" (capabilities lsp.vimls)
       "on_attach" on-attach })
 )
 

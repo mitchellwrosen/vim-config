@@ -1,13 +1,16 @@
 (local event
   { "after-read" "BufReadPost"
+    "after-yank" "TextYankPost"
     "bufEnter" "BufEnter"
     "bufLeave" "BufLeave"
     "before-write" "BufWritePre"
+    "cursor-hold" "CursorHold"
     "cursor-moved" "CursorMoved"
-    "focusGained" "FocusGained"
+    "focus-gained" "FocusGained"
     "focusLost" "FocusLost"
     "insertEnter" "InsertEnter"
-    "insertLeave" "InsertLeave"
+    "leave-insert-mode" "InsertLeave"
+    "text-changed" "TextChanged"
   })
 
 (local mode
@@ -26,14 +29,13 @@
     (set n (+ n 1))
     name))
 
-; autocmd : string -> list string -> string -> io () -> io ()
-(lambda autocmd [group events pattern f]
+; autocmd : list string -> string -> io () -> io ()
+(vim.cmd "augroup mitchellwrosen\nautocmd!\naugroup END")
+(lambda autocmd [events pattern f]
   (let [name (register-lambda f)]
     (vim.cmd
       (..
-        "autocmd "
-        group
-        " "
+        "autocmd mitchellwrosen "
         (table.concat events ",")
         " "
         pattern

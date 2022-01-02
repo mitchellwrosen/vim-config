@@ -32,28 +32,7 @@ onoremap <silent> in :<C-u>call <SID>innerNumberTextObject()<cr>
 xnoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 onoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 
-command! -complete=shellcmd -nargs=1 Fg lua require'init'.run_floating(<f-args>)
-nnoremap <silent> <Space>rg :Fg lazygit<CR>
-nnoremap <silent> <Space>rt :Fg htop<CR>
-
-" Hm... can't figure out how to "fall through" to normal tab (autocomplete)
-" behavior
-" function! s:commandModeTab() abort
-"   if getcmdtype() ==# '/' || getcmdtype() ==# '?'
-"     return "\<Enter>/\<C-r>/"
-"   else
-"     return "\<Tab>"
-"   endif
-" endfunction
-" function! s:commandModeShiftTab() abort
-"   if getcmdtype() ==# '/' || getcmdtype() ==# '?'
-"     return "\<Enter>?\<C-r>/"
-"   else
-"     return "\<S-Tab>"
-"   endif
-" endfunction
-" cnoremap <expr> <Tab> <SID>commandModeTab()
-" cnoremap <expr> <S-Tab> <SID>commandModeShiftTab()
+command! -complete=shellcmd -nargs=1 Run lua require'init'.run_floating(<f-args>)
 
 " Jump to last cursor position on file open
 function! s:jumpToLastPosition() abort
@@ -78,9 +57,6 @@ function! s:stripTrailingWhitespace() abort
 endfunction
 autocmd mitchellwrosen BufWritePre * call s:stripTrailingWhitespace()
 
-" kick in autoread on cursor hold or focus gained
-autocmd CursorHold,FocusGained ?* if getcmdwintype() == '' | checktime | endif
-
 " On <Enter>, go to error and close quickfix list
 autocmd mitchellwrosen FileType qf nnoremap <silent> <buffer> <CR> <CR>:ccl<CR>
 
@@ -91,14 +67,6 @@ autocmd mitchellwrosen TermOpen * tnoremap <buffer> <Esc> <C-\><C-n>
 autocmd mitchellwrosen TermOpen * setlocal nonumber norelativenumber
 " forcibly exit a terminal buffer, because there's nothing to save
 autocmd mitchellwrosen TermOpen * nnoremap <silent> <buffer> <Space>d :bw!<CR>
-
-" Briefly highlight yanks
-autocmd mitchellwrosen TextYankPost * silent! lua vim.highlight.on_yank {higroup="Visual", timeout=600}
-
-" Save the buffer after changing it
-" nested means do run other autocommands as if we saved manually, i.e. do
-" strip whitespace, format buffer, etc.
-autocmd mitchellwrosen InsertLeave,TextChanged * nested if empty(&buftype) && !empty(bufname('')) | silent! update | endif
 
 " Highlight merge conflict markers
 match ErrorMsg '^\(<\||\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -235,29 +203,10 @@ let g:multi_cursor_prev_key = '<C-p>'
 " let g:multi_cursor_skip_key = '<C-x>'
 let g:multi_cursor_quit_key = '<Esc>'
 
-" function! s:HandleEnter()
-"   if coc#util#has_float()
-"     call coc#util#float_hide()
-"   else
-"     call CocAction('doHover')
-"   endif
-" endfunction
-
-" autocmd mitchellwrosen Filetype haskell autocmd CursorHold <buffer> lua vim.lsp.buf.hover()
-
 sign define LspDiagnosticsErrorSign text=✗ texthl=LspDiagnosticsError linehl= numhl=
 sign define LspDiagnosticsWarningSign text=⚠ texthl=LspDiagnosticsWarning linehl= numhl=
 sign define LspDiagnosticsInformationSign text=ℹ texthl=LspDiagnosticsInformation linehl= numhl=
 sign define LspDiagnosticsHintSign text=➤ texthl=LspDiagnosticsHint linehl= numhl=
-
-" [neovimhaskell/haskell-vim]
-let g:haskell_enable_backpack = 1
-let g:haskell_enable_pattern_synonyms = 1
-let g:haskell_enable_quantification = 1
-let g:haskell_enable_recursivedo = 1
-let g:haskell_enable_static_pointers = 1
-let g:haskell_enable_typeroles = 1
-let g:haskell_indent_disable = 1
 
 " [romainl/vim-qf]
 " Toggle the quickfix ("location") menu; move thru quickfix items with Alt+jk
@@ -265,45 +214,6 @@ let g:haskell_indent_disable = 1
 " nmap <Space>l <Plug>(qf_qf_toggle)
 " nmap <A-j> <Plug>(qf_qf_next)
 " nmap <A-k> <Plug>(qf_qf_prev)
-
-" [sdiehl/vim-ormolu]
-let g:ormolu_disable = 1
-
-" [mhinz/signify]
-let g:signify_sign_change = 'Δ'
-let g:signify_sign_delete = '-'
-" I only use git, so only bother integrating with it (performance win!)
-let g:signify_vcs_list = [ 'git' ]
-
-" [rhysd/git-messenger.vim]
-let g:git_messenger_always_into_popup = v:true
-let g:git_messenger_extra_blame_args = '-w'
-let g:git_messenger_no_default_mappings = v:true
-
-" blame the line under the cursor
-nmap <Space>b <Plug>(git-messenger)
-
-" x ("exchange") once to yank, x again to exchange with the first yank
-nmap x <Plug>(Exchange)
-" Manually make [exhange] replace 'w' with 'e', as vim does for e.g. 'c'
-nmap xw <Plug>(Exchange)e
-nmap xW <Plug>(Exchange)E
-" xx to exchange-yank the whole line (and return cursor to where it was)
-nmap xx m`<Plug>(ExchangeLine)``
-" X to exchange-yank the rest of the line
-nmap X <Plug>(Exchange)$
-" xc to clear the exchange
-nmap xc <Plug>(ExchangeClear)
-vmap x <Plug>(Exchange)
-
-" [tpope/vim-commentary]
-" Toggle comment
-nmap <Space>m <Plug>CommentaryLine
-vmap <Space>m <Plug>Commentary
-
-" [tpope/vim-surround]
-" Don't let surround provide any magic mappings
-let g:surround_no_mappings = 1
 
 " dz to delete surround and restore cursor position
 nmap dz' mz<Plug>Dsurround'`zh
@@ -342,12 +252,6 @@ nmap ZZ( mz<Plug>Yssurround)`z
 nmap ZZ[ mz<Plug>Yssurround]`z
 nmap ZZ{ mz<Plug>Yssurround}`z
 nmap ZZp mz<Plug>Yssurround)`z
-
-" [unblevable/quick-scope]
-" let g:qs_lazy_highlight = 1 " only kick in after updatetime ms
-let g:qs_max_chars = 120
-let g:qs_second_highlight = 0 " don't highlight second occurrence
-hi! link QuickScopePrimary GruvboxGreenBold
 
 " ==============================================================================
 " nvim-gtk settings

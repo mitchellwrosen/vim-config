@@ -68,22 +68,6 @@
 ; Q to apply macro recorded into q
 (map [ "n" ] "Q" "@q" { "noremap" true })
 
-; " Make *, # work in visual mode, too
-; function! s:visualSearch(cmdtype, ...)
-;   let temp = @"
-;   normal! gvy
-;   if !a:0 || a:1 != 'raw'
-;     let @" = escape(@", a:cmdtype.'\*')
-;   endif
-;   let @/ = substitute(@", '\n', '\\n', 'g')
-;   let @/ = substitute(@/, '\[', '\\[', 'g')
-;   let @/ = substitute(@/, '\~', '\\~', 'g')
-;   let @/ = substitute(@/, '\.', '\\.', 'g')
-;   let @" = temp
-; endfunction
-; vnoremap * :<C-u>call <SID>visualSearch('/')<CR>/<C-r>=@/<CR><CR>``
-; vnoremap # :<C-u>call <SID>visualSearch('?')<CR>?<C-r>=@/<CR><CR>``
-
 ; Follow >>/<< shifted text around with the cursor
 (map [ "n" ] ">>" "<Plug>MyNmapLl" {})
 (map [ "n" ] "<<" "<Plug>MyNmapHh" {})
@@ -142,10 +126,6 @@
 (map [ "n" ] "<Space>S" "m`:silent w !repld-send<CR>``" { "noremap" true "silent" true })
 (map [ "v" ] "<Space>s" "m`<Esc>:silent '<,'>w !repld-send<CR>``" { "noremap" true "silent" true })
 
-; command! -complete=shellcmd -nargs=1 Fg lua require'init'.run_floating(<f-args>)
-; nnoremap <silent> <Space>rg :Fg lazygit<CR>
-; nnoremap <silent> <Space>rt :Fg htop<CR>
-
 ; <C-v> to paste from * register
 (map [ "i" ] "<C-v>" "<C-r>*" { "noremap" true })
 
@@ -157,25 +137,6 @@
 (map [ "c" ] "<C-j>" "<Down>" { "noremap" true })
 (map [ "c" ] "<C-k>" "<Up>" { "noremap" true })
 (map [ "c" ] "<C-l>" "<Right>" { "noremap" true })
-
-; " Hm... can't figure out how to "fall through" to normal tab (autocomplete)
-; " behavior
-; " function! s:commandModeTab() abort
-; "   if getcmdtype() ==# '/' || getcmdtype() ==# '?'
-; "     return "\<Enter>/\<C-r>/"
-; "   else
-; "     return "\<Tab>"
-; "   endif
-; " endfunction
-; " function! s:commandModeShiftTab() abort
-; "   if getcmdtype() ==# '/' || getcmdtype() ==# '?'
-; "     return "\<Enter>?\<C-r>/"
-; "   else
-; "     return "\<S-Tab>"
-; "   endif
-; " endfunction
-; " cnoremap <expr> <Tab> <SID>commandModeTab()
-; " cnoremap <expr> <S-Tab> <SID>commandModeShiftTab()
 
 ; When a popup menu is visible, move thru it with tab and select with enter
 (map [ "i" ] "<Tab>" "pumvisible() ? \"\\<C-n>\" : \"\\<Tab>\"" { "expr" true "noremap" true })

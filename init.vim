@@ -8,22 +8,6 @@
 
 lua require('init')
 
-" Make *, # work in visual mode, too
-function! s:visualSearch(cmdtype, ...)
-  let temp = @"
-  normal! gvy
-  if !a:0 || a:1 != 'raw'
-    let @" = escape(@", a:cmdtype.'\*')
-  endif
-  let @/ = substitute(@", '\n', '\\n', 'g')
-  let @/ = substitute(@/, '\[', '\\[', 'g')
-  let @/ = substitute(@/, '\~', '\\~', 'g')
-  let @/ = substitute(@/, '\.', '\\.', 'g')
-  let @" = temp
-endfunction
-vnoremap * :<C-u>call <SID>visualSearch('/')<CR>/<C-r>=@/<CR><CR>``
-vnoremap # :<C-u>call <SID>visualSearch('?')<CR>?<C-r>=@/<CR><CR>``
-
 " inner/around number text objects (with forward-seeking behavior)
 " 123 123.456 0b1010 0xff
 let s:number_regex = '0b[01]\+\|0x\x\+\|\d\+\(\.\d\+\)\='

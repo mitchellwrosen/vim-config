@@ -30,7 +30,7 @@
 ; (vim.cmd "Plug 'Yggdroot/indentLine', { 'commit': '5617a1cf7d315e6e6f84d825c85e3b669d220bfa' }")
 (vim.cmd "Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
 ; open LSP diagnostics with :TroubleToggle
-(vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '7de8bc46164ec1f787dee34b6843b61251b1ea91' }")
+(vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '20469be985143d024c460d95326ebeff9971d714' }")
 ; vim-sneak thingy for moving to a specific character from far away
 (vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '9fddb6ebf4007eaa26f44cd31b5140cbd3bbb820' }")
 ; statusline
@@ -79,24 +79,6 @@
     ; don't use some fancy icons that require a separate plugin
     "icons" false
     "position" "right"
-  })
-)
-
-; ggandor/lightspeed.nvim
-(let
-  [lightspeed (require "lightspeed")]
-  (lightspeed.setup {
-    ; Milliseconds until the follow-up character is "swallowed" when jumping to a unique character right after the first
-    ; input
-    "jump_on_partial_input_safety_timeout" 400
-    ; Jump to the first match automatically, without having to select a label.
-    "jump_to_first_match" true
-    "grey_out_search_area" true
-    ; Before the first character is pressed, highlight characters that would be jumped to immediately. The docs say this
-    ; can get slow, so consider disabling.
-    "highlight_unique_chars" true
-    ; Only jump to e.g. the first '=' character in a sequence like '==='
-    "match_only_the_start_of_same_char_seqs" true
   })
 )
 
@@ -233,9 +215,7 @@
       (vim.cmd "checktime"))))
 
 ; Save the buffer after changing it
-; nested means do run other autocommands as if we saved manually, i.e. do
-; strip whitespace, format buffer, etc.
-(autocmd [event.leave-insert-mode event.text-changed] "* nested"
+(autocmd [event.leave-insert-mode event.text-changed] "*"
   (fn []
     (when
       (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
@@ -250,8 +230,8 @@
 
   (local on-attach
     (lambda [client buf]
-      ; Format on save
-      (autocmd [event.before-write] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
+      ; Format on save and on leaving insert mode
+      (autocmd [event.before-write event.leave-insert-mode] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
 
       (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
       (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -259,7 +239,7 @@
       (vim.cmd "highlight! link LspReferenceWrite LspReference")
 
       (vim.api.nvim_buf_set_keymap buf "n" "<Space>a" ":lua vim.lsp.buf.code_action()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Space>gd" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
+      (vim.api.nvim_buf_set_keymap buf "n" "gd" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Space>d" ":lua vim.lsp.buf.formatting()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Enter>" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Up>" ":lua vim.diagnostic.goto_prev()<CR>" { "noremap" true "silent" true })
@@ -299,7 +279,7 @@
 
       (autocmd [event.cursor-moved] "<buffer>"
         (fn []
-          (do
+          (when (= (. (vim.api.nvim_get_mode) "mode") "n")
             (local position (vim.lsp.util.make_position_params))
             ; highlight other occurrences of the thing under the cursor
             ; the colors are determined by LspReferenceText, etc. highlight groups

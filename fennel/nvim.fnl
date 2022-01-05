@@ -29,13 +29,14 @@
     (set n (+ n 1))
     name))
 
-; autocmd : list string -> string -> io () -> io ()
-(vim.cmd "augroup mitchellwrosen\nautocmd!\naugroup END")
-(lambda autocmd [events pattern f]
+; autocmd : string -> list string -> string -> io () -> io ()
+(lambda autocmd [group events pattern f]
   (let [name (register-lambda f)]
     (vim.cmd
       (..
-        "autocmd mitchellwrosen "
+        "autocmd "
+        group
+        " "
         (table.concat events ",")
         " "
         pattern

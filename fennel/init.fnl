@@ -201,21 +201,23 @@
 
 ; autocommands
 
+(vim.cmd "augroup mitchellwrosen\nautocmd!\naugroup END")
+
 ; Disallow edits to read-only files
-(autocmd [event.after-read] "*" (fn [] (set vim.bo.modifiable (not vim.bo.readonly))))
+(autocmd "mitchellwrosen" [event.after-read] "*" (fn [] (set vim.bo.modifiable (not vim.bo.readonly))))
 
 ; Briefly highlight yanks
-(autocmd [event.after-yank] "* silent!" (fn [] (vim.highlight.on_yank { "higroup" "Visual" "timeout" 600 })))
+(autocmd "mitchellwrosen" [event.after-yank] "* silent!" (fn [] (vim.highlight.on_yank { "higroup" "Visual" "timeout" 600 })))
 
 ; on cursor hold or focus gained, read the buffer in case it has been modified externally
-(autocmd [event.cursor-hold event.focus-gained] "?*"
+(autocmd "mitchellwrosen" [event.cursor-hold event.focus-gained] "?*"
   (fn []
     (when
       (= (vim.fn.getcmdwintype) "")
       (vim.cmd "checktime"))))
 
 ; Save the buffer after changing it
-(autocmd [event.leave-insert-mode event.text-changed] "*"
+(autocmd "mitchellwrosen" [event.leave-insert-mode event.text-changed] "*"
   (fn []
     (when
       (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
@@ -230,8 +232,10 @@
 
   (local on-attach
     (lambda [client buf]
+      (vim.cmd "augroup mitchellwrosenLsp\nautocmd!\naugroup END")
+
       ; Format on save and on leaving insert mode
-      (autocmd [event.before-write event.leave-insert-mode] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
+      (autocmd "mitchellwrosenLsp" [event.before-write event.leave-insert-mode] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
 
       (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
       (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -277,7 +281,7 @@
             (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
           _ (fn [line] line)))
 
-      (autocmd [event.cursor-moved] "<buffer>"
+      (autocmd "mitchellwrosenLsp" [event.cursor-moved] "<buffer>"
         (fn []
           (when (= (. (vim.api.nvim_get_mode) "mode") "n")
             (local position (vim.lsp.util.make_position_params))
@@ -299,12 +303,14 @@
                       0
                       namespace
                       position.position.line
-                      [ [ (.. "∙ " line) "Comment" ] ] {})))))))
+                      [ [ (.. "∙ " line) "Comment" ] ] {})))))
+          )
         )
-
-        (completion.on_attach client)
-        (status.on_attach client)
       )
+
+      (completion.on_attach client)
+      (status.on_attach client)
+    )
   )
 
   ; Uh, just kind of following https://github.com/nvim-lua/lsp-status.nvim here...
@@ -321,6 +327,7 @@
 
   (lsp.hls.setup
     { "capabilities" (capabilities lsp.hls)
+      "cmd" ["haskell-language-server-wrapper" "--lsp"]
       "settings" {
         "haskell" {
           "formattingProvider" "ormolu"

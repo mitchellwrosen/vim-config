@@ -290,7 +290,7 @@
             (vim.lsp.buf.clear_references)
             (vim.lsp.buf.document_highlight)
             ; open diagnostics underneath the cursor
-            (vim.diagnostic.open_float { "scope" "cursor" })
+            (vim.diagnostic.open_float)
             ; try to put a type sig in the virtual text area
             (vim.lsp.buf_request 0 "textDocument/hover" position
               (fn [_err result _ctx _config]
@@ -315,6 +315,20 @@
 
   ; Uh, just kind of following https://github.com/nvim-lua/lsp-status.nvim here...
   (status.register_progress)
+
+  (vim.diagnostic.config {
+    "float" {
+      ; require cursor to be over diagnostic in order to open a float window of it
+      "scope" "cursor"
+      ; remove the default "Diagnostics:" header
+      "header" ""
+    }
+    ; only underline errors
+    "underline" { "severity" vim.diagnostic.severity.ERROR }
+    ; don't put diagnostics inline
+    "virtual_text" false
+
+  })
 
   (lsp.elmls.setup
     { "capabilities" (capabilities lsp.elmls)

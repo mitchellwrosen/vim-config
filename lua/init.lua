@@ -394,7 +394,7 @@ do
         local position = vim.lsp.util.make_position_params()
         vim.lsp.buf.clear_references()
         vim.lsp.buf.document_highlight()
-        vim.diagnostic.open_float({scope = "cursor"})
+        vim.diagnostic.open_float()
         local function _21_(_err, result, _ctx, _config)
           if (not (result == nil) and (type(result) == "table")) then
             local namespace = vim.api.nvim_create_namespace("hover")
@@ -420,8 +420,9 @@ do
   end
   on_attach = _11_
   status.register_progress()
+  vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
   local function _25_(client)
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:322")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:336")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -429,7 +430,7 @@ do
     return on_attach(client)
   end
   lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _25_})
-  lsp.hls.setup({capabilities = capabilities(lsp.hls), settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}}, maxCompletions = 20}}, on_attach = on_attach})
+  lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}}, maxCompletions = 20}}, on_attach = on_attach})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
 end
 local function lightline_status()
@@ -440,7 +441,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:355")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:370")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

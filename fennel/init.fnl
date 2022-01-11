@@ -37,6 +37,8 @@
 ; completion - 2022/01/09
 (vim.cmd "Plug 'hrsh7th/cmp-buffer', { 'commit': 'f83773e2f433a923997c5faad7ea689ec24d1785' }")
 (vim.cmd "Plug 'hrsh7th/cmp-nvim-lsp', { 'commit': 'b4251f0fca1daeb6db5d60a23ca81507acf858c2' }")
+(vim.cmd "Plug 'hrsh7th/cmp-vsnip', { 'commit': '0abfa1860f5e095a07c477da940cfcb0d273b700' }")
+(vim.cmd "Plug 'hrsh7th/vim-vsnip', { 'commit': '7fde9c0b6878a62bcc6d2d29f9a85a6616032f02' }")
 (vim.cmd "Plug 'hrsh7th/nvim-cmp', { 'commit': '9f6d2b42253dda8db950ab38795978e5420a93aa' }")
 
 ; statusline
@@ -89,10 +91,17 @@
   (local cmp (require "cmp"))
   (cmp.setup {
     "mapping" {
-      "<CR>" (fn [fallback] (if (cmp.visible) (cmp.confirm) (fallback)))
-      "<Tab>" (fn [fallback] (if (cmp.visible) (cmp.select_next_item) (fallback)))
+      "<CR>" (cmp.mapping.confirm { "select" false })
+      "<Tab>" (cmp.mapping.select_next_item)
     }
-    "sources" (cmp.config.sources [ {"name" "nvim_lsp"} {"name" "buffer"} ])
+    "snippet" {
+      "expand" (fn [args] ((. vim.fn "vsnip#anonymous") args.body))
+    }
+    "sources"
+      (cmp.config.sources [
+        {"name" "nvim_lsp"}
+        {"name" "buffer"}
+      ])
   })
 )
 

@@ -33,6 +33,12 @@
 (vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '20469be985143d024c460d95326ebeff9971d714' }")
 ; vim-sneak thingy for moving to a specific character from far away
 (vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '9fddb6ebf4007eaa26f44cd31b5140cbd3bbb820' }")
+
+; completion - 2022/01/09
+(vim.cmd "Plug 'hrsh7th/cmp-buffer', { 'commit': 'f83773e2f433a923997c5faad7ea689ec24d1785' }")
+(vim.cmd "Plug 'hrsh7th/cmp-nvim-lsp', { 'commit': 'b4251f0fca1daeb6db5d60a23ca81507acf858c2' }")
+(vim.cmd "Plug 'hrsh7th/nvim-cmp', { 'commit': '9f6d2b42253dda8db950ab38795978e5420a93aa' }")
+
 ; statusline
 (vim.cmd "Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa77e89cdd832b2' }")
 (vim.cmd "Plug 'junegunn/fzf'") ; fuzzy search source code, files, etc
@@ -43,7 +49,6 @@
 ; lsp configs
 (vim.cmd "Plug 'neovim/nvim-lsp'")
 (vim.cmd "Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")
-(vim.cmd "Plug 'nvim-lua/completion-nvim'")
 (vim.cmd "Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
 (vim.cmd "Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
 (vim.cmd "Plug 'nvim-lua/lsp-status.nvim'")
@@ -67,9 +72,6 @@
 (set vim.g.gruvbox_invert_signs 1)
 (vim.cmd "colorscheme gruvbox")
 
-(set vim.g.completion_enable_auto_popup 1)
-(set vim.g.completion_matching_ignore_case 1)
-
 ; folke/trouble.nvim
 (let
   [trouble (require "trouble")]
@@ -79,6 +81,18 @@
     ; don't use some fancy icons that require a separate plugin
     "icons" false
     "position" "right"
+  })
+)
+
+; completion - 2022/01/09
+(do
+  (local cmp (require "cmp"))
+  (cmp.setup {
+    "mapping" {
+      "<CR>" (fn [fallback] (if (cmp.visible) (cmp.confirm) (fallback)))
+      "<Tab>" (fn [fallback] (if (cmp.visible) (cmp.select_next_item) (fallback)))
+    }
+    "sources" (cmp.config.sources [ {"name" "nvim_lsp"} {"name" "buffer"} ])
   })
 )
 
@@ -224,11 +238,20 @@
       (vim.cmd "silent! update"))))
 
 (do
-  (local completion (require "completion"))
   (local lsp (require "lspconfig"))
   (local status (require "lsp-status"))
 
-  (local capabilities (lambda [config] (left-merge (or config.capabilities {}) status.capabilities)))
+  (local capabilities
+    (lambda [config]
+      (local cmp-nvim-lsp (require "cmp_nvim_lsp"))
+      (cmp-nvim-lsp.update_capabilities
+        (left-merge
+          (or config.capabilities {})
+          status.capabilities
+        )
+      )
+    )
+  )
 
   (local on-attach
     (lambda [client buf]
@@ -308,7 +331,6 @@
         )
       )
 
-      (completion.on_attach client)
       (status.on_attach client)
     )
   )
@@ -351,7 +373,7 @@
             }
           }
           ; max number of completions sent to client at one time
-          "maxCompletions" 20
+          ; "maxCompletions" 20
         }
       }
       "on_attach" on-attach })

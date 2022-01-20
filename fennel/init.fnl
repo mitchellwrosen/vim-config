@@ -264,7 +264,11 @@
 
   (local on-attach
     (lambda [client buf]
-      (vim.cmd "augroup mitchellwrosenLsp\nautocmd!\naugroup END")
+      (vim.cmd "augroup mitchellwrosenLsp\naugroup END")
+      ; Urgh, this was my solution to :LspRestart installing a second formatting autocmd, but it also causes autocmds to
+      ; cleared on other buffers or something.
+      ; I FUCKING HATE CONFIGURING THIS EDITOR
+      ; (vim.cmd "augroup mitchellwrosenLsp\nautocmd!\naugroup END")
 
       ; Format on save and on leaving insert mode
       (autocmd "mitchellwrosenLsp" [event.before-write event.leave-insert-mode] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
@@ -373,6 +377,7 @@
   (lsp.hls.setup
     { "capabilities" (capabilities lsp.hls)
       "cmd" ["haskell-language-server-wrapper" "--lsp"]
+      ; "cmd" ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
       "settings" {
         "haskell" {
           "formattingProvider" "ormolu"

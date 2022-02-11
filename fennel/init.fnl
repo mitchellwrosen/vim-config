@@ -271,7 +271,8 @@
       ; (vim.cmd "augroup mitchellwrosenLsp\nautocmd!\naugroup END")
 
       ; Format on save and on leaving insert mode
-      (autocmd "mitchellwrosenLsp" [event.before-write event.leave-insert-mode] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
+      ; commented out temporarily because it's a little bit slow on the unison codebase
+      ; (autocmd "mitchellwrosenLsp" [event.before-write event.leave-insert-mode] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
 
       (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
       (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -323,8 +324,9 @@
             (local position (vim.lsp.util.make_position_params))
             ; highlight other occurrences of the thing under the cursor
             ; the colors are determined by LspReferenceText, etc. highlight groups
-            (vim.lsp.buf.clear_references)
-            (vim.lsp.buf.document_highlight)
+            (when client.resolved_capabilities.document_highlight
+              (vim.lsp.buf.clear_references)
+              (vim.lsp.buf.document_highlight))
             ; open diagnostics underneath the cursor
             (vim.diagnostic.open_float)
             ; try to put a type sig in the virtual text area
@@ -368,10 +370,10 @@
   (lsp.elmls.setup
     { "capabilities" (capabilities lsp.elmls)
       "on_attach"
-        (lambda [client]
+        (lambda [client buf]
           ; https://github.com/elm-tooling/elm-language-server/issues/503
           (when client.config.flags (set client.config.flags.allow_incremental_sync true))
-          (on-attach client))
+          (on-attach client buf))
     })
 
   (lsp.hls.setup

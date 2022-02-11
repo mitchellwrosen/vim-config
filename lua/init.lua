@@ -346,10 +346,6 @@ do
     _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:266")
     _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:266")
     vim.cmd("augroup mitchellwrosenLsp\naugroup END")
-    local function _14_()
-      return vim.lsp.buf.formatting_sync(nil, 1000)
-    end
-    autocmd("mitchellwrosenLsp", {event["before-write"], event["leave-insert-mode"]}, "<buffer>", _14_)
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
     vim.cmd("highlight! link LspReferenceText LspReference")
     vim.cmd("highlight! link LspReferenceRead LspReference")
@@ -362,7 +358,7 @@ do
     vim.api.nvim_buf_set_keymap(buf, "n", "<Down>", ":lua vim.diagnostic.goto_next()<CR>", {noremap = true, silent = true})
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
     local meaningful_head
-    local function _15_(lines)
+    local function _14_(lines)
       local ret = ""
       local i = 1
       while (i <= #lines) do
@@ -376,34 +372,37 @@ do
       end
       return ret
     end
-    meaningful_head = _15_
+    meaningful_head = _14_
     local filter
     do
-      local _17_ = vim.bo.filetype
-      if (_17_ == "haskell") then
-        local function _18_(line)
+      local _16_ = vim.bo.filetype
+      if (_16_ == "haskell") then
+        local function _17_(line)
           if (-1 == vim.fn.match(line, "::")) then
             return ""
           else
             return line
           end
         end
-        filter = _18_
+        filter = _17_
       elseif true then
-        local _ = _17_
-        local function _20_(line)
+        local _ = _16_
+        local function _19_(line)
           return line
         end
-        filter = _20_
+        filter = _19_
       else
         filter = nil
       end
     end
-    local function _22_()
+    local function _21_()
       if (vim.api.nvim_get_mode().mode == "n") then
         local position = vim.lsp.util.make_position_params()
-        vim.lsp.buf.clear_references()
-        vim.lsp.buf.document_highlight()
+        if client.resolved_capabilities.document_highlight then
+          vim.lsp.buf.clear_references()
+          vim.lsp.buf.document_highlight()
+        else
+        end
         vim.diagnostic.open_float()
         local function _23_(_err, result, _ctx, _config)
           if (not (result == nil) and (type(result) == "table")) then
@@ -424,19 +423,20 @@ do
         return nil
       end
     end
-    autocmd("mitchellwrosenLsp", {event["cursor-moved"]}, "<buffer>", _22_)
+    autocmd("mitchellwrosenLsp", {event["cursor-moved"]}, "<buffer>", _21_)
     return status.on_attach(client)
   end
   on_attach = _13_
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
-  local function _27_(client)
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:371")
+  local function _27_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:373")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:373")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
     end
-    return on_attach(client)
+    return on_attach(client, buf)
   end
   lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _27_})
   lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}}}}, on_attach = on_attach})
@@ -450,7 +450,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:406")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:408")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

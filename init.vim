@@ -81,10 +81,6 @@ match ErrorMsg '\%>120v.\+'
 " Plugin settings
 " ==============================================================================
 
-" [ElmCast/elm-vim]
-let g:elm_setup_keybindings = 0 " Don't make any key mappings
-let g:elm_format_autosave = 1 " Run elm-format on save
-
 " [junegunn/fzf.vim]
 " If the buffer is already open in another tab or window, jump to it rather
 " than replace the current buffer (which would open 2 copies)

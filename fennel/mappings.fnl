@@ -122,7 +122,7 @@
 ; nnoremap <C-l> <C-w>l
 
 ; " github.com/mitchellwrosen/repld stuff
-(map [ "n" ] "<Space>s" "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``" { "silent" true })
+(map [ "n" ] "<Space>s" "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``" { "noremap" true "silent" true })
 (map [ "n" ] "<Space>S" "m`:silent w !repld-send<CR>``" { "noremap" true "silent" true })
 (map [ "v" ] "<Space>s" "m`<Esc>:silent '<,'>w !repld-send<CR>``" { "noremap" true "silent" true })
 

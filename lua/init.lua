@@ -174,7 +174,6 @@ vim.cmd("Plug 'neovimhaskell/haskell-vim', { 'commit': 'f35d02204b4813d1dbe8b0e9
 vim.cmd("Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
 vim.cmd("Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
 vim.cmd("Plug 'nvim-lua/lsp-status.nvim', { 'commit': '4073f766f1303fb602802075e558fe43e382cc92' }")
-vim.cmd("Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce71b45193117f6fb5626b' }")
 vim.cmd("Plug 'rhysd/git-messenger.vim', { 'commit': '2e67899355f3f631aad6845925e4c2c13546444d' }")
 vim.cmd("Plug 'romainl/vim-cool', { 'commit': '27ad4ecf7532b750fadca9f36e1c5498fc225af2' }")
 vim.cmd("Plug 'romainl/vim-qf', { 'commit': '65f115c350934517382ae45198a74232a9069c2a' }")
@@ -218,11 +217,6 @@ vim.g.haskell_enable_recursivedo = 1
 vim.g.haskell_enable_static_pointers = 1
 vim.g.haskell_enable_typeroles = 1
 vim.g.haskell_indent_disable = 1
-do
-  local telescope = require("telescope")
-  local actions = require("telescope.actions")
-  telescope.setup({defaults = {mappings = {i = {["<C-n>"] = false, ["<C-p>"] = false, ["<C-j>"] = actions.move_selection_next, ["<C-k>"] = actions.move_selection_previous, ["<Esc>"] = actions.close}}}})
-end
 vim.g.git_messenger_always_into_popup = true
 vim.g.git_messenger_extra_blame_args = "-w"
 vim.g.git_messenger_no_default_mappings = true

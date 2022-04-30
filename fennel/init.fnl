@@ -1,9 +1,4 @@
-(local
-  { "autocmd" autocmd
-    "event" event
-  }
-  (include "fennel/nvim")
-)
+(include "fennel/nvim")
 (import-macros
   { "left-merge" left-merge
     "map" map
@@ -255,27 +250,53 @@
 
 ; autocommands
 
-(vim.cmd "augroup mitchellwrosen\nautocmd!\naugroup END")
+(vim.api.nvim_create_augroup "mitchellwrosen" {})
+; (vim.api.nvim_create_augroup "mitchellwrosenLsp" {})
 
 ; Disallow edits to read-only files
-(autocmd "mitchellwrosen" [event.after-read] "*" (fn [] (set vim.bo.modifiable (not vim.bo.readonly))))
+(vim.api.nvim_create_autocmd
+  ["BufReadPost"]
+  {
+    "callback" (fn [] (set vim.bo.modifiable (not vim.bo.readonly)))
+    "group" "mitchellwrosen"
+  }
+)
 
 ; Briefly highlight yanks
-(autocmd "mitchellwrosen" [event.after-yank] "* silent!" (fn [] (vim.highlight.on_yank { "higroup" "Visual" "timeout" 600 })))
+(vim.api.nvim_create_autocmd
+  ["TextYankPost"]
+  {
+    "callback" (fn [] (vim.highlight.on_yank { "higroup" "Visual" "timeout" 600 }))
+    "group" "mitchellwrosen"
+  }
+)
 
 ; on cursor hold or focus gained, read the buffer in case it has been modified externally
-(autocmd "mitchellwrosen" [event.cursor-hold event.focus-gained] "?*"
-  (fn []
-    (when
-      (= (vim.fn.getcmdwintype) "")
-      (vim.cmd "checktime"))))
+(vim.api.nvim_create_autocmd
+  ["CursorHold" "FocusGained"]
+  {
+    "callback"
+      (fn []
+        (when
+          (= (vim.fn.getcmdwintype) "")
+          (vim.cmd "checktime"))
+      )
+    "group" "mitchellwrosen"
+  }
+)
 
 ; Save the buffer after changing it
-(autocmd "mitchellwrosen" [event.leave-insert-mode event.text-changed] "*"
-  (fn []
-    (when
-      (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
-      (vim.cmd "silent! update"))))
+(vim.api.nvim_create_autocmd
+  ["InsertLeave" "TextChanged"]
+  {
+    "callback"
+      (fn []
+        (when
+          (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
+          (vim.cmd "silent! update")))
+    "group" "mitchellwrosen"
+  }
+)
 
 (do
   (local lsp (require "lspconfig"))
@@ -303,7 +324,7 @@
 
       ; Format on save and on leaving insert mode
       ; commented out temporarily because it's a little bit slow on the unison codebase
-      ; (autocmd "mitchellwrosenLsp" [event.before-write event.leave-insert-mode] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
+      ; (autocmd "mitchellwrosenLsp" ["BufWritePre" "InsertLeave"] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
 
       (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
       (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -349,35 +370,38 @@
             (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
           _ (fn [line] line)))
 
-      (autocmd "mitchellwrosenLsp" [event.cursor-moved] "<buffer>"
-        (fn []
-          (when (= (. (vim.api.nvim_get_mode) "mode") "n")
-            (local position (vim.lsp.util.make_position_params))
-            ; highlight other occurrences of the thing under the cursor
-            ; the colors are determined by LspReferenceText, etc. highlight groups
-            (when client.resolved_capabilities.document_highlight
-              (vim.lsp.buf.clear_references)
-              (vim.lsp.buf.document_highlight))
-            ; open diagnostics underneath the cursor
-            (vim.diagnostic.open_float)
-            ; try to put a type sig in the virtual text area
-            (vim.lsp.buf_request 0 "textDocument/hover" position
-              (fn [_err result _ctx _config]
-                (when (and (not (= result nil)) (= (type result) "table"))
-                  (local namespace (vim.api.nvim_create_namespace "hover"))
-                  (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
-                  (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
-                  (when (not (= (filter line) ""))
-                    (vim.api.nvim_buf_set_virtual_text
-                      0
-                      namespace
-                      position.position.line
-                      [ [ (.. "∙ " line) "Comment" ] ] {})))))
-          )
-        )
+      (vim.api.nvim_create_autocmd
+        ["CursorMoved"]
+        {
+          "buffer" buf
+          "callback"
+            (fn []
+              (when (= (. (vim.api.nvim_get_mode) "mode") "n")
+                (local position (vim.lsp.util.make_position_params))
+                ; highlight other occurrences of the thing under the cursor
+                ; the colors are determined by LspReferenceText, etc. highlight groups
+                (when client.resolved_capabilities.document_highlight
+                  (vim.lsp.buf.clear_references)
+                  (vim.lsp.buf.document_highlight))
+                ; open diagnostics underneath the cursor
+                (vim.diagnostic.open_float)
+                ; try to put a type sig in the virtual text area
+                (vim.lsp.buf_request 0 "textDocument/hover" position
+                  (fn [_err result _ctx _config]
+                    (when (and (not (= result nil)) (= (type result) "table"))
+                      (local namespace (vim.api.nvim_create_namespace "hover"))
+                      (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
+                      (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
+                      (when (not (= (filter line) ""))
+                        (vim.api.nvim_buf_set_virtual_text
+                          0
+                          namespace
+                          position.position.line
+                          [ [ (.. "∙ " line) "Comment" ] ] {})))))
+              ))
+          "group" "mitchellwrosenLsp"
+        }
       )
-
-      (status.on_attach client)
     )
   )
 

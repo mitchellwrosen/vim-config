@@ -41,7 +41,8 @@
 (vim.cmd "Plug 'hrsh7th/cmp-nvim-lsp', { 'commit': 'b4251f0fca1daeb6db5d60a23ca81507acf858c2' }")
 (vim.cmd "Plug 'hrsh7th/cmp-vsnip', { 'commit': '0abfa1860f5e095a07c477da940cfcb0d273b700' }")
 (vim.cmd "Plug 'hrsh7th/vim-vsnip', { 'commit': '7fde9c0b6878a62bcc6d2d29f9a85a6616032f02' }")
-(vim.cmd "Plug 'hrsh7th/nvim-cmp', { 'commit': '9f6d2b42253dda8db950ab38795978e5420a93aa' }")
+; 22-04-30
+(vim.cmd "Plug 'hrsh7th/nvim-cmp', { 'commit': 'f841fa6ced194aa930136a7671439e6bd4c51722' }")
 
 ; statusline
 (vim.cmd "Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa77e89cdd832b2' }")

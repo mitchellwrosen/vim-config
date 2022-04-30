@@ -155,7 +155,7 @@ do
 end
 vim.fn["plug#begin"]((vim.fn.stdpath("data") .. "/plugged"))
 vim.cmd("Plug 'lukas-reineke/indent-blankline.nvim', { 'commit': '0f8df7e43f0cae4c44e0e8383436ad602f333419' }")
-vim.cmd("Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
+vim.cmd("Plug 'bakpakin/fennel.vim', { 'commit': '30b9beabad2c4f09b9b284caf5cd5666b6b4dc89', 'for': 'fennel' }")
 vim.cmd("Plug 'folke/trouble.nvim', { 'commit': '20469be985143d024c460d95326ebeff9971d714' }")
 vim.cmd("Plug 'ggandor/lightspeed.nvim', { 'commit': '9fddb6ebf4007eaa26f44cd31b5140cbd3bbb820' }")
 vim.cmd("Plug 'hrsh7th/cmp-buffer', { 'commit': 'f83773e2f433a923997c5faad7ea689ec24d1785' }")
@@ -164,27 +164,27 @@ vim.cmd("Plug 'hrsh7th/cmp-vsnip', { 'commit': '0abfa1860f5e095a07c477da940cfcb0
 vim.cmd("Plug 'hrsh7th/vim-vsnip', { 'commit': '7fde9c0b6878a62bcc6d2d29f9a85a6616032f02' }")
 vim.cmd("Plug 'hrsh7th/nvim-cmp', { 'commit': '9f6d2b42253dda8db950ab38795978e5420a93aa' }")
 vim.cmd("Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa77e89cdd832b2' }")
-vim.cmd("Plug 'junegunn/fzf'")
-vim.cmd("Plug 'junegunn/fzf.vim'")
+vim.cmd("Plug 'junegunn/fzf', { 'commit': '6dcf5c3d7d6c321b17e6a5673f1533d6e8350462' }")
+vim.cmd("Plug 'junegunn/fzf.vim', { 'commit': 'd5f1f8641b24c0fd5b10a299824362a2a1b20ae0' }")
 vim.cmd("Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
 vim.cmd("Plug 'mengelbrecht/lightline-bufferline'")
-vim.cmd("Plug 'mhinz/vim-startify'")
-vim.cmd("Plug 'neovim/nvim-lsp'")
-vim.cmd("Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")
+vim.cmd("Plug 'mhinz/vim-startify', { 'commit': '81e36c352a8deea54df5ec1e2f4348685569bed2' }")
+vim.cmd("Plug 'neovim/nvim-lsp', { 'commit': '2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491' }")
+vim.cmd("Plug 'neovimhaskell/haskell-vim', { 'commit': 'f35d02204b4813d1dbe8b0e98cc39701a4b8e15e', 'for': 'haskell' }")
 vim.cmd("Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
 vim.cmd("Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
-vim.cmd("Plug 'nvim-lua/lsp-status.nvim'")
+vim.cmd("Plug 'nvim-lua/lsp-status.nvim', { 'commit': '4073f766f1303fb602802075e558fe43e382cc92' }")
 vim.cmd("Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce71b45193117f6fb5626b' }")
-vim.cmd("Plug 'rhysd/git-messenger.vim'")
-vim.cmd("Plug 'romainl/vim-cool'")
-vim.cmd("Plug 'romainl/vim-qf'")
-vim.cmd("Plug 'terryma/vim-multiple-cursors'")
-vim.cmd("Plug 'tommcdo/vim-exchange'")
-vim.cmd("Plug 'tpope/vim-characterize'")
-vim.cmd("Plug 'tpope/vim-commentary'")
-vim.cmd("Plug 'tpope/vim-fugitive'")
-vim.cmd("Plug 'tpope/vim-repeat'")
-vim.cmd("Plug 'tpope/vim-surround'")
+vim.cmd("Plug 'rhysd/git-messenger.vim', { 'commit': '2e67899355f3f631aad6845925e4c2c13546444d' }")
+vim.cmd("Plug 'romainl/vim-cool', { 'commit': '27ad4ecf7532b750fadca9f36e1c5498fc225af2' }")
+vim.cmd("Plug 'romainl/vim-qf', { 'commit': '65f115c350934517382ae45198a74232a9069c2a' }")
+vim.cmd("Plug 'terryma/vim-multiple-cursors', { 'commit': '6456718e1d30b42c04b920c5413ca44f68f08759' }")
+vim.cmd("Plug 'tommcdo/vim-exchange', { 'commit': '784d63083ad7d613aa96f00021cd0dfb126a781a' }")
+vim.cmd("Plug 'tpope/vim-characterize', { 'commit': '885a00a3c21dd52ca8f2fd7d62850134934179d9' }")
+vim.cmd("Plug 'tpope/vim-commentary', { 'commit': '627308e30639be3e2d5402808ce18690557e8292' }")
+vim.cmd("Plug 'tpope/vim-fugitive', { 'commit': 'bb4f9e660b0934f70af693c56c5b8a4c322e7a1f' }")
+vim.cmd("Plug 'tpope/vim-repeat', { 'commit': '24afe922e6a05891756ecf331f39a1f6743d3d5a' }")
+vim.cmd("Plug 'tpope/vim-surround', { 'commit': 'aeb933272e72617f7c4d35e1f003be16836b948d' }")
 vim.fn["plug#end"]()
 vim.g.gruvbox_inverse = 1
 vim.g.gruvbox_contrast_dark = "soft"
@@ -331,7 +331,7 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _11_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:254")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:284")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     local function _12_()
       local x_1_auto = (config.capabilities or {})
@@ -343,8 +343,8 @@ do
   capabilities = _11_
   local on_attach
   local function _13_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:266")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:266")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:296")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:296")
     vim.cmd("augroup mitchellwrosenLsp\naugroup END")
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
     vim.cmd("highlight! link LspReferenceText LspReference")
@@ -430,8 +430,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
   local function _27_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:373")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:373")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:403")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:403")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -450,7 +450,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:408")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:438")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

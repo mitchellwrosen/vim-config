@@ -34,7 +34,7 @@
 (vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '20469be985143d024c460d95326ebeff9971d714' }")
 
 ; vim-sneak thingy for moving to a specific character from far away
-(vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '9fddb6ebf4007eaa26f44cd31b5140cbd3bbb820' }")
+(vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': 'cfde2b2fe0dafc5684780399961595357998f611' }")
 
 ; completion - 2022/01/09
 (vim.cmd "Plug 'hrsh7th/cmp-buffer', { 'commit': 'f83773e2f433a923997c5faad7ea689ec24d1785' }")
@@ -172,7 +172,7 @@
 ;           "<C-p>" false
 ;           "<C-j>" actions.move_selection_next
 ;           "<C-k>" actions.move_selection_previous
-; 
+;
 ;           "<Esc>" actions.close
 ;         }
 ;       }

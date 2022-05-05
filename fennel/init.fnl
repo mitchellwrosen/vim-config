@@ -335,8 +335,11 @@
       (vim.api.nvim_buf_set_keymap buf "n" "gd" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Space>d" ":lua vim.lsp.buf.formatting()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Enter>" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Up>" ":lua vim.diagnostic.goto_prev()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Down>" ":lua vim.diagnostic.goto_next()<CR>" { "noremap" true "silent" true })
+      ; float=false here means don't call vim.diagnostic.open_float once we land, because we already do on CursorHold.
+      ; if float=true, the second vim.diagnostic.open_float jumps *into* the diagnostic window, which suuux (so glad I
+      ; finally fixed this)
+      (vim.api.nvim_buf_set_keymap buf "n" "<Up>" ":lua vim.diagnostic.goto_prev({float=false})<CR>" { "noremap" true "silent" true })
+      (vim.api.nvim_buf_set_keymap buf "n" "<Down>" ":lua vim.diagnostic.goto_next({float=false})<CR>" { "noremap" true "silent" true })
       (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
 
       ; extract the "meaningful head" of a list of (markdown) strings, where "meaningful" means not the empty
@@ -371,6 +374,16 @@
           _ (fn [line] line)))
 
       (vim.api.nvim_create_autocmd
+        ["CursorHold"]
+        {
+          "buffer" buf
+          ; open diagnostics underneath the cursor
+          "callback" (fn [] (vim.diagnostic.open_float))
+          "group" "mitchellwrosenLsp"
+        }
+      )
+
+      (vim.api.nvim_create_autocmd
         ["CursorMoved"]
         {
           "buffer" buf
@@ -383,8 +396,6 @@
                 (when client.resolved_capabilities.document_highlight
                   (vim.lsp.buf.clear_references)
                   (vim.lsp.buf.document_highlight))
-                ; open diagnostics underneath the cursor
-                (vim.diagnostic.open_float)
                 ; try to put a type sig in the virtual text area
                 (vim.lsp.buf_request 0 "textDocument/hover" position
                   (fn [_err result _ctx _config]

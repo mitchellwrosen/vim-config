@@ -337,8 +337,8 @@ do
     vim.api.nvim_buf_set_keymap(buf, "n", "gd", ":lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true})
     vim.api.nvim_buf_set_keymap(buf, "n", "<Space>d", ":lua vim.lsp.buf.formatting()<CR>", {noremap = true, silent = true})
     vim.api.nvim_buf_set_keymap(buf, "n", "<Enter>", ":lua vim.lsp.buf.hover()<CR>", {noremap = true, silent = true})
-    vim.api.nvim_buf_set_keymap(buf, "n", "<Up>", ":lua vim.diagnostic.goto_prev()<CR>", {noremap = true, silent = true})
-    vim.api.nvim_buf_set_keymap(buf, "n", "<Down>", ":lua vim.diagnostic.goto_next()<CR>", {noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(buf, "n", "<Up>", ":lua vim.diagnostic.goto_prev({float=false})<CR>", {noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(buf, "n", "<Down>", ":lua vim.diagnostic.goto_next({float=false})<CR>", {noremap = true, silent = true})
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
     local meaningful_head
     local function _13_(lines)
@@ -379,6 +379,10 @@ do
       end
     end
     local function _20_()
+      return vim.diagnostic.open_float()
+    end
+    vim.api.nvim_create_autocmd({"CursorHold"}, {buffer = buf, callback = _20_, group = "mitchellwrosenLsp"})
+    local function _21_()
       if (vim.api.nvim_get_mode().mode == "n") then
         local position = vim.lsp.util.make_position_params()
         if client.resolved_capabilities.document_highlight then
@@ -386,8 +390,7 @@ do
           vim.lsp.buf.document_highlight()
         else
         end
-        vim.diagnostic.open_float()
-        local function _22_(_err, result, _ctx, _config)
+        local function _23_(_err, result, _ctx, _config)
           if (not (result == nil) and (type(result) == "table")) then
             local namespace = vim.api.nvim_create_namespace("hover")
             local line = meaningful_head(vim.lsp.util.convert_input_to_markdown_lines(result.contents))
@@ -401,26 +404,26 @@ do
             return nil
           end
         end
-        return vim.lsp.buf_request(0, "textDocument/hover", position, _22_)
+        return vim.lsp.buf_request(0, "textDocument/hover", position, _23_)
       else
         return nil
       end
     end
-    return vim.api.nvim_create_autocmd({"CursorMoved"}, {buffer = buf, callback = _20_, group = "mitchellwrosenLsp"})
+    return vim.api.nvim_create_autocmd({"CursorMoved"}, {buffer = buf, callback = _21_, group = "mitchellwrosenLsp"})
   end
   on_attach = _12_
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
-  local function _26_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:428")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:428")
+  local function _27_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:439")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:439")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
     end
     return on_attach(client, buf)
   end
-  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _26_})
+  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _27_})
   lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}}}}, on_attach = on_attach})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
 end
@@ -432,7 +435,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:463")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:474")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -441,10 +444,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.8) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _29_()
+  local function _30_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _29_})
+  vim.fn.termopen(command, {on_exit = _30_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

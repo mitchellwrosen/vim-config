@@ -1,18 +1,3 @@
-(local event
-  { "after-read" "BufReadPost"
-    "after-yank" "TextYankPost"
-    "bufEnter" "BufEnter"
-    "bufLeave" "BufLeave"
-    "before-write" "BufWritePre"
-    "cursor-hold" "CursorHold"
-    "cursor-moved" "CursorMoved"
-    "focus-gained" "FocusGained"
-    "focusLost" "FocusLost"
-    "insertEnter" "InsertEnter"
-    "leave-insert-mode" "InsertLeave"
-    "text-changed" "TextChanged"
-  })
-
 (local mode
   { "command" "command"
     "insert" "insert"
@@ -28,21 +13,6 @@
     (tset lambdas name f)
     (set n (+ n 1))
     name))
-
-; autocmd : string -> list string -> string -> io () -> io ()
-(lambda autocmd [group events pattern f]
-  (let [name (register-lambda f)]
-    (vim.cmd
-      (..
-        "autocmd "
-        group
-        " "
-        (table.concat events ",")
-        " "
-        pattern
-        " lua require('fennel/nvim').lambdas."
-        name
-        "()"))))
 
 (lambda buf-map-fn [modes lhs f opts]
   (let [name (register-lambda f)]
@@ -64,9 +34,7 @@
       (overwrite-buffer (vim.fn.split output "\n"))
       (vim.cmd "update"))))
 
-{ "autocmd" autocmd
-  "buf-map-fn" buf-map-fn
-  "event" event
+{ "buf-map-fn" buf-map-fn
   "lambdas" lambdas
   "mode" mode
   "sys-format-buffer" sys-format-buffer

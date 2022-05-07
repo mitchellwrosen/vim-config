@@ -1,9 +1,4 @@
-(local
-  { "autocmd" autocmd
-    "event" event
-  }
-  (include "fennel/nvim")
-)
+(include "fennel/nvim")
 (import-macros
   { "left-merge" left-merge
     "map" map
@@ -27,44 +22,75 @@
 
 ; show markers every 2 columns of leading whitespace
 (vim.cmd "Plug 'lukas-reineke/indent-blankline.nvim', { 'commit': '0f8df7e43f0cae4c44e0e8383436ad602f333419' }")
-; (vim.cmd "Plug 'Yggdroot/indentLine', { 'commit': '5617a1cf7d315e6e6f84d825c85e3b669d220bfa' }")
-(vim.cmd "Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }")
+
+(vim.cmd "Plug 'bakpakin/fennel.vim', { 'commit': '30b9beabad2c4f09b9b284caf5cd5666b6b4dc89', 'for': 'fennel' }")
+
 ; open LSP diagnostics with :TroubleToggle
 (vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '20469be985143d024c460d95326ebeff9971d714' }")
+
 ; vim-sneak thingy for moving to a specific character from far away
-(vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': '9fddb6ebf4007eaa26f44cd31b5140cbd3bbb820' }")
+(vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': 'cfde2b2fe0dafc5684780399961595357998f611' }")
 
 ; completion - 2022/01/09
 (vim.cmd "Plug 'hrsh7th/cmp-buffer', { 'commit': 'f83773e2f433a923997c5faad7ea689ec24d1785' }")
 (vim.cmd "Plug 'hrsh7th/cmp-nvim-lsp', { 'commit': 'b4251f0fca1daeb6db5d60a23ca81507acf858c2' }")
 (vim.cmd "Plug 'hrsh7th/cmp-vsnip', { 'commit': '0abfa1860f5e095a07c477da940cfcb0d273b700' }")
 (vim.cmd "Plug 'hrsh7th/vim-vsnip', { 'commit': '7fde9c0b6878a62bcc6d2d29f9a85a6616032f02' }")
-(vim.cmd "Plug 'hrsh7th/nvim-cmp', { 'commit': '9f6d2b42253dda8db950ab38795978e5420a93aa' }")
+; 22-04-30
+(vim.cmd "Plug 'hrsh7th/nvim-cmp', { 'commit': 'f841fa6ced194aa930136a7671439e6bd4c51722' }")
 
 ; statusline
 (vim.cmd "Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa77e89cdd832b2' }")
-(vim.cmd "Plug 'junegunn/fzf'") ; fuzzy search source code, files, etc
-(vim.cmd "Plug 'junegunn/fzf.vim'") ; fuzzy search source code, files, etc
+; fuzzy search source code, files, etc
+(vim.cmd "Plug 'junegunn/fzf', { 'commit': '6dcf5c3d7d6c321b17e6a5673f1533d6e8350462' }")
+(vim.cmd "Plug 'junegunn/fzf.vim', { 'commit': 'd5f1f8641b24c0fd5b10a299824362a2a1b20ae0' }")
+
 (vim.cmd "Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
 (vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")
-(vim.cmd "Plug 'mhinz/vim-startify'") ; startup screen
+
+; startup screen
+(vim.cmd "Plug 'mhinz/vim-startify', { 'commit': '81e36c352a8deea54df5ec1e2f4348685569bed2' }")
+
 ; lsp configs
-(vim.cmd "Plug 'neovim/nvim-lsp'")
-(vim.cmd "Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }")
+(vim.cmd "Plug 'neovim/nvim-lsp', { 'commit': '2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491' }")
+
+(vim.cmd "Plug 'neovimhaskell/haskell-vim', { 'commit': 'f35d02204b4813d1dbe8b0e98cc39701a4b8e15e', 'for': 'haskell' }")
 (vim.cmd "Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
 (vim.cmd "Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
-(vim.cmd "Plug 'nvim-lua/lsp-status.nvim'")
-(vim.cmd "Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce71b45193117f6fb5626b' }")
-(vim.cmd "Plug 'rhysd/git-messenger.vim'") ; git blame the line under the cursor
-(vim.cmd "Plug 'romainl/vim-cool'") ; automatically unhighlight when cursor moves
-(vim.cmd "Plug 'romainl/vim-qf'") ; vim quickfix improvements
-(vim.cmd "Plug 'terryma/vim-multiple-cursors'") ; multiple cursors for quick and dirty renaming
-(vim.cmd "Plug 'tommcdo/vim-exchange'") ; swap the location of two selections
-(vim.cmd "Plug 'tpope/vim-characterize'") ; improved "ga"
-(vim.cmd "Plug 'tpope/vim-commentary'") ; quick (un-)commenting
-(vim.cmd "Plug 'tpope/vim-fugitive'")
-(vim.cmd "Plug 'tpope/vim-repeat'") ; make "." repeat more things out of the box
-(vim.cmd "Plug 'tpope/vim-surround'") ; some surround helpers
+
+(vim.cmd "Plug 'nvim-lua/lsp-status.nvim', { 'commit': '4073f766f1303fb602802075e558fe43e382cc92' }")
+
+; (vim.cmd "Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce71b45193117f6fb5626b' }")
+
+; git blame the line under the cursor
+(vim.cmd "Plug 'rhysd/git-messenger.vim', { 'commit': '2e67899355f3f631aad6845925e4c2c13546444d' }")
+
+; automatically unhighlight when cursor moves
+(vim.cmd "Plug 'romainl/vim-cool', { 'commit': '27ad4ecf7532b750fadca9f36e1c5498fc225af2' }")
+
+; vim quickfix improvements
+(vim.cmd "Plug 'romainl/vim-qf', { 'commit': '65f115c350934517382ae45198a74232a9069c2a' }")
+
+; multiple cursors for quick and dirty renaming
+(vim.cmd "Plug 'terryma/vim-multiple-cursors', { 'commit': '6456718e1d30b42c04b920c5413ca44f68f08759' }")
+
+; swap the location of two selections
+(vim.cmd "Plug 'tommcdo/vim-exchange', { 'commit': '784d63083ad7d613aa96f00021cd0dfb126a781a' }")
+
+; improved "ga"
+(vim.cmd "Plug 'tpope/vim-characterize', { 'commit': '885a00a3c21dd52ca8f2fd7d62850134934179d9' }")
+
+; quick (un-)commenting
+(vim.cmd "Plug 'tpope/vim-commentary', { 'commit': '627308e30639be3e2d5402808ce18690557e8292' }")
+
+(vim.cmd "Plug 'tpope/vim-fugitive', { 'commit': 'bb4f9e660b0934f70af693c56c5b8a4c322e7a1f' }")
+
+; make "." repeat more things out of the box
+(vim.cmd "Plug 'tpope/vim-repeat', { 'commit': '24afe922e6a05891756ecf331f39a1f6743d3d5a' }")
+
+; some surround helpers
+(vim.cmd "Plug 'tpope/vim-surround', { 'commit': 'aeb933272e72617f7c4d35e1f003be16836b948d' }")
+
 ((. vim.fn "plug#end"))
 
 ; colorscheme settings
@@ -128,26 +154,26 @@
 (set vim.g.haskell_indent_disable 1)
 
 ; nvim-telescope/telescope.nvim
-(let
-  [telescope (require "telescope")
-   actions (require "telescope.actions")
-  ]
-  (telescope.setup {
-    "defaults" {
-      "mappings" {
-        "i" {
-          ; Change <C-n>/<C-p> movement to <C-j>/<C-k>
-          "<C-n>" false
-          "<C-p>" false
-          "<C-j>" actions.move_selection_next
-          "<C-k>" actions.move_selection_previous
-
-          "<Esc>" actions.close
-        }
-      }
-    }
-  })
-)
+; (let
+;   [telescope (require "telescope")
+;    actions (require "telescope.actions")
+;   ]
+;   (telescope.setup {
+;     "defaults" {
+;       "mappings" {
+;         "i" {
+;           ; Change <C-n>/<C-p> movement to <C-j>/<C-k>
+;           "<C-n>" false
+;           "<C-p>" false
+;           "<C-j>" actions.move_selection_next
+;           "<C-k>" actions.move_selection_previous
+;
+;           "<Esc>" actions.close
+;         }
+;       }
+;     }
+;   })
+; )
 
 ; rhysd/git-messenger.vim
 (set vim.g.git_messenger_always_into_popup true)
@@ -224,27 +250,53 @@
 
 ; autocommands
 
-(vim.cmd "augroup mitchellwrosen\nautocmd!\naugroup END")
+(vim.api.nvim_create_augroup "mitchellwrosen" {})
+; (vim.api.nvim_create_augroup "mitchellwrosenLsp" {})
 
 ; Disallow edits to read-only files
-(autocmd "mitchellwrosen" [event.after-read] "*" (fn [] (set vim.bo.modifiable (not vim.bo.readonly))))
+(vim.api.nvim_create_autocmd
+  ["BufReadPost"]
+  {
+    "callback" (fn [] (set vim.bo.modifiable (not vim.bo.readonly)))
+    "group" "mitchellwrosen"
+  }
+)
 
 ; Briefly highlight yanks
-(autocmd "mitchellwrosen" [event.after-yank] "* silent!" (fn [] (vim.highlight.on_yank { "higroup" "Visual" "timeout" 600 })))
+(vim.api.nvim_create_autocmd
+  ["TextYankPost"]
+  {
+    "callback" (fn [] (vim.highlight.on_yank { "higroup" "Visual" "timeout" 600 }))
+    "group" "mitchellwrosen"
+  }
+)
 
 ; on cursor hold or focus gained, read the buffer in case it has been modified externally
-(autocmd "mitchellwrosen" [event.cursor-hold event.focus-gained] "?*"
-  (fn []
-    (when
-      (= (vim.fn.getcmdwintype) "")
-      (vim.cmd "checktime"))))
+(vim.api.nvim_create_autocmd
+  ["CursorHold" "FocusGained"]
+  {
+    "callback"
+      (fn []
+        (when
+          (= (vim.fn.getcmdwintype) "")
+          (vim.cmd "checktime"))
+      )
+    "group" "mitchellwrosen"
+  }
+)
 
 ; Save the buffer after changing it
-(autocmd "mitchellwrosen" [event.leave-insert-mode event.text-changed] "*"
-  (fn []
-    (when
-      (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
-      (vim.cmd "silent! update"))))
+(vim.api.nvim_create_autocmd
+  ["InsertLeave" "TextChanged"]
+  {
+    "callback"
+      (fn []
+        (when
+          (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
+          (vim.cmd "silent! update")))
+    "group" "mitchellwrosen"
+  }
+)
 
 (do
   (local lsp (require "lspconfig"))
@@ -271,7 +323,8 @@
       ; (vim.cmd "augroup mitchellwrosenLsp\nautocmd!\naugroup END")
 
       ; Format on save and on leaving insert mode
-      (autocmd "mitchellwrosenLsp" [event.before-write event.leave-insert-mode] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
+      ; commented out temporarily because it's a little bit slow on the unison codebase
+      ; (autocmd "mitchellwrosenLsp" ["BufWritePre" "InsertLeave"] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
 
       (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
       (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -282,8 +335,11 @@
       (vim.api.nvim_buf_set_keymap buf "n" "gd" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Space>d" ":lua vim.lsp.buf.formatting()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Enter>" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Up>" ":lua vim.diagnostic.goto_prev()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Down>" ":lua vim.diagnostic.goto_next()<CR>" { "noremap" true "silent" true })
+      ; float=false here means don't call vim.diagnostic.open_float once we land, because we already do on CursorHold.
+      ; if float=true, the second vim.diagnostic.open_float jumps *into* the diagnostic window, which suuux (so glad I
+      ; finally fixed this)
+      (vim.api.nvim_buf_set_keymap buf "n" "<Up>" ":lua vim.diagnostic.goto_prev({float=false})<CR>" { "noremap" true "silent" true })
+      (vim.api.nvim_buf_set_keymap buf "n" "<Down>" ":lua vim.diagnostic.goto_next({float=false})<CR>" { "noremap" true "silent" true })
       (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
 
       ; extract the "meaningful head" of a list of (markdown) strings, where "meaningful" means not the empty
@@ -317,35 +373,46 @@
             (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
           _ (fn [line] line)))
 
-      (autocmd "mitchellwrosenLsp" [event.cursor-moved] "<buffer>"
-        (fn []
-          (when (= (. (vim.api.nvim_get_mode) "mode") "n")
-            (local position (vim.lsp.util.make_position_params))
-            ; highlight other occurrences of the thing under the cursor
-            ; the colors are determined by LspReferenceText, etc. highlight groups
-            (when client.resolved_capabilities.document_highlight
-              (vim.lsp.buf.clear_references)
-              (vim.lsp.buf.document_highlight))
-            ; open diagnostics underneath the cursor
-            (vim.diagnostic.open_float)
-            ; try to put a type sig in the virtual text area
-            (vim.lsp.buf_request 0 "textDocument/hover" position
-              (fn [_err result _ctx _config]
-                (when (and (not (= result nil)) (= (type result) "table"))
-                  (local namespace (vim.api.nvim_create_namespace "hover"))
-                  (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
-                  (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
-                  (when (not (= (filter line) ""))
-                    (vim.api.nvim_buf_set_virtual_text
-                      0
-                      namespace
-                      position.position.line
-                      [ [ (.. "∙ " line) "Comment" ] ] {})))))
-          )
-        )
+      (vim.api.nvim_create_autocmd
+        ["CursorHold"]
+        {
+          "buffer" buf
+          ; open diagnostics underneath the cursor
+          "callback" (fn [] (vim.diagnostic.open_float))
+          "group" "mitchellwrosenLsp"
+        }
       )
 
-      (status.on_attach client)
+      (vim.api.nvim_create_autocmd
+        ["CursorMoved"]
+        {
+          "buffer" buf
+          "callback"
+            (fn []
+              (when (= (. (vim.api.nvim_get_mode) "mode") "n")
+                (local position (vim.lsp.util.make_position_params))
+                ; highlight other occurrences of the thing under the cursor
+                ; the colors are determined by LspReferenceText, etc. highlight groups
+                (when client.resolved_capabilities.document_highlight
+                  (vim.lsp.buf.clear_references)
+                  (vim.lsp.buf.document_highlight))
+                ; try to put a type sig in the virtual text area
+                (vim.lsp.buf_request 0 "textDocument/hover" position
+                  (fn [_err result _ctx _config]
+                    (when (and (not (= result nil)) (= (type result) "table"))
+                      (local namespace (vim.api.nvim_create_namespace "hover"))
+                      (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
+                      (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
+                      (when (not (= (filter line) ""))
+                        (vim.api.nvim_buf_set_virtual_text
+                          0
+                          namespace
+                          position.position.line
+                          [ [ (.. "∙ " line) "Comment" ] ] {})))))
+              ))
+          "group" "mitchellwrosenLsp"
+        }
+      )
     )
   )
 

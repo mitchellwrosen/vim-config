@@ -66,7 +66,7 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.api.nvim_set_keymap("v", "<C-s>", ":s/\\v//cg<Left><Left><Left><Left>", {noremap = true})
   vim.api.nvim_set_keymap("n", "<C-j>", ":bn<CR>", {noremap = true, silent = true})
   vim.api.nvim_set_keymap("n", "<C-k>", ":bp<CR>", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("n", "<Space>s", "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``", {silent = true})
+  vim.api.nvim_set_keymap("n", "<Space>s", "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``", {noremap = true, silent = true})
   vim.api.nvim_set_keymap("n", "<Space>S", "m`:silent w !repld-send<CR>``", {noremap = true, silent = true})
   vim.api.nvim_set_keymap("v", "<Space>s", "m`<Esc>:silent '<,'>w !repld-send<CR>``", {noremap = true, silent = true})
   vim.api.nvim_set_keymap("i", "<C-v>", "<C-r>*", {noremap = true})
@@ -402,10 +402,13 @@ do
     local function _22_()
       if (vim.api.nvim_get_mode().mode == "n") then
         local position = vim.lsp.util.make_position_params()
-        vim.lsp.buf.clear_references()
-        vim.lsp.buf.document_highlight()
+        if client.resolved_capabilities.document_highlight then
+          vim.lsp.buf.clear_references()
+          vim.lsp.buf.document_highlight()
+        else
+        end
         vim.diagnostic.open_float()
-        local function _23_(_err, result, _ctx, _config)
+        local function _24_(_err, result, _ctx, _config)
           if (not (result == nil) and (type(result) == "table")) then
             local namespace = vim.api.nvim_create_namespace("hover")
             local line = meaningful_head(vim.lsp.util.convert_input_to_markdown_lines(result.contents))
@@ -419,7 +422,7 @@ do
             return nil
           end
         end
-        return vim.lsp.buf_request(0, "textDocument/hover", position, _23_)
+        return vim.lsp.buf_request(0, "textDocument/hover", position, _24_)
       else
         return nil
       end
@@ -430,15 +433,16 @@ do
   on_attach = _13_
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
-  local function _27_(client)
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:371")
+  local function _28_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:372")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:372")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
     end
-    return on_attach(client)
+    return on_attach(client, buf)
   end
-  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _27_})
+  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _28_})
   lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}}}}, on_attach = on_attach})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
 end
@@ -450,7 +454,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:406")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:407")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -459,10 +463,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.8) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _30_()
+  local function _31_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _30_})
+  vim.fn.termopen(command, {on_exit = _31_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

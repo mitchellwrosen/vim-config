@@ -323,8 +323,9 @@
             (local position (vim.lsp.util.make_position_params))
             ; highlight other occurrences of the thing under the cursor
             ; the colors are determined by LspReferenceText, etc. highlight groups
-            (vim.lsp.buf.clear_references)
-            (vim.lsp.buf.document_highlight)
+            (when client.resolved_capabilities.document_highlight
+              (vim.lsp.buf.clear_references)
+              (vim.lsp.buf.document_highlight))
             ; open diagnostics underneath the cursor
             (vim.diagnostic.open_float)
             ; try to put a type sig in the virtual text area
@@ -368,10 +369,10 @@
   (lsp.elmls.setup
     { "capabilities" (capabilities lsp.elmls)
       "on_attach"
-        (lambda [client]
+        (lambda [client buf]
           ; https://github.com/elm-tooling/elm-language-server/issues/503
           (when client.config.flags (set client.config.flags.allow_incremental_sync true))
-          (on-attach client))
+          (on-attach client buf))
     })
 
   (lsp.hls.setup

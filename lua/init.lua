@@ -329,6 +329,7 @@ do
     _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:317")
     _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:317")
     local augroup_name = ("mitchellwrosenLsp" .. buf)
+    vim.api.nvim_create_augroup(augroup_name, {})
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
     vim.cmd("highlight! link LspReferenceText LspReference")
     vim.cmd("highlight! link LspReferenceRead LspReference")
@@ -416,8 +417,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
   local function _27_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:437")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:437")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:438")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:438")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -436,7 +437,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:472")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:473")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

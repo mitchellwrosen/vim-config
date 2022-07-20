@@ -315,9 +315,10 @@
 
   (local on-attach
     (lambda [client buf]
-      ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it 
+      ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
       ; gets deleted and re-opend
       (local augroup-name (.. "mitchellwrosenLsp" buf))
+      (vim.api.nvim_create_augroup augroup-name {})
 
       ; Format on save and on leaving insert mode
       ; commented out temporarily because it's a little bit slow on the unison codebase

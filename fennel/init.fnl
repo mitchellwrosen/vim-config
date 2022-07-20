@@ -251,7 +251,6 @@
 ; autocommands
 
 (vim.api.nvim_create_augroup "mitchellwrosen" {})
-; (vim.api.nvim_create_augroup "mitchellwrosenLsp" {})
 
 ; Disallow edits to read-only files
 (vim.api.nvim_create_autocmd
@@ -316,15 +315,13 @@
 
   (local on-attach
     (lambda [client buf]
-      (vim.cmd "augroup mitchellwrosenLsp\naugroup END")
-      ; Urgh, this was my solution to :LspRestart installing a second formatting autocmd, but it also causes autocmds to
-      ; cleared on other buffers or something.
-      ; I FUCKING HATE CONFIGURING THIS EDITOR
-      ; (vim.cmd "augroup mitchellwrosenLsp\nautocmd!\naugroup END")
+      ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it 
+      ; gets deleted and re-opend
+      (local augroup-name (.. "mitchellwrosenLsp" buf))
 
       ; Format on save and on leaving insert mode
       ; commented out temporarily because it's a little bit slow on the unison codebase
-      ; (autocmd "mitchellwrosenLsp" ["BufWritePre" "InsertLeave"] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
+      ; (autocmd augroup-name ["BufWritePre" "InsertLeave"] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
 
       (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
       (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -380,7 +377,7 @@
           "buffer" buf
           ; open diagnostics underneath the cursor
           "callback" (fn [] (vim.diagnostic.open_float))
-          "group" "mitchellwrosenLsp"
+          "group" augroup-name
         }
       )
 
@@ -411,7 +408,7 @@
                           position.position.line
                           [ [ (.. "∙ " line) "Comment" ] ] {})))))
               ))
-          "group" "mitchellwrosenLsp"
+          "group" augroup-name
         }
       )
     )

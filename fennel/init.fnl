@@ -331,7 +331,7 @@
 
       (vim.api.nvim_buf_set_keymap buf "n" "<Space>a" ":lua vim.lsp.buf.code_action()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "gd" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Space>d" ":lua vim.lsp.buf.formatting()<CR>" { "noremap" true "silent" true })
+      (vim.api.nvim_buf_set_keymap buf "n" "<Space>d" ":lua vim.lsp.buf.format()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Enter>" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Space>r" ":lua vim.lsp.buf.references()<CR>" { "noremap" true "silent" true })
       ; float=false here means don't call vim.diagnostic.open_float once we land, because we already do on CursorHold.

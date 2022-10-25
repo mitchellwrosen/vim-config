@@ -387,7 +387,7 @@ do
     local function _21_()
       if (vim.api.nvim_get_mode().mode == "n") then
         local position = vim.lsp.util.make_position_params()
-        if client.resolved_capabilities.document_highlight then
+        if client.server_capabilities.documentHighlightProvider then
           vim.lsp.buf.clear_references()
           vim.lsp.buf.document_highlight()
         else

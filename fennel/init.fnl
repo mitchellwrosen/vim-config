@@ -392,7 +392,7 @@
                 (local position (vim.lsp.util.make_position_params))
                 ; highlight other occurrences of the thing under the cursor
                 ; the colors are determined by LspReferenceText, etc. highlight groups
-                (when client.resolved_capabilities.document_highlight
+                (when client.server_capabilities.documentHighlightProvider
                   (vim.lsp.buf.clear_references)
                   (vim.lsp.buf.document_highlight))
                 ; try to put a type sig in the virtual text area

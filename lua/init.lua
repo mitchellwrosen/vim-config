@@ -168,6 +168,7 @@ vim.cmd("Plug 'romainl/vim-cool', { 'commit': '27ad4ecf7532b750fadca9f36e1c5498f
 vim.cmd("Plug 'romainl/vim-qf', { 'commit': '65f115c350934517382ae45198a74232a9069c2a' }")
 vim.cmd("Plug 'terryma/vim-multiple-cursors', { 'commit': '6456718e1d30b42c04b920c5413ca44f68f08759' }")
 vim.cmd("Plug 'tommcdo/vim-exchange', { 'commit': '784d63083ad7d613aa96f00021cd0dfb126a781a' }")
+vim.cmd("Plug 'tpope/vim-abolish', { 'commit': '3f0c8faadf0c5b68bcf40785c1c42e3731bfa522' }")
 vim.cmd("Plug 'tpope/vim-characterize', { 'commit': '885a00a3c21dd52ca8f2fd7d62850134934179d9' }")
 vim.cmd("Plug 'tpope/vim-commentary', { 'commit': '627308e30639be3e2d5402808ce18690557e8292' }")
 vim.cmd("Plug 'tpope/vim-fugitive', { 'commit': 'bb4f9e660b0934f70af693c56c5b8a4c322e7a1f' }")
@@ -314,7 +315,7 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _10_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:305")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:309")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     local function _11_()
       local x_1_auto = (config.capabilities or {})
@@ -326,8 +327,8 @@ do
   capabilities = _10_
   local on_attach
   local function _12_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:317")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:317")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:321")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:321")
     local augroup_name = ("mitchellwrosenLsp" .. buf)
     vim.api.nvim_create_augroup(augroup_name, {})
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
@@ -417,8 +418,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
   local function _27_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:438")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:438")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:442")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:442")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -437,7 +438,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:473")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:477")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

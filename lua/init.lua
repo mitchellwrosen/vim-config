@@ -157,7 +157,6 @@ vim.cmd("Plug 'junegunn/fzf', { 'commit': '6dcf5c3d7d6c321b17e6a5673f1533d6e8350
 vim.cmd("Plug 'junegunn/fzf.vim', { 'commit': 'd5f1f8641b24c0fd5b10a299824362a2a1b20ae0' }")
 vim.cmd("Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
 vim.cmd("Plug 'mengelbrecht/lightline-bufferline'")
-vim.cmd("Plug 'mhinz/vim-startify', { 'commit': '81e36c352a8deea54df5ec1e2f4348685569bed2' }")
 vim.cmd("Plug 'neovim/nvim-lsp', { 'commit': '2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491' }")
 vim.cmd("Plug 'neovimhaskell/haskell-vim', { 'commit': 'f35d02204b4813d1dbe8b0e98cc39701a4b8e15e', 'for': 'haskell' }")
 vim.cmd("Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
@@ -191,15 +190,6 @@ do
   end
   cmp.setup({mapping = {["<CR>"] = cmp.mapping.confirm({select = false}), ["<Tab>"] = cmp.mapping.select_next_item()}, snippet = {expand = _3_}, sources = cmp.config.sources({{name = "nvim_lsp"}, {name = "buffer"}})})
 end
-vim.g.startify_custom_footer = {"   [e]  empty buffer", "   [q]  quit"}
-vim.g.startify_custom_header = {}
-vim.g.startify_custom_indices = {"a", "s", "d", "f", "l", "g", "h", "w", "r", "u", "o", "p", "t", "y", "z", "x", "c", "v", "m", "", ".", "/", "b", "n", "1", "2", "3", "4", "5", "6"}
-vim.g.startify_enable_special = 0
-vim.g.startify_enable_unsafe = 1
-vim.g.startify_change_to_dir = 0
-vim.g.startify_files_number = 30
-vim.g.startify_lists = {{type = "files"}}
-vim.g.startify_relative_path = 1
 vim.g.haskell_enable_backpack = 1
 vim.g.haskell_enable_pattern_synonyms = 1
 vim.g.haskell_enable_quantification = 1
@@ -427,7 +417,7 @@ do
     return on_attach(client, buf)
   end
   lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _27_})
-  lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}}}}, on_attach = on_attach})
+  lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}, on_attach = on_attach})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
 end
 local function lightline_status()
@@ -438,7 +428,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:477")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:480")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

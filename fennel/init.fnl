@@ -49,7 +49,7 @@
 (vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")
 
 ; startup screen
-(vim.cmd "Plug 'mhinz/vim-startify', { 'commit': '81e36c352a8deea54df5ec1e2f4348685569bed2' }")
+; (vim.cmd "Plug 'mhinz/vim-startify', { 'commit': '81e36c352a8deea54df5ec1e2f4348685569bed2' }")
 
 ; lsp configs
 (vim.cmd "Plug 'neovim/nvim-lsp', { 'commit': '2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491' }")
@@ -136,17 +136,17 @@
 )
 
 ; mhinz/vim-startify
-(set vim.g.startify_custom_footer [ "   [e]  empty buffer" "   [q]  quit" ])
-(set vim.g.startify_custom_header {})
-(set vim.g.startify_custom_indices
-  ["a" "s" "d" "f" "l" "g" "h" "w" "r" "u" "o" "p" "t" "y" "z"
-   "x" "c" "v" "m" "" "." "/" "b" "n" "1" "2" "3" "4" "5" "6"])
-(set vim.g.startify_enable_special 0)
-(set vim.g.startify_enable_unsafe 1) ; faster startup
-(set vim.g.startify_change_to_dir 0) ; don't cd to where file is
-(set vim.g.startify_files_number 30)
-(set vim.g.startify_lists [{ "type" "files" }])
-(set vim.g.startify_relative_path 1)
+; (set vim.g.startify_custom_footer [ "   [e]  empty buffer" "   [q]  quit" ])
+; (set vim.g.startify_custom_header {})
+; (set vim.g.startify_custom_indices
+;   ["a" "s" "d" "f" "l" "g" "h" "w" "r" "u" "o" "p" "t" "y" "z"
+;    "x" "c" "v" "m" "" "." "/" "b" "n" "1" "2" "3" "4" "5" "6"])
+; (set vim.g.startify_enable_special 0)
+; (set vim.g.startify_enable_unsafe 1) ; faster startup
+; (set vim.g.startify_change_to_dir 0) ; don't cd to where file is
+; (set vim.g.startify_files_number 30)
+; (set vim.g.startify_lists [{ "type" "files" }])
+; (set vim.g.startify_relative_path 1)
 
 ; neovimhaskell/haskell-vim
 (set vim.g.haskell_enable_backpack 1)
@@ -454,6 +454,9 @@
           "formattingProvider" "ormolu"
           "plugin" {
             "hlint" {
+              "globalOn" false
+            }
+            "stan" {
               "globalOn" false
             }
           }

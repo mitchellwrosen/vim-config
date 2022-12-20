@@ -156,6 +156,7 @@ vim.cmd("Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa7
 vim.cmd("Plug 'junegunn/fzf', { 'commit': '6dcf5c3d7d6c321b17e6a5673f1533d6e8350462' }")
 vim.cmd("Plug 'junegunn/fzf.vim', { 'commit': 'd5f1f8641b24c0fd5b10a299824362a2a1b20ae0' }")
 vim.cmd("Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
+vim.cmd("Plug 'LnL7/vim-nix', { 'commit': '7d23e97d13c40fcc6d603b291fe9b6e5f92516ee' }")
 vim.cmd("Plug 'mengelbrecht/lightline-bufferline'")
 vim.cmd("Plug 'neovim/nvim-lsp', { 'commit': '2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491' }")
 vim.cmd("Plug 'neovimhaskell/haskell-vim', { 'commit': 'f35d02204b4813d1dbe8b0e98cc39701a4b8e15e', 'for': 'haskell' }")
@@ -266,8 +267,8 @@ do
   vim.o["shiftwidth"] = 2
 end
 do
-  vim.bo["synmaxcol"] = 180
-  vim.o["synmaxcol"] = 180
+  vim.bo["synmaxcol"] = 3000
+  vim.o["synmaxcol"] = 3000
 end
 do
   vim.bo["softtabstop"] = 2
@@ -305,15 +306,15 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _10_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:309")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:310")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
   capabilities = _10_
   local on_attach
   local function _11_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:321")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:321")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:322")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:322")
     local augroup_name = ("mitchellwrosenLsp" .. buf)
     vim.api.nvim_create_augroup(augroup_name, {})
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
@@ -403,8 +404,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
   local function _26_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:442")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:442")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:443")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:443")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -423,7 +424,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:480")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:481")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

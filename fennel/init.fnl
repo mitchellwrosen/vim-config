@@ -46,10 +46,11 @@
 (vim.cmd "Plug 'junegunn/fzf.vim', { 'commit': 'd5f1f8641b24c0fd5b10a299824362a2a1b20ae0' }")
 
 (vim.cmd "Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
-(vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")
 
-; startup screen
-; (vim.cmd "Plug 'mhinz/vim-startify', { 'commit': '81e36c352a8deea54df5ec1e2f4348685569bed2' }")
+; nix syntax highlighting - 22-12-14
+(vim.cmd "Plug 'LnL7/vim-nix', { 'commit': '7d23e97d13c40fcc6d603b291fe9b6e5f92516ee' }")
+
+(vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")
 
 ; lsp configs
 (vim.cmd "Plug 'neovim/nvim-lsp', { 'commit': '2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491' }")
@@ -247,7 +248,7 @@
 (set-bo "undofile" true)    ; persist undo history across buffer exits
 
 (set-bo "shiftwidth" 2)
-(set-bo "synmaxcol" 180) ; dont bother syntax-highlighting past this column
+(set-bo "synmaxcol" 3000) ; dont bother syntax-highlighting past this column
 (set-bo "softtabstop" 2)
 
 (include "fennel/mappings")

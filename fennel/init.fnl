@@ -339,6 +339,7 @@
       (vim.api.nvim_buf_set_keymap buf "n" "<Space>d" ":lua vim.lsp.buf.format()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Enter>" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
       (vim.api.nvim_buf_set_keymap buf "n" "<Space>r" ":lua vim.lsp.buf.references()<CR>" { "noremap" true "silent" true })
+      (vim.api.nvim_buf_set_keymap buf "n" "gt" ":lua vim.lsp.buf.type_definition()<CR>" { "noremap" true "silent" true })
       ; float=false here means don't call vim.diagnostic.open_float once we land, because we already do on CursorHold.
       ; if float=true, the second vim.diagnostic.open_float jumps *into* the diagnostic window, which suuux (so glad I
       ; finally fixed this)

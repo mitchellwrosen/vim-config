@@ -326,6 +326,7 @@ do
     vim.api.nvim_buf_set_keymap(buf, "n", "<Space>d", ":lua vim.lsp.buf.format()<CR>", {noremap = true, silent = true})
     vim.api.nvim_buf_set_keymap(buf, "n", "<Enter>", ":lua vim.lsp.buf.hover()<CR>", {noremap = true, silent = true})
     vim.api.nvim_buf_set_keymap(buf, "n", "<Space>r", ":lua vim.lsp.buf.references()<CR>", {noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(buf, "n", "gt", ":lua vim.lsp.buf.type_definition()<CR>", {noremap = true, silent = true})
     vim.api.nvim_buf_set_keymap(buf, "n", "<Up>", ":lua vim.diagnostic.goto_prev({float=false})<CR>", {noremap = true, silent = true})
     vim.api.nvim_buf_set_keymap(buf, "n", "<Down>", ":lua vim.diagnostic.goto_next({float=false})<CR>", {noremap = true, silent = true})
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
@@ -404,8 +405,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
   local function _26_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:443")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:443")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:444")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:444")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -424,7 +425,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:481")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:482")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

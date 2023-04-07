@@ -21,7 +21,8 @@
 ((. vim.fn "plug#begin") (.. (vim.fn.stdpath "data") "/plugged"))
 
 ; show markers every 2 columns of leading whitespace
-(vim.cmd "Plug 'lukas-reineke/indent-blankline.nvim', { 'commit': '0f8df7e43f0cae4c44e0e8383436ad602f333419' }")
+; 23/02/19
+(vim.cmd "Plug 'lukas-reineke/indent-blankline.nvim', { 'tag': 'v2.20.4' }")
 
 (vim.cmd "Plug 'bakpakin/fennel.vim', { 'commit': '30b9beabad2c4f09b9b284caf5cd5666b6b4dc89', 'for': 'fennel' }")
 
@@ -134,6 +135,14 @@
         {:name "buffer"}
       ])
   })
+)
+
+(do
+  (local plugin (require "indent_blankline"))
+  (plugin.setup
+    {
+    }
+  )
 )
 
 ; mhinz/vim-startify
@@ -261,13 +270,11 @@
 ; Cribbed from https://github.com/neovim/neovim/issues/16339#issuecomment-1457394370
 (vim.api.nvim_create_autocmd
   "BufRead"
-  {
-    :callback
+  { :callback
       (fn [opts]
         (vim.api.nvim_create_autocmd
           "BufWinEnter"
-          {
-            :once true
+          { :once true
             :buffer opts.buf
             :callback
               (fn []
@@ -284,18 +291,16 @@
 
 ; Disallow edits to read-only files
 (vim.api.nvim_create_autocmd
-  ["BufReadPost"]
-  {
-    :callback (fn [] (set vim.bo.modifiable (not vim.bo.readonly)))
+  "BufReadPost"
+  { :callback (fn [] (set vim.bo.modifiable (not vim.bo.readonly)))
     :group "mitchellwrosen"
   }
 )
 
 ; Briefly highlight yanks
 (vim.api.nvim_create_autocmd
-  ["TextYankPost"]
-  {
-    :callback (fn [] (vim.highlight.on_yank { :higroup "Visual" :timeout 600 }))
+  "TextYankPost"
+  { :callback (fn [] (vim.highlight.on_yank { :higroup "Visual" :timeout 600 }))
     :group "mitchellwrosen"
   }
 )
@@ -303,8 +308,7 @@
 ; on cursor hold or focus gained, read the buffer in case it has been modified externally
 (vim.api.nvim_create_autocmd
   ["CursorHold" "FocusGained"]
-  {
-    :callback
+  { :callback
       (fn []
         (when
           (= (vim.fn.getcmdwintype) "")
@@ -317,12 +321,19 @@
 ; Save the buffer after changing it
 (vim.api.nvim_create_autocmd
   ["InsertLeave" "TextChanged"]
-  {
-    :callback
+  { :callback
       (fn []
         (when
           (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
           (vim.cmd "silent! update")))
+    :group "mitchellwrosen"
+  }
+)
+
+; Start a terminal in insert mode
+(vim.api.nvim_create_autocmd
+  "TermOpen"
+  { :callback (fn [] (vim.cmd "startinsert"))
     :group "mitchellwrosen"
   }
 )

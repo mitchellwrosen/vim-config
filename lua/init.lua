@@ -163,6 +163,7 @@ vim.cmd("Plug 'neovimhaskell/haskell-vim', { 'commit': 'f35d02204b4813d1dbe8b0e9
 vim.cmd("Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
 vim.cmd("Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
 vim.cmd("Plug 'nvim-lua/lsp-status.nvim', { 'commit': '4073f766f1303fb602802075e558fe43e382cc92' }")
+vim.cmd("Plug 'nvim-treesitter/nvim-treesitter', { 'tag': 'v0.8.5.2', 'do': ':TSUpdate' }")
 vim.cmd("Plug 'rhysd/git-messenger.vim', { 'commit': '2e67899355f3f631aad6845925e4c2c13546444d' }")
 vim.cmd("Plug 'romainl/vim-cool', { 'commit': '27ad4ecf7532b750fadca9f36e1c5498fc225af2' }")
 vim.cmd("Plug 'romainl/vim-qf', { 'commit': '65f115c350934517382ae45198a74232a9069c2a' }")
@@ -202,6 +203,10 @@ vim.g.haskell_enable_recursivedo = 1
 vim.g.haskell_enable_static_pointers = 1
 vim.g.haskell_enable_typeroles = 1
 vim.g.haskell_indent_disable = 1
+do
+  local treesitter = require("nvim-treesitter.configs")
+  treesitter.setup({highlight = {enable = true}})
+end
 vim.g.git_messenger_always_into_popup = true
 vim.g.git_messenger_extra_blame_args = "-w"
 vim.g.git_messenger_no_default_mappings = true
@@ -326,15 +331,15 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _14_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:346")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:356")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
   capabilities = _14_
   local on_attach
   local function _15_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:358")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:358")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:368")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:368")
     local augroup_name = ("mitchellwrosenLsp" .. buf)
     vim.api.nvim_create_augroup(augroup_name, {})
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
@@ -425,8 +430,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
   local function _30_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:527")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:527")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:537")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:537")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -445,7 +450,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:563")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:573")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

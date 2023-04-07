@@ -157,13 +157,14 @@ let g:lightline.component_function.lsp = 'LightlineLspStatus'
 let g:lightline.component_type = {}
 let g:lightline.component_type.buffers = 'tabsel'
 let g:lightline.mode_map = {
-      \ 'c': '𝒸ℴ𝓂𝓂𝒶𝓃𝒹',
-      \ 'i': '𝒾𝓃𝓈ℯ𝓇𝓉',
-      \ 'n': '𝓃ℴ𝓇𝓂𝒶ℓ',
-      \ 'R': '𝓇ℯ𝓅ℓ𝒶𝒸ℯ',
-      \ 'v': '𝓋𝒾𝓈𝓊𝒶ℓ',
-      \ 'V': '𝓋𝒾𝓈𝓊𝒶ℓ–ℓ𝒾𝓃ℯ',
-      \ "\<C-v>": '𝓋𝒾𝓈𝓊𝒶ℓ–𝒷ℓℴ𝒸𝓀',
+      \ 'c': ' ',
+      \ 'i': ' ',
+      \ 'n': '',
+      \ 'R': ' ',
+      \ 't': ' ',
+      \ 'v': ' ',
+      \ 'V': ' ',
+      \ "\<C-v>": ' ',
       \ }
 let g:lightline.tab = {}
 let g:lightline.tab.active = [ 'tabnum', 'filename', 'modified' ]

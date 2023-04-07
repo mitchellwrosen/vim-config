@@ -20,8 +20,7 @@
 ; plugins
 ((. vim.fn "plug#begin") (.. (vim.fn.stdpath "data") "/plugged"))
 
-; show markers every 2 columns of leading whitespace
-; 23/02/19
+; Show markers every 2 columns of leading whitespace
 (vim.cmd "Plug 'lukas-reineke/indent-blankline.nvim', { 'tag': 'v2.20.4' }")
 
 (vim.cmd "Plug 'bakpakin/fennel.vim', { 'commit': '30b9beabad2c4f09b9b284caf5cd5666b6b4dc89', 'for': 'fennel' }")
@@ -63,6 +62,8 @@
 (vim.cmd "Plug 'nvim-lua/lsp-status.nvim', { 'commit': '4073f766f1303fb602802075e558fe43e382cc92' }")
 
 ; (vim.cmd "Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce71b45193117f6fb5626b' }")
+
+(vim.cmd "Plug 'nvim-treesitter/nvim-treesitter', { 'tag': 'v0.8.5.2', 'do': ':TSUpdate' }")
 
 ; git blame the line under the cursor
 (vim.cmd "Plug 'rhysd/git-messenger.vim', { 'commit': '2e67899355f3f631aad6845925e4c2c13546444d' }")
@@ -188,6 +189,15 @@
 ;     }
 ;   })
 ; )
+
+; nvim-treesitter/nvim-treesitter
+(do
+  (local treesitter (require "nvim-treesitter.configs"))
+  (treesitter.setup
+    { :highlight { :enable true }
+    }
+  )
+)
 
 ; rhysd/git-messenger.vim
 (set vim.g.git_messenger_always_into_popup true)

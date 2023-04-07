@@ -32,16 +32,6 @@ onoremap <silent> in :<C-u>call <SID>innerNumberTextObject()<cr>
 xnoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 onoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 
-" Jump to last cursor position on file open
-" function! s:jumpToLastPosition() abort
-"   if empty(&buftype) && index(['diff', 'gitcommit'], &filetype, 0, v:true) == -1
-"     if line("'\"") >= 1 && line("'\"") <= line('$')
-"       execute 'normal! g`"'
-"     endif
-"   endif
-" endfunction
-" autocmd mitchellwrosen BufWinEnter ?* call s:jumpToLastPosition()
-
 " Strip trailing whitespace on save
 function! s:stripTrailingWhitespace() abort
   if &l:modifiable && !&l:binary
@@ -59,7 +49,7 @@ autocmd mitchellwrosen BufWritePre * call s:stripTrailingWhitespace()
 autocmd mitchellwrosen FileType qf nnoremap <silent> <buffer> <CR> <CR>:ccl<CR>
 
 " start a terminal in insert mode
-autocmd mitchellwrosen TermEnter * startinsert
+autocmd mitchellwrosen TermOpen * startinsert
 " Esc escapes terminal mode
 autocmd mitchellwrosen TermOpen * tnoremap <buffer> <Esc> <C-\><C-n>
 autocmd mitchellwrosen TermOpen * setlocal nonumber norelativenumber

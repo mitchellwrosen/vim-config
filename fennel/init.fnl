@@ -1,7 +1,7 @@
 (include "fennel/nvim")
 (import-macros
-  { "left-merge" left-merge
-    "map" map
+  { :left-merge left-merge
+    :map map
   }
   "fennel/nvim-macros"
 )
@@ -12,10 +12,10 @@
 (map [ "o" ] "S" "<Plug>Lightspeed_S" {}) ; default = Z (why?)
 ; Workaround (documented in lightspeed readme) for the fact that when recording macros, we want normal fFtT, not
 ; lightspeed's fancy fFtT.
-(map [ "n" "o" "v" ] "f" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_f' : 'f'" { "expr" true })
-(map [ "n" "o" "v" ] "F" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_F' : 'F'" { "expr" true })
-(map [ "n" "o" "v" ] "t" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_t' : 't'" { "expr" true })
-(map [ "n" "o" "v" ] "T" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_T' : 'T'" { "expr" true })
+(map [ "n" "o" "v" ] "f" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_f' : 'f'" { :expr true })
+(map [ "n" "o" "v" ] "F" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_F' : 'F'" { :expr true })
+(map [ "n" "o" "v" ] "t" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_t' : 't'" { :expr true })
+(map [ "n" "o" "v" ] "T" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_T' : 'T'" { :expr true })
 
 ; plugins
 ((. vim.fn "plug#begin") (.. (vim.fn.stdpath "data") "/plugged"))
@@ -109,11 +109,11 @@
 (let
   [trouble (require "trouble")]
   (trouble.setup {
-    ; "auto_open" true
-    ; "auto_close" true
+    ; :auto_open true
+    ; :auto_close true
     ; don't use some fancy icons that require a separate plugin
-    "icons" false
-    "position" "right"
+    :icons false
+    :position "right"
   })
 )
 
@@ -121,17 +121,17 @@
 (do
   (local cmp (require "cmp"))
   (cmp.setup {
-    "mapping" {
+    :mapping {
       "<CR>" (cmp.mapping.confirm { "select" false })
       "<Tab>" (cmp.mapping.select_next_item)
     }
-    "snippet" {
-      "expand" (fn [args] ((. vim.fn "vsnip#anonymous") args.body))
+    :snippet {
+      :expand (fn [args] ((. vim.fn "vsnip#anonymous") args.body))
     }
-    "sources"
+    :sources
       (cmp.config.sources [
-        {"name" "nvim_lsp"}
-        {"name" "buffer"}
+        {:name "nvim_lsp"}
+        {:name "buffer"}
       ])
   })
 )
@@ -286,8 +286,8 @@
 (vim.api.nvim_create_autocmd
   ["BufReadPost"]
   {
-    "callback" (fn [] (set vim.bo.modifiable (not vim.bo.readonly)))
-    "group" "mitchellwrosen"
+    :callback (fn [] (set vim.bo.modifiable (not vim.bo.readonly)))
+    :group "mitchellwrosen"
   }
 )
 
@@ -295,8 +295,8 @@
 (vim.api.nvim_create_autocmd
   ["TextYankPost"]
   {
-    "callback" (fn [] (vim.highlight.on_yank { "higroup" "Visual" "timeout" 600 }))
-    "group" "mitchellwrosen"
+    :callback (fn [] (vim.highlight.on_yank { :higroup "Visual" :timeout 600 }))
+    :group "mitchellwrosen"
   }
 )
 
@@ -304,13 +304,13 @@
 (vim.api.nvim_create_autocmd
   ["CursorHold" "FocusGained"]
   {
-    "callback"
+    :callback
       (fn []
         (when
           (= (vim.fn.getcmdwintype) "")
           (vim.cmd "checktime"))
       )
-    "group" "mitchellwrosen"
+    :group "mitchellwrosen"
   }
 )
 
@@ -318,12 +318,12 @@
 (vim.api.nvim_create_autocmd
   ["InsertLeave" "TextChanged"]
   {
-    "callback"
+    :callback
       (fn []
         (when
           (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
           (vim.cmd "silent! update")))
-    "group" "mitchellwrosen"
+    :group "mitchellwrosen"
   }
 )
 
@@ -359,17 +359,64 @@
       (vim.cmd "highlight! link LspReferenceRead LspReference")
       (vim.cmd "highlight! link LspReferenceWrite LspReference")
 
-      (vim.api.nvim_buf_set_keymap buf "n" "<Space>a" ":lua vim.lsp.buf.code_action()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "gd" ":lua vim.lsp.buf.definition()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Space>d" ":lua vim.lsp.buf.format()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Enter>" ":lua vim.lsp.buf.hover()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Space>r" ":lua vim.lsp.buf.references()<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "gt" ":lua vim.lsp.buf.type_definition()<CR>" { "noremap" true "silent" true })
+      (vim.api.nvim_buf_set_keymap
+        buf
+        "n"
+        "<Space>a" ":lua vim.lsp.buf.code_action()<CR>"
+        { :noremap true :silent true }
+      )
+      (vim.api.nvim_buf_set_keymap
+        buf
+        "n"
+        "gd"
+        ":lua vim.lsp.buf.definition()<CR>"
+        { :noremap true :silent true }
+      )
+      (vim.api.nvim_buf_set_keymap
+        buf
+        "n"
+        "<Space>d"
+        ":lua vim.lsp.buf.format()<CR>"
+        { :noremap true :silent true }
+      )
+      (vim.api.nvim_buf_set_keymap
+        buf
+        "n"
+        "<Enter>"
+        ":lua vim.lsp.buf.hover()<CR>"
+        { :noremap true :silent true }
+      )
+      (vim.api.nvim_buf_set_keymap
+        buf
+        "n"
+        "<Space>r"
+        ":lua vim.lsp.buf.references()<CR>"
+        { :noremap true :silent true }
+      )
+      (vim.api.nvim_buf_set_keymap
+        buf
+        "n"
+        "gt"
+        ":lua vim.lsp.buf.type_definition()<CR>"
+        { :noremap true :silent true }
+      )
       ; float=false here means don't call vim.diagnostic.open_float once we land, because we already do on CursorHold.
       ; if float=true, the second vim.diagnostic.open_float jumps *into* the diagnostic window, which suuux (so glad I
       ; finally fixed this)
-      (vim.api.nvim_buf_set_keymap buf "n" "<Up>" ":lua vim.diagnostic.goto_prev({float=false})<CR>" { "noremap" true "silent" true })
-      (vim.api.nvim_buf_set_keymap buf "n" "<Down>" ":lua vim.diagnostic.goto_next({float=false})<CR>" { "noremap" true "silent" true })
+      (vim.api.nvim_buf_set_keymap
+        buf
+        "n"
+        "<Up>"
+        ":lua vim.diagnostic.goto_prev({float=false})<CR>"
+        { :noremap true :silent true }
+      )
+      (vim.api.nvim_buf_set_keymap
+        buf
+        "n"
+        "<Down>"
+        ":lua vim.diagnostic.goto_next({float=false})<CR>"
+        { :noremap true :silent true }
+      )
       (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
 
       ; extract the "meaningful head" of a list of (markdown) strings, where "meaningful" means not the empty
@@ -406,18 +453,18 @@
       (vim.api.nvim_create_autocmd
         ["CursorHold"]
         {
-          "buffer" buf
+          :buffer buf
           ; open diagnostics underneath the cursor
-          "callback" (fn [] (vim.diagnostic.open_float))
-          "group" augroup-name
+          :callback (fn [] (vim.diagnostic.open_float))
+          :group augroup-name
         }
       )
 
       (vim.api.nvim_create_autocmd
         ["CursorMoved"]
         {
-          "buffer" buf
-          "callback"
+          :buffer buf
+          :callback
             (fn []
               (when (= (. (vim.api.nvim_get_mode) "mode") "n")
                 (local position (vim.lsp.util.make_position_params))
@@ -440,7 +487,7 @@
                           position.position.line
                           [ [ (.. "∙ " line) "Comment" ] ] {})))))
               ))
-          "group" augroup-name
+          :group augroup-name
         }
       )
     )
@@ -450,22 +497,22 @@
   (status.register_progress)
 
   (vim.diagnostic.config {
-    "float" {
+    :float {
       ; require cursor to be over diagnostic in order to open a float window of it
-      "scope" "cursor"
+      :scope "cursor"
       ; remove the default "Diagnostics:" header
-      "header" ""
+      :header ""
     }
     ; only underline errors
-    "underline" { "severity" vim.diagnostic.severity.ERROR }
+    :underline { "severity" vim.diagnostic.severity.ERROR }
     ; don't put diagnostics inline
-    "virtual_text" false
+    :virtual_text false
 
   })
 
   (lsp.elmls.setup
-    { "capabilities" (capabilities lsp.elmls)
-      "on_attach"
+    { :capabilities (capabilities lsp.elmls)
+      :on_attach
         (lambda [client buf]
           ; https://github.com/elm-tooling/elm-language-server/issues/503
           (when client.config.flags (set client.config.flags.allow_incremental_sync true))
@@ -473,29 +520,27 @@
     })
 
   (lsp.hls.setup
-    { "capabilities" (capabilities lsp.hls)
-      "cmd" ["haskell-language-server-wrapper" "--lsp"]
+    { :capabilities (capabilities lsp.hls)
+      :cmd ["haskell-language-server-wrapper" "--lsp"]
       ; "cmd" ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
-      "settings" {
-        "haskell" {
-          "formattingProvider" "ormolu"
-          "plugin" {
-            "hlint" {
-              "globalOn" false
-            }
-            "stan" {
-              "globalOn" false
-            }
+      :settings {
+        :haskell {
+          :formattingProvider "ormolu"
+          :plugin {
+            :hlint { :globalOn false }
+            :stan { "globalOn" false }
           }
           ; max number of completions sent to client at one time
-          ; "maxCompletions" 20
+          ; :maxCompletions 20
         }
       }
-      "on_attach" on-attach })
+      :on_attach on-attach })
 
   (lsp.sumneko_lua.setup
-    { "capabilities" (capabilities lsp.sumneko_lua)
-      "on_attach" on-attach })
+    { :capabilities (capabilities lsp.sumneko_lua)
+      :on_attach on-attach
+    }
+  )
 )
 
 (lambda lightline-status []
@@ -512,20 +557,25 @@
         row (math.floor (+ (/ (- lines height) 2) 0.5))
         width (math.floor (+ (* columns 0.8) 0.5))
         col (math.floor (+ (/ (- columns width) 2) 0.5))
-        win (vim.api.nvim_open_win
-              buf
-              true
-              { "col" col
-                "height" height
-                "relative" "editor"
-                "row" row
-                "style" "minimal"
-                "width" width })]
-    (vim.fn.termopen command { "on_exit" (lambda [] (vim.cmd (.. "bw! " buf))) })
+        win
+          (vim.api.nvim_open_win
+            buf
+            true
+            { :col col
+              :height height
+              :relative "editor"
+              :row row
+              :style "minimal"
+              :width width
+            }
+          )
+        ]
+    (vim.fn.termopen command { :on_exit (lambda [] (vim.cmd (.. "bw! " buf))) })
     ; Awkward, undo the remapping of <Esc> to <C-\><C-n> in init.vim
-    (vim.api.nvim_buf_set_keymap buf "t" "<Esc>" "<Esc>" { "noremap" true "nowait" true "silent" true })
+    (vim.api.nvim_buf_set_keymap buf "t" "<Esc>" "<Esc>" { :noremap true :nowait true :silent true })
     win))
 
-{ "lightline_status" lightline-status
-  "run_floating" run-floating
-  "virtual_hover" virtual-hover }
+{ :lightline_status lightline-status
+  :run_floating run-floating
+  :virtual_hover virtual-hover
+}

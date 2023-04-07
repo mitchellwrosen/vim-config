@@ -103,6 +103,8 @@
 ; some surround helpers
 (vim.cmd "Plug 'tpope/vim-surround', { 'commit': 'aeb933272e72617f7c4d35e1f003be16836b948d' }")
 
+(vim.cmd "Plug 'https://git.sr.ht/~whynothugo/lsp_lines.nvim', { 'commit': 'dcff567b3a2d730f31b6da229ca3bb40640ec5a6' }")
+
 ((. vim.fn "plug#end"))
 
 ; colorscheme settings
@@ -160,6 +162,11 @@
     {
     }
   )
+)
+
+(do
+  (local lsp_lines (require "lsp_lines"))
+  (lsp_lines.setup)
 )
 
 ; mhinz/vim-startify
@@ -438,9 +445,7 @@
         ":lua vim.lsp.buf.type_definition()<CR>"
         { :noremap true :silent true }
       )
-      ; float=false here means don't call vim.diagnostic.open_float once we land, because we already do on CursorHold.
-      ; if float=true, the second vim.diagnostic.open_float jumps *into* the diagnostic window, which suuux (so glad I
-      ; finally fixed this)
+      ; float=false here means don't call vim.diagnostic.open_float once we land
       (vim.api.nvim_buf_set_keymap
         buf
         "n"
@@ -489,16 +494,6 @@
           _ (fn [line] line)))
 
       (vim.api.nvim_create_autocmd
-        ["CursorHold"]
-        {
-          :buffer buf
-          ; open diagnostics underneath the cursor
-          :callback (fn [] (vim.diagnostic.open_float))
-          :group augroup-name
-        }
-      )
-
-      (vim.api.nvim_create_autocmd
         ["CursorMoved"]
         {
           :buffer buf
@@ -543,6 +538,7 @@
     }
     ; only underline errors
     :underline { "severity" vim.diagnostic.severity.ERROR }
+    :virtual_lines true
     ; don't put diagnostics inline
     :virtual_text false
 

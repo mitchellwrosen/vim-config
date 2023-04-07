@@ -25,6 +25,9 @@
 
 (vim.cmd "Plug 'bakpakin/fennel.vim', { 'commit': '30b9beabad2c4f09b9b284caf5cd5666b6b4dc89', 'for': 'fennel' }")
 
+; highlight colorcolumn in insert mode
+(vim.cmd "Plug 'Bekaboo/deadcolumn.nvim', { 'commit': '8140fd7cface9592a44b3151203fc6ca95ad9598' }")
+
 ; open LSP diagnostics with :TroubleToggle
 (vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '20469be985143d024c460d95326ebeff9971d714' }")
 
@@ -106,6 +109,17 @@
 (set vim.g.gruvbox_improved_strings 1) ; extra-highlight strings
 (set vim.g.gruvbox_invert_signs 1)
 (vim.cmd "colorscheme gruvbox")
+
+; Bekaboo/deadcolumn.nvim
+(do
+  (local deadcolumn (require "deadcolumn"))
+  (deadcolumn.setup
+    { :blending { :threshold 100 } ; start showing color column here
+      :scope "visible" ; show color column per all visible lines
+      :warning { :alpha 0.1 :hlgroup [ "ErrorMsg" "background" ] }
+    }
+  )
+)
 
 ; folke/trouble.nvim
 (let
@@ -249,6 +263,7 @@
 (set vim.o.inccommand "split") ; show live command substitutions
 (set vim.o.listchars "tab:> ,trail:·,nbsp:+") ; trailing whitespace markers
 (set vim.o.wildmode "list:longest,full") ; wild menu completion behavior
+(set vim.wo.colorcolumn "120")
 (set vim.wo.cursorline true) ; higlight the current line
 (set vim.wo.linebreak true) ; wrap lines in a more visually pleasing way
 (set vim.wo.list true) ; show trailing whitespace, tabs, etc.

@@ -54,12 +54,6 @@ autocmd mitchellwrosen TermOpen * setlocal nonumber norelativenumber
 " forcibly exit a terminal buffer, because there's nothing to save
 autocmd mitchellwrosen TermOpen * nnoremap <silent> <buffer> <Space>d :bw!<CR>
 
-" Highlight merge conflict markers
-match ErrorMsg '^\(<\||\|=\|>\)\{7\}\([^=].\+\)\?$'
-
-" Highlight characters after 120th column
-match ErrorMsg '\%>120v.\+'
-
 " Echo the quickfix entry on the current line, if any
 " autocmd CursorMoved * call <SID>EchoQuickFixEntry()
 

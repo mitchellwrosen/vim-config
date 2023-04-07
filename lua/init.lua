@@ -145,6 +145,7 @@ end
 vim.fn["plug#begin"]((vim.fn.stdpath("data") .. "/plugged"))
 vim.cmd("Plug 'lukas-reineke/indent-blankline.nvim', { 'tag': 'v2.20.4' }")
 vim.cmd("Plug 'bakpakin/fennel.vim', { 'commit': '30b9beabad2c4f09b9b284caf5cd5666b6b4dc89', 'for': 'fennel' }")
+vim.cmd("Plug 'Bekaboo/deadcolumn.nvim', { 'commit': '8140fd7cface9592a44b3151203fc6ca95ad9598' }")
 vim.cmd("Plug 'folke/trouble.nvim', { 'commit': '20469be985143d024c460d95326ebeff9971d714' }")
 vim.cmd("Plug 'ggandor/lightspeed.nvim', { 'commit': 'cfde2b2fe0dafc5684780399961595357998f611' }")
 vim.cmd("Plug 'hrsh7th/cmp-buffer', { 'commit': 'f83773e2f433a923997c5faad7ea689ec24d1785' }")
@@ -181,6 +182,10 @@ vim.g.gruvbox_contrast_dark = "soft"
 vim.g.gruvbox_improved_strings = 1
 vim.g.gruvbox_invert_signs = 1
 vim.cmd("colorscheme gruvbox")
+do
+  local deadcolumn = require("deadcolumn")
+  deadcolumn.setup({blending = {threshold = 100}, scope = "visible", warning = {alpha = 0.1, hlgroup = {"ErrorMsg", "background"}}})
+end
 do
   local trouble = require("trouble")
   trouble.setup({icons = false, position = "right"})
@@ -249,6 +254,7 @@ vim.o.grepprg = "rg --vimgrep"
 vim.o.inccommand = "split"
 vim.o.listchars = "tab:> ,trail:\194\183,nbsp:+"
 vim.o.wildmode = "list:longest,full"
+vim.wo.colorcolumn = "120"
 vim.wo.cursorline = true
 vim.wo.linebreak = true
 vim.wo.list = true
@@ -331,15 +337,15 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _14_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:356")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:371")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
   capabilities = _14_
   local on_attach
   local function _15_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:368")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:368")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:383")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:383")
     local augroup_name = ("mitchellwrosenLsp" .. buf)
     vim.api.nvim_create_augroup(augroup_name, {})
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
@@ -430,8 +436,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
   local function _30_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:537")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:537")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:552")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:552")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -450,7 +456,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:573")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:588")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

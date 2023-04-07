@@ -33,14 +33,14 @@ xnoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 onoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 
 " Jump to last cursor position on file open
-function! s:jumpToLastPosition() abort
-  if empty(&buftype) && index(['diff', 'gitcommit'], &filetype, 0, v:true) == -1
-    if line("'\"") >= 1 && line("'\"") <= line('$')
-      execute 'normal! g`"'
-    endif
-  endif
-endfunction
-autocmd mitchellwrosen BufWinEnter ?* call s:jumpToLastPosition()
+" function! s:jumpToLastPosition() abort
+"   if empty(&buftype) && index(['diff', 'gitcommit'], &filetype, 0, v:true) == -1
+"     if line("'\"") >= 1 && line("'\"") <= line('$')
+"       execute 'normal! g`"'
+"     endif
+"   endif
+" endfunction
+" autocmd mitchellwrosen BufWinEnter ?* call s:jumpToLastPosition()
 
 " Strip trailing whitespace on save
 function! s:stripTrailingWhitespace() abort

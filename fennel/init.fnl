@@ -257,6 +257,31 @@
 
 (vim.api.nvim_create_augroup "mitchellwrosen" {})
 
+; Restore cursor position on open
+; Cribbed from https://github.com/neovim/neovim/issues/16339#issuecomment-1457394370
+(vim.api.nvim_create_autocmd
+  "BufRead"
+  {
+    :callback
+      (fn [opts]
+        (vim.api.nvim_create_autocmd
+          "BufWinEnter"
+          {
+            :once true
+            :buffer opts.buf
+            :callback
+              (fn []
+                (local last_known_line (. (vim.api.nvim_buf_get_mark opts.buf "\"") 1))
+                (when (and (> last_known_line 1) (<= last_known_line (vim.api.nvim_buf_line_count opts.buf)))
+                  (vim.api.nvim_feedkeys "g`\"" "x" false)
+                )
+              )
+          }
+        )
+      )
+  }
+)
+
 ; Disallow edits to read-only files
 (vim.api.nvim_create_autocmd
   ["BufReadPost"]

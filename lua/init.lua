@@ -276,45 +276,57 @@ do
 end
 require("fennel/mappings")
 vim.api.nvim_create_augroup("mitchellwrosen", {})
-local function _4_()
+local function _4_(opts)
+  local function _5_()
+    local last_known_line = (vim.api.nvim_buf_get_mark(opts.buf, "\""))[1]
+    if ((last_known_line > 1) and (last_known_line <= vim.api.nvim_buf_line_count(opts.buf))) then
+      return vim.api.nvim_feedkeys("g`\"", "x", false)
+    else
+      return nil
+    end
+  end
+  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, callback = _5_})
+end
+vim.api.nvim_create_autocmd("BufRead", {callback = _4_})
+local function _7_()
   vim.bo.modifiable = not vim.bo.readonly
   return nil
 end
-vim.api.nvim_create_autocmd({"BufReadPost"}, {callback = _4_, group = "mitchellwrosen"})
-local function _5_()
+vim.api.nvim_create_autocmd({"BufReadPost"}, {callback = _7_, group = "mitchellwrosen"})
+local function _8_()
   return vim.highlight.on_yank({higroup = "Visual", timeout = 600})
 end
-vim.api.nvim_create_autocmd({"TextYankPost"}, {callback = _5_, group = "mitchellwrosen"})
-local function _6_()
+vim.api.nvim_create_autocmd({"TextYankPost"}, {callback = _8_, group = "mitchellwrosen"})
+local function _9_()
   if (vim.fn.getcmdwintype() == "") then
     return vim.cmd("checktime")
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _6_, group = "mitchellwrosen"})
-local function _8_()
+vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _9_, group = "mitchellwrosen"})
+local function _11_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
     return vim.cmd("silent! update")
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _8_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _11_, group = "mitchellwrosen"})
 do
   local lsp = require("lspconfig")
   local status = require("lsp-status")
   local capabilities
-  local function _10_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:310")
+  local function _13_(config)
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:335")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
-  capabilities = _10_
+  capabilities = _13_
   local on_attach
-  local function _11_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:322")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:322")
+  local function _14_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:347")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:347")
     local augroup_name = ("mitchellwrosenLsp" .. buf)
     vim.api.nvim_create_augroup(augroup_name, {})
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
@@ -331,7 +343,7 @@ do
     vim.api.nvim_buf_set_keymap(buf, "n", "<Down>", ":lua vim.diagnostic.goto_next({float=false})<CR>", {noremap = true, silent = true})
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
     local meaningful_head
-    local function _12_(lines)
+    local function _15_(lines)
       local ret = ""
       local i = 1
       while (i <= #lines) do
@@ -345,34 +357,34 @@ do
       end
       return ret
     end
-    meaningful_head = _12_
+    meaningful_head = _15_
     local filter
     do
-      local _14_ = vim.bo.filetype
-      if (_14_ == "haskell") then
-        local function _15_(line)
+      local _17_ = vim.bo.filetype
+      if (_17_ == "haskell") then
+        local function _18_(line)
           if (-1 == vim.fn.match(line, "::")) then
             return ""
           else
             return line
           end
         end
-        filter = _15_
+        filter = _18_
       elseif true then
-        local _ = _14_
-        local function _17_(line)
+        local _ = _17_
+        local function _20_(line)
           return line
         end
-        filter = _17_
+        filter = _20_
       else
         filter = nil
       end
     end
-    local function _19_()
+    local function _22_()
       return vim.diagnostic.open_float()
     end
-    vim.api.nvim_create_autocmd({"CursorHold"}, {buffer = buf, callback = _19_, group = augroup_name})
-    local function _20_()
+    vim.api.nvim_create_autocmd({"CursorHold"}, {buffer = buf, callback = _22_, group = augroup_name})
+    local function _23_()
       if (vim.api.nvim_get_mode().mode == "n") then
         local position = vim.lsp.util.make_position_params()
         if client.server_capabilities.documentHighlightProvider then
@@ -380,7 +392,7 @@ do
           vim.lsp.buf.document_highlight()
         else
         end
-        local function _22_(_err, result, _ctx, _config)
+        local function _25_(_err, result, _ctx, _config)
           if (not (result == nil) and (type(result) == "table")) then
             local namespace = vim.api.nvim_create_namespace("hover")
             local line = meaningful_head(vim.lsp.util.convert_input_to_markdown_lines(result.contents))
@@ -394,26 +406,26 @@ do
             return nil
           end
         end
-        return vim.lsp.buf_request(0, "textDocument/hover", position, _22_)
+        return vim.lsp.buf_request(0, "textDocument/hover", position, _25_)
       else
         return nil
       end
     end
-    return vim.api.nvim_create_autocmd({"CursorMoved"}, {buffer = buf, callback = _20_, group = augroup_name})
+    return vim.api.nvim_create_autocmd({"CursorMoved"}, {buffer = buf, callback = _23_, group = augroup_name})
   end
-  on_attach = _11_
+  on_attach = _14_
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_text = false})
-  local function _26_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:444")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:444")
+  local function _29_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:469")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:469")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
     end
     return on_attach(client, buf)
   end
-  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _26_})
+  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _29_})
   lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}, on_attach = on_attach})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
 end
@@ -425,7 +437,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:482")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:507")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -434,10 +446,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.8) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _29_()
+  local function _32_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _29_})
+  vim.fn.termopen(command, {on_exit = _32_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

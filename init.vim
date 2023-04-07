@@ -32,8 +32,6 @@ onoremap <silent> in :<C-u>call <SID>innerNumberTextObject()<cr>
 xnoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 onoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 
-command! -complete=shellcmd -nargs=1 Run lua require'init'.run_floating(<f-args>)
-
 " Jump to last cursor position on file open
 function! s:jumpToLastPosition() abort
   if empty(&buftype) && index(['diff', 'gitcommit'], &filetype, 0, v:true) == -1

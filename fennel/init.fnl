@@ -507,12 +507,87 @@
   }
 )
 
+(vim.api.nvim_create_autocmd
+  ["LspAttach"]
+  { :callback
+      (fn [args]
+        (do
+          (local buf args.buf)
+          ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
+          ; gets deleted and re-opend
+          (local augroup-name (.. "mitchellwrosenLsp" buf))
+          ; (vim.api.nvim_create_augroup augroup-name {})
+
+          (vim.keymap.set "n" "<Space>a" vim.lsp.buf.code_action { :buffer buf :silent true })
+          (vim.keymap.set "n" "gd" vim.lsp.buf.definition { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Space>d" vim.lsp.buf.format { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Space>r" vim.lsp.buf.references { :buffer buf :silent true })
+          (vim.keymap.set "n" "gt" vim.lsp.buf.type_definition { :buffer buf :silent true })
+          ; float=false here means don't call vim.diagnostic.open_float once we land
+          (vim.keymap.set "n" "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
+        )
+      )
+    :group "mitchellwrosen"
+  }
+)
+
 ; Start a terminal in insert mode
 (vim.api.nvim_create_autocmd
   "TermOpen"
   { :callback (fn [] (vim.cmd "startinsert"))
     :group "mitchellwrosen"
   }
+)
+
+; try to extract the haskell type signature from the input string, which is assumed to look like:
+;
+; ```haskell
+; runParser :: forall e s a.
+; Parsec e s a -> String -> s -> Either (ParseErrorBundle s e) a
+; ```
+;
+; *Defined in ‘Text.Megaparsec’* *(megaparsec-9.3.0)*\
+;
+;
+; * * *
+;
+; ```haskell
+; _ :: Parsec Void Text (Dump, Text)
+; -> String
+; -> Text
+; -> Either (ParseErrorBundle Text Void) (Dump, Text)
+; ```
+(local extract-haskell-typesig-from-markdown
+  (fn [str0]
+    (var str str0)
+    (var i nil)
+
+    (set i (string.find str "```haskell\n"))
+    (when i
+      (set str (string.sub str (+ i 11)))
+      (set i (string.find str "\n```"))
+      (when i
+        (set str (string.sub str 1 (- i 1)))
+        (set i (string.find str ":: "))
+        (when i
+          (set str (string.sub str (+ i 3)))
+          ; chop off leading forall, if any
+          (set i (string.find str "forall"))
+          (when (= i 1)
+            (set i (string.find str "%.")) ; need to escape '.' in lua pattern
+            (set str (string.sub str (+ i 2)))
+          )
+          ; render entire type on one line
+          (set str (string.gsub str "\n" " "))
+          ; throw away multiplicity markers (well, multiplicity-1)
+          (set str (string.gsub str "%%1 %->" "->")) ; need to escape '%' and '-' in lua pattern
+          str
+        )
+      )
+    )
+  )
 )
 
 (do
@@ -547,79 +622,8 @@
       (vim.cmd "highlight! link LspReferenceRead LspReference")
       (vim.cmd "highlight! link LspReferenceWrite LspReference")
 
-      (vim.api.nvim_buf_set_keymap
-        buf
-        "n"
-        "<Space>a" ":lua vim.lsp.buf.code_action()<CR>"
-        { :noremap true :silent true }
-      )
-      (vim.api.nvim_buf_set_keymap
-        buf
-        "n"
-        "gd"
-        ":lua vim.lsp.buf.definition()<CR>"
-        { :noremap true :silent true }
-      )
-      (vim.api.nvim_buf_set_keymap
-        buf
-        "n"
-        "<Space>d"
-        ":lua vim.lsp.buf.format()<CR>"
-        { :noremap true :silent true }
-      )
-      (vim.api.nvim_buf_set_keymap
-        buf
-        "n"
-        "<Enter>"
-        ":lua vim.lsp.buf.hover()<CR>"
-        { :noremap true :silent true }
-      )
-      (vim.api.nvim_buf_set_keymap
-        buf
-        "n"
-        "<Space>r"
-        ":lua vim.lsp.buf.references()<CR>"
-        { :noremap true :silent true }
-      )
-      (vim.api.nvim_buf_set_keymap
-        buf
-        "n"
-        "gt"
-        ":lua vim.lsp.buf.type_definition()<CR>"
-        { :noremap true :silent true }
-      )
-      ; float=false here means don't call vim.diagnostic.open_float once we land
-      (vim.api.nvim_buf_set_keymap
-        buf
-        "n"
-        "<Up>"
-        ":lua vim.diagnostic.goto_prev({float=false})<CR>"
-        { :noremap true :silent true }
-      )
-      (vim.api.nvim_buf_set_keymap
-        buf
-        "n"
-        "<Down>"
-        ":lua vim.diagnostic.goto_next({float=false})<CR>"
-        { :noremap true :silent true }
-      )
+      ; keymaps were here
       (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
-
-      ; extract the "meaningful head" of a list of (markdown) strings, where "meaningful" means not the empty
-      ; string, and not beginning with ```
-      (local meaningful-head
-        (fn [lines]
-          (var ret "")
-          (var i 1)
-          (while (<= i (length lines))
-            (let [l (. lines i)]
-              (if
-                (or (= l "") (= 0 (vim.fn.match l "^```")))
-                (set i (+ i 1))
-                (do
-                  (set i (+ (length lines) 1))
-                  (set ret l)))))
-          ret))
 
       ; filter : string -> string
       ;
@@ -630,11 +634,11 @@
       ; otherwise we'd end up annotating types with their own names on hover (for whatever reason,
       ; haskell-language-server currently returns "Bool" as the first line of a hover request, rather than
       ; something like "Bool :: Type")
-      (local filter
-        (match vim.bo.filetype
-          "haskell"
-            (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
-          _ (fn [line] line)))
+      ; (local filter
+      ;   (match vim.bo.filetype
+      ;     "haskell"
+      ;       (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
+      ;     _ (fn [line] line)))
 
       (vim.api.nvim_create_autocmd
         ["CursorMoved"]
@@ -642,7 +646,7 @@
           :buffer buf
           :callback
             (fn []
-              (when (= (. (vim.api.nvim_get_mode) "mode") "n")
+              (when (= (. (vim.api.nvim_get_mode) :mode) "n")
                 (local position (vim.lsp.util.make_position_params))
                 ; highlight other occurrences of the thing under the cursor
                 ; the colors are determined by LspReferenceText, etc. highlight groups
@@ -652,17 +656,24 @@
                 ; try to put a type sig in the virtual text area
                 (vim.lsp.buf_request 0 "textDocument/hover" position
                   (fn [_err result _ctx _config]
-                    (when (and (not (= result nil)) (= (type result) "table"))
+                    (local contents (?. result :contents))
+                    (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
                       (local namespace (vim.api.nvim_create_namespace "hover"))
-                      (local line (meaningful-head (vim.lsp.util.convert_input_to_markdown_lines result.contents)))
+                      (local line (extract-haskell-typesig-from-markdown contents.value))
                       (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
-                      (when (not (= (filter line) ""))
+                      (when line
                         (vim.api.nvim_buf_set_virtual_text
                           0
                           namespace
                           position.position.line
-                          [ [ (.. "∙ " line) "Comment" ] ] {})))))
-              ))
+                          [ [ (.. "∙ " line) "Comment" ] ] {}
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
           :group augroup-name
         }
       )
@@ -722,7 +733,7 @@
 
 (lambda lightline-status []
   (if (> (length (vim.lsp.buf_get_clients)) 0)
-    ((. (require "lsp-status") "status"))
+    ((. (require "lsp-status") :status))
     ""))
 
 ; Run the given command in a centered floating terminal.

@@ -6,8 +6,29 @@
   "fennel/nvim-macros"
 )
 
-; Some ggandor/lightspeed.nvim mappings. These need to come before the plugin is loaded, because that's how the plugin
-; documentation says you are meant to override the defaults.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Bootstrap lazy.nvim
+
+(do
+  (local lazypath (.. (vim.fn.stdpath "data") "/lazy/lazy.nvim"))
+  (when (not (vim.loop.fs_stat lazypath))
+    (vim.fn.system
+      [ "git"
+        "clone"
+        "--filter=blob:none"
+        "https://github.com/folke/lazy.nvim"
+        "--branch=v9.14.2"
+        lazypath
+      ]
+    )
+  )
+  (vim.opt.rtp:prepend lazypath)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Some ggandor/lightspeed.nvim mappings. These need to come before the plugin is loaded, because that's how the plugin
+;; documentation says you are meant to override the defaults.
+
 (map [ "o" ] "s" "<Plug>Lightspeed_s" {}) ; default = z (why?)
 (map [ "o" ] "S" "<Plug>Lightspeed_S" {}) ; default = Z (why?)
 ; Workaround (documented in lightspeed readme) for the fact that when recording macros, we want normal fFtT, not
@@ -17,95 +38,168 @@
 (map [ "n" "o" "v" ] "t" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_t' : 't'" { :expr true })
 (map [ "n" "o" "v" ] "T" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_T' : 'T'" { :expr true })
 
-; plugins
-((. vim.fn "plug#begin") (.. (vim.fn.stdpath "data") "/plugged"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Plugins
 
-; Show markers every 2 columns of leading whitespace
-(vim.cmd "Plug 'lukas-reineke/indent-blankline.nvim', { 'tag': 'v2.20.4' }")
+(do
+  (local lazy (require "lazy"))
+  (lazy.setup
+    [
+      ; fennel syntax highlighting
+      { :url "https://github.com/bakpakin/fennel.vim"
+        :commit "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89"
+	:ft "fennel"
+      }
 
-(vim.cmd "Plug 'bakpakin/fennel.vim', { 'commit': '30b9beabad2c4f09b9b284caf5cd5666b6b4dc89', 'for': 'fennel' }")
+      ; highlight colorcolumn in insert mode
+      { :url "https://github.com/Bekaboo/deadcolumn.nvim"
+        :commit "8140fd7cface9592a44b3151203fc6ca95ad9598"
+      }
 
-; highlight colorcolumn in insert mode
-(vim.cmd "Plug 'Bekaboo/deadcolumn.nvim', { 'commit': '8140fd7cface9592a44b3151203fc6ca95ad9598' }")
+      ; open LSP diagnostics with :TroubleToggle
+      { :url "https://github.com/folke/trouble.nvim"
+        :commit "20469be985143d024c460d95326ebeff9971d714"
+      }
 
-(vim.cmd "Plug 'sainnhe/gruvbox-material', { 'commit': 'a6c5f652788b36c6ff2a0fdbefa271cb46f8f5e7' }")
+      ; move to a specific character from far away
+      { :url "https://github.com/ggandor/lightspeed.nvim"
+        :commit "cfde2b2fe0dafc5684780399961595357998f611"
+      }
 
-; open LSP diagnostics with :TroubleToggle
-(vim.cmd "Plug 'folke/trouble.nvim', { 'commit': '20469be985143d024c460d95326ebeff9971d714' }")
+      ; completion - 2022/01/09
+      { :url "https://github.com/hrsh7th/cmp-buffer"
+        :commit "f83773e2f433a923997c5faad7ea689ec24d1785"
+      }
+      { :url "https://github.com/hrsh7th/cmp-nvim-lsp"
+        :commit "b4251f0fca1daeb6db5d60a23ca81507acf858c2"
+      }
+      { :url "https://github.com/hrsh7th/cmp-vsnip"
+        :commit "0abfa1860f5e095a07c477da940cfcb0d273b700"
+      }
+      { :url "https://github.com/hrsh7th/vim-vsnip"
+        :commit "7fde9c0b6878a62bcc6d2d29f9a85a6616032f02"
+      }
+      ; 22-04-30
+      { :url "https://github.com/hrsh7th/nvim-cmp"
+        :commit "f841fa6ced194aa930136a7671439e6bd4c51722"
+      }
 
-; vim-sneak thingy for moving to a specific character from far away
-(vim.cmd "Plug 'ggandor/lightspeed.nvim', { 'commit': 'cfde2b2fe0dafc5684780399961595357998f611' }")
+      ; statusline
+      { :url "https://github.com/itchyny/lightline.vim"
+        :commit "a29b8331e1bb36b09bafa30c3aa77e89cdd832b2"
+      }
 
-; completion - 2022/01/09
-(vim.cmd "Plug 'hrsh7th/cmp-buffer', { 'commit': 'f83773e2f433a923997c5faad7ea689ec24d1785' }")
-(vim.cmd "Plug 'hrsh7th/cmp-nvim-lsp', { 'commit': 'b4251f0fca1daeb6db5d60a23ca81507acf858c2' }")
-(vim.cmd "Plug 'hrsh7th/cmp-vsnip', { 'commit': '0abfa1860f5e095a07c477da940cfcb0d273b700' }")
-(vim.cmd "Plug 'hrsh7th/vim-vsnip', { 'commit': '7fde9c0b6878a62bcc6d2d29f9a85a6616032f02' }")
-; 22-04-30
-(vim.cmd "Plug 'hrsh7th/nvim-cmp', { 'commit': 'f841fa6ced194aa930136a7671439e6bd4c51722' }")
+      ; fuzzy search source code, files, etc
+      { :url "https://github.com/junegunn/fzf"
+        :commit "6dcf5c3d7d6c321b17e6a5673f1533d6e8350462"
+      }
+      { :url "https://github.com/junegunn/fzf.vim"
+        :commit "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0"
+      }
 
-; statusline
-(vim.cmd "Plug 'itchyny/lightline.vim', { 'commit': 'a29b8331e1bb36b09bafa30c3aa77e89cdd832b2' }")
-; fuzzy search source code, files, etc
-(vim.cmd "Plug 'junegunn/fzf', { 'commit': '6dcf5c3d7d6c321b17e6a5673f1533d6e8350462' }")
-(vim.cmd "Plug 'junegunn/fzf.vim', { 'commit': 'd5f1f8641b24c0fd5b10a299824362a2a1b20ae0' }")
+      ; nix syntax highlighting - 22-12-14
+      { :url "https://github.com/LnL7/vim-nix"
+        :commit "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee"
+        :ft "nix"
+      }
 
-(vim.cmd "Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
+      ; Show markers every 2 columns of leading whitespace
+      { :url "https://github.com/lukas-reineke/indent-blankline.nvim"
+        :tag "v2.20.4"
+      }
 
-; nix syntax highlighting - 22-12-14
-(vim.cmd "Plug 'LnL7/vim-nix', { 'commit': '7d23e97d13c40fcc6d603b291fe9b6e5f92516ee' }")
+      { :url "https://github.com/mengelbrecht/lightline-bufferline"
+        :commit "c0199a7027da92d9770d1e2a9f4bf6257c7ec7ef"
+      }
 
-(vim.cmd "Plug 'mengelbrecht/lightline-bufferline'")
+      ; lsp configs
+      { :url "https://github.com/neovim/nvim-lsp"
+        :commit "2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491"
+      }
 
-; lsp configs
-(vim.cmd "Plug 'neovim/nvim-lsp', { 'commit': '2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491' }")
+      ; Haskell syntax highlighting
+      ; Does treesitter obviate this?
+      { :url "https://github.com/neovimhaskell/haskell-vim"
+        :commit "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e"
+        :ft "haskell"
+      }
 
-(vim.cmd "Plug 'neovimhaskell/haskell-vim', { 'commit': 'f35d02204b4813d1dbe8b0e98cc39701a4b8e15e', 'for': 'haskell' }")
-(vim.cmd "Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
-(vim.cmd "Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
+      { :url "https://github.com/nvim-lua/lsp-status.nvim"
+        :commit "4073f766f1303fb602802075e558fe43e382cc92"
+      }
 
-(vim.cmd "Plug 'nvim-lua/lsp-status.nvim', { 'commit': '4073f766f1303fb602802075e558fe43e382cc92' }")
+      ; treesitter
+      ; 'do': ':TSUpdate'
+      { :url "https://github.com/nvim-treesitter/nvim-treesitter"
+        :tag "v0.8.5.2"
+      }
+
+      ; automatically unhighlight when cursor moves
+      { :url "https://github.com/romainl/vim-cool"
+        :commit "27ad4ecf7532b750fadca9f36e1c5498fc225af2"
+      }
+
+      ; nice low-contrast fork of gruvbox color scheme
+      { :url "https://github.com/sainnhe/gruvbox-material"
+        :commit "a6c5f652788b36c6ff2a0fdbefa271cb46f8f5e7"
+      }
+
+      ; swap the location of two selections
+      { :url "https://github.com/tommcdo/vim-exchange"
+        :commit "784d63083ad7d613aa96f00021cd0dfb126a781a"
+      }
+
+      ; improved "ga" for information about the character under the cursor
+      { :url "https://github.com/tpope/vim-characterize"
+        :commit "885a00a3c21dd52ca8f2fd7d62850134934179d9"
+      }
+
+      ; quick (un-)commenting
+      { :url "https://github.com/tpope/vim-commentary"
+        :commit "627308e30639be3e2d5402808ce18690557e8292"
+      }
+
+      ; make "." repeat more things out of the box
+      { :url "https://github.com/tpope/vim-repeat"
+        :commit "24afe922e6a05891756ecf331f39a1f6743d3d5a"
+      }
+
+      ; some surround helpers
+      { :url "https://github.com/tpope/vim-surround"
+        :commit "aeb933272e72617f7c4d35e1f003be16836b948d"
+      }
+
+      ; show lsp error under cursor in virtual text block
+      { :url "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
+        :commit "dcff567b3a2d730f31b6da229ca3bb40640ec5a6"
+      }
+    ]
+  )
+)
+
+; (vim.cmd "Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
+
+; (vim.cmd "Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
+; (vim.cmd "Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
 
 ; (vim.cmd "Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce71b45193117f6fb5626b' }")
 
-(vim.cmd "Plug 'nvim-treesitter/nvim-treesitter', { 'tag': 'v0.8.5.2', 'do': ':TSUpdate' }")
-
 ; git blame the line under the cursor
-(vim.cmd "Plug 'rhysd/git-messenger.vim', { 'commit': '2e67899355f3f631aad6845925e4c2c13546444d' }")
-
-; automatically unhighlight when cursor moves
-(vim.cmd "Plug 'romainl/vim-cool', { 'commit': '27ad4ecf7532b750fadca9f36e1c5498fc225af2' }")
+; (vim.cmd "Plug 'rhysd/git-messenger.vim', { 'commit': '2e67899355f3f631aad6845925e4c2c13546444d' }")
 
 ; vim quickfix improvements
-(vim.cmd "Plug 'romainl/vim-qf', { 'commit': '65f115c350934517382ae45198a74232a9069c2a' }")
+; (vim.cmd "Plug 'romainl/vim-qf', { 'commit': '65f115c350934517382ae45198a74232a9069c2a' }")
 
 ; multiple cursors for quick and dirty renaming
-(vim.cmd "Plug 'terryma/vim-multiple-cursors', { 'commit': '6456718e1d30b42c04b920c5413ca44f68f08759' }")
-
-; swap the location of two selections
-(vim.cmd "Plug 'tommcdo/vim-exchange', { 'commit': '784d63083ad7d613aa96f00021cd0dfb126a781a' }")
+; (vim.cmd "Plug 'terryma/vim-multiple-cursors', { 'commit': '6456718e1d30b42c04b920c5413ca44f68f08759' }")
 
 ; case-preserving search-and-replace with e.g. %Subvert/Foo/Bar/g (foo -> bar, FOO -> BAR, etc)
 ; 22-11-01
-(vim.cmd "Plug 'tpope/vim-abolish', { 'commit': '3f0c8faadf0c5b68bcf40785c1c42e3731bfa522' }")
+; (vim.cmd "Plug 'tpope/vim-abolish', { 'commit': '3f0c8faadf0c5b68bcf40785c1c42e3731bfa522' }")
 
-; improved "ga"
-(vim.cmd "Plug 'tpope/vim-characterize', { 'commit': '885a00a3c21dd52ca8f2fd7d62850134934179d9' }")
+; (vim.cmd "Plug 'tpope/vim-fugitive', { 'commit': 'bb4f9e660b0934f70af693c56c5b8a4c322e7a1f' }")
 
-; quick (un-)commenting
-(vim.cmd "Plug 'tpope/vim-commentary', { 'commit': '627308e30639be3e2d5402808ce18690557e8292' }")
-
-(vim.cmd "Plug 'tpope/vim-fugitive', { 'commit': 'bb4f9e660b0934f70af693c56c5b8a4c322e7a1f' }")
-
-; make "." repeat more things out of the box
-(vim.cmd "Plug 'tpope/vim-repeat', { 'commit': '24afe922e6a05891756ecf331f39a1f6743d3d5a' }")
-
-; some surround helpers
-(vim.cmd "Plug 'tpope/vim-surround', { 'commit': 'aeb933272e72617f7c4d35e1f003be16836b948d' }")
-
-(vim.cmd "Plug 'https://git.sr.ht/~whynothugo/lsp_lines.nvim', { 'commit': 'dcff567b3a2d730f31b6da229ca3bb40640ec5a6' }")
-
-((. vim.fn "plug#end"))
+; ((. vim.fn "plug#end"))
 
 ; colorscheme settings
 (set vim.g.gruvbox_material_background "soft") ; soft, medium, hard
@@ -158,29 +252,13 @@
 
 (do
   (local plugin (require "indent_blankline"))
-  (plugin.setup
-    {
-    }
-  )
+  (plugin.setup {})
 )
 
 (do
   (local lsp_lines (require "lsp_lines"))
   (lsp_lines.setup)
 )
-
-; mhinz/vim-startify
-; (set vim.g.startify_custom_footer [ "   [e]  empty buffer" "   [q]  quit" ])
-; (set vim.g.startify_custom_header {})
-; (set vim.g.startify_custom_indices
-;   ["a" "s" "d" "f" "l" "g" "h" "w" "r" "u" "o" "p" "t" "y" "z"
-;    "x" "c" "v" "m" "" "." "/" "b" "n" "1" "2" "3" "4" "5" "6"])
-; (set vim.g.startify_enable_special 0)
-; (set vim.g.startify_enable_unsafe 1) ; faster startup
-; (set vim.g.startify_change_to_dir 0) ; don't cd to where file is
-; (set vim.g.startify_files_number 30)
-; (set vim.g.startify_lists [{ "type" "files" }])
-; (set vim.g.startify_relative_path 1)
 
 ; neovimhaskell/haskell-vim
 (set vim.g.haskell_enable_backpack 1)
@@ -296,7 +374,8 @@
 
 (include "fennel/mappings")
 
-; autocommands
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Autocommands
 
 (vim.api.nvim_create_augroup "mitchellwrosen" {})
 

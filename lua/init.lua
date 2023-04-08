@@ -318,15 +318,15 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _15_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:459")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:469")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
   capabilities = _15_
   local on_attach
   local function _16_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:471")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:471")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:481")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:481")
     local augroup_name = ("mitchellwrosenLsp" .. buf)
     vim.api.nvim_create_augroup(augroup_name, {})
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
@@ -413,8 +413,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = true, virtual_text = false})
   local function _30_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:629")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:629")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:639")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:639")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -433,7 +433,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:665")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:675")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

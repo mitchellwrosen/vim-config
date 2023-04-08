@@ -269,6 +269,16 @@
 (set vim.g.haskell_enable_typeroles 1)
 (set vim.g.haskell_indent_disable 1)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; lightline
+
+; TODO move configs from vim
+
+; why does running this manually work, but does nothing here? some dumb timing thing?
+; I didn't need this line at all before moving to lazy.nvim, I just randomly stumbled upon it while trying to debug
+; why lightline is busted... *SIGH*
+; ((. vim.fn "lightline#init"))
+
 ; nvim-telescope/telescope.nvim
 ; (let
 ;   [telescope (require "telescope")

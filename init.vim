@@ -137,48 +137,9 @@ function! LightlineLspStatus() abort
   return luaeval("require('init').lightline_status()")
 endfunction
 
-let g:lightline = {}
-let g:lightline.active = {}
-let g:lightline.active.left = [ [ 'mode', 'paste' ], [ 'branch' ] ]
-let g:lightline.active.right = [ [ 'lineinfo' ], [ 'percent' ], [ 'filetype' ], [ 'lsp' ] ]
-let g:lightline.colorscheme = 'gruvbox_material'
-let g:lightline.component_expand = {}
-let g:lightline.component_expand.buffers = 'lightline#bufferline#buffers'
-let g:lightline.component_function = {}
-let g:lightline.component_function.branch = 'FugitiveHead'
-let g:lightline.component_function.filename = 'LightlineFilename'
-let g:lightline.component_function.lsp = 'LightlineLspStatus'
-let g:lightline.component_type = {}
-let g:lightline.component_type.buffers = 'tabsel'
-let g:lightline.mode_map = {
-      \ 'c': ' ',
-      \ 'i': ' ',
-      \ 'n': '',
-      \ 'R': ' ',
-      \ 't': ' ',
-      \ 'v': ' ',
-      \ 'V': ' ',
-      \ "\<C-v>": ' ',
-      \ }
-let g:lightline.tab = {}
-let g:lightline.tab.active = [ 'tabnum', 'filename', 'modified' ]
-let g:lightline.tab.inactive = [ 'tabnum', 'filename', 'modified' ]
-let g:lightline.tabline = {}
-let g:lightline.tabline.left = [ [ 'buffers' ] ]
-let g:lightline.tabline.right = [ [ ] ]
 
 " [mengelbrecht/lightline-bufferline]
 let g:lightline#bufferline#modified = '+'
-
-" [multiple-cursors]
-let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_start_word_key = '<C-n>'
-" let g:multi_cursor_start_key = 'g<C-n>'
-" let g:multi_cursor_select_all_key = 'g<A-n>'
-let g:multi_cursor_next_key = '<C-n>'
-let g:multi_cursor_prev_key = '<C-p>'
-" let g:multi_cursor_skip_key = '<C-x>'
-let g:multi_cursor_quit_key = '<Esc>'
 
 sign define LspDiagnosticsErrorSign text=✗ texthl=LspDiagnosticsError linehl= numhl=
 sign define LspDiagnosticsWarningSign text=⚠ texthl=LspDiagnosticsWarning linehl= numhl=

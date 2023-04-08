@@ -54,6 +54,19 @@
       ; highlight colorcolumn in insert mode
       { :url "https://github.com/Bekaboo/deadcolumn.nvim"
         :commit "8140fd7cface9592a44b3151203fc6ca95ad9598"
+        :event "InsertEnter" ; defer loading of this plugin until insert mode is entered
+        :config
+          (fn [_ _]
+            (do
+              (local deadcolumn (require "deadcolumn"))
+              (deadcolumn.setup
+                { :blending { :threshold 100 } ; start showing color column here
+                  :scope "visible" ; show color column per all visible lines
+                  :warning { :alpha 0.1 :hlgroup [ "ErrorMsg" "background" ] }
+                }
+              )
+            )
+          )
       }
 
       ; open LSP diagnostics with :TroubleToggle
@@ -66,27 +79,91 @@
         :commit "cfde2b2fe0dafc5684780399961595357998f611"
       }
 
-      ; completion - 2022/01/09
-      { :url "https://github.com/hrsh7th/cmp-buffer"
-        :commit "f83773e2f433a923997c5faad7ea689ec24d1785"
-      }
-      { :url "https://github.com/hrsh7th/cmp-nvim-lsp"
-        :commit "b4251f0fca1daeb6db5d60a23ca81507acf858c2"
-      }
-      { :url "https://github.com/hrsh7th/cmp-vsnip"
-        :commit "0abfa1860f5e095a07c477da940cfcb0d273b700"
-      }
-      { :url "https://github.com/hrsh7th/vim-vsnip"
-        :commit "7fde9c0b6878a62bcc6d2d29f9a85a6616032f02"
-      }
+      ; autocompletion
       ; 22-04-30
       { :url "https://github.com/hrsh7th/nvim-cmp"
         :commit "f841fa6ced194aa930136a7671439e6bd4c51722"
+        ; don't load these plugins until this one is loaded
+        ; todo add cmp-path?
+        :dependencies
+          [
+            { :url "https://github.com/hrsh7th/cmp-nvim-lsp"
+              :commit "b4251f0fca1daeb6db5d60a23ca81507acf858c2"
+            }
+            { :url "https://github.com/hrsh7th/cmp-buffer"
+              :commit "f83773e2f433a923997c5faad7ea689ec24d1785"
+            }
+          ]
+        :event "InsertEnter" ; defer loading of this plugin until insert mode is entered
+        :config
+          (fn [_ _]
+            (do
+              (local cmp (require "cmp"))
+              (cmp.setup
+                { :mapping
+                    { "<CR>" (cmp.mapping.confirm { "select" false })
+                      "<Tab>" (cmp.mapping.select_next_item)
+                    }
+                  :sources
+                    (cmp.config.sources
+                      [ {:name "nvim_lsp"}
+                        {:name "buffer"}
+                      ]
+                    )
+                }
+              )
+            )
+          )
       }
 
       ; statusline
       { :url "https://github.com/itchyny/lightline.vim"
         :commit "a29b8331e1bb36b09bafa30c3aa77e89cdd832b2"
+        :config
+          (fn [_ _]
+            (do
+              (set vim.g.lightline
+                { :active
+                    { :left [ [ "mode" "paste" ] [ "branch" ] ]
+                      :right [ [ "lineinfo" ] [ "percent" ] [ "filetype" ] [ "lsp" ] ]
+                    }
+                  :colorscheme "gruvbox_material"
+                  :component_expand
+                    { :buffers "lightline#bufferline#buffers"
+                    }
+                  :component_function
+                    { :branch "FugitiveHead"
+                      :filename "LightlineFilename"
+                      :lsp "LightlineLspStatus"
+                    }
+                  :component_type
+                    { :buffers "tabsel"
+                    }
+                  :mode_map
+                    { :c "   "
+                      :i "   "
+                      :n ""
+                      :R "   "
+                      :t "   "
+                      :v "   "
+                      :V "   "
+                      ; FIXME ugh, can't figure out the fucking syntax for Ctrl+V. in vimshit it's "\<C-v>"
+                      ; Nothing fucking works not even the weird string "\22" that I got from painstakingly reading
+                      ; docs and discovering vim.api.nvim_replace_termcodes("<C-v>", true, true, true)
+                      "\22" "   "
+                    }
+                  :tab
+                    { :active [ "tabnum" "filename" "modified" ]
+                      :inactive [ "tabnum" "filename" "modified" ]
+                    }
+                  :tabline
+                    { :left [ [ "buffers" ] ]
+                      :right [ [ ] ]
+                    }
+                }
+              )
+            )
+          )
       }
 
       ; fuzzy search source code, files, etc
@@ -106,6 +183,13 @@
       ; Show markers every 2 columns of leading whitespace
       { :url "https://github.com/lukas-reineke/indent-blankline.nvim"
         :tag "v2.20.4"
+        :config
+          (fn [_ _]
+            (do
+              (local plugin (require "indent_blankline"))
+              (plugin.setup { :show_current_context true })
+            )
+          )
       }
 
       { :url "https://github.com/mengelbrecht/lightline-bufferline"
@@ -129,9 +213,19 @@
       }
 
       ; treesitter
-      ; 'do': ':TSUpdate'
       { :url "https://github.com/nvim-treesitter/nvim-treesitter"
         :tag "v0.8.5.2"
+        :build ":TSUpdate"
+        :config
+          (fn [_ _]
+            (do
+              (local treesitter (require "nvim-treesitter.configs"))
+              (treesitter.setup
+                { :highlight { :enable true }
+                }
+              )
+            )
+          )
       }
 
       ; automatically unhighlight when cursor moves
@@ -142,6 +236,8 @@
       ; nice low-contrast fork of gruvbox color scheme
       { :url "https://github.com/sainnhe/gruvbox-material"
         :commit "a6c5f652788b36c6ff2a0fdbefa271cb46f8f5e7"
+        ; the lazy.nvim readme recommends colorscheme plugins load first
+        :priority 1000
       }
 
       ; swap the location of two selections
@@ -162,16 +258,25 @@
       ; make "." repeat more things out of the box
       { :url "https://github.com/tpope/vim-repeat"
         :commit "24afe922e6a05891756ecf331f39a1f6743d3d5a"
+        :event "VeryLazy" ; defer loading until way after UI
       }
 
       ; some surround helpers
       { :url "https://github.com/tpope/vim-surround"
         :commit "aeb933272e72617f7c4d35e1f003be16836b948d"
+        :event "VeryLazy" ; defer loading until way after UI
       }
 
       ; show lsp error under cursor in virtual text block
       { :url "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
         :commit "dcff567b3a2d730f31b6da229ca3bb40640ec5a6"
+        :config
+          (fn [_ _]
+            (do
+              (local lsp_lines (require "lsp_lines"))
+              (lsp_lines.setup)
+            )
+          )
       }
     ]
   )
@@ -204,20 +309,9 @@
 ; colorscheme settings
 (set vim.g.gruvbox_material_background "soft") ; soft, medium, hard
 (set vim.g.gruvbox_material_better_performance 1) ; what
-(set vim.g.gruvbox_material_enable_bold 1)
+; (set vim.g.gruvbox_material_enable_bold 1) ; this makes functions bold, which is kinda weird
 (set vim.g.gruvbox_material_enable_italic 1)
 (vim.cmd "colorscheme gruvbox-material")
-
-; Bekaboo/deadcolumn.nvim
-(do
-  (local deadcolumn (require "deadcolumn"))
-  (deadcolumn.setup
-    { :blending { :threshold 100 } ; start showing color column here
-      :scope "visible" ; show color column per all visible lines
-      :warning { :alpha 0.1 :hlgroup [ "ErrorMsg" "background" ] }
-    }
-  )
-)
 
 ; folke/trouble.nvim
 (let
@@ -229,35 +323,6 @@
     :icons false
     :position "right"
   })
-)
-
-; completion - 2022/01/09
-(do
-  (local cmp (require "cmp"))
-  (cmp.setup {
-    :mapping {
-      "<CR>" (cmp.mapping.confirm { "select" false })
-      "<Tab>" (cmp.mapping.select_next_item)
-    }
-    :snippet {
-      :expand (fn [args] ((. vim.fn "vsnip#anonymous") args.body))
-    }
-    :sources
-      (cmp.config.sources [
-        {:name "nvim_lsp"}
-        {:name "buffer"}
-      ])
-  })
-)
-
-(do
-  (local plugin (require "indent_blankline"))
-  (plugin.setup {})
-)
-
-(do
-  (local lsp_lines (require "lsp_lines"))
-  (lsp_lines.setup)
 )
 
 ; neovimhaskell/haskell-vim
@@ -301,15 +366,6 @@
 ;   })
 ; )
 
-; nvim-treesitter/nvim-treesitter
-(do
-  (local treesitter (require "nvim-treesitter.configs"))
-  (treesitter.setup
-    { :highlight { :enable true }
-    }
-  )
-)
-
 ; rhysd/git-messenger.vim
 (set vim.g.git_messenger_always_into_popup true)
 (set vim.g.git_messenger_extra_blame_args "-w")
@@ -336,7 +392,9 @@
 (set vim.g.surround_no_mappings 1) ; don't let surround map anything
 
 (set vim.o.autowriteall true)
-(set vim.o.cmdheight 0) ; don't waste a line on command
+; this would be nice, but unsuccessful search prompts to press enter
+; https://github.com/neovim/neovim/issues/20380
+; (set vim.o.cmdheight 0) ; don't waste a line on command
 (set vim.o.hidden true) ; don't abandon out-of-sight buffers
 (set vim.o.ignorecase true) ; case-insensitive searching
 (set vim.o.lazyredraw true) ; don't draw during e.g. applying a macro

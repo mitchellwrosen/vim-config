@@ -336,6 +336,7 @@
 (set vim.g.surround_no_mappings 1) ; don't let surround map anything
 
 (set vim.o.autowriteall true)
+(set vim.o.cmdheight 0) ; don't waste a line on command
 (set vim.o.hidden true) ; don't abandon out-of-sight buffers
 (set vim.o.ignorecase true) ; case-insensitive searching
 (set vim.o.lazyredraw true) ; don't draw during e.g. applying a macro

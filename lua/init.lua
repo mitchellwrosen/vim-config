@@ -211,6 +211,7 @@ vim.api.nvim_set_keymap("n", "-", "m`<Plug>CommentaryLine``", {})
 vim.api.nvim_set_keymap("v", "-", "<Plug>Commentary", {})
 vim.g.surround_no_mappings = 1
 vim.o.autowriteall = true
+vim.o.cmdheight = 0
 vim.o.hidden = true
 vim.o.ignorecase = true
 vim.o.lazyredraw = true
@@ -318,15 +319,15 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _15_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:469")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:470")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
   capabilities = _15_
   local on_attach
   local function _16_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:481")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:481")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:482")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:482")
     local augroup_name = ("mitchellwrosenLsp" .. buf)
     vim.api.nvim_create_augroup(augroup_name, {})
     vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
@@ -413,8 +414,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = true, virtual_text = false})
   local function _30_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:639")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:639")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:640")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:640")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -433,7 +434,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:675")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:676")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

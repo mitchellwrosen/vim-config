@@ -26,19 +26,6 @@
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Some ggandor/lightspeed.nvim mappings. These need to come before the plugin is loaded, because that's how the plugin
-;; documentation says you are meant to override the defaults.
-
-(map [ "o" ] "s" "<Plug>Lightspeed_s" {}) ; default = z (why?)
-(map [ "o" ] "S" "<Plug>Lightspeed_S" {}) ; default = Z (why?)
-; Workaround (documented in lightspeed readme) for the fact that when recording macros, we want normal fFtT, not
-; lightspeed's fancy fFtT.
-(map [ "n" "o" "v" ] "f" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_f' : 'f'" { :expr true })
-(map [ "n" "o" "v" ] "F" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_F' : 'F'" { :expr true })
-(map [ "n" "o" "v" ] "t" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_t' : 't'" { :expr true })
-(map [ "n" "o" "v" ] "T" "reg_recording() . reg_executing() == '' ? '<Plug>Lightspeed_T' : 'T'" { :expr true })
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Plugins
 
 (do
@@ -74,9 +61,17 @@
         :commit "20469be985143d024c460d95326ebeff9971d714"
       }
 
-      ; move to a specific character from far away
-      { :url "https://github.com/ggandor/lightspeed.nvim"
-        :commit "cfde2b2fe0dafc5684780399961595357998f611"
+      ; use 's' to move far away
+      { :url "https://github.com/ggandor/leap.nvim"
+        :commit "f74473d23ebf60957e0db3ff8172349a82e5a442"
+        :event "VeryLazy" ; defer loading until way after UI
+        :config
+          (fn [_ _]
+            (do
+              (local leap (require "leap"))
+              (leap.add_default_mappings)
+            )
+          )
       }
 
       ; autocompletion

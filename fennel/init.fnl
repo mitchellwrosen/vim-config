@@ -507,40 +507,6 @@
   }
 )
 
-(vim.api.nvim_create_autocmd
-  ["LspAttach"]
-  { :callback
-      (fn [args]
-        (do
-          (local buf args.buf)
-          ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
-          ; gets deleted and re-opend
-          (local augroup-name (.. "mitchellwrosenLsp" buf))
-          ; (vim.api.nvim_create_augroup augroup-name {})
-
-          (vim.keymap.set "n" "<Space>a" vim.lsp.buf.code_action { :buffer buf :silent true })
-          (vim.keymap.set "n" "gd" vim.lsp.buf.definition { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Space>d" vim.lsp.buf.format { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Space>r" vim.lsp.buf.references { :buffer buf :silent true })
-          (vim.keymap.set "n" "gt" vim.lsp.buf.type_definition { :buffer buf :silent true })
-          ; float=false here means don't call vim.diagnostic.open_float once we land
-          (vim.keymap.set "n" "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
-        )
-      )
-    :group "mitchellwrosen"
-  }
-)
-
-; Start a terminal in insert mode
-(vim.api.nvim_create_autocmd
-  "TermOpen"
-  { :callback (fn [] (vim.cmd "startinsert"))
-    :group "mitchellwrosen"
-  }
-)
-
 ; try to extract the haskell type signature from the input string, which is assumed to look like:
 ;
 ; ```haskell
@@ -590,6 +556,89 @@
   )
 )
 
+(vim.api.nvim_create_autocmd
+  "LspAttach"
+  { :callback
+      (fn [args]
+        (do
+          (local buf args.buf)
+          (local client (vim.lsp.get_client_by_id args.data.client_id))
+
+          ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
+          ; gets deleted and re-opend
+          (local augroup-name (.. "mitchellwrosenLsp" buf))
+          (vim.api.nvim_create_augroup augroup-name {})
+
+          (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
+          (vim.cmd "highlight! link LspReferenceText LspReference")
+          (vim.cmd "highlight! link LspReferenceRead LspReference")
+          (vim.cmd "highlight! link LspReferenceWrite LspReference")
+
+          (vim.keymap.set "n" "<Space>a" vim.lsp.buf.code_action { :buffer buf :silent true })
+          (vim.keymap.set "n" "gd" vim.lsp.buf.definition { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Space>d" vim.lsp.buf.format { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Space>i" vim.lsp.buf.incoming_calls { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Space>u" vim.lsp.buf.outgoing_calls { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Space>r" vim.lsp.buf.references { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Space>e" vim.lsp.buf.rename { :buffer buf :silent true })
+          (vim.keymap.set "n" "gt" vim.lsp.buf.type_definition { :buffer buf :silent true })
+          ; float=false here means don't call vim.diagnostic.open_float once we land
+          (vim.keymap.set "n" "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
+          (vim.keymap.set "n" "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
+
+          (vim.api.nvim_create_autocmd
+            "CursorMoved"
+            {
+              :buffer buf
+              :callback
+                (fn []
+                  (when (= (. (vim.api.nvim_get_mode) :mode) "n")
+                    (local position (vim.lsp.util.make_position_params))
+                    ; highlight other occurrences of the thing under the cursor
+                    ; the colors are determined by LspReferenceText, etc. highlight groups
+                    (when client.server_capabilities.documentHighlightProvider
+                      (vim.lsp.buf.clear_references)
+                      (vim.lsp.buf.document_highlight)
+                    )
+                    ; try to put a type sig in the virtual text area
+                    (vim.lsp.buf_request 0 "textDocument/hover" position
+                      (fn [_err result _ctx _config]
+                        (local contents (?. result :contents))
+                        (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
+                          (local namespace (vim.api.nvim_create_namespace "hover"))
+                          (local line (extract-haskell-typesig-from-markdown contents.value))
+                          (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
+                          (when line
+                            (vim.api.nvim_buf_set_virtual_text
+                              0
+                              namespace
+                              position.position.line
+                              [ [ (.. "∙ " line) "Comment" ] ] {}
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              :group augroup-name
+            }
+          )
+        )
+      )
+    :group "mitchellwrosen"
+  }
+)
+
+; Start a terminal in insert mode
+(vim.api.nvim_create_autocmd
+  "TermOpen"
+  { :callback (fn [] (vim.cmd "startinsert"))
+    :group "mitchellwrosen"
+  }
+)
+
 (do
   (local lsp (require "lspconfig"))
   (local status (require "lsp-status"))
@@ -610,73 +659,14 @@
     (lambda [client buf]
       ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
       ; gets deleted and re-opend
-      (local augroup-name (.. "mitchellwrosenLsp" buf))
-      (vim.api.nvim_create_augroup augroup-name {})
+      ; (local augroup-name (.. "mitchellwrosenLsp" buf))
 
       ; Format on save and on leaving insert mode
       ; commented out temporarily because it's a little bit slow on the unison codebase
       ; (autocmd augroup-name ["BufWritePre" "InsertLeave"] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
 
-      (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
-      (vim.cmd "highlight! link LspReferenceText LspReference")
-      (vim.cmd "highlight! link LspReferenceRead LspReference")
-      (vim.cmd "highlight! link LspReferenceWrite LspReference")
-
       ; keymaps were here
       (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
-
-      ; filter : string -> string
-      ;
-      ; Per the current buffer's filetype, return a function that mutates a line to set as virtual text, where
-      ; the empty string means "don't annotate".
-      ;
-      ; For example, in Haskell we only care about lines that contain "::" (type signatures), because
-      ; otherwise we'd end up annotating types with their own names on hover (for whatever reason,
-      ; haskell-language-server currently returns "Bool" as the first line of a hover request, rather than
-      ; something like "Bool :: Type")
-      ; (local filter
-      ;   (match vim.bo.filetype
-      ;     "haskell"
-      ;       (fn [line] (if (= -1 (vim.fn.match line "::")) "" line))
-      ;     _ (fn [line] line)))
-
-      (vim.api.nvim_create_autocmd
-        ["CursorMoved"]
-        {
-          :buffer buf
-          :callback
-            (fn []
-              (when (= (. (vim.api.nvim_get_mode) :mode) "n")
-                (local position (vim.lsp.util.make_position_params))
-                ; highlight other occurrences of the thing under the cursor
-                ; the colors are determined by LspReferenceText, etc. highlight groups
-                (when client.server_capabilities.documentHighlightProvider
-                  (vim.lsp.buf.clear_references)
-                  (vim.lsp.buf.document_highlight))
-                ; try to put a type sig in the virtual text area
-                (vim.lsp.buf_request 0 "textDocument/hover" position
-                  (fn [_err result _ctx _config]
-                    (local contents (?. result :contents))
-                    (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
-                      (local namespace (vim.api.nvim_create_namespace "hover"))
-                      (local line (extract-haskell-typesig-from-markdown contents.value))
-                      (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
-                      (when line
-                        (vim.api.nvim_buf_set_virtual_text
-                          0
-                          namespace
-                          position.position.line
-                          [ [ (.. "∙ " line) "Comment" ] ] {}
-                        )
-                      )
-                    )
-                  )
-                )
-              )
-            )
-          :group augroup-name
-        }
-      )
     )
   )
 

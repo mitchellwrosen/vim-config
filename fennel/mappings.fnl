@@ -33,6 +33,9 @@
 ; Make Y yank to the end of line, similar to how C and D behave
 (map [ "n" ] "Y" "y$" { "noremap" true })
 
+; when pasting over visual selection, don't copy that visual selection to the default register
+(vim.keymap.set "v" "p" "\"0p")
+
 ; After visual mode delete/yank, leave cursor at the end of the highlight
 (map [ "v" ] "D" "d`>" { "noremap" true })
 (map [ "v" ] "Y" "y`>" { "noremap" true })

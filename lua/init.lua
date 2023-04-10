@@ -28,6 +28,7 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.keymap.set({"n", "o"}, "L", "$")
   vim.keymap.set("v", "L", "g_")
   vim.api.nvim_set_keymap("n", "Y", "y$", {noremap = true})
+  vim.keymap.set("v", "p", "\"0p")
   vim.api.nvim_set_keymap("v", "D", "d`>", {noremap = true})
   vim.api.nvim_set_keymap("v", "Y", "y`>", {noremap = true})
   vim.api.nvim_set_keymap("n", "gV", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {expr = true, noremap = true})

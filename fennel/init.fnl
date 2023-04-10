@@ -44,21 +44,14 @@
         :event "InsertEnter" ; defer loading of this plugin until insert mode is entered
         :config
           (fn [_ _]
-            (do
-              (local deadcolumn (require "deadcolumn"))
-              (deadcolumn.setup
-                { :blending { :threshold 100 } ; start showing color column here
-                  :scope "visible" ; show color column per all visible lines
-                  :warning { :alpha 0.1 :hlgroup [ "ErrorMsg" "background" ] }
-                }
-              )
+            (local deadcolumn (require "deadcolumn"))
+            (deadcolumn.setup
+              { :blending { :threshold 100 } ; start showing color column here
+                :scope "visible" ; show color column per all visible lines
+                :warning { :alpha 0.1 :hlgroup [ "ErrorMsg" "background" ] }
+              }
             )
           )
-      }
-
-      ; open LSP diagnostics with :TroubleToggle
-      { :url "https://github.com/folke/trouble.nvim"
-        :commit "20469be985143d024c460d95326ebeff9971d714"
       }
 
       ; use 's' to move far away
@@ -67,10 +60,8 @@
         :event "VeryLazy" ; defer loading until way after UI
         :config
           (fn [_ _]
-            (do
-              (local leap (require "leap"))
-              (leap.add_default_mappings)
-            )
+            (local leap (require "leap"))
+            (leap.add_default_mappings)
           )
       }
 
@@ -92,21 +83,19 @@
         :event "InsertEnter" ; defer loading of this plugin until insert mode is entered
         :config
           (fn [_ _]
-            (do
-              (local cmp (require "cmp"))
-              (cmp.setup
-                { :mapping
-                    { "<CR>" (cmp.mapping.confirm { "select" false })
-                      "<Tab>" (cmp.mapping.select_next_item)
-                    }
-                  :sources
-                    (cmp.config.sources
-                      [ {:name "nvim_lsp"}
-                        {:name "buffer"}
-                      ]
-                    )
-                }
-              )
+            (local cmp (require "cmp"))
+            (cmp.setup
+              { :mapping
+                  { "<CR>" (cmp.mapping.confirm { "select" false })
+                    "<Tab>" (cmp.mapping.select_next_item)
+                  }
+                :sources
+                  (cmp.config.sources
+                    [ {:name "nvim_lsp"}
+                      {:name "buffer"}
+                    ]
+                  )
+              }
             )
           )
       }
@@ -116,47 +105,45 @@
         :commit "a29b8331e1bb36b09bafa30c3aa77e89cdd832b2"
         :config
           (fn [_ _]
-            (do
-              (set vim.g.lightline
-                { :active
-                    { :left [ [ "mode" "paste" ] [ "branch" ] ]
-                      :right [ [ "lineinfo" ] [ "percent" ] [ "filetype" ] [ "lsp" ] ]
-                    }
-                  :colorscheme "gruvbox_material"
-                  :component_expand
-                    { :buffers "lightline#bufferline#buffers"
-                    }
-                  :component_function
-                    { :branch "FugitiveHead"
-                      :filename "LightlineFilename"
-                      :lsp "LightlineLspStatus"
-                    }
-                  :component_type
-                    { :buffers "tabsel"
-                    }
-                  :mode_map
-                    { :c "   "
-                      :i "   "
-                      :n ""
-                      :R "   "
-                      :t "   "
-                      :v "   "
-                      :V "   "
-                      ; FIXME ugh, can't figure out the fucking syntax for Ctrl+V. in vimshit it's "\<C-v>"
-                      ; Nothing fucking works not even the weird string "\22" that I got from painstakingly reading
-                      ; docs and discovering vim.api.nvim_replace_termcodes("<C-v>", true, true, true)
-                      "\22" "   "
-                    }
-                  :tab
-                    { :active [ "tabnum" "filename" "modified" ]
-                      :inactive [ "tabnum" "filename" "modified" ]
-                    }
-                  :tabline
-                    { :left [ [ "buffers" ] ]
-                      :right [ [ ] ]
-                    }
-                }
-              )
+            (set vim.g.lightline
+              { :active
+                  { :left [ [ "mode" "paste" ] [ "branch" ] ]
+                    :right [ [ "lineinfo" ] [ "percent" ] [ "filetype" ] [ "lsp" ] ]
+                  }
+                :colorscheme "gruvbox_material"
+                :component_expand
+                  { :buffers "lightline#bufferline#buffers"
+                  }
+                :component_function
+                  { :branch "FugitiveHead"
+                    :filename "LightlineFilename"
+                    :lsp "LightlineLspStatus"
+                  }
+                :component_type
+                  { :buffers "tabsel"
+                  }
+                :mode_map
+                  { :c "   "
+                    :i "   "
+                    :n ""
+                    :R "   "
+                    :t "   "
+                    :v "   "
+                    :V "   "
+                    ; FIXME ugh, can't figure out the fucking syntax for Ctrl+V. in vimshit it's "\<C-v>"
+                    ; Nothing fucking works not even the weird string "\22" that I got from painstakingly reading
+                    ; docs and discovering vim.api.nvim_replace_termcodes("<C-v>", true, true, true)
+                    "\22" "   "
+                  }
+                :tab
+                  { :active [ "tabnum" "filename" "modified" ]
+                    :inactive [ "tabnum" "filename" "modified" ]
+                  }
+                :tabline
+                  { :left [ [ "buffers" ] ]
+                    :right [ [ ] ]
+                  }
+              }
             )
           )
       }
@@ -180,10 +167,8 @@
         :tag "v2.20.4"
         :config
           (fn [_ _]
-            (do
-              (local plugin (require "indent_blankline"))
-              (plugin.setup { :show_current_context true })
-            )
+            (local plugin (require "indent_blankline"))
+            (plugin.setup { :show_current_context true })
           )
       }
 
@@ -213,12 +198,10 @@
         :build ":TSUpdate"
         :config
           (fn [_ _]
-            (do
-              (local treesitter (require "nvim-treesitter.configs"))
-              (treesitter.setup
-                { :highlight { :enable true }
-                }
-              )
+            (local treesitter (require "nvim-treesitter.configs"))
+            (treesitter.setup
+              { :highlight { :enable true }
+              }
             )
           )
       }
@@ -267,10 +250,8 @@
         :commit "dcff567b3a2d730f31b6da229ca3bb40640ec5a6"
         :config
           (fn [_ _]
-            (do
-              (local lsp_lines (require "lsp_lines"))
-              (lsp_lines.setup)
-            )
+            (local lsp_lines (require "lsp_lines"))
+            (lsp_lines.setup)
           )
       }
     ]
@@ -307,18 +288,6 @@
 ; (set vim.g.gruvbox_material_enable_bold 1) ; this makes functions bold, which is kinda weird
 (set vim.g.gruvbox_material_enable_italic 1)
 (vim.cmd "colorscheme gruvbox-material")
-
-; folke/trouble.nvim
-(let
-  [trouble (require "trouble")]
-  (trouble.setup {
-    ; :auto_open true
-    ; :auto_close true
-    ; don't use some fancy icons that require a separate plugin
-    :icons false
-    :position "right"
-  })
-)
 
 ; neovimhaskell/haskell-vim
 (set vim.g.haskell_enable_backpack 1)
@@ -563,72 +532,70 @@
   "LspAttach"
   { :callback
       (fn [args]
-        (do
-          (local buf args.buf)
-          (local client (vim.lsp.get_client_by_id args.data.client_id))
+        (local buf args.buf)
+        (local client (vim.lsp.get_client_by_id args.data.client_id))
 
-          ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
-          ; gets deleted and re-opend
-          (local augroup-name (.. "mitchellwrosenLsp" buf))
-          (vim.api.nvim_create_augroup augroup-name {})
+        ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
+        ; gets deleted and re-opend
+        (local augroup-name (.. "mitchellwrosenLsp" buf))
+        (vim.api.nvim_create_augroup augroup-name {})
 
-          (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
-          (vim.cmd "highlight! link LspReferenceText LspReference")
-          (vim.cmd "highlight! link LspReferenceRead LspReference")
-          (vim.cmd "highlight! link LspReferenceWrite LspReference")
+        (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
+        (vim.cmd "highlight! link LspReferenceText LspReference")
+        (vim.cmd "highlight! link LspReferenceRead LspReference")
+        (vim.cmd "highlight! link LspReferenceWrite LspReference")
 
-          (vim.keymap.set "n" "<Space>a" vim.lsp.buf.code_action { :buffer buf :silent true })
-          (vim.keymap.set "n" "gd" vim.lsp.buf.definition { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Space>d" vim.lsp.buf.format { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Space>i" vim.lsp.buf.incoming_calls { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Space>u" vim.lsp.buf.outgoing_calls { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Space>r" vim.lsp.buf.references { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Space>e" vim.lsp.buf.rename { :buffer buf :silent true })
-          (vim.keymap.set "n" "gt" vim.lsp.buf.type_definition { :buffer buf :silent true })
-          ; float=false here means don't call vim.diagnostic.open_float once we land
-          (vim.keymap.set "n" "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
-          (vim.keymap.set "n" "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
+        (vim.keymap.set "n" "<Space>a" vim.lsp.buf.code_action { :buffer buf :silent true })
+        (vim.keymap.set "n" "gd" vim.lsp.buf.definition { :buffer buf :silent true })
+        (vim.keymap.set "n" "<Space>d" vim.lsp.buf.format { :buffer buf :silent true })
+        (vim.keymap.set "n" "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
+        (vim.keymap.set "n" "<Space>i" vim.lsp.buf.incoming_calls { :buffer buf :silent true })
+        (vim.keymap.set "n" "<Space>u" vim.lsp.buf.outgoing_calls { :buffer buf :silent true })
+        (vim.keymap.set "n" "<Space>r" vim.lsp.buf.references { :buffer buf :silent true })
+        (vim.keymap.set "n" "<Space>e" vim.lsp.buf.rename { :buffer buf :silent true })
+        (vim.keymap.set "n" "gt" vim.lsp.buf.type_definition { :buffer buf :silent true })
+        ; float=false here means don't call vim.diagnostic.open_float once we land
+        (vim.keymap.set "n" "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
+        (vim.keymap.set "n" "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
 
-          (vim.api.nvim_create_autocmd
-            "CursorMoved"
-            {
-              :buffer buf
-              :callback
-                (fn []
-                  (when (= (. (vim.api.nvim_get_mode) :mode) "n")
-                    (local position (vim.lsp.util.make_position_params))
-                    ; highlight other occurrences of the thing under the cursor
-                    ; the colors are determined by LspReferenceText, etc. highlight groups
-                    (when client.server_capabilities.documentHighlightProvider
-                      (vim.lsp.buf.clear_references)
-                      (vim.lsp.buf.document_highlight)
-                    )
-                    ; try to put a type sig in the virtual text area
-                    (vim.lsp.buf_request 0 "textDocument/hover" position
-                      (fn [_err result _ctx _config]
-                        (local contents (?. result :contents))
-                        (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
-                          (local line (extract-haskell-typesig-from-markdown contents.value))
-                          (vim.api.nvim_buf_clear_namespace 0 hover-namespace 0 -1)
-                          (when line
-                            (vim.api.nvim_buf_set_extmark
-                              0 ; current buffer
-                              hover-namespace
-                              position.position.line
-                              1 ; column (ignored unless we set :virt_text_pos to "overlay" below
-                              { :virt_text [ [ (.. "∙ " line) "Comment" ] ]
-                              }
-                            )
+        (vim.api.nvim_create_autocmd
+          "CursorMoved"
+          {
+            :buffer buf
+            :callback
+              (fn []
+                (when (= (. (vim.api.nvim_get_mode) :mode) "n")
+                  (local position (vim.lsp.util.make_position_params))
+                  ; highlight other occurrences of the thing under the cursor
+                  ; the colors are determined by LspReferenceText, etc. highlight groups
+                  (when client.server_capabilities.documentHighlightProvider
+                    (vim.lsp.buf.clear_references)
+                    (vim.lsp.buf.document_highlight)
+                  )
+                  ; try to put a type sig in the virtual text area
+                  (vim.lsp.buf_request 0 "textDocument/hover" position
+                    (fn [_err result _ctx _config]
+                      (local contents (?. result :contents))
+                      (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
+                        (local line (extract-haskell-typesig-from-markdown contents.value))
+                        (vim.api.nvim_buf_clear_namespace 0 hover-namespace 0 -1)
+                        (when line
+                          (vim.api.nvim_buf_set_extmark
+                            0 ; current buffer
+                            hover-namespace
+                            position.position.line
+                            1 ; column (ignored unless we set :virt_text_pos to "overlay" below
+                            { :virt_text [ [ (.. "∙ " line) "Comment" ] ]
+                            }
                           )
                         )
                       )
                     )
                   )
                 )
-              :group augroup-name
-            }
-          )
+              )
+            :group augroup-name
+          }
         )
       )
     :group "mitchellwrosen"

@@ -17,7 +17,6 @@
   "nvim-cmp": { "branch": "main", "commit": "f841fa6ced194aa930136a7671439e6bd4c51722" },
   "nvim-lsp": { "branch": "master", "commit": "2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491" },
   "nvim-treesitter": { "branch": "master", "commit": "b401b7423d18c78371c5ff1a5f8d3c14292b2047" },
-  "trouble.nvim": { "branch": "main", "commit": "20469be985143d024c460d95326ebeff9971d714" },
   "vim-characterize": { "branch": "master", "commit": "885a00a3c21dd52ca8f2fd7d62850134934179d9" },
   "vim-commentary": { "branch": "master", "commit": "627308e30639be3e2d5402808ce18690557e8292" },
   "vim-cool": { "branch": "master", "commit": "27ad4ecf7532b750fadca9f36e1c5498fc225af2" },

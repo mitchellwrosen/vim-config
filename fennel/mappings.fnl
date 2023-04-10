@@ -69,12 +69,12 @@
 ; Disable annoying command search 'q:' that I never use
 ; (nnoremap "q:" "<Nop>")
 
-; Follow >>/<< shifted text around with the cursor
-(map [ "n" ] ">>" "<Plug>MyNmapLl" {})
-(map [ "n" ] "<<" "<Plug>MyNmapHh" {})
+; Follow >/< shifted text around with the cursor
 ; Get it to repeat with '.'
-(map [ "n" ] "<Plug>MyNmapLl" ">>ll:call repeat#set(\"\\<Plug>MyNmapLl\")<CR>" { "noremap" true "silent" true })
-(map [ "n" ] "<Plug>MyNmapHh" "<<hh:call repeat#set(\"\\<Plug>MyNmapHh\")<CR>" { "noremap" true "silent" true })
+(vim.keymap.set "n" ">" "<Plug>MyNmapLl" { :silent true })
+(vim.keymap.set "n" "<" "<Plug>MyNmapHh" { :silent true })
+(vim.keymap.set "n" "<Plug>MyNmapLl" ">>ll:call repeat#set(\"\\<Plug>MyNmapLl\")<CR>" { :silent true })
+(vim.keymap.set "n" "<Plug>MyNmapHh" "<<hh:call repeat#set(\"\\<Plug>MyNmapHh\")<CR>" { :silent true })
 
 ; [M]erge to join (since J moves down)
 (vim.keymap.set "n" "M" "m`J``")

@@ -85,7 +85,8 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.api.nvim_set_keymap("c", "<C-h>", "<Left>", {noremap = true})
   vim.api.nvim_set_keymap("c", "<C-j>", "<Down>", {noremap = true})
   vim.api.nvim_set_keymap("c", "<C-k>", "<Up>", {noremap = true})
-  return vim.api.nvim_set_keymap("c", "<C-l>", "<Right>", {noremap = true})
+  vim.api.nvim_set_keymap("c", "<C-l>", "<Right>", {noremap = true})
+  return vim.keymap.set("n", "~", "mzlblgueh~`z", {silent = true})
 end
 package.preload["fennel/nvim"] = package.preload["fennel/nvim"] or function(...)
   local mode = {command = "command", insert = "insert", normal = "normal", ["operator-pending"] = "operator-pending", visual = "visual"}

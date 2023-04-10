@@ -583,6 +583,8 @@
             :group augroup-name
           }
         )
+
+        (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
       )
     :group "mitchellwrosen"
   }
@@ -636,21 +638,6 @@
     )
   )
 
-  (local on-attach
-    (lambda [client buf]
-      ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
-      ; gets deleted and re-opend
-      ; (local augroup-name (.. "mitchellwrosenLsp" buf))
-
-      ; Format on save and on leaving insert mode
-      ; commented out temporarily because it's a little bit slow on the unison codebase
-      ; (autocmd augroup-name ["BufWritePre" "InsertLeave"] "<buffer>" (fn [] (vim.lsp.buf.formatting_sync nil 1000)))
-
-      ; keymaps were here
-      (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
-    )
-  )
-
   ; Uh, just kind of following https://github.com/nvim-lua/lsp-status.nvim here...
   (status.register_progress)
 
@@ -677,8 +664,9 @@
         (lambda [client buf]
           ; https://github.com/elm-tooling/elm-language-server/issues/503
           (when client.config.flags (set client.config.flags.allow_incremental_sync true))
-          (on-attach client buf))
-    })
+        )
+    }
+  )
 
   (lsp.hls.setup
     { :capabilities (capabilities lsp.hls)
@@ -689,17 +677,18 @@
           :formattingProvider "ormolu"
           :plugin {
             :hlint { :globalOn false }
-            :stan { "globalOn" false }
+            ; FUCK stan. all my homies HATE stan
+            :stan { :globalOn false }
           }
           ; max number of completions sent to client at one time
           ; :maxCompletions 20
         }
       }
-      :on_attach on-attach })
+    }
+  )
 
   (lsp.sumneko_lua.setup
     { :capabilities (capabilities lsp.sumneko_lua)
-      :on_attach on-attach
     }
   )
 )

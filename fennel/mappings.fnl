@@ -24,13 +24,11 @@
 (map [ "n" ] "k" "gk" { "noremap" true })
 
 ; HJKL to move around the file.
-(map [ "n" ] "J" "5j" {})
-(map [ "n" ] "K" "5k" {})
-(map [ "v" ] "J" "5j" { "noremap" true })
-(map [ "v" ] "K" "5k" { "noremap" true })
-(map [ "n" "o" "v" ] "H" "^" { "noremap" true })
-(map [ "n" "o" ] "L" "$" { "noremap" true })
-(map [ "v" ] "L" "g_" { "noremap" true })
+(vim.keymap.set ["n" "v"] "J" "6j" { :remap true })
+(vim.keymap.set ["n" "v"] "K" "6k" { :remap true })
+(vim.keymap.set [ "n" "o" "v" ] "H" "^")
+(vim.keymap.set [ "n" "o" ] "L" "$")
+(vim.keymap.set "v" "L" "g_")
 
 ; Make Y yank to the end of line, similar to how C and D behave
 (map [ "n" ] "Y" "y$" { "noremap" true })
@@ -62,12 +60,6 @@
 ; Disable annoying command search 'q:' that I never use
 ; (nnoremap "q:" "<Nop>")
 
-; ,q to record a macro
-(map [ "n" ] ",q" "q" { "noremap" true })
-
-; Q to apply macro recorded into q
-(map [ "n" ] "Q" "@q" { "noremap" true })
-
 ; Follow >>/<< shifted text around with the cursor
 (map [ "n" ] ">>" "<Plug>MyNmapLl" {})
 (map [ "n" ] "<<" "<Plug>MyNmapHh" {})
@@ -75,8 +67,8 @@
 (map [ "n" ] "<Plug>MyNmapLl" ">>ll:call repeat#set(\"\\<Plug>MyNmapLl\")<CR>" { "noremap" true "silent" true })
 (map [ "n" ] "<Plug>MyNmapHh" "<<hh:call repeat#set(\"\\<Plug>MyNmapHh\")<CR>" { "noremap" true "silent" true })
 
-; ,j to join (since J moves down)
-(map [ "n" ] ",j" "m`J``" { "noremap" true })
+; [M]erge to join (since J moves down)
+(vim.keymap.set "n" "M" "m`J``")
 
 ; inner/around line text objects
 (map [ "v" ] "al" "$o0" { "noremap" true "silent" true })

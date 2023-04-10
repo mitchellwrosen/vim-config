@@ -401,7 +401,7 @@
 (set vim.o.listchars "tab:> ,trail:·,nbsp:+") ; trailing whitespace markers
 (set vim.o.mouse "") ; disable mouse
 (set vim.o.report 0) ; always repeat the number of lines changed
-(set vim.o.scrolloff 10) ; start scrolling before the cursor reaches the edge
+(set vim.o.scrolloff 15) ; start scrolling before the cursor reaches the edge
 (set vim.o.shiftround true) ; shift to multiple of shiftwidth
 (set vim.o.shortmess "filnxtToOFIc")
 (set vim.o.showmode false) ; don't show mode, since lightline handle that
@@ -634,6 +634,21 @@
     :group "mitchellwrosen"
   }
 )
+
+; record macro with 1, replay macro with 9
+(vim.api.nvim_create_autocmd
+  [ "RecordingLeave" "VimEnter" ]
+  { :callback (fn [] (vim.keymap.set "n" "1" "qz"))
+    :group "mitchellwrosen"
+  }
+)
+(vim.api.nvim_create_autocmd
+  "RecordingEnter"
+  { :callback (fn [] (vim.keymap.set "n" "1" "q"))
+    :group "mitchellwrosen"
+  }
+)
+(vim.keymap.set "n" "9" "@z")
 
 ; Start a terminal in insert mode
 (vim.api.nvim_create_autocmd

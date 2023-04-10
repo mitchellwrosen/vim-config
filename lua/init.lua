@@ -22,20 +22,11 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.api.nvim_set_keymap("n", "<BS>", "<C-^>", {noremap = true})
   vim.api.nvim_set_keymap("n", "j", "gj", {noremap = true})
   vim.api.nvim_set_keymap("n", "k", "gk", {noremap = true})
-  vim.api.nvim_set_keymap("n", "J", "5j", {})
-  vim.api.nvim_set_keymap("n", "K", "5k", {})
-  vim.api.nvim_set_keymap("v", "J", "5j", {noremap = true})
-  vim.api.nvim_set_keymap("v", "K", "5k", {noremap = true})
-  do
-    vim.api.nvim_set_keymap("n", "H", "^", {noremap = true})
-    vim.api.nvim_set_keymap("o", "H", "^", {noremap = true})
-    vim.api.nvim_set_keymap("v", "H", "^", {noremap = true})
-  end
-  do
-    vim.api.nvim_set_keymap("n", "L", "$", {noremap = true})
-    vim.api.nvim_set_keymap("o", "L", "$", {noremap = true})
-  end
-  vim.api.nvim_set_keymap("v", "L", "g_", {noremap = true})
+  vim.keymap.set({"n", "v"}, "J", "6j", {remap = true})
+  vim.keymap.set({"n", "v"}, "K", "6k", {remap = true})
+  vim.keymap.set({"n", "o", "v"}, "H", "^")
+  vim.keymap.set({"n", "o"}, "L", "$")
+  vim.keymap.set("v", "L", "g_")
   vim.api.nvim_set_keymap("n", "Y", "y$", {noremap = true})
   vim.api.nvim_set_keymap("v", "D", "d`>", {noremap = true})
   vim.api.nvim_set_keymap("v", "Y", "y`>", {noremap = true})
@@ -51,13 +42,11 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
     vim.api.nvim_set_keymap("v", "N", "Nzz", {noremap = true})
   end
   vim.api.nvim_set_keymap("n", "q", "len(getbufinfo({'buflisted': 1})) ==? 1 ? \":q\\<CR>\" : \":bd\\<CR>\"", {expr = true, noremap = true, silent = true})
-  vim.api.nvim_set_keymap("n", ",q", "q", {noremap = true})
-  vim.api.nvim_set_keymap("n", "Q", "@q", {noremap = true})
   vim.api.nvim_set_keymap("n", ">>", "<Plug>MyNmapLl", {})
   vim.api.nvim_set_keymap("n", "<<", "<Plug>MyNmapHh", {})
   vim.api.nvim_set_keymap("n", "<Plug>MyNmapLl", ">>ll:call repeat#set(\"\\<Plug>MyNmapLl\")<CR>", {noremap = true, silent = true})
   vim.api.nvim_set_keymap("n", "<Plug>MyNmapHh", "<<hh:call repeat#set(\"\\<Plug>MyNmapHh\")<CR>", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("n", ",j", "m`J``", {noremap = true})
+  vim.keymap.set("n", "M", "m`J``")
   vim.api.nvim_set_keymap("v", "al", "$o0", {noremap = true, silent = true})
   vim.api.nvim_set_keymap("o", "al", ":<C-u>normal val<CR>", {noremap = true, silent = true})
   vim.api.nvim_set_keymap("v", "il", "g_o^", {noremap = true, silent = true})
@@ -204,7 +193,7 @@ vim.o.lazyredraw = true
 vim.o.listchars = "tab:> ,trail:\194\183,nbsp:+"
 vim.o.mouse = ""
 vim.o.report = 0
-vim.o.scrolloff = 10
+vim.o.scrolloff = 15
 vim.o.shiftround = true
 vim.o.shortmess = "filnxtToOFIc"
 vim.o.showmode = false
@@ -391,39 +380,48 @@ local function _25_(args)
 end
 vim.api.nvim_create_autocmd("LspAttach", {callback = _25_, group = "mitchellwrosen"})
 local function _36_()
+  return vim.keymap.set("n", "1", "qz")
+end
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _36_, group = "mitchellwrosen"})
+local function _37_()
+  return vim.keymap.set("n", "1", "q")
+end
+vim.api.nvim_create_autocmd("RecordingEnter", {callback = _37_, group = "mitchellwrosen"})
+vim.keymap.set("n", "9", "@z")
+local function _38_()
   return vim.cmd("startinsert")
 end
-vim.api.nvim_create_autocmd("TermOpen", {callback = _36_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("TermOpen", {callback = _38_, group = "mitchellwrosen"})
 do
   local lsp = require("lspconfig")
   local status = require("lsp-status")
   local capabilities
-  local function _37_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:651")
+  local function _39_(config)
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:666")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
-  capabilities = _37_
+  capabilities = _39_
   local on_attach
-  local function _38_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:663")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:663")
+  local function _40_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:678")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:678")
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
     return nil
   end
-  on_attach = _38_
+  on_attach = _40_
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = true, virtual_text = false})
-  local function _39_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:698")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:698")
+  local function _41_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:713")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:713")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
     end
     return on_attach(client, buf)
   end
-  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _39_})
+  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _41_})
   lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}, on_attach = on_attach})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
 end
@@ -435,7 +433,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:734")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:749")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -444,10 +442,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.8) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _42_()
+  local function _44_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _42_})
+  vim.fn.termopen(command, {on_exit = _44_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

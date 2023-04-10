@@ -452,7 +452,7 @@
 ; Briefly highlight yanks
 (vim.api.nvim_create_autocmd
   "TextYankPost"
-  { :callback (fn [] (vim.highlight.on_yank { :higroup "Visual" :timeout 300 }))
+  { :callback (fn [] (vim.highlight.on_yank { :higroup "IncSearch" :timeout 300 }))
     :group "mitchellwrosen"
   }
 )

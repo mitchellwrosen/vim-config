@@ -285,7 +285,7 @@ local function _18_()
 end
 vim.api.nvim_create_autocmd("BufReadPost", {callback = _18_, group = "mitchellwrosen"})
 local function _19_()
-  return vim.highlight.on_yank({higroup = "Visual", timeout = 300})
+  return vim.highlight.on_yank({higroup = "IncSearch", timeout = 300})
 end
 vim.api.nvim_create_autocmd("TextYankPost", {callback = _19_, group = "mitchellwrosen"})
 local function _20_()

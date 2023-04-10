@@ -209,6 +209,7 @@
       ; automatically unhighlight when cursor moves
       { :url "https://github.com/romainl/vim-cool"
         :commit "27ad4ecf7532b750fadca9f36e1c5498fc225af2"
+        :event "VeryLazy" ; defer loading until way after UI
       }
 
       ; nice low-contrast fork of gruvbox color scheme
@@ -221,16 +222,20 @@
       ; swap the location of two selections
       { :url "https://github.com/tommcdo/vim-exchange"
         :commit "784d63083ad7d613aa96f00021cd0dfb126a781a"
+        :config (fn [_ _] nil)
+
       }
 
       ; improved "ga" for information about the character under the cursor
       { :url "https://github.com/tpope/vim-characterize"
         :commit "885a00a3c21dd52ca8f2fd7d62850134934179d9"
+        :event "VeryLazy" ; defer loading until way after UI
       }
 
       ; quick (un-)commenting
       { :url "https://github.com/tpope/vim-commentary"
         :commit "627308e30639be3e2d5402808ce18690557e8292"
+        :event "VeryLazy" ; defer loading until way after UI
       }
 
       ; make "." repeat more things out of the box

@@ -452,14 +452,14 @@
 ; Briefly highlight yanks
 (vim.api.nvim_create_autocmd
   "TextYankPost"
-  { :callback (fn [] (vim.highlight.on_yank { :higroup "Visual" :timeout 600 }))
+  { :callback (fn [] (vim.highlight.on_yank { :higroup "Visual" :timeout 300 }))
     :group "mitchellwrosen"
   }
 )
 
 ; on cursor hold or focus gained, read the buffer in case it has been modified externally
 (vim.api.nvim_create_autocmd
-  ["CursorHold" "FocusGained"]
+  [ "CursorHold" "FocusGained" ]
   { :callback
       (fn []
         (when
@@ -472,7 +472,7 @@
 
 ; Save the buffer after changing it
 (vim.api.nvim_create_autocmd
-  ["InsertLeave" "TextChanged"]
+  [ "InsertLeave" "TextChanged" ]
   { :callback
       (fn []
         (when
@@ -622,10 +622,19 @@
 )
 (vim.keymap.set "n" "9" "@z")
 
+; Start a git commit in insert mode
+(vim.api.nvim_create_autocmd
+  "FileType"
+  { :command "startinsert"
+    :group "mitchellwrosen"
+    :pattern "gitcommit"
+  }
+)
+
 ; Start a terminal in insert mode
 (vim.api.nvim_create_autocmd
   "TermOpen"
-  { :callback (fn [] (vim.cmd "startinsert"))
+  { :command "startinsert"
     :group "mitchellwrosen"
   }
 )

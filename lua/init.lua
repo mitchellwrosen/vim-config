@@ -285,7 +285,7 @@ local function _18_()
 end
 vim.api.nvim_create_autocmd("BufReadPost", {callback = _18_, group = "mitchellwrosen"})
 local function _19_()
-  return vim.highlight.on_yank({higroup = "Visual", timeout = 600})
+  return vim.highlight.on_yank({higroup = "Visual", timeout = 300})
 end
 vim.api.nvim_create_autocmd("TextYankPost", {callback = _19_, group = "mitchellwrosen"})
 local function _20_()
@@ -411,40 +411,38 @@ local function _41_()
 end
 vim.api.nvim_create_autocmd("RecordingEnter", {callback = _41_, group = "mitchellwrosen"})
 vim.keymap.set("n", "9", "@z")
-local function _42_()
-  return vim.cmd("startinsert")
-end
-vim.api.nvim_create_autocmd("TermOpen", {callback = _42_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {command = "startinsert", group = "mitchellwrosen", pattern = "gitcommit"})
+vim.api.nvim_create_autocmd("TermOpen", {command = "startinsert", group = "mitchellwrosen"})
 do
   local lsp = require("lspconfig")
   local status = require("lsp-status")
   local capabilities
-  local function _43_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:638")
+  local function _42_(config)
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:647")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
-  capabilities = _43_
+  capabilities = _42_
   local on_attach
-  local function _44_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:650")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:650")
+  local function _43_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:659")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:659")
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
     return nil
   end
-  on_attach = _44_
+  on_attach = _43_
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
-  local function _45_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:687")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:687")
+  local function _44_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:696")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:696")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
     end
     return on_attach(client, buf)
   end
-  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _45_})
+  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _44_})
   lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}, on_attach = on_attach})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua), on_attach = on_attach})
 end
@@ -456,7 +454,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:723")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:732")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -465,10 +463,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.8) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _48_()
+  local function _47_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _48_})
+  vim.fn.termopen(command, {on_exit = _47_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

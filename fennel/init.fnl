@@ -526,6 +526,9 @@
   )
 )
 
+; overwrite default hover handler with the same one, but with rounded borders
+(tset vim.lsp.handlers "textDocument/hover" (vim.lsp.with vim.lsp.handlers.hover { :border "rounded" }))
+
 (local hover-namespace (vim.api.nvim_create_namespace "hover"))
 
 (vim.api.nvim_create_autocmd

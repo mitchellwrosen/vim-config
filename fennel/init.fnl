@@ -378,7 +378,9 @@
 (macro set-bo [name value]
   `(do
      (tset vim.bo ,name ,value)
-     (tset vim.o ,name ,value)))
+     (tset vim.o ,name ,value)
+  )
+)
 
 (set-bo "expandtab" true)   ; convert tabs to spaces
 (set-bo "modeline" false)   ; disable modelines
@@ -552,27 +554,30 @@
               (fn []
                 (when (= (. (vim.api.nvim_get_mode) :mode) "n")
                   (local position (vim.lsp.util.make_position_params))
-                  ; highlight other occurrences of the thing under the cursor
-                  ; the colors are determined by LspReferenceText, etc. highlight groups
-                  (when client.server_capabilities.documentHighlightProvider
-                    (vim.lsp.buf.clear_references)
-                    (vim.lsp.buf.document_highlight)
-                  )
-                  ; try to put a type sig in the virtual text area
-                  (vim.lsp.buf_request buf "textDocument/hover" position
-                    (fn [_err result _ctx _config]
-                      (local contents (?. result :contents))
-                      (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
-                        (local line (extract-haskell-typesig-from-markdown contents.value))
-                        (vim.api.nvim_buf_clear_namespace buf hover-namespace 0 -1)
-                        (when line
-                          (vim.api.nvim_buf_set_extmark
-                            buf
-                            hover-namespace
-                            position.position.line
-                            1 ; column (ignored unless we set :virt_text_pos to "overlay" below
-                            { :virt_text [ [ (.. "∙ " line) "Comment" ] ]
-                            }
+                  (local line-number position.position.line)
+                  (when (not= (. (vim.api.nvim_buf_get_lines buf line-number (+ line-number 1) false) 1) "")
+                    ; highlight other occurrences of the thing under the cursor
+                    ; the colors are determined by LspReferenceText, etc. highlight groups
+                    (when client.server_capabilities.documentHighlightProvider
+                      (vim.lsp.buf.clear_references)
+                      (vim.lsp.buf.document_highlight)
+                    )
+                    ; try to put a type sig in the virtual text area
+                    (vim.lsp.buf_request buf "textDocument/hover" position
+                      (fn [_err result _ctx _config]
+                        (local contents (?. result :contents))
+                        (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
+                          (local line (extract-haskell-typesig-from-markdown contents.value))
+                          (vim.api.nvim_buf_clear_namespace buf hover-namespace 0 -1)
+                          (when line
+                            (vim.api.nvim_buf_set_extmark
+                              buf
+                              hover-namespace
+                              position.position.line
+                              0 ; column (ignored unless we set :virt_text_pos to "overlay" below
+                              { :virt_text [ [ line "Comment" ] ]
+                              }
+                            )
                           )
                         )
                       )

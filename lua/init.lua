@@ -369,34 +369,39 @@ local function _29_(args)
   local function _32_()
     if (vim.api.nvim_get_mode().mode == "n") then
       local position = vim.lsp.util.make_position_params()
-      if client.server_capabilities.documentHighlightProvider then
-        vim.lsp.buf.clear_references()
-        vim.lsp.buf.document_highlight()
-      else
-      end
-      local function _34_(_err, result, _ctx, _config)
-        local contents
-        do
-          local t_35_ = result
-          if (nil ~= t_35_) then
-            t_35_ = (t_35_).contents
-          else
-          end
-          contents = t_35_
+      local line_number = position.position.line
+      if ((vim.api.nvim_buf_get_lines(buf, line_number, (line_number + 1), false))[1] ~= "") then
+        if client.server_capabilities.documentHighlightProvider then
+          vim.lsp.buf.clear_references()
+          vim.lsp.buf.document_highlight()
+        else
         end
-        if (not (contents == nil) and (type(contents) == "table") and ("markdown" == contents.kind)) then
-          local line = extract_haskell_typesig_from_markdown(contents.value)
-          vim.api.nvim_buf_clear_namespace(buf, hover_namespace, 0, -1)
-          if line then
-            return vim.api.nvim_buf_set_extmark(buf, hover_namespace, position.position.line, 1, {virt_text = {{("\226\136\153 " .. line), "Comment"}}})
+        local function _34_(_err, result, _ctx, _config)
+          local contents
+          do
+            local t_35_ = result
+            if (nil ~= t_35_) then
+              t_35_ = (t_35_).contents
+            else
+            end
+            contents = t_35_
+          end
+          if (not (contents == nil) and (type(contents) == "table") and ("markdown" == contents.kind)) then
+            local line = extract_haskell_typesig_from_markdown(contents.value)
+            vim.api.nvim_buf_clear_namespace(buf, hover_namespace, 0, -1)
+            if line then
+              return vim.api.nvim_buf_set_extmark(buf, hover_namespace, position.position.line, 0, {virt_text = {{line, "Comment"}}})
+            else
+              return nil
+            end
           else
             return nil
           end
-        else
-          return nil
         end
+        return vim.lsp.buf_request(buf, "textDocument/hover", position, _34_)
+      else
+        return nil
       end
-      return vim.lsp.buf_request(buf, "textDocument/hover", position, _34_)
     else
       return nil
     end
@@ -406,14 +411,14 @@ local function _29_(args)
   return nil
 end
 vim.api.nvim_create_autocmd("LspAttach", {callback = _29_, group = "mitchellwrosen"})
-local function _40_()
+local function _41_()
   return vim.keymap.set("n", "1", "qz")
 end
-vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _40_, group = "mitchellwrosen"})
-local function _41_()
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _41_, group = "mitchellwrosen"})
+local function _42_()
   return vim.keymap.set("n", "1", "q")
 end
-vim.api.nvim_create_autocmd("RecordingEnter", {callback = _41_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("RecordingEnter", {callback = _42_, group = "mitchellwrosen"})
 vim.keymap.set("n", "9", "@z")
 vim.api.nvim_create_autocmd("FileType", {command = "startinsert", group = "mitchellwrosen", pattern = "gitcommit"})
 vim.api.nvim_create_autocmd("TermOpen", {command = "startinsert", group = "mitchellwrosen"})
@@ -421,17 +426,17 @@ do
   local lsp = require("lspconfig")
   local status = require("lsp-status")
   local capabilities
-  local function _42_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:630")
+  local function _43_(config)
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:635")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
-  capabilities = _42_
+  capabilities = _43_
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
-  local function _43_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:664")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:664")
+  local function _44_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:669")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:669")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
       return nil
@@ -439,12 +444,12 @@ do
       return nil
     end
   end
-  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _43_})
+  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _44_})
   lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua)})
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:697")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:702")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -453,10 +458,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.8) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _45_()
+  local function _46_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _45_})
+  vim.fn.termopen(command, {on_exit = _46_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

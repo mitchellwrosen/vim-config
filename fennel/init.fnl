@@ -578,15 +578,15 @@
                     (vim.lsp.buf.document_highlight)
                   )
                   ; try to put a type sig in the virtual text area
-                  (vim.lsp.buf_request 0 "textDocument/hover" position
+                  (vim.lsp.buf_request buf "textDocument/hover" position
                     (fn [_err result _ctx _config]
                       (local contents (?. result :contents))
                       (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
                         (local line (extract-haskell-typesig-from-markdown contents.value))
-                        (vim.api.nvim_buf_clear_namespace 0 hover-namespace 0 -1)
+                        (vim.api.nvim_buf_clear_namespace buf hover-namespace 0 -1)
                         (when line
                           (vim.api.nvim_buf_set_extmark
-                            0 ; current buffer
+                            buf
                             hover-namespace
                             position.position.line
                             1 ; column (ignored unless we set :virt_text_pos to "overlay" below
@@ -691,7 +691,7 @@
   (lsp.hls.setup
     { :capabilities (capabilities lsp.hls)
       :cmd ["haskell-language-server-wrapper" "--lsp"]
-      ; "cmd" ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
+      ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
       :settings {
         :haskell {
           :formattingProvider "ormolu"

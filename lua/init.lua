@@ -384,9 +384,9 @@ local function _29_(args)
         end
         if (not (contents == nil) and (type(contents) == "table") and ("markdown" == contents.kind)) then
           local line = extract_haskell_typesig_from_markdown(contents.value)
-          vim.api.nvim_buf_clear_namespace(0, hover_namespace, 0, -1)
+          vim.api.nvim_buf_clear_namespace(buf, hover_namespace, 0, -1)
           if line then
-            return vim.api.nvim_buf_set_extmark(0, hover_namespace, position.position.line, 1, {virt_text = {{("\226\136\153 " .. line), "Comment"}}})
+            return vim.api.nvim_buf_set_extmark(buf, hover_namespace, position.position.line, 1, {virt_text = {{("\226\136\153 " .. line), "Comment"}}})
           else
             return nil
           end
@@ -394,7 +394,7 @@ local function _29_(args)
           return nil
         end
       end
-      return vim.lsp.buf_request(0, "textDocument/hover", position, _34_)
+      return vim.lsp.buf_request(buf, "textDocument/hover", position, _34_)
     else
       return nil
     end

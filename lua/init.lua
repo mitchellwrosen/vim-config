@@ -193,35 +193,36 @@ vim.api.nvim_set_keymap("n", "-", "m`<Plug>CommentaryLine``", {})
 vim.api.nvim_set_keymap("v", "-", "<Plug>Commentary", {})
 vim.g.surround_no_mappings = 1
 vim.o.autowriteall = true
-vim.o.hidden = true
-vim.o.ignorecase = true
-vim.o.lazyredraw = true
-vim.o.joinspaces = false
-vim.o.showmode = false
-vim.o.startofline = false
-vim.o.shiftround = true
-vim.o.shortmess = "filnxtToOFIc"
-vim.o.smartcase = true
-vim.o.termguicolors = true
-vim.o.title = true
-vim.o.wildmenu = true
-vim.o.report = 0
-vim.o.scrolloff = 10
-vim.o.sidescrolloff = 16
-vim.o.showtabline = 2
-vim.o.timeoutlen = 400
-vim.o.updatetime = 300
 vim.o.clipboard = "unnamed,unnamedplus"
 vim.o.completeopt = "menuone,noinsert,noselect"
 vim.o.grepprg = "rg --vimgrep"
+vim.o.hidden = true
+vim.o.ignorecase = true
 vim.o.inccommand = "split"
+vim.o.joinspaces = false
+vim.o.lazyredraw = true
 vim.o.listchars = "tab:> ,trail:\194\183,nbsp:+"
+vim.o.mouse = ""
+vim.o.report = 0
+vim.o.scrolloff = 10
+vim.o.shiftround = true
+vim.o.shortmess = "filnxtToOFIc"
+vim.o.showmode = false
+vim.o.showtabline = 2
+vim.o.sidescrolloff = 16
+vim.o.smartcase = true
+vim.o.startofline = false
+vim.o.termguicolors = true
+vim.o.timeoutlen = 400
+vim.o.title = true
+vim.o.updatetime = 300
+vim.o.wildmenu = true
 vim.o.wildmode = "list:longest,full"
 vim.wo.colorcolumn = "120"
 vim.wo.cursorline = true
+vim.wo.foldenable = false
 vim.wo.linebreak = true
 vim.wo.list = true
-vim.wo.foldenable = false
 vim.wo.number = true
 vim.wo.signcolumn = "yes"
 do
@@ -324,6 +325,7 @@ local function _20_(str0)
   end
 end
 extract_haskell_typesig_from_markdown = _20_
+local hover_namespace = vim.api.nvim_create_namespace("hover")
 local function _25_(args)
   local buf = args.buf
   local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -369,11 +371,10 @@ local function _25_(args)
           contents = t_31_
         end
         if (not (contents == nil) and (type(contents) == "table") and ("markdown" == contents.kind)) then
-          local namespace = vim.api.nvim_create_namespace("hover")
           local line = extract_haskell_typesig_from_markdown(contents.value)
-          vim.api.nvim_buf_clear_namespace(0, namespace, 0, -1)
+          vim.api.nvim_buf_clear_namespace(0, hover_namespace, 0, -1)
           if line then
-            return vim.api.nvim_buf_set_virtual_text(0, namespace, position.position.line, {{("\226\136\153 " .. line), "Comment"}}, {})
+            return vim.api.nvim_buf_set_extmark(0, hover_namespace, position.position.line, 1, {virt_text = {{("\226\136\153 " .. line), "Comment"}}})
           else
             return nil
           end
@@ -398,15 +399,15 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _37_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:647")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:651")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
   capabilities = _37_
   local on_attach
   local function _38_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:659")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:659")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:663")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:663")
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
     return nil
   end
@@ -414,8 +415,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = true, virtual_text = false})
   local function _39_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:694")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:694")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:698")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:698")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -434,7 +435,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:730")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:734")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

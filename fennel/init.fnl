@@ -390,35 +390,36 @@
 ; this would be nice, but unsuccessful search prompts to press enter
 ; https://github.com/neovim/neovim/issues/20380
 ; (set vim.o.cmdheight 0) ; don't waste a line on command
-(set vim.o.hidden true) ; don't abandon out-of-sight buffers
-(set vim.o.ignorecase true) ; case-insensitive searching
-(set vim.o.lazyredraw true) ; don't draw during e.g. applying a macro
-(set vim.o.joinspaces false) ; insert one space after ., ?, ! chars when joining
-(set vim.o.showmode false) ; don't show mode, since lightline handle that
-(set vim.o.startofline false) ; don't jump cursor to start of line when moving
-(set vim.o.shiftround true) ; shift to multiple of shiftwidth
-(set vim.o.shortmess "filnxtToOFIc")
-(set vim.o.smartcase true) ; don't ignore case if search contains uppercase char
-(set vim.o.termguicolors true)
-(set vim.o.title true) ; put filename in window title
-(set vim.o.wildmenu true) ; complete commands with a little menu
-(set vim.o.report 0) ; always repeat the number of lines changed
-(set vim.o.scrolloff 10) ; start scrolling before the cursor reaches the edge
-(set vim.o.sidescrolloff 16) ; start scrolling before the cursor reaches the edge
-(set vim.o.showtabline 2) ; always show the tabline
-(set vim.o.timeoutlen 400) ; only wait this many ms for key sequence to complete
-(set vim.o.updatetime 300) ; fire CursorHold after this many ms (default 4000ms)
 (set vim.o.clipboard "unnamed,unnamedplus") ; yank also copies to both clipboards
 (set vim.o.completeopt "menuone,noinsert,noselect") ; sane completion behavior...
 (set vim.o.grepprg "rg --vimgrep") ; use rg to grep
+(set vim.o.hidden true) ; don't abandon out-of-sight buffers
+(set vim.o.ignorecase true) ; case-insensitive searching
 (set vim.o.inccommand "split") ; show live command substitutions
+(set vim.o.joinspaces false) ; insert one space after ., ?, ! chars when joining
+(set vim.o.lazyredraw true) ; don't draw during e.g. applying a macro
 (set vim.o.listchars "tab:> ,trail:·,nbsp:+") ; trailing whitespace markers
+(set vim.o.mouse "") ; disable mouse
+(set vim.o.report 0) ; always repeat the number of lines changed
+(set vim.o.scrolloff 10) ; start scrolling before the cursor reaches the edge
+(set vim.o.shiftround true) ; shift to multiple of shiftwidth
+(set vim.o.shortmess "filnxtToOFIc")
+(set vim.o.showmode false) ; don't show mode, since lightline handle that
+(set vim.o.showtabline 2) ; always show the tabline
+(set vim.o.sidescrolloff 16) ; start scrolling before the cursor reaches the edge
+(set vim.o.smartcase true) ; don't ignore case if search contains uppercase char
+(set vim.o.startofline false) ; don't jump cursor to start of line when moving
+(set vim.o.termguicolors true)
+(set vim.o.timeoutlen 400) ; only wait this many ms for key sequence to complete
+(set vim.o.title true) ; put filename in window title
+(set vim.o.updatetime 300) ; fire CursorHold after this many ms (default 4000ms)
+(set vim.o.wildmenu true) ; complete commands with a little menu
 (set vim.o.wildmode "list:longest,full") ; wild menu completion behavior
 (set vim.wo.colorcolumn "120")
 (set vim.wo.cursorline true) ; higlight the current line
+(set vim.wo.foldenable false) ; never fold
 (set vim.wo.linebreak true) ; wrap lines in a more visually pleasing way
 (set vim.wo.list true) ; show trailing whitespace, tabs, etc.
-(set vim.wo.foldenable false) ; never fold
 (set vim.wo.number true) ; show line number gutter
 (set vim.wo.signcolumn "yes") ; always draw signcolumn because it's jarring when it appears otherwise
 
@@ -556,6 +557,8 @@
   )
 )
 
+(local hover-namespace (vim.api.nvim_create_namespace "hover"))
+
 (vim.api.nvim_create_autocmd
   "LspAttach"
   { :callback
@@ -606,15 +609,16 @@
                       (fn [_err result _ctx _config]
                         (local contents (?. result :contents))
                         (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
-                          (local namespace (vim.api.nvim_create_namespace "hover"))
                           (local line (extract-haskell-typesig-from-markdown contents.value))
-                          (vim.api.nvim_buf_clear_namespace 0 namespace 0 -1)
+                          (vim.api.nvim_buf_clear_namespace 0 hover-namespace 0 -1)
                           (when line
-                            (vim.api.nvim_buf_set_virtual_text
-                              0
-                              namespace
+                            (vim.api.nvim_buf_set_extmark
+                              0 ; current buffer
+                              hover-namespace
                               position.position.line
-                              [ [ (.. "∙ " line) "Comment" ] ] {}
+                              1 ; column (ignored unless we set :virt_text_pos to "overlay" below
+                              { :virt_text [ [ (.. "∙ " line) "Comment" ] ]
+                              }
                             )
                           )
                         )

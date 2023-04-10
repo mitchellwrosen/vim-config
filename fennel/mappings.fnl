@@ -62,7 +62,7 @@
     (local loaded
       (accumulate [acc 0 _ buffer (ipairs buffers)]
         (if (vim.api.nvim_buf_is_loaded buffer) (+ acc 1) acc)))
-    (vim.cmd (if (= loaded 1) "q" "bd"))
+    (vim.cmd (if (<= loaded 1) "q" "bd"))
   )
 )
 

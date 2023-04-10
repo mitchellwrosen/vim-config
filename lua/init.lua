@@ -56,7 +56,7 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
       loaded = acc
     end
     local function _13_()
-      if (loaded == 1) then
+      if (loaded <= 1) then
         return "q"
       else
         return "bd"

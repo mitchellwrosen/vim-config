@@ -54,8 +54,17 @@
 (map [ "n" "v" ] "N" "Nzz" { "noremap" true })
 
 ; q to quit the current buffer, or quit vim if there's only 1 listed buffer
-(map [ "n" ] "q" "len(getbufinfo({'buflisted': 1})) ==? 1 ? \":q\\<CR>\" : \":bd\\<CR>\""
-  { "expr" true "noremap" true "silent" true })
+(vim.keymap.set
+  "n"
+  "q"
+  (fn []
+    (local buffers (vim.api.nvim_list_bufs))
+    (local loaded
+      (accumulate [acc 0 _ buffer (ipairs buffers)]
+        (if (vim.api.nvim_buf_is_loaded buffer) (+ acc 1) acc)))
+    (vim.cmd (if (= loaded 1) "q" "bd"))
+  )
+)
 
 ; Disable annoying command search 'q:' that I never use
 ; (nnoremap "q:" "<Nop>")

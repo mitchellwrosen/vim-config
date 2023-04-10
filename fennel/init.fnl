@@ -100,48 +100,35 @@
           )
       }
 
-      ; statusline
-      { :url "https://github.com/itchyny/lightline.vim"
-        :commit "a29b8331e1bb36b09bafa30c3aa77e89cdd832b2"
+      ; status line
+      { :url "https://github.com/nvim-lualine/lualine.nvim"
+        :commit "84ffb80e452d95e2c46fa29a98ea11a240f7843e"
         :config
           (fn [_ _]
-            (set vim.g.lightline
-              { :active
-                  { :left [ [ "mode" "paste" ] [ "branch" ] ]
-                    :right [ [ "lineinfo" ] [ "percent" ] [ "filetype" ] [ "lsp" ] ]
-                  }
-                :colorscheme "gruvbox_material"
-                :component_expand
-                  { :buffers "lightline#bufferline#buffers"
-                  }
-                :component_function
-                  { :branch "FugitiveHead"
-                    :filename "LightlineFilename"
-                    :lsp "LightlineLspStatus"
-                  }
-                :component_type
-                  { :buffers "tabsel"
-                  }
-                :mode_map
-                  { :c "   "
-                    :i "   "
-                    :n ""
-                    :R "   "
-                    :t "   "
-                    :v "   "
-                    :V "   "
-                    ; FIXME ugh, can't figure out the fucking syntax for Ctrl+V. in vimshit it's "\<C-v>"
-                    ; Nothing fucking works not even the weird string "\22" that I got from painstakingly reading
-                    ; docs and discovering vim.api.nvim_replace_termcodes("<C-v>", true, true, true)
-                    "\22" "   "
-                  }
-                :tab
-                  { :active [ "tabnum" "filename" "modified" ]
-                    :inactive [ "tabnum" "filename" "modified" ]
+            (local lualine (require "lualine"))
+            (lualine.setup
+              { :component_separators ""
+                :icons_enabled false
+                :section_separators ""
+                :sections
+                  { :lualine_a [ "mode" ]
+                    :lualine_b [ "branch" "diff" "diagnostics" ]
+                    :lualine_c [ "filename" ]
+                    :lualine_x [ "filetype" ]
+                    :lualine_y [ "progress" ]
+                    :lualine_z [ "location" ]
                   }
                 :tabline
-                  { :left [ [ "buffers" ] ]
-                    :right [ [ ] ]
+                  { :lualine_a
+                       [ { 1 "buffers"
+                           :show_filenames_only true
+                         }
+                       ]
+                    :lualine_b [ ]
+                    :lualine_c [ ]
+                    :lualine_x [ ]
+                    :lualine_y [ ]
+                    :lualine_z [ ]
                   }
               }
             )
@@ -170,10 +157,6 @@
             (local plugin (require "indent_blankline"))
             (plugin.setup { :show_current_context true })
           )
-      }
-
-      { :url "https://github.com/mengelbrecht/lightline-bufferline"
-        :commit "c0199a7027da92d9770d1e2a9f4bf6257c7ec7ef"
       }
 
       ; lsp configs
@@ -373,7 +356,7 @@
 (set vim.o.scrolloff 15) ; start scrolling before the cursor reaches the edge
 (set vim.o.shiftround true) ; shift to multiple of shiftwidth
 (set vim.o.shortmess "filnxtToOFIc")
-(set vim.o.showmode false) ; don't show mode, since lightline handle that
+(set vim.o.showmode false) ; don't show mode, since statusline handles that
 (set vim.o.showtabline 2) ; always show the tabline
 (set vim.o.sidescrolloff 16) ; start scrolling before the cursor reaches the edge
 (set vim.o.smartcase true) ; don't ignore case if search contains uppercase char
@@ -721,11 +704,6 @@
   )
 )
 
-(lambda lightline-status []
-  (if (> (length (vim.lsp.buf_get_clients)) 0)
-    ((. (require "lsp-status") :status))
-    ""))
-
 ; Run the given command in a centered floating terminal.
 (lambda run-floating [command]
   (let [buf (vim.api.nvim_create_buf false true)
@@ -753,7 +731,6 @@
     (vim.api.nvim_buf_set_keymap buf "t" "<Esc>" "<Esc>" { :noremap true :nowait true :silent true })
     win))
 
-{ :lightline_status lightline-status
-  :run_floating run-floating
+{ :run_floating run-floating
   :virtual_hover virtual-hover
 }

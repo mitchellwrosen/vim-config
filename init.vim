@@ -126,21 +126,6 @@ command! -nargs=* Rgu
 " " Unmap Esc quitting terminal mode, so fzf handles it (result: one Esc closes fzf)
 " autocmd mitchellwrosen FileType fzf tunmap <buffer> <Esc>
 
-" [itchyny/lightline.vim]
-function! LightlineFilename()
-  let filename = expand('%:t')
-  let modified = &modified ? '+' : ''
-  return filename . modified
-endfunction
-
-function! LightlineLspStatus() abort
-  return luaeval("require('init').lightline_status()")
-endfunction
-
-
-" [mengelbrecht/lightline-bufferline]
-let g:lightline#bufferline#modified = '+'
-
 sign define LspDiagnosticsErrorSign text=✗ texthl=LspDiagnosticsError linehl= numhl=
 sign define LspDiagnosticsWarningSign text=⚠ texthl=LspDiagnosticsWarning linehl= numhl=
 sign define LspDiagnosticsInformationSign text=ℹ texthl=LspDiagnosticsInformation linehl= numhl=

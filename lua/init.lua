@@ -42,21 +42,21 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
     vim.api.nvim_set_keymap("v", "N", "Nzz", {noremap = true})
   end
   local function _12_()
-    local buffers = vim.api.nvim_list_bufs()
-    local loaded
+    local buffers = vim.fn.getbufinfo()
+    local num_listed
     do
       local acc = 0
       for _, buffer in ipairs(buffers) do
-        if vim.api.nvim_buf_is_loaded(buffer) then
+        if (1 == buffer.listed) then
           acc = (acc + 1)
         else
           acc = acc
         end
       end
-      loaded = acc
+      num_listed = acc
     end
     local function _14_()
-      if (loaded <= 1) then
+      if (num_listed <= 1) then
         return "q"
       else
         return "bd"

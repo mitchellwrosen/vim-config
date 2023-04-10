@@ -58,11 +58,13 @@
   "n"
   "q"
   (fn []
-    (local buffers (vim.api.nvim_list_bufs))
-    (local loaded
+    (local buffers (vim.fn.getbufinfo))
+    (local num-listed
       (accumulate [acc 0 _ buffer (ipairs buffers)]
-        (if (vim.api.nvim_buf_is_loaded buffer) (+ acc 1) acc)))
-    (vim.cmd (if (<= loaded 1) "q" "bd"))
+        (if (= 1 buffer.listed) (+ acc 1) acc)
+      )
+    )
+    (vim.cmd (if (<= num-listed 1) "q" "bd"))
   )
 )
 

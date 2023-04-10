@@ -308,11 +308,6 @@
 
 ; TODO move configs from vim
 
-; why does running this manually work, but does nothing here? some dumb timing thing?
-; I didn't need this line at all before moving to lazy.nvim, I just randomly stumbled upon it while trying to debug
-; why lightline is busted... *SIGH*
-; ((. vim.fn "lightline#init"))
-
 ; nvim-telescope/telescope.nvim
 ; (let
 ;   [telescope (require "telescope")
@@ -389,10 +384,10 @@
 (set vim.o.updatetime 300) ; fire CursorHold after this many ms (default 4000ms)
 (set vim.o.wildmenu true) ; complete commands with a little menu
 (set vim.o.wildmode "list:longest,full") ; wild menu completion behavior
+(set vim.o.wrap false) ; don't wrap long lines
 (set vim.wo.colorcolumn "120")
 (set vim.wo.cursorline true) ; higlight the current line
 (set vim.wo.foldenable false) ; never fold
-(set vim.wo.linebreak true) ; wrap lines in a more visually pleasing way
 (set vim.wo.list true) ; show trailing whitespace, tabs, etc.
 (set vim.wo.number true) ; show line number gutter
 (set vim.wo.signcolumn "yes") ; always draw signcolumn because it's jarring when it appears otherwise

@@ -231,10 +231,10 @@ vim.o.title = true
 vim.o.updatetime = 300
 vim.o.wildmenu = true
 vim.o.wildmode = "list:longest,full"
+vim.o.wrap = false
 vim.wo.colorcolumn = "120"
 vim.wo.cursorline = true
 vim.wo.foldenable = false
-vim.wo.linebreak = true
 vim.wo.list = true
 vim.wo.number = true
 vim.wo.signcolumn = "yes"
@@ -419,15 +419,15 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _42_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:647")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:642")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
   capabilities = _42_
   local on_attach
   local function _43_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:659")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:659")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:654")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:654")
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
     return nil
   end
@@ -435,8 +435,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
   local function _44_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:696")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:696")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:691")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:691")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -455,7 +455,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:732")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:727")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

@@ -434,10 +434,10 @@ do
   end
   on_attach = _44_
   status.register_progress()
-  vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = true, virtual_text = false})
+  vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
   local function _45_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:685")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:685")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:687")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:687")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
     else
@@ -456,7 +456,7 @@ local function lightline_status()
   end
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:721")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:723")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

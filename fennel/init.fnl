@@ -664,20 +664,22 @@
   ; Uh, just kind of following https://github.com/nvim-lua/lsp-status.nvim here...
   (status.register_progress)
 
-  (vim.diagnostic.config {
-    :float {
-      ; require cursor to be over diagnostic in order to open a float window of it
-      :scope "cursor"
-      ; remove the default "Diagnostics:" header
-      :header ""
+  (vim.diagnostic.config
+    { :float
+        { ; require cursor to be over diagnostic in order to open a float window of it
+          :scope "cursor"
+          ; remove the default "Diagnostics:" header
+          :header ""
+        }
+      ; only underline errors
+      :underline { "severity" vim.diagnostic.severity.ERROR }
+      ; the lsp_lines plugin seems to want to configure itself by making up a new `virtual_lines` key in
+      ; `vim.diagnostic.config`. seems stupid as hell but here we are.
+      :virtual_lines { :only_current_line true }
+      ; don't put diagnostics inline
+      :virtual_text false
     }
-    ; only underline errors
-    :underline { "severity" vim.diagnostic.severity.ERROR }
-    :virtual_lines true
-    ; don't put diagnostics inline
-    :virtual_text false
-
-  })
+  )
 
   (lsp.elmls.setup
     { :capabilities (capabilities lsp.elmls)

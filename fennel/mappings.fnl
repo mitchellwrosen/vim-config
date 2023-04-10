@@ -7,7 +7,7 @@
 (map [ "n" ] "r:" "r;" { "noremap" true })
 
 ; make ' jump back to mark's exact position, not just line
-(map [ "n" ] "'" "`" { "noremap" true })
+(vim.keymap.set "n" "'" "`")
 
 ; very magic mode search
 (map [ "n" ] "/" "/\\v" { "noremap" true })
@@ -36,9 +36,8 @@
 ; when pasting over visual selection, don't copy that visual selection to the default register
 (vim.keymap.set "v" "p" "\"0p")
 
-; After visual mode delete/yank, leave cursor at the end of the highlight
-(map [ "v" ] "D" "d`>" { "noremap" true })
-(map [ "v" ] "Y" "y`>" { "noremap" true })
+; After visual mode yank, leave cursor at the end of the highlight
+(vim.keymap.set "v" "Y" "y`>")
 
 ; Select last changed or yanked area
 (map [ "n" ] "gV" "'`[' . strpart(getregtype(), 0, 1) . '`]'" { "expr" true "noremap" true })
@@ -133,7 +132,7 @@
 (map [ "v" ] "<Space>s" "m`<Esc>:silent '<,'>w !repld-send<CR>``" { "noremap" true "silent" true })
 
 ; <C-v> to paste from * register
-(map [ "i" ] "<C-v>" "<C-r>*" { "noremap" true })
+(vim.keymap.set "i" "<C-v>" "<C-r>*")
 
 ; " Ctrl+space for omnicomplete
 ; imap <C-Space> <C-x><C-o>

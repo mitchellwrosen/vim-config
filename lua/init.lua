@@ -1,85 +1,3 @@
-package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or function(...)
-  vim.keymap.set({"c", "i", "n", "o", "v"}, ";", ":")
-  vim.keymap.set({"c", "i", "n", "o", "v"}, ":", ";")
-  vim.keymap.set("n", "r;", "r:")
-  vim.keymap.set("n", "r:", "r;")
-  vim.keymap.set("n", "'", "`")
-  vim.keymap.set("n", "/", "/\\v")
-  vim.keymap.set("v", "/", "/\\v")
-  vim.keymap.set("n", "*", "*``")
-  vim.keymap.set("n", "<BS>", "<C-^>")
-  vim.keymap.set("n", "j", "gj")
-  vim.keymap.set("n", "k", "gk")
-  vim.keymap.set({"n", "v"}, "J", "6j", {remap = true})
-  vim.keymap.set({"n", "v"}, "K", "6k", {remap = true})
-  vim.keymap.set({"n", "o", "v"}, "H", "^")
-  vim.keymap.set({"n", "o"}, "L", "$")
-  vim.keymap.set("v", "L", "g_")
-  vim.keymap.set("v", "p", "\"0p")
-  vim.keymap.set("v", "Y", "y`>")
-  vim.keymap.set("n", "gV", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {expr = true})
-  vim.keymap.set("n", "U", "<C-r>")
-  vim.keymap.set("n", "<C-r>", "<Nop>")
-  vim.keymap.set({"n", "v"}, "n", "nzz")
-  vim.keymap.set({"n", "v"}, "N", "Nzz")
-  local function _12_()
-    local buffers = vim.fn.getbufinfo()
-    local num_listed
-    do
-      local acc = 0
-      for _, buffer in ipairs(buffers) do
-        if (1 == buffer.listed) then
-          acc = (acc + 1)
-        else
-          acc = acc
-        end
-      end
-      num_listed = acc
-    end
-    local function _14_()
-      if (num_listed <= 1) then
-        return "q"
-      else
-        return "bd"
-      end
-    end
-    return vim.cmd(_14_())
-  end
-  vim.keymap.set("n", "q", _12_)
-  vim.keymap.set("n", ">", "<Plug>MyRightShift", {silent = true})
-  vim.keymap.set("n", "<", "<Plug>MyLeftShift", {silent = true})
-  vim.keymap.set("n", "<Plug>MyRightShift", ">>ll:call repeat#set(\"\\<Plug>MyRightShift\")<CR>", {silent = true})
-  vim.keymap.set("n", "<Plug>MyLeftShift", "<<hh:call repeat#set(\"\\<Plug>MyLeftShift\")<CR>", {silent = true})
-  vim.keymap.set("n", "M", "m`J``")
-  vim.keymap.set("v", "al", "$o0", {silent = true})
-  vim.keymap.set("o", "al", ":<C-u>normal val<CR>", {silent = true})
-  vim.keymap.set("v", "il", "g_o^", {silent = true})
-  vim.keymap.set("o", "il", ":<C-u>normal vil<CR>", {silent = true})
-  vim.keymap.set("n", "<C-s>", ":%s/\\v//cg<Left><Left><Left><Left>")
-  vim.keymap.set("v", "<C-s>", ":s/\\v//cg<Left><Left><Left><Left>")
-  vim.keymap.set("n", "<C-j>", ":bn<CR>", {silent = true})
-  vim.keymap.set("n", "<C-k>", ":bp<CR>", {silent = true})
-  vim.keymap.set("n", "<Space>s", "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``", {silent = true})
-  vim.keymap.set("n", "<Space>S", "m`:silent w !repld-send<CR>``", {silent = true})
-  vim.keymap.set("v", "<Space>s", "m`<Esc>:silent '<,'>w !repld-send<CR>``", {silent = true})
-  vim.keymap.set("i", "<C-v>", "<C-r>*")
-  vim.keymap.set("c", "<C-h>", "<Left>")
-  vim.keymap.set("c", "<C-j>", "<Down>")
-  vim.keymap.set("c", "<C-k>", "<Up>")
-  vim.keymap.set("c", "<C-l>", "<Right>")
-  vim.keymap.set("n", "~", "mzlblgueh~`z", {silent = true})
-  local number_regex = "0x\\x\\+\\|\\d\\+\\(\\.\\d\\+\\)\\?"
-  local function _15_()
-    local matched_line = vim.fn.search(number_regex, "ceW")
-    if (matched_line ~= 0) then
-      vim.cmd("normal! v")
-      return vim.fn.search(number_regex, "bcW")
-    else
-      return nil
-    end
-  end
-  return vim.keymap.set("o", "n", _15_)
-end
 do
   local lazypath = (vim.fn.stdpath("data") .. "/lazy/lazy.nvim")
   if not vim.loop.fs_stat(lazypath) then
@@ -108,7 +26,7 @@ do
   end
   local function _6_(_, _0)
     local lualine = require("lualine")
-    return lualine.setup({component_separators = "", icons_enabled = false, section_separators = "", sections = {lualine_a = {"mode"}, lualine_b = {"branch", "diff", "diagnostics"}, lualine_c = {"filename"}, lualine_x = {"filetype"}, lualine_y = {"progress"}, lualine_z = {"location"}}, tabline = {lualine_a = {{show_filenames_only = true, "buffers"}}, lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = {}, lualine_z = {}}})
+    return lualine.setup({component_separators = "", section_separators = "", sections = {lualine_a = {"mode"}, lualine_b = {"branch", "diff", "diagnostics"}, lualine_c = {"filename"}, lualine_x = {"filetype"}, lualine_y = {"progress"}, lualine_z = {"location"}}, tabline = {lualine_a = {{"buffers", show_filenames_only = true}}, lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = {}, lualine_z = {}}, icons_enabled = false})
   end
   local function _7_(_, _0)
     local plugin = require("indent_blankline")
@@ -129,7 +47,7 @@ do
     local lsp_lines = require("lsp_lines")
     return lsp_lines.setup()
   end
-  lazy.setup({{url = "https://github.com/bakpakin/fennel.vim", commit = "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89", ft = "fennel"}, {url = "https://github.com/Bekaboo/deadcolumn.nvim", commit = "8140fd7cface9592a44b3151203fc6ca95ad9598", event = "InsertEnter", config = _2_}, {url = "https://github.com/ggandor/leap.nvim", commit = "f74473d23ebf60957e0db3ff8172349a82e5a442", event = "VeryLazy", config = _3_}, {url = "https://github.com/hrsh7th/nvim-cmp", commit = "f841fa6ced194aa930136a7671439e6bd4c51722", dependencies = {{url = "https://github.com/hrsh7th/cmp-nvim-lsp", commit = "b4251f0fca1daeb6db5d60a23ca81507acf858c2"}, {url = "https://github.com/hrsh7th/cmp-buffer", commit = "f83773e2f433a923997c5faad7ea689ec24d1785"}}, event = "InsertEnter", config = _4_}, {url = "https://github.com/kevinhwang91/nvim-bqf", tag = "v1.1.0", ft = "qf", config = _5_}, {url = "https://github.com/nvim-lualine/lualine.nvim", commit = "84ffb80e452d95e2c46fa29a98ea11a240f7843e", config = _6_}, {url = "https://github.com/junegunn/fzf", commit = "6dcf5c3d7d6c321b17e6a5673f1533d6e8350462"}, {url = "https://github.com/junegunn/fzf.vim", commit = "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0"}, {url = "https://github.com/LnL7/vim-nix", commit = "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee", ft = "nix"}, {url = "https://github.com/lukas-reineke/indent-blankline.nvim", tag = "v2.20.4", config = _7_}, {url = "https://github.com/neovim/nvim-lsp", commit = "2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491"}, {url = "https://github.com/neovimhaskell/haskell-vim", commit = "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e", ft = "haskell"}, {url = "https://github.com/nvim-lua/lsp-status.nvim", commit = "4073f766f1303fb602802075e558fe43e382cc92"}, {url = "https://github.com/nvim-treesitter/nvim-treesitter", tag = "v0.8.5.2", build = ":TSUpdate", config = _8_}, {url = "https://github.com/rcarriga/nvim-notify", tag = "v3.11.0", event = "VeryLazy", config = _9_}, {url = "https://github.com/romainl/vim-cool", commit = "27ad4ecf7532b750fadca9f36e1c5498fc225af2", event = "VeryLazy"}, {url = "https://github.com/sainnhe/gruvbox-material", commit = "a6c5f652788b36c6ff2a0fdbefa271cb46f8f5e7", priority = 1000}, {url = "https://github.com/tommcdo/vim-exchange", commit = "784d63083ad7d613aa96f00021cd0dfb126a781a", config = _10_}, {url = "https://github.com/tpope/vim-characterize", commit = "885a00a3c21dd52ca8f2fd7d62850134934179d9", event = "VeryLazy"}, {url = "https://github.com/tpope/vim-commentary", commit = "627308e30639be3e2d5402808ce18690557e8292", event = "VeryLazy"}, {url = "https://github.com/tpope/vim-repeat", commit = "24afe922e6a05891756ecf331f39a1f6743d3d5a", event = "VeryLazy"}, {url = "https://github.com/tpope/vim-surround", commit = "aeb933272e72617f7c4d35e1f003be16836b948d", event = "VeryLazy"}, {url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim", commit = "dcff567b3a2d730f31b6da229ca3bb40640ec5a6", config = _11_}})
+  lazy.setup({{url = "https://github.com/bakpakin/fennel.vim", commit = "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89", ft = "fennel"}, {url = "https://github.com/Bekaboo/deadcolumn.nvim", commit = "8140fd7cface9592a44b3151203fc6ca95ad9598", event = "InsertEnter", config = _2_}, {url = "https://github.com/ggandor/leap.nvim", commit = "f74473d23ebf60957e0db3ff8172349a82e5a442", event = "VeryLazy", config = _3_}, {url = "https://github.com/hrsh7th/nvim-cmp", commit = "f841fa6ced194aa930136a7671439e6bd4c51722", dependencies = {{url = "https://github.com/hrsh7th/cmp-nvim-lsp", commit = "b4251f0fca1daeb6db5d60a23ca81507acf858c2"}, {url = "https://github.com/hrsh7th/cmp-buffer", commit = "f83773e2f433a923997c5faad7ea689ec24d1785"}}, event = "InsertEnter", config = _4_}, {url = "https://github.com/kevinhwang91/nvim-bqf", tag = "v1.1.0", ft = "qf", config = _5_}, {url = "https://github.com/nvim-lualine/lualine.nvim", commit = "84ffb80e452d95e2c46fa29a98ea11a240f7843e", config = _6_}, {url = "https://github.com/junegunn/fzf", commit = "6dcf5c3d7d6c321b17e6a5673f1533d6e8350462"}, {url = "https://github.com/junegunn/fzf.vim", commit = "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0"}, {url = "https://github.com/LnL7/vim-nix", commit = "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee", ft = "nix"}, {url = "https://github.com/lukas-reineke/indent-blankline.nvim", tag = "v2.20.4", config = _7_}, {url = "https://github.com/neovim/nvim-lsp", commit = "2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491"}, {url = "https://github.com/neovimhaskell/haskell-vim", commit = "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e", ft = "haskell"}, {url = "https://github.com/nvim-lua/lsp-status.nvim", commit = "4073f766f1303fb602802075e558fe43e382cc92"}, {url = "https://github.com/nvim-treesitter/nvim-treesitter", tag = "v0.8.5.2", build = ":TSUpdate", config = _8_}, {url = "https://github.com/rcarriga/nvim-notify", tag = "v3.11.0", config = _9_}, {url = "https://github.com/romainl/vim-cool", commit = "27ad4ecf7532b750fadca9f36e1c5498fc225af2", event = "VeryLazy"}, {url = "https://github.com/sainnhe/gruvbox-material", commit = "a6c5f652788b36c6ff2a0fdbefa271cb46f8f5e7", priority = 1000}, {url = "https://github.com/tommcdo/vim-exchange", commit = "784d63083ad7d613aa96f00021cd0dfb126a781a", config = _10_}, {url = "https://github.com/tpope/vim-characterize", commit = "885a00a3c21dd52ca8f2fd7d62850134934179d9", event = "VeryLazy"}, {url = "https://github.com/tpope/vim-commentary", commit = "627308e30639be3e2d5402808ce18690557e8292", event = "VeryLazy"}, {url = "https://github.com/tpope/vim-repeat", commit = "24afe922e6a05891756ecf331f39a1f6743d3d5a", event = "VeryLazy"}, {url = "https://github.com/tpope/vim-surround", commit = "aeb933272e72617f7c4d35e1f003be16836b948d", event = "VeryLazy"}, {url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim", commit = "dcff567b3a2d730f31b6da229ca3bb40640ec5a6", config = _11_}})
 end
 vim.g.gruvbox_material_background = "soft"
 vim.g.gruvbox_material_better_performance = 1
@@ -216,6 +134,88 @@ end
 do
   vim.bo["softtabstop"] = 2
   vim.o["softtabstop"] = 2
+end
+package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or function(...)
+  vim.keymap.set({"c", "i", "n", "o", "v"}, ";", ":")
+  vim.keymap.set({"c", "i", "n", "o", "v"}, ":", ";")
+  vim.keymap.set("n", "r;", "r:")
+  vim.keymap.set("n", "r:", "r;")
+  vim.keymap.set("n", "'", "`")
+  vim.keymap.set("n", "/", "/\\v")
+  vim.keymap.set("v", "/", "/\\v")
+  vim.keymap.set("n", "*", "*``")
+  vim.keymap.set("n", "<BS>", "<C-^>")
+  vim.keymap.set("n", "j", "gj")
+  vim.keymap.set("n", "k", "gk")
+  vim.keymap.set({"n", "v"}, "J", "6j", {remap = true})
+  vim.keymap.set({"n", "v"}, "K", "6k", {remap = true})
+  vim.keymap.set({"n", "o", "v"}, "H", "^")
+  vim.keymap.set({"n", "o"}, "L", "$")
+  vim.keymap.set("v", "L", "g_")
+  vim.keymap.set("v", "p", "\"0p")
+  vim.keymap.set("v", "Y", "y`>")
+  vim.keymap.set("n", "gV", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {expr = true})
+  vim.keymap.set("n", "U", "<C-r>")
+  vim.keymap.set("n", "<C-r>", "<Nop>")
+  vim.keymap.set({"n", "v"}, "n", "nzz")
+  vim.keymap.set({"n", "v"}, "N", "Nzz")
+  local function _12_()
+    local buffers = vim.fn.getbufinfo()
+    local num_listed
+    do
+      local acc = 0
+      for _, buffer in ipairs(buffers) do
+        if (1 == buffer.listed) then
+          acc = (acc + 1)
+        else
+          acc = acc
+        end
+      end
+      num_listed = acc
+    end
+    local function _14_()
+      if (num_listed <= 1) then
+        return "q"
+      else
+        return "bd"
+      end
+    end
+    return vim.cmd(_14_())
+  end
+  vim.keymap.set("n", "q", _12_)
+  vim.keymap.set("n", ">", "<Plug>MyRightShift", {silent = true})
+  vim.keymap.set("n", "<", "<Plug>MyLeftShift", {silent = true})
+  vim.keymap.set("n", "<Plug>MyRightShift", ">>ll:call repeat#set(\"\\<Plug>MyRightShift\")<CR>", {silent = true})
+  vim.keymap.set("n", "<Plug>MyLeftShift", "<<hh:call repeat#set(\"\\<Plug>MyLeftShift\")<CR>", {silent = true})
+  vim.keymap.set("n", "M", "m`J``")
+  vim.keymap.set("v", "al", "$o0", {silent = true})
+  vim.keymap.set("o", "al", ":<C-u>normal val<CR>", {silent = true})
+  vim.keymap.set("v", "il", "g_o^", {silent = true})
+  vim.keymap.set("o", "il", ":<C-u>normal vil<CR>", {silent = true})
+  vim.keymap.set("n", "<C-s>", ":%s/\\v//cg<Left><Left><Left><Left>")
+  vim.keymap.set("v", "<C-s>", ":s/\\v//cg<Left><Left><Left><Left>")
+  vim.keymap.set("n", "<C-j>", ":bn<CR>", {silent = true})
+  vim.keymap.set("n", "<C-k>", ":bp<CR>", {silent = true})
+  vim.keymap.set("n", "<Space>s", "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``", {silent = true})
+  vim.keymap.set("n", "<Space>S", "m`:silent w !repld-send<CR>``", {silent = true})
+  vim.keymap.set("v", "<Space>s", "m`<Esc>:silent '<,'>w !repld-send<CR>``", {silent = true})
+  vim.keymap.set("i", "<C-v>", "<C-r>*")
+  vim.keymap.set("c", "<C-h>", "<Left>")
+  vim.keymap.set("c", "<C-j>", "<Down>")
+  vim.keymap.set("c", "<C-k>", "<Up>")
+  vim.keymap.set("c", "<C-l>", "<Right>")
+  vim.keymap.set("n", "~", "mzlblgueh~`z", {silent = true})
+  local number_regex = "0x\\x\\+\\|\\d\\+\\(\\.\\d\\+\\)\\?"
+  local function _15_()
+    local matched_line = vim.fn.search(number_regex, "ceW")
+    if (matched_line ~= 0) then
+      vim.cmd("normal! v")
+      return vim.fn.search(number_regex, "bcW")
+    else
+      return nil
+    end
+  end
+  return vim.keymap.set("o", "n", _15_)
 end
 require("fennel/mappings")
 vim.api.nvim_create_augroup("mitchellwrosen", {})
@@ -375,22 +375,51 @@ end
 vim.api.nvim_create_autocmd("RecordingEnter", {callback = _44_, group = "mitchellwrosen"})
 vim.keymap.set("n", "9", "@z")
 vim.api.nvim_create_autocmd("FileType", {command = "startinsert", group = "mitchellwrosen", pattern = "gitcommit"})
+local function seems_like_haskell_project()
+  local acc = false
+  for name, typ in vim.fs.dir(".") do
+    if acc then break end
+    if ((typ == "file") and ((name == "cabal.project") or (name == "stack.yaml") or string.match(name, "%.cabal$"))) then
+      acc = true
+    else
+      acc = acc
+    end
+  end
+  return acc
+end
+local function _46_()
+  if seems_like_haskell_project() then
+    local function _47_(_, _0)
+      return vim.notify("Initializing.", vim.log.levels.INFO, {title = "hls"})
+    end
+    local function _48_(_, _0)
+      return vim.notify("Initialized.", vim.log.levels.INFO, {title = "hls"})
+    end
+    local function _49_(_, _0)
+      return vim.notify("Hello.", vim.log.levels.INFO, {title = "hls"})
+    end
+    return vim.lsp.start({before_init = _47_, on_init = _48_, on_attach = _49_, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "hls", root_dir = ".", settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
+  else
+    return nil
+  end
+end
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _46_})
 vim.api.nvim_create_autocmd("TermOpen", {command = "startinsert", group = "mitchellwrosen"})
 do
   local lsp = require("lspconfig")
   local status = require("lsp-status")
   local capabilities
-  local function _45_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:650")
+  local function _51_(config)
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:698")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
-  capabilities = _45_
+  capabilities = _51_
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
-  local function _46_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:685")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:685")
+  local function _52_(client, buf)
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:733")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:733")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
       return nil
@@ -398,12 +427,11 @@ do
       return nil
     end
   end
-  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _46_})
-  lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
+  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _52_})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua)})
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:718")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:766")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -412,10 +440,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.8) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _48_()
+  local function _54_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _48_})
+  vim.fn.termopen(command, {on_exit = _54_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

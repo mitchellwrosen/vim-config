@@ -193,9 +193,9 @@
       }
 
       ; fancy notifications (not sure if any of my plugins use this)
+      ; we do want this loaded right away
       { :url "https://github.com/rcarriga/nvim-notify"
         :tag "v3.11.0"
-        :event "VeryLazy" ; defer loading until way after UI
         :config
           (fn [_ _]
             (set vim.notify (require "notify"))
@@ -634,6 +634,54 @@
   }
 )
 
+; seems-like-haskell-project : io bool
+(fn seems-like-haskell-project []
+  (accumulate [acc false name typ (vim.fs.dir ".") &until acc]
+    (if
+      (and
+        (= typ "file")
+        (or
+          (= name "cabal.project")
+          (= name "stack.yaml")
+          (string.match name "%.cabal$")
+        )
+      )
+      true
+      acc
+    )
+  )
+)
+(vim.api.nvim_create_autocmd
+  "FileType"
+  { :pattern "haskell"
+    :group "mitchellwrosen"
+    :callback
+      (fn []
+        (when (seems-like-haskell-project)
+          (vim.lsp.start
+            { :before_init (fn [_ _] (vim.notify "Initializing." vim.log.levels.INFO { :title "hls" }))
+              :on_init (fn [_ _] (vim.notify "Initialized." vim.log.levels.INFO { :title "hls" }))
+              :on_attach (fn [_ _] (vim.notify "Hello." vim.log.levels.INFO { :title "hls" }))
+              :cmd ["haskell-language-server-wrapper" "--lsp"]
+              ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
+              :name "hls"
+              :root_dir "."
+              :settings
+                { :haskell
+                    { :formattingProvider "ormolu"
+                      :plugin
+                        { :hlint { :globalOn false }
+                          :stan { :globalOn false } ; FUCK stan. all my homies HATE stan
+                        }
+                    }
+                }
+            }
+        )
+      )
+    )
+  }
+)
+
 ; Start a terminal in insert mode
 (vim.api.nvim_create_autocmd
   "TermOpen"
@@ -689,24 +737,24 @@
     }
   )
 
-  (lsp.hls.setup
-    { :capabilities (capabilities lsp.hls)
-      :cmd ["haskell-language-server-wrapper" "--lsp"]
-      ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
-      :settings {
-        :haskell {
-          :formattingProvider "ormolu"
-          :plugin {
-            :hlint { :globalOn false }
-            ; FUCK stan. all my homies HATE stan
-            :stan { :globalOn false }
-          }
-          ; max number of completions sent to client at one time
-          ; :maxCompletions 20
-        }
-      }
-    }
-  )
+  ; (lsp.hls.setup
+  ;   { :capabilities (capabilities lsp.hls)
+  ;     :cmd ["haskell-language-server-wrapper" "--lsp"]
+  ;     ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
+  ;     :settings {
+  ;       :haskell {
+  ;         :formattingProvider "ormolu"
+  ;         :plugin {
+  ;           :hlint { :globalOn false }
+  ;           ; FUCK stan. all my homies HATE stan
+  ;           :stan { :globalOn false }
+  ;         }
+  ;         ; max number of completions sent to client at one time
+  ;         ; :maxCompletions 20
+  ;       }
+  ;     }
+  ;   }
+  ; )
 
   (lsp.sumneko_lua.setup
     { :capabilities (capabilities lsp.sumneko_lua)

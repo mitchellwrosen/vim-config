@@ -192,6 +192,16 @@
           )
       }
 
+      ; fancy notifications (not sure if any of my plugins use this)
+      { :url "https://github.com/rcarriga/nvim-notify"
+        :tag "v3.11.0"
+        :event "VeryLazy" ; defer loading until way after UI
+        :config
+          (fn [_ _]
+            (set vim.notify (require "notify"))
+          )
+      }
+
       ; automatically unhighlight when cursor moves
       { :url "https://github.com/romainl/vim-cool"
         :commit "27ad4ecf7532b750fadca9f36e1c5498fc225af2"

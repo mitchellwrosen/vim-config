@@ -16,6 +16,7 @@
   "nvim-bqf": { "branch": "main", "commit": "b71e6bc220ea2ef8f09d5e6b39d52609a965f322" },
   "nvim-cmp": { "branch": "main", "commit": "f841fa6ced194aa930136a7671439e6bd4c51722" },
   "nvim-lsp": { "branch": "master", "commit": "2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491" },
+  "nvim-notify": { "branch": "master", "commit": "bdd647f61a05c9b8a57c83b78341a0690e9c29d7" },
   "nvim-treesitter": { "branch": "master", "commit": "b401b7423d18c78371c5ff1a5f8d3c14292b2047" },
   "vim-characterize": { "branch": "master", "commit": "885a00a3c21dd52ca8f2fd7d62850134934179d9" },
   "vim-commentary": { "branch": "master", "commit": "627308e30639be3e2d5402808ce18690557e8292" },

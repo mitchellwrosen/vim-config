@@ -1,4 +1,3 @@
-(include "fennel/nvim")
 (import-macros
   { :left-merge left-merge
     :map map

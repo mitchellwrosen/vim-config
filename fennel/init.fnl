@@ -100,6 +100,17 @@
           )
       }
 
+      ; better quickfix with preview
+      { :url "https://github.com/kevinhwang91/nvim-bqf"
+        :tag "v1.1.0"
+        :ft "qf"
+        :config
+          (fn [_ _]
+            (local bqf (require "bqf"))
+            (bqf.setup)
+          )
+      }
+
       ; status line
       { :url "https://github.com/nvim-lualine/lualine.nvim"
         :commit "84ffb80e452d95e2c46fa29a98ea11a240f7843e"
@@ -245,8 +256,6 @@
     ]
   )
 )
-
-; (vim.cmd "Plug 'kevinhwang91/nvim-bqf', { 'commit': '46e6469fb1ef90d475fb43c56e0eeb81eacf08dd' }")
 
 ; (vim.cmd "Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
 ; (vim.cmd "Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")

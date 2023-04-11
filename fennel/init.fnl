@@ -1,10 +1,3 @@
-(import-macros
-  { :left-merge left-merge
-    :map map
-  }
-  "fennel/nvim-macros"
-)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bootstrap lazy.nvim
 
@@ -331,17 +324,17 @@
 ; tommcdo/vim-exchange
 (set vim.g.exchange_no_mappings 1) ; Don't make any key mappings
 ; x ("exchange") once to yank, x again to exchange with the first yank
-(map [ "n" "v" ] "x" "<Plug>(Exchange)" {})
+(vim.keymap.set [ "n" "v" ] "x" "<Plug>(Exchange)")
 ; Manually make exhange replace 'w' with 'e', as vim does for e.g. 'c'
-(map [ "n" ] "xw" "<Plug>(Exchange)e" {})
-(map [ "n" ] "xW" "<Plug>(Exchange)E" {})
-(map [ "n" ] "xx" "m`<Plug>(ExchangeLine)``" {}) ; exchange the entire line
-(map [ "n" ] "X" "<Plug>(Exchange)$" {}) ; exchange from here to the end of line
-(map [ "n" ] "xc" "<Plug>(ExchangeClear)" {}) ; clear the exchange highlight
+(vim.keymap.set "n" "xw" "<Plug>(Exchange)e")
+(vim.keymap.set "n" "xW" "<Plug>(Exchange)E")
+(vim.keymap.set "n" "xx" "m`<Plug>(ExchangeLine)``") ; exchange the entire line
+(vim.keymap.set "n" "X" "<Plug>(Exchange)$") ; exchange from here to the end of line
+(vim.keymap.set "n" "xc" "<Plug>(ExchangeClear)") ; clear the exchange highlight
 
 ; tpope/vim-commentary
-(map [ "n" ] "-" "m`<Plug>CommentaryLine``" {})
-(map [ "v" ] "-" "<Plug>Commentary" {})
+(vim.keymap.set "n" "-" "m`<Plug>CommentaryLine``")
+(vim.keymap.set "v" "-" "<Plug>Commentary")
 
 ; tpope/vim-surround
 (set vim.g.surround_no_mappings 1) ; don't let surround map anything
@@ -647,7 +640,8 @@
     (lambda [config]
       (local cmp-nvim-lsp (require "cmp_nvim_lsp"))
       (cmp-nvim-lsp.update_capabilities
-        (left-merge
+        (vim.tbl_extend
+          "keep"
           (or config.capabilities {})
           status.capabilities
         )

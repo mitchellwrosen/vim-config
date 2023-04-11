@@ -1,46 +1,27 @@
 package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or function(...)
-  do
-    vim.api.nvim_set_keymap("c", ";", ":", {noremap = true})
-    vim.api.nvim_set_keymap("i", ";", ":", {noremap = true})
-    vim.api.nvim_set_keymap("n", ";", ":", {noremap = true})
-    vim.api.nvim_set_keymap("o", ";", ":", {noremap = true})
-    vim.api.nvim_set_keymap("v", ";", ":", {noremap = true})
-  end
-  do
-    vim.api.nvim_set_keymap("c", ":", ";", {noremap = true})
-    vim.api.nvim_set_keymap("i", ":", ";", {noremap = true})
-    vim.api.nvim_set_keymap("n", ":", ";", {noremap = true})
-    vim.api.nvim_set_keymap("o", ":", ";", {noremap = true})
-    vim.api.nvim_set_keymap("v", ":", ";", {noremap = true})
-  end
-  vim.api.nvim_set_keymap("n", "r;", "r:", {noremap = true})
-  vim.api.nvim_set_keymap("n", "r:", "r;", {noremap = true})
+  vim.keymap.set({"c", "i", "n", "o", "v"}, ";", ":")
+  vim.keymap.set({"c", "i", "n", "o", "v"}, ":", ";")
+  vim.keymap.set("n", "r;", "r:")
+  vim.keymap.set("n", "r:", "r;")
   vim.keymap.set("n", "'", "`")
-  vim.api.nvim_set_keymap("n", "/", "/\\v", {noremap = true})
-  vim.api.nvim_set_keymap("v", "/", "/\\v", {noremap = true})
-  vim.api.nvim_set_keymap("n", "*", "*``", {noremap = true})
-  vim.api.nvim_set_keymap("n", "<BS>", "<C-^>", {noremap = true})
-  vim.api.nvim_set_keymap("n", "j", "gj", {noremap = true})
-  vim.api.nvim_set_keymap("n", "k", "gk", {noremap = true})
+  vim.keymap.set("n", "/", "/\\v")
+  vim.keymap.set("v", "/", "/\\v")
+  vim.keymap.set("n", "*", "*``")
+  vim.keymap.set("n", "<BS>", "<C-^>")
+  vim.keymap.set("n", "j", "gj")
+  vim.keymap.set("n", "k", "gk")
   vim.keymap.set({"n", "v"}, "J", "6j", {remap = true})
   vim.keymap.set({"n", "v"}, "K", "6k", {remap = true})
   vim.keymap.set({"n", "o", "v"}, "H", "^")
   vim.keymap.set({"n", "o"}, "L", "$")
   vim.keymap.set("v", "L", "g_")
-  vim.api.nvim_set_keymap("n", "Y", "y$", {noremap = true})
   vim.keymap.set("v", "p", "\"0p")
   vim.keymap.set("v", "Y", "y`>")
-  vim.api.nvim_set_keymap("n", "gV", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {expr = true, noremap = true})
-  vim.api.nvim_set_keymap("n", "U", "<C-r>", {noremap = true})
-  vim.api.nvim_set_keymap("n", "<C-r>", "<Nop>", {noremap = true})
-  do
-    vim.api.nvim_set_keymap("n", "n", "nzz", {noremap = true})
-    vim.api.nvim_set_keymap("v", "n", "nzz", {noremap = true})
-  end
-  do
-    vim.api.nvim_set_keymap("n", "N", "Nzz", {noremap = true})
-    vim.api.nvim_set_keymap("v", "N", "Nzz", {noremap = true})
-  end
+  vim.keymap.set("n", "gV", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {expr = true})
+  vim.keymap.set("n", "U", "<C-r>")
+  vim.keymap.set("n", "<C-r>", "<Nop>")
+  vim.keymap.set({"n", "v"}, "n", "nzz")
+  vim.keymap.set({"n", "v"}, "N", "Nzz")
   local function _11_()
     local buffers = vim.fn.getbufinfo()
     local num_listed
@@ -65,27 +46,27 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
     return vim.cmd(_13_())
   end
   vim.keymap.set("n", "q", _11_)
-  vim.keymap.set("n", ">", "<Plug>MyNmapLl", {silent = true})
-  vim.keymap.set("n", "<", "<Plug>MyNmapHh", {silent = true})
-  vim.keymap.set("n", "<Plug>MyNmapLl", ">>ll:call repeat#set(\"\\<Plug>MyNmapLl\")<CR>", {silent = true})
-  vim.keymap.set("n", "<Plug>MyNmapHh", "<<hh:call repeat#set(\"\\<Plug>MyNmapHh\")<CR>", {silent = true})
+  vim.keymap.set("n", ">", "<Plug>MyRightShift", {silent = true})
+  vim.keymap.set("n", "<", "<Plug>MyLeftShift", {silent = true})
+  vim.keymap.set("n", "<Plug>MyRightShift", ">>ll:call repeat#set(\"\\<Plug>MyRightShift\")<CR>", {silent = true})
+  vim.keymap.set("n", "<Plug>MyLeftShift", "<<hh:call repeat#set(\"\\<Plug>MyLeftShift\")<CR>", {silent = true})
   vim.keymap.set("n", "M", "m`J``")
-  vim.api.nvim_set_keymap("v", "al", "$o0", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("o", "al", ":<C-u>normal val<CR>", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("v", "il", "g_o^", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("o", "il", ":<C-u>normal vil<CR>", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("n", "<C-s>", ":%s/\\v//cg<Left><Left><Left><Left>", {noremap = true})
-  vim.api.nvim_set_keymap("v", "<C-s>", ":s/\\v//cg<Left><Left><Left><Left>", {noremap = true})
-  vim.api.nvim_set_keymap("n", "<C-j>", ":bn<CR>", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("n", "<C-k>", ":bp<CR>", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("n", "<Space>s", "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("n", "<Space>S", "m`:silent w !repld-send<CR>``", {noremap = true, silent = true})
-  vim.api.nvim_set_keymap("v", "<Space>s", "m`<Esc>:silent '<,'>w !repld-send<CR>``", {noremap = true, silent = true})
+  vim.keymap.set("v", "al", "$o0", {silent = true})
+  vim.keymap.set("o", "al", ":<C-u>normal val<CR>", {silent = true})
+  vim.keymap.set("v", "il", "g_o^", {silent = true})
+  vim.keymap.set("o", "il", ":<C-u>normal vil<CR>", {silent = true})
+  vim.keymap.set("n", "<C-s>", ":%s/\\v//cg<Left><Left><Left><Left>")
+  vim.keymap.set("v", "<C-s>", ":s/\\v//cg<Left><Left><Left><Left>")
+  vim.keymap.set("n", "<C-j>", ":bn<CR>", {silent = true})
+  vim.keymap.set("n", "<C-k>", ":bp<CR>", {silent = true})
+  vim.keymap.set("n", "<Space>s", "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``", {silent = true})
+  vim.keymap.set("n", "<Space>S", "m`:silent w !repld-send<CR>``", {silent = true})
+  vim.keymap.set("v", "<Space>s", "m`<Esc>:silent '<,'>w !repld-send<CR>``", {silent = true})
   vim.keymap.set("i", "<C-v>", "<C-r>*")
-  vim.api.nvim_set_keymap("c", "<C-h>", "<Left>", {noremap = true})
-  vim.api.nvim_set_keymap("c", "<C-j>", "<Down>", {noremap = true})
-  vim.api.nvim_set_keymap("c", "<C-k>", "<Up>", {noremap = true})
-  vim.api.nvim_set_keymap("c", "<C-l>", "<Right>", {noremap = true})
+  vim.keymap.set("c", "<C-h>", "<Left>")
+  vim.keymap.set("c", "<C-j>", "<Down>")
+  vim.keymap.set("c", "<C-k>", "<Up>")
+  vim.keymap.set("c", "<C-l>", "<Right>")
   vim.keymap.set("n", "~", "mzlblgueh~`z", {silent = true})
   local number_regex = "0x\\x\\+\\|\\d\\+\\(\\.\\d\\+\\)\\?"
   local function _14_()
@@ -162,17 +143,14 @@ vim.g.git_messenger_extra_blame_args = "-w"
 vim.g.git_messenger_no_default_mappings = true
 vim.api.nvim_set_keymap("n", "<Space>b", "<Plug>(git-messenger)", {})
 vim.g.exchange_no_mappings = 1
-do
-  vim.api.nvim_set_keymap("n", "x", "<Plug>(Exchange)", {})
-  vim.api.nvim_set_keymap("v", "x", "<Plug>(Exchange)", {})
-end
-vim.api.nvim_set_keymap("n", "xw", "<Plug>(Exchange)e", {})
-vim.api.nvim_set_keymap("n", "xW", "<Plug>(Exchange)E", {})
-vim.api.nvim_set_keymap("n", "xx", "m`<Plug>(ExchangeLine)``", {})
-vim.api.nvim_set_keymap("n", "X", "<Plug>(Exchange)$", {})
-vim.api.nvim_set_keymap("n", "xc", "<Plug>(ExchangeClear)", {})
-vim.api.nvim_set_keymap("n", "-", "m`<Plug>CommentaryLine``", {})
-vim.api.nvim_set_keymap("v", "-", "<Plug>Commentary", {})
+vim.keymap.set({"n", "v"}, "x", "<Plug>(Exchange)")
+vim.keymap.set("n", "xw", "<Plug>(Exchange)e")
+vim.keymap.set("n", "xW", "<Plug>(Exchange)E")
+vim.keymap.set("n", "xx", "m`<Plug>(ExchangeLine)``")
+vim.keymap.set("n", "X", "<Plug>(Exchange)$")
+vim.keymap.set("n", "xc", "<Plug>(ExchangeClear)")
+vim.keymap.set("n", "-", "m`<Plug>CommentaryLine``")
+vim.keymap.set("v", "-", "<Plug>Commentary")
 vim.g.surround_no_mappings = 1
 vim.o.autowriteall = true
 vim.o.clipboard = "unnamed,unnamedplus"
@@ -399,7 +377,7 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _44_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:647")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:640")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
@@ -407,8 +385,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
   local function _45_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:681")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:681")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:675")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:675")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
       return nil
@@ -421,7 +399,7 @@ do
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua)})
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:714")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:708")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

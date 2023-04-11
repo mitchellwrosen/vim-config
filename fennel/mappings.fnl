@@ -149,3 +149,36 @@
 
 ; make tilde toggle the capitalization of the first letter of the current word (not sure i like this)
 (vim.keymap.set "n" "~" "mzlblgueh~`z" { :silent true })
+
+; make "n" like a number text object, with forward seeking behavior
+; cn to change (inner) number, dn to delete it, etc
+
+; human readable regex:
+;
+;   number = hex-number | decimal-number
+;   hex-number = 0x hex-digit+
+;   decimal-number = digit+ (. digit+)?
+;
+; guide to ugly escaped characters below:
+;
+;   \\d  digit
+;   \\x  hex digit
+;   \\.  literal period character
+;   \\+  one or more
+;   \\?  optional
+;   \\(  begin group
+;   \\)  end group
+;   \\|  alternative
+(let [number-regex "0x\\x\\+\\|\\d\\+\\(\\.\\d\\+\\)\\?"]
+  (vim.keymap.set
+    "o"
+    "n"
+    (fn []
+      (local matched-line (vim.fn.search number-regex "ceW"))
+      (when (not= matched-line 0)
+        (vim.cmd "normal! v")
+        (vim.fn.search number-regex "bcW")
+      )
+    )
+  )
+)

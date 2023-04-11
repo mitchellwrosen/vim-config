@@ -86,7 +86,18 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.api.nvim_set_keymap("c", "<C-j>", "<Down>", {noremap = true})
   vim.api.nvim_set_keymap("c", "<C-k>", "<Up>", {noremap = true})
   vim.api.nvim_set_keymap("c", "<C-l>", "<Right>", {noremap = true})
-  return vim.keymap.set("n", "~", "mzlblgueh~`z", {silent = true})
+  vim.keymap.set("n", "~", "mzlblgueh~`z", {silent = true})
+  local number_regex = "0x\\x\\+\\|\\d\\+\\(\\.\\d\\+\\)\\?"
+  local function _16_()
+    local matched_line = vim.fn.search(number_regex, "ceW")
+    if (matched_line ~= 0) then
+      vim.cmd("normal! v")
+      return vim.fn.search(number_regex, "bcW")
+    else
+      return nil
+    end
+  end
+  return vim.keymap.set("o", "n", _16_)
 end
 package.preload["fennel/nvim"] = package.preload["fennel/nvim"] or function(...)
   local mode = {command = "command", insert = "insert", normal = "normal", ["operator-pending"] = "operator-pending", visual = "visual"}
@@ -271,8 +282,8 @@ do
 end
 require("fennel/mappings")
 vim.api.nvim_create_augroup("mitchellwrosen", {})
-local function _16_(opts)
-  local function _17_()
+local function _18_(opts)
+  local function _19_()
     local last_known_line = (vim.api.nvim_buf_get_mark(opts.buf, "\""))[1]
     if ((last_known_line > 1) and (last_known_line <= vim.api.nvim_buf_line_count(opts.buf))) then
       return vim.api.nvim_feedkeys("g`\"", "x", false)
@@ -280,27 +291,27 @@ local function _16_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, callback = _17_})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, callback = _19_})
 end
-vim.api.nvim_create_autocmd("BufRead", {callback = _16_})
-local function _19_()
+vim.api.nvim_create_autocmd("BufRead", {callback = _18_})
+local function _21_()
   vim.bo.modifiable = not vim.bo.readonly
   return nil
 end
-vim.api.nvim_create_autocmd("BufReadPost", {callback = _19_, group = "mitchellwrosen"})
-local function _20_()
+vim.api.nvim_create_autocmd("BufReadPost", {callback = _21_, group = "mitchellwrosen"})
+local function _22_()
   return vim.highlight.on_yank({higroup = "IncSearch", timeout = 300})
 end
-vim.api.nvim_create_autocmd("TextYankPost", {callback = _20_, group = "mitchellwrosen"})
-local function _21_()
+vim.api.nvim_create_autocmd("TextYankPost", {callback = _22_, group = "mitchellwrosen"})
+local function _23_()
   if (vim.fn.getcmdwintype() == "") then
     return vim.cmd("checktime")
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _21_, group = "mitchellwrosen"})
-local function _23_()
+vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _23_, group = "mitchellwrosen"})
+local function _25_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
     local view = vim.fn.winsaveview()
     vim.cmd("keeppatterns silent! %s/\\s\\+$//e")
@@ -310,9 +321,9 @@ local function _23_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _23_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _25_, group = "mitchellwrosen"})
 local extract_haskell_typesig_from_markdown
-local function _25_(str0)
+local function _27_(str0)
   local str = str0
   local i = nil
   i = string.find(str, "```haskell\n")
@@ -343,10 +354,10 @@ local function _25_(str0)
     return nil
   end
 end
-extract_haskell_typesig_from_markdown = _25_
+extract_haskell_typesig_from_markdown = _27_
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"})
 local hover_namespace = vim.api.nvim_create_namespace("hover")
-local function _30_(args)
+local function _32_(args)
   local buf = args.buf
   local client = vim.lsp.get_client_by_id(args.data.client_id)
   local augroup_name = ("mitchellwrosenLsp" .. buf)
@@ -364,15 +375,15 @@ local function _30_(args)
   vim.keymap.set("n", "<Space>r", vim.lsp.buf.references, {buffer = buf, silent = true})
   vim.keymap.set("n", "<Space>e", vim.lsp.buf.rename, {buffer = buf, silent = true})
   vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, {buffer = buf, silent = true})
-  local function _31_()
+  local function _33_()
     return vim.diagnostic.goto_prev({float = false})
   end
-  vim.keymap.set("n", "<Up>", _31_, {buffer = buf, silent = true})
-  local function _32_()
+  vim.keymap.set("n", "<Up>", _33_, {buffer = buf, silent = true})
+  local function _34_()
     return vim.diagnostic.goto_next({float = false})
   end
-  vim.keymap.set("n", "<Down>", _32_, {buffer = buf, silent = true})
-  local function _33_()
+  vim.keymap.set("n", "<Down>", _34_, {buffer = buf, silent = true})
+  local function _35_()
     if (vim.api.nvim_get_mode().mode == "n") then
       local position = vim.lsp.util.make_position_params()
       local line_number = position.position.line
@@ -382,15 +393,15 @@ local function _30_(args)
           vim.lsp.buf.document_highlight()
         else
         end
-        local function _35_(_err, result, _ctx, _config)
+        local function _37_(_err, result, _ctx, _config)
           local contents
           do
-            local t_36_ = result
-            if (nil ~= t_36_) then
-              t_36_ = (t_36_).contents
+            local t_38_ = result
+            if (nil ~= t_38_) then
+              t_38_ = (t_38_).contents
             else
             end
-            contents = t_36_
+            contents = t_38_
           end
           if (not (contents == nil) and (type(contents) == "table") and ("markdown" == contents.kind)) then
             local line = extract_haskell_typesig_from_markdown(contents.value)
@@ -404,7 +415,7 @@ local function _30_(args)
             return nil
           end
         end
-        return vim.lsp.buf_request(buf, "textDocument/hover", position, _35_)
+        return vim.lsp.buf_request(buf, "textDocument/hover", position, _37_)
       else
         return nil
       end
@@ -412,19 +423,19 @@ local function _30_(args)
       return nil
     end
   end
-  vim.api.nvim_create_autocmd("CursorMoved", {buffer = buf, callback = _33_, group = augroup_name})
+  vim.api.nvim_create_autocmd("CursorMoved", {buffer = buf, callback = _35_, group = augroup_name})
   vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
   return nil
 end
-vim.api.nvim_create_autocmd("LspAttach", {callback = _30_, group = "mitchellwrosen"})
-local function _42_()
+vim.api.nvim_create_autocmd("LspAttach", {callback = _32_, group = "mitchellwrosen"})
+local function _44_()
   return vim.keymap.set("n", "1", "qz")
 end
-vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _42_, group = "mitchellwrosen"})
-local function _43_()
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _44_, group = "mitchellwrosen"})
+local function _45_()
   return vim.keymap.set("n", "1", "q")
 end
-vim.api.nvim_create_autocmd("RecordingEnter", {callback = _43_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("RecordingEnter", {callback = _45_, group = "mitchellwrosen"})
 vim.keymap.set("n", "9", "@z")
 vim.api.nvim_create_autocmd("FileType", {command = "startinsert", group = "mitchellwrosen", pattern = "gitcommit"})
 vim.api.nvim_create_autocmd("TermOpen", {command = "startinsert", group = "mitchellwrosen"})
@@ -432,15 +443,15 @@ do
   local lsp = require("lspconfig")
   local status = require("lsp-status")
   local capabilities
-  local function _44_(config)
+  local function _46_(config)
     _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:648")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
-  capabilities = _44_
+  capabilities = _46_
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
-  local function _45_(client, buf)
+  local function _47_(client, buf)
     _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:682")
     _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:682")
     if client.config.flags then
@@ -450,7 +461,7 @@ do
       return nil
     end
   end
-  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _45_})
+  lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _47_})
   lsp.hls.setup({capabilities = capabilities(lsp.hls), cmd = {"haskell-language-server-wrapper", "--lsp"}, settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua)})
 end
@@ -464,10 +475,10 @@ local function run_floating(command)
   local width = math.floor(((columns * 0.8) + 0.5))
   local col = math.floor((((columns - width) / 2) + 0.5))
   local win = vim.api.nvim_open_win(buf, true, {col = col, height = height, relative = "editor", row = row, style = "minimal", width = width})
-  local function _47_()
+  local function _49_()
     return vim.cmd(("bw! " .. buf))
   end
-  vim.fn.termopen(command, {on_exit = _47_})
+  vim.fn.termopen(command, {on_exit = _49_})
   vim.api.nvim_buf_set_keymap(buf, "t", "<Esc>", "<Esc>", {noremap = true, nowait = true, silent = true})
   return win
 end

@@ -8,30 +8,6 @@
 
 lua require('init')
 
-" inner/around number text objects (with forward-seeking behavior)
-" 123 123.456 0b1010 0xff
-let s:number_regex = '0b[01]\+\|0x\x\+\|\d\+\(\.\d\+\)\='
-function! s:innerNumberTextObject()
-  if (!search(s:number_regex, 'ceW'))
-    return
-  endif
-  normal! v
-  call search(s:number_regex, 'bcW')
-endfunction
-function! s:aroundNumberTextObject()
-  if (!search(s:number_regex, 'ceW'))
-    return
-  endif
-  call search('\%' . (virtcol('.')+1) . 'v\s*', 'ceW')
-  normal! v
-  call search(s:number_regex, 'cb')
-  call search('\s*\%' . virtcol('.') . 'v', 'bW')
-endfunction
-vnoremap <silent> in :<C-u>call <SID>innerNumberTextObject()<cr>
-onoremap <silent> in :<C-u>call <SID>innerNumberTextObject()<cr>
-xnoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
-onoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
-
 " On <Enter>, go to error and close quickfix list
 autocmd mitchellwrosen FileType qf nnoremap <silent> <buffer> <CR> <CR>:ccl<CR>
 
@@ -40,9 +16,6 @@ autocmd mitchellwrosen TermOpen * tnoremap <buffer> <Esc> <C-\><C-n>
 autocmd mitchellwrosen TermOpen * setlocal nonumber norelativenumber
 " forcibly exit a terminal buffer, because there's nothing to save
 autocmd mitchellwrosen TermOpen * nnoremap <silent> <buffer> <Space>d :bw!<CR>
-
-" Echo the quickfix entry on the current line, if any
-" autocmd CursorMoved * call <SID>EchoQuickFixEntry()
 
 " ==============================================================================
 " Plugin settings
@@ -118,13 +91,6 @@ sign define LspDiagnosticsWarningSign text=⚠ texthl=LspDiagnosticsWarning line
 sign define LspDiagnosticsInformationSign text=ℹ texthl=LspDiagnosticsInformation linehl= numhl=
 sign define LspDiagnosticsHintSign text=➤ texthl=LspDiagnosticsHint linehl= numhl=
 
-" [romainl/vim-qf]
-" Toggle the quickfix ("location") menu; move thru quickfix items with Alt+jk
-" Hmm... I never seem to use these... do they even work? Wtf is quickfix?
-" nmap <Space>l <Plug>(qf_qf_toggle)
-" nmap <A-j> <Plug>(qf_qf_next)
-" nmap <A-k> <Plug>(qf_qf_prev)
-
 " dz to delete surround and restore cursor position
 nmap dz' mz<Plug>Dsurround'`zh
 nmap dz" mz<Plug>Dsurround"`zh
@@ -162,14 +128,6 @@ nmap ZZ( mz<Plug>Yssurround)`z
 nmap ZZ[ mz<Plug>Yssurround]`z
 nmap ZZ{ mz<Plug>Yssurround}`z
 nmap ZZp mz<Plug>Yssurround)`z
-
-" ==============================================================================
-" nvim-gtk settings
-" ==============================================================================
-
-if exists('g:GtkGuiLoaded')
-  call rpcnotify(1, 'Gui', 'Font', 'PragmataPro Mono Liga 18')
-endif
 
 " ==============================================================================
 

@@ -157,7 +157,7 @@ do
   end
   local function _7_(_, _0)
     local lualine = require("lualine")
-    return lualine.setup({component_separators = "", icons_enabled = false, section_separators = "", sections = {lualine_a = {"mode"}, lualine_b = {"branch", "diff", "diagnostics"}, lualine_c = {"filename"}, lualine_x = {"filetype"}, lualine_y = {"progress"}, lualine_z = {"location"}}, tabline = {lualine_a = {{"buffers", show_filenames_only = true}}, lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = {}, lualine_z = {}}})
+    return lualine.setup({component_separators = "", icons_enabled = false, section_separators = "", sections = {lualine_a = {"mode"}, lualine_b = {"branch", "diff", "diagnostics"}, lualine_c = {"filename"}, lualine_x = {"filetype"}, lualine_y = {"progress"}, lualine_z = {"location"}}, tabline = {lualine_a = {{show_filenames_only = true, "buffers"}}, lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = {}, lualine_z = {}}})
   end
   local function _8_(_, _0)
     local plugin = require("indent_blankline")

@@ -32,19 +32,6 @@ onoremap <silent> in :<C-u>call <SID>innerNumberTextObject()<cr>
 xnoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 onoremap <silent> an :<C-u>call <SID>aroundNumberTextObject()<cr>
 
-" Strip trailing whitespace on save
-function! s:stripTrailingWhitespace() abort
-  if &l:modifiable && !&l:binary
-    let l:view = winsaveview()
-      try
-        keeppatterns silent! 1,$s/\s\+$//e
-      finally
-        call winrestview(l:view)
-      endtry
-  endif
-endfunction
-autocmd mitchellwrosen BufWritePre * call s:stripTrailingWhitespace()
-
 " On <Enter>, go to error and close quickfix list
 autocmd mitchellwrosen FileType qf nnoremap <silent> <buffer> <CR> <CR>:ccl<CR>
 

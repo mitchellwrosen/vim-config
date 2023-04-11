@@ -442,22 +442,26 @@
   [ "CursorHold" "FocusGained" ]
   { :callback
       (fn []
-        (when
-          (= (vim.fn.getcmdwintype) "")
-          (vim.cmd "checktime"))
+        (when (= (vim.fn.getcmdwintype) "")
+          (vim.cmd "checktime")
+        )
       )
     :group "mitchellwrosen"
   }
 )
 
-; Save the buffer after changing it
+; Strip trailing whitespace and save the buffer after changing it
 (vim.api.nvim_create_autocmd
   [ "InsertLeave" "TextChanged" ]
   { :callback
       (fn []
-        (when
-          (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
-          (vim.cmd "silent! update")))
+        (when (and (= vim.o.buftype "") (not= (vim.api.nvim_buf_get_name 0) ""))
+          (local view (vim.fn.winsaveview))
+          (vim.cmd "keeppatterns silent! %s/\\s\\+$//e")
+          (vim.cmd "silent! update")
+          (vim.fn.winrestview view)
+        )
+      )
     :group "mitchellwrosen"
   }
 )

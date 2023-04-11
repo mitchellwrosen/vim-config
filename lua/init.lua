@@ -298,7 +298,10 @@ end
 vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _20_, group = "mitchellwrosen"})
 local function _22_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
-    return vim.cmd("silent! update")
+    local view = vim.fn.winsaveview()
+    vim.cmd("keeppatterns silent! %s/\\s\\+$//e")
+    vim.cmd("silent! update")
+    return vim.fn.winrestview(view)
   else
     return nil
   end
@@ -426,7 +429,7 @@ do
   local status = require("lsp-status")
   local capabilities
   local function _43_(config)
-    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:635")
+    _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:639")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
     return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
   end
@@ -434,8 +437,8 @@ do
   status.register_progress()
   vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
   local function _44_(client, buf)
-    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:669")
-    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:669")
+    _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:673")
+    _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:673")
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
       return nil
@@ -448,7 +451,7 @@ do
   lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua)})
 end
 local function run_floating(command)
-  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:702")
+  _G.assert((nil ~= command), "Missing argument command on fennel/init.fnl:706")
   local buf = vim.api.nvim_create_buf(false, true)
   local columns = vim.o.columns
   local lines = vim.o.lines

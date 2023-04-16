@@ -11,8 +11,8 @@
 (vim.keymap.set "n" "/" "/\\v")
 (vim.keymap.set "v" "/" "/\\v")
 
-; Don't highlight matches *and* jump at the same time; only highlight
-(vim.keymap.set "n" "*" "*``")
+; Don't highlight matches *and* jump at the same time; only highlight. Also don't mess with the jumplist.
+(vim.keymap.set "n" "*" (fn [] (vim.cmd "keepjumps normal! *``")))
 
 ; Backspace to switch to the previously edited buffer
 (vim.keymap.set "n" "<BS>" "<C-^>")

@@ -568,9 +568,7 @@
             :callback
               (fn []
                 (when (= (. (vim.api.nvim_get_mode) :mode) "n")
-                  (local position (vim.lsp.util.make_position_params))
-                  (local line-number position.position.line)
-                  (when (not= (. (vim.api.nvim_buf_get_lines buf line-number (+ line-number 1) false) 1) "")
+                  (when (not= (vim.api.nvim_get_current_line) "")
                     ; highlight other occurrences of the thing under the cursor
                     ; the colors are determined by LspReferenceText, etc. highlight groups
                     (when client.server_capabilities.documentHighlightProvider
@@ -578,7 +576,11 @@
                       (vim.lsp.buf.document_highlight)
                     )
                     ; try to put a type sig in the virtual text area
-                    (vim.lsp.buf_request buf "textDocument/hover" position
+                    (local position (vim.lsp.util.make_position_params))
+                    (vim.lsp.buf_request
+                      buf
+                      "textDocument/hover"
+                      position
                       (fn [_err result _ctx _config]
                         (local contents (?. result :contents))
                         (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
@@ -634,6 +636,78 @@
   }
 )
 
+; neovim's progress handler seems like a bit of a work-in-progress, and I don't think it's a good idea to just
+; overwrite it. it currently appends messages to an internal struct, emits a User LspStatusUpdate autocmd, and you can
+; react to this by calling vim.lsp.util.get_client_messages, which returns a list of unseen messages
+;
+; that's all rather weird, so we just hook in here to do our thing (vim.notify progress updates) before passing along
+; to the default handler
+(do
+  (local default-progress-handler (. vim.lsp.handlers "$/progress"))
+
+  ; notifications : map client-id (map token notification-id)
+  ;
+  ; we track the notification-id for each progress update so we can update notifications in-place
+  (var notifications {})
+
+  (fn my-progress-handler [err result context config]
+    (local client-id context.client_id)
+    (local client (vim.lsp.get_client_by_id client-id))
+    (if client
+      (do
+        (local token result.token)
+        (local value result.value)
+        (case value.kind
+          "begin"
+            (do
+              (when (not (. notifications client-id)) (tset notifications client-id {}))
+              (local
+                notification-id
+                (vim.notify
+                  (or value.message "")
+                  vim.log.levels.INFO
+                  { :timeout false
+                    :title (if value.title (.. client.name ": " value.title) client.name)
+                  }
+                )
+              )
+              (tset notifications client-id token notification-id)
+            )
+          "report"
+            (do
+              (local old-notification-id (. notifications client-id token))
+              (local
+                new-notification-id
+                (vim.notify
+                  (or value.message "")
+                  vim.log.levels.INFO
+                  { :replace old-notification-id })
+              )
+              (tset notifications client-id token new-notification-id)
+            )
+          "end"
+            (do
+              (local notification-id (. notifications client-id token))
+              (vim.notify
+                (or value.message "")
+                vim.log.levels.INFO
+                { :replace notification-id
+                  :timeout 3000
+                }
+              )
+              (tset notifications client-id token nil)
+            )
+        )
+      )
+      ; TODO
+      (print "client died")
+    )
+
+    (default-progress-handler err result context config)
+  )
+  (tset vim.lsp.handlers "$/progress" my-progress-handler)
+)
+
 ; seems-like-haskell-project : io bool
 (fn seems-like-haskell-project []
   (accumulate [acc false name typ (vim.fs.dir ".") &until acc]
@@ -659,9 +733,9 @@
       (fn []
         (when (seems-like-haskell-project)
           (vim.lsp.start
-            { :before_init (fn [_ _] (vim.notify "Initializing." vim.log.levels.INFO { :title "hls" }))
-              :on_init (fn [_ _] (vim.notify "Initialized." vim.log.levels.INFO { :title "hls" }))
-              :on_attach (fn [_ _] (vim.notify "Hello." vim.log.levels.INFO { :title "hls" }))
+            { ; :before_init (fn [_ _] (vim.notify "Initializing." vim.log.levels.INFO { :title "hls" }))
+              ; :on_init (fn [_ _] (vim.notify "Initialized." vim.log.levels.INFO { :title "hls" }))
+              ; :on_attach (fn [_ _] (vim.notify "Hello." vim.log.levels.INFO { :title "hls" }))
               :cmd ["haskell-language-server-wrapper" "--lsp"]
               ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
               :name "hls"
@@ -707,9 +781,6 @@
     )
   )
 
-  ; Uh, just kind of following https://github.com/nvim-lua/lsp-status.nvim here...
-  (status.register_progress)
-
   (vim.diagnostic.config
     { :float
         { ; require cursor to be over diagnostic in order to open a float window of it
@@ -737,58 +808,8 @@
     }
   )
 
-  ; (lsp.hls.setup
-  ;   { :capabilities (capabilities lsp.hls)
-  ;     :cmd ["haskell-language-server-wrapper" "--lsp"]
-  ;     ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
-  ;     :settings {
-  ;       :haskell {
-  ;         :formattingProvider "ormolu"
-  ;         :plugin {
-  ;           :hlint { :globalOn false }
-  ;           ; FUCK stan. all my homies HATE stan
-  ;           :stan { :globalOn false }
-  ;         }
-  ;         ; max number of completions sent to client at one time
-  ;         ; :maxCompletions 20
-  ;       }
-  ;     }
-  ;   }
-  ; )
-
   (lsp.sumneko_lua.setup
     { :capabilities (capabilities lsp.sumneko_lua)
     }
   )
 )
-
-; Run the given command in a centered floating terminal.
-(lambda run-floating [command]
-  (let [buf (vim.api.nvim_create_buf false true)
-        columns vim.o.columns
-        lines vim.o.lines
-        height (math.floor (+ (* lines 0.8) 0.5))
-        row (math.floor (+ (/ (- lines height) 2) 0.5))
-        width (math.floor (+ (* columns 0.8) 0.5))
-        col (math.floor (+ (/ (- columns width) 2) 0.5))
-        win
-          (vim.api.nvim_open_win
-            buf
-            true
-            { :col col
-              :height height
-              :relative "editor"
-              :row row
-              :style "minimal"
-              :width width
-            }
-          )
-        ]
-    (vim.fn.termopen command { :on_exit (lambda [] (vim.cmd (.. "bw! " buf))) })
-    ; Awkward, undo the remapping of <Esc> to <C-\><C-n> in init.vim
-    (vim.api.nvim_buf_set_keymap buf "t" "<Esc>" "<Esc>" { :noremap true :nowait true :silent true })
-    win))
-
-{ :run_floating run-floating
-  :virtual_hover virtual-hover
-}

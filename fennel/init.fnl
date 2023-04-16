@@ -18,6 +18,62 @@
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Options
+
+(set vim.o.autowriteall true)
+; this would be nice, but unsuccessful search prompts to press enter
+; https://github.com/neovim/neovim/issues/20380
+; (set vim.o.cmdheight 0) ; don't waste a line on command
+(set vim.o.clipboard "unnamed,unnamedplus") ; yank also copies to both clipboards
+(set vim.o.completeopt "menuone,noinsert,noselect") ; sane completion behavior...
+(set vim.o.grepprg "rg --vimgrep") ; use rg to grep
+(set vim.o.hidden true) ; don't abandon out-of-sight buffers
+(set vim.o.ignorecase true) ; case-insensitive searching
+(set vim.o.inccommand "split") ; show live command substitutions
+(set vim.o.joinspaces false) ; insert one space after ., ?, ! chars when joining
+(set vim.o.lazyredraw true) ; don't draw during e.g. applying a macro
+(set vim.o.listchars "tab:> ,trail:·,nbsp:+") ; trailing whitespace markers
+(set vim.o.mouse "") ; disable mouse
+(set vim.o.report 0) ; always repeat the number of lines changed
+(set vim.o.scrolloff 15) ; start scrolling before the cursor reaches the edge
+(set vim.o.shiftround true) ; shift to multiple of shiftwidth
+(set vim.o.shortmess "filnxtToOFIc")
+(set vim.o.showmode false) ; don't show mode, since statusline handles that
+(set vim.o.showtabline 2) ; always show the tabline
+(set vim.o.sidescrolloff 16) ; start scrolling before the cursor reaches the edge
+(set vim.o.smartcase true) ; don't ignore case if search contains uppercase char
+(set vim.o.startofline false) ; don't jump cursor to start of line when moving
+(set vim.o.termguicolors true)
+(set vim.o.timeoutlen 400) ; only wait this many ms for key sequence to complete
+(set vim.o.title true) ; put filename in window title
+(set vim.o.updatetime 300) ; fire CursorHold after this many ms (default 4000ms)
+(set vim.o.wildmenu true) ; complete commands with a little menu
+(set vim.o.wildmode "list:longest,full") ; wild menu completion behavior
+(set vim.o.wrap false) ; don't wrap long lines
+(set vim.wo.colorcolumn "120")
+(set vim.wo.cursorline true) ; higlight the current line
+(set vim.wo.foldenable false) ; never fold
+(set vim.wo.list true) ; show trailing whitespace, tabs, etc.
+(set vim.wo.number true) ; show line number gutter
+(set vim.wo.signcolumn "yes") ; always draw signcolumn because it's jarring when it appears otherwise
+
+(macro set-bo [name value]
+  `(do
+     (tset vim.bo ,name ,value)
+     (tset vim.o ,name ,value)
+  )
+)
+
+(set-bo "expandtab" true)   ; convert tabs to spaces
+(set-bo "modeline" false)   ; disable modelines
+(set-bo "smartindent" true) ; smart autoindenting when starting a new line
+(set-bo "undofile" true)    ; persist undo history across buffer exits
+
+(set-bo "shiftwidth" 2)
+(set-bo "synmaxcol" 3000) ; dont bother syntax-highlighting past this column
+(set-bo "softtabstop" 2)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Plugins
 
 (do
@@ -198,7 +254,12 @@
         :tag "v3.11.0"
         :config
           (fn [_ _]
-            (set vim.notify (require "notify"))
+            (local notify (require "notify"))
+            (notify.setup
+              { :stages "static" ; don't animate, it looks janky
+              }
+            )
+            (set vim.notify notify)
           )
       }
 
@@ -297,33 +358,6 @@
 (set vim.g.haskell_enable_typeroles 1)
 (set vim.g.haskell_indent_disable 1)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; lightline
-
-; TODO move configs from vim
-
-; nvim-telescope/telescope.nvim
-; (let
-;   [telescope (require "telescope")
-;    actions (require "telescope.actions")
-;   ]
-;   (telescope.setup {
-;     "defaults" {
-;       "mappings" {
-;         "i" {
-;           ; Change <C-n>/<C-p> movement to <C-j>/<C-k>
-;           "<C-n>" false
-;           "<C-p>" false
-;           "<C-j>" actions.move_selection_next
-;           "<C-k>" actions.move_selection_previous
-;
-;           "<Esc>" actions.close
-;         }
-;       }
-;     }
-;   })
-; )
-
 ; rhysd/git-messenger.vim
 (set vim.g.git_messenger_always_into_popup true)
 (set vim.g.git_messenger_extra_blame_args "-w")
@@ -348,59 +382,6 @@
 
 ; tpope/vim-surround
 (set vim.g.surround_no_mappings 1) ; don't let surround map anything
-
-(set vim.o.autowriteall true)
-; this would be nice, but unsuccessful search prompts to press enter
-; https://github.com/neovim/neovim/issues/20380
-; (set vim.o.cmdheight 0) ; don't waste a line on command
-(set vim.o.clipboard "unnamed,unnamedplus") ; yank also copies to both clipboards
-(set vim.o.completeopt "menuone,noinsert,noselect") ; sane completion behavior...
-(set vim.o.grepprg "rg --vimgrep") ; use rg to grep
-(set vim.o.hidden true) ; don't abandon out-of-sight buffers
-(set vim.o.ignorecase true) ; case-insensitive searching
-(set vim.o.inccommand "split") ; show live command substitutions
-(set vim.o.joinspaces false) ; insert one space after ., ?, ! chars when joining
-(set vim.o.lazyredraw true) ; don't draw during e.g. applying a macro
-(set vim.o.listchars "tab:> ,trail:·,nbsp:+") ; trailing whitespace markers
-(set vim.o.mouse "") ; disable mouse
-(set vim.o.report 0) ; always repeat the number of lines changed
-(set vim.o.scrolloff 15) ; start scrolling before the cursor reaches the edge
-(set vim.o.shiftround true) ; shift to multiple of shiftwidth
-(set vim.o.shortmess "filnxtToOFIc")
-(set vim.o.showmode false) ; don't show mode, since statusline handles that
-(set vim.o.showtabline 2) ; always show the tabline
-(set vim.o.sidescrolloff 16) ; start scrolling before the cursor reaches the edge
-(set vim.o.smartcase true) ; don't ignore case if search contains uppercase char
-(set vim.o.startofline false) ; don't jump cursor to start of line when moving
-(set vim.o.termguicolors true)
-(set vim.o.timeoutlen 400) ; only wait this many ms for key sequence to complete
-(set vim.o.title true) ; put filename in window title
-(set vim.o.updatetime 300) ; fire CursorHold after this many ms (default 4000ms)
-(set vim.o.wildmenu true) ; complete commands with a little menu
-(set vim.o.wildmode "list:longest,full") ; wild menu completion behavior
-(set vim.o.wrap false) ; don't wrap long lines
-(set vim.wo.colorcolumn "120")
-(set vim.wo.cursorline true) ; higlight the current line
-(set vim.wo.foldenable false) ; never fold
-(set vim.wo.list true) ; show trailing whitespace, tabs, etc.
-(set vim.wo.number true) ; show line number gutter
-(set vim.wo.signcolumn "yes") ; always draw signcolumn because it's jarring when it appears otherwise
-
-(macro set-bo [name value]
-  `(do
-     (tset vim.bo ,name ,value)
-     (tset vim.o ,name ,value)
-  )
-)
-
-(set-bo "expandtab" true)   ; convert tabs to spaces
-(set-bo "modeline" false)   ; disable modelines
-(set-bo "smartindent" true) ; smart autoindenting when starting a new line
-(set-bo "undofile" true)    ; persist undo history across buffer exits
-
-(set-bo "shiftwidth" 2)
-(set-bo "synmaxcol" 3000) ; dont bother syntax-highlighting past this column
-(set-bo "softtabstop" 2)
 
 (include "fennel/mappings")
 
@@ -645,7 +626,7 @@
 (do
   (local default-progress-handler (. vim.lsp.handlers "$/progress"))
 
-  ; notifications : map client-id (map token notification-id)
+  ; notifications : map client-id (map token { title : string, id : notification-id })
   ;
   ; we track the notification-id for each progress update so we can update notifications in-place
   (var notifications {})
@@ -664,35 +645,45 @@
               (local
                 notification-id
                 (vim.notify
-                  (or value.message "")
+                  (..
+                    client.name
+                    ":"
+                    (if value.title (.. " " value.title) "")
+                    (if value.message (.. " " value.message) "")
+                  )
                   vim.log.levels.INFO
-                  { :timeout false
-                    :title (if value.title (.. client.name ": " value.title) client.name)
+                  { :render "minimal"
+                    :timeout false
                   }
                 )
               )
-              (tset notifications client-id token notification-id)
+              (tset notifications client-id token { :title value.title :id notification-id })
             )
           "report"
             (do
-              (local old-notification-id (. notifications client-id token))
+              (local { :title title :id old-notification-id } (. notifications client-id token))
               (local
                 new-notification-id
                 (vim.notify
-                  (or value.message "")
+                  (..
+                    client.name
+                    ":"
+                    (if title (.. " " title) "")
+                    (if value.message (.. " " value.message) "")
+                  )
                   vim.log.levels.INFO
                   { :replace old-notification-id })
               )
-              (tset notifications client-id token new-notification-id)
+              (tset notifications client-id token :id new-notification-id)
             )
           "end"
             (do
-              (local notification-id (. notifications client-id token))
+              (local { :id notification-id } (. notifications client-id token))
               (vim.notify
-                (or value.message "")
+                ""
                 vim.log.levels.INFO
                 { :replace notification-id
-                  :timeout 3000
+                  :timeout 0
                 }
               )
               (tset notifications client-id token nil)
@@ -732,9 +723,25 @@
     :callback
       (fn []
         (when (seems-like-haskell-project)
+          (var initialize-notification-id nil)
           (vim.lsp.start
-            { ; :before_init (fn [_ _] (vim.notify "Initializing." vim.log.levels.INFO { :title "hls" }))
-              ; :on_init (fn [_ _] (vim.notify "Initialized." vim.log.levels.INFO { :title "hls" }))
+            { :before_init
+                (fn [_ _]
+                  (set
+                    initialize-notification-id
+                    (vim.notify
+                      "hls: Initializing"
+                      vim.log.levels.INFO
+                      { :render "minimal"
+                        :timeout false
+                      }
+                    )
+                  )
+                )
+              :on_init
+                (fn [_ _]
+                  (vim.notify "" vim.log.levels.INFO { :replace initialize-notification-id :timeout 0 })
+                )
               ; :on_attach (fn [_ _] (vim.notify "Hello." vim.log.levels.INFO { :title "hls" }))
               :cmd ["haskell-language-server-wrapper" "--lsp"]
               ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]

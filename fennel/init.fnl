@@ -24,15 +24,12 @@
 ; this would be nice, but unsuccessful search prompts to press enter
 ; https://github.com/neovim/neovim/issues/20380
 ; (set vim.o.cmdheight 0) ; don't waste a line on command
-(set vim.o.clipboard "unnamed,unnamedplus") ; yank also copies to both clipboards
-(set vim.o.completeopt "menuone,noinsert,noselect") ; sane completion behavior...
 (set vim.o.grepprg "rg --vimgrep") ; use rg to grep
 (set vim.o.hidden true) ; don't abandon out-of-sight buffers
 (set vim.o.ignorecase true) ; case-insensitive searching
 (set vim.o.inccommand "split") ; show live command substitutions
 (set vim.o.joinspaces false) ; insert one space after ., ?, ! chars when joining
 (set vim.o.lazyredraw true) ; don't draw during e.g. applying a macro
-(set vim.o.listchars "tab:> ,trail:·,nbsp:+") ; trailing whitespace markers
 (set vim.o.mouse "") ; disable mouse
 (set vim.o.report 0) ; always repeat the number of lines changed
 (set vim.o.scrolloff 15) ; start scrolling before the cursor reaches the edge
@@ -50,6 +47,9 @@
 (set vim.o.wildmenu true) ; complete commands with a little menu
 (set vim.o.wildmode "list:longest,full") ; wild menu completion behavior
 (set vim.o.wrap false) ; don't wrap long lines
+(set vim.opt.clipboard [ "unnamed" "unnamedplus" ]) ; yank also copies to both clipboards
+(set vim.opt.completeopt [ "menuone" "noinsert" "noselect" ]) ; sane completion behavior...
+(set vim.opt.listchars { :nbsp "+" :tab "> " :trail "·"}) ; trailing whitespace markers
 (set vim.wo.colorcolumn "120")
 (set vim.wo.cursorline true) ; higlight the current line
 (set vim.wo.foldenable false) ; never fold
@@ -64,14 +64,14 @@
   )
 )
 
-(set-bo "expandtab" true)   ; convert tabs to spaces
-(set-bo "modeline" false)   ; disable modelines
-(set-bo "smartindent" true) ; smart autoindenting when starting a new line
-(set-bo "undofile" true)    ; persist undo history across buffer exits
+(set-bo :expandtab true)   ; convert tabs to spaces
+(set-bo :modeline false)   ; disable modelines
+(set-bo :smartindent true) ; smart autoindenting when starting a new line
+(set-bo :undofile true)    ; persist undo history across buffer exits
 
-(set-bo "shiftwidth" 2)
-(set-bo "synmaxcol" 3000) ; dont bother syntax-highlighting past this column
-(set-bo "softtabstop" 2)
+(set-bo :shiftwidth 2)
+(set-bo :synmaxcol 200) ; dont bother syntax-highlighting past this column
+(set-bo :softtabstop 2)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Plugins

@@ -7,15 +7,12 @@ do
   do end (vim.opt.rtp):prepend(lazypath)
 end
 vim.o.autowriteall = true
-vim.o.clipboard = "unnamed,unnamedplus"
-vim.o.completeopt = "menuone,noinsert,noselect"
 vim.o.grepprg = "rg --vimgrep"
 vim.o.hidden = true
 vim.o.ignorecase = true
 vim.o.inccommand = "split"
 vim.o.joinspaces = false
 vim.o.lazyredraw = true
-vim.o.listchars = "tab:> ,trail:\194\183,nbsp:+"
 vim.o.mouse = ""
 vim.o.report = 0
 vim.o.scrolloff = 15
@@ -33,6 +30,9 @@ vim.o.updatetime = 300
 vim.o.wildmenu = true
 vim.o.wildmode = "list:longest,full"
 vim.o.wrap = false
+vim.opt.clipboard = {"unnamed", "unnamedplus"}
+vim.opt.completeopt = {"menuone", "noinsert", "noselect"}
+vim.opt.listchars = {nbsp = "+", tab = "> ", trail = "\194\183"}
 vim.wo.colorcolumn = "120"
 vim.wo.cursorline = true
 vim.wo.foldenable = false
@@ -60,8 +60,8 @@ do
   vim.o["shiftwidth"] = 2
 end
 do
-  vim.bo["synmaxcol"] = 3000
-  vim.o["synmaxcol"] = 3000
+  vim.bo["synmaxcol"] = 200
+  vim.o["synmaxcol"] = 200
 end
 do
   vim.bo["softtabstop"] = 2

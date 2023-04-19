@@ -1,3 +1,5 @@
+(local { : file-exists } (require "stdlib"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bootstrap lazy.nvim
 
@@ -819,6 +821,28 @@
 (vim.api.nvim_create_autocmd
   "TermOpen"
   { :command "startinsert"
+    :group "mitchellwrosen"
+  }
+)
+
+; restore Session.vim it it exists and and no args were provided to vim
+; resources to look at later and make this better:
+;   https://vim.fandom.com/wiki/Go_away_and_come_back
+;   https://stackoverflow.com/questions/9281438/syntax-highlighting-doesnt-work-after-restore-a-previous-vim-session
+;   https://github.com/Shatur/neovim-session-manager/blob/master/lua/session_manager/utils.lua
+(vim.api.nvim_create_autocmd
+  "VimEnter"
+  { :callback
+      (fn []
+        (when
+          (and
+            (= (vim.fn.argc) 0)
+            (file-exists "Session.vim")
+          )
+          (vim.cmd { :cmd "source" :args [ "Session.vim" ] :mods { :silent true } })
+        )
+      )
+    :nested true ; fire more autocomands triggered by loading the session, like BufEnter etc
     :group "mitchellwrosen"
   }
 )

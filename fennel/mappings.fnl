@@ -65,7 +65,7 @@
         (if (= 1 buffer.listed) (+ acc 1) acc)
       )
     )
-    (vim.cmd (if (<= num-listed 1) "q" "bw"))
+    (if (<= num-listed 1) (vim.cmd.q) (vim.api.nvim_buf_delete 0 { :force true }))
   )
 )
 
@@ -121,7 +121,7 @@
         (when (= buffer-id current-buffer-id) (set current-buffer-index buffer-index))
       )
       (macro delete-buffer [buffer-id]
-        `(vim.cmd { :cmd "bw" :args [ ,buffer-id ] :mods { :silent true } })
+        `(vim.api.nvim_buf_delete ,buffer-id { :force true })
       )
       (if
         (< desired-buffer-index current-buffer-index)
@@ -160,6 +160,12 @@
             ;   1 5 2 3 4 6 7 8
             (each [_ filename (ipairs left-filenames-to-reopen)] (vim.cmd.badd filename))
             (each [_ filename (ipairs right-filenames-to-reopen)] (vim.cmd.badd filename))
+
+            ; without this, the buffer tabline thing seems to only update after some (probably updatetime) milliseconds
+            ; weirdly we don't need it when moving the buffer right. that's probably because we :edit
+            ; urgh - it doesn't work. yet putting a (vim.notify "done!") here makes the reorder seem instantaneous. so
+            ; how the hell do you redraw the statusline with this fuckass editor? HELLO?
+            ; (vim.cmd.redraws)
           )
         (> desired-buffer-index current-buffer-index)
           (do

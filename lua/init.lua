@@ -178,14 +178,11 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
       end
       num_listed = acc
     end
-    local function _15_()
-      if (num_listed <= 1) then
-        return "q"
-      else
-        return "bw"
-      end
+    if (num_listed <= 1) then
+      return vim.cmd.q()
+    else
+      return vim.api.nvim_buf_delete(0, {force = true})
     end
-    return vim.cmd(_15_())
   end
   vim.keymap.set("n", "q", _13_)
   vim.keymap.set("n", ">", "<Plug>MyRightShift", {silent = true})
@@ -328,10 +325,10 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
             right_filenames_to_reopen = tbl_17_auto
           end
           for _, buffer_id in ipairs(left_buffer_ids_to_delete) do
-            vim.cmd({args = {buffer_id}, cmd = "bw", mods = {silent = true}})
+            vim.api.nvim_buf_delete(buffer_id, {force = true})
           end
           for _, buffer_id in ipairs(right_buffer_ids_to_delete) do
-            vim.cmd({args = {buffer_id}, cmd = "bw", mods = {silent = true}})
+            vim.api.nvim_buf_delete(buffer_id, {force = true})
           end
           for _, filename in ipairs(left_filenames_to_reopen) do
             vim.cmd.badd(filename)
@@ -375,9 +372,9 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
             filenames_to_reopen = tbl_17_auto
           end
           local current_filename = vim.api.nvim_buf_get_name(0)
-          vim.cmd({args = {current_buffer_id}, cmd = "bw", mods = {silent = true}})
+          vim.api.nvim_buf_delete(current_buffer_id, {force = true})
           for _, buffer_id in ipairs(buffer_ids_to_delete) do
-            vim.cmd({args = {buffer_id}, cmd = "bw", mods = {silent = true}})
+            vim.api.nvim_buf_delete(buffer_id, {force = true})
           end
           vim.cmd.edit(current_filename)
           for _, filename in ipairs(filenames_to_reopen) do

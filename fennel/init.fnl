@@ -626,7 +626,7 @@
 (do
   (local default-progress-handler (. vim.lsp.handlers "$/progress"))
 
-  ; notifications : map client-id (map token { title : string, id : notification-id })
+  ; notifications : map client-id (map token { id : notification-id, start-ms : number, title : string })
   ;
   ; we track the notification-id for each progress update so we can update notifications in-place
   (var notifications {})
@@ -638,14 +638,17 @@
       (do
         (local token result.token)
         (local value result.value)
+        (var start-ms nil)
         (case value.kind
           "begin"
             (do
+              (set start-ms (vim.loop.now))
               (when (not (. notifications client-id)) (tset notifications client-id {}))
               (local
                 notification-id
                 (vim.notify
                   (..
+                    "        | "
                     client.name
                     ":"
                     (if value.title (.. " " value.title) "")
@@ -657,15 +660,16 @@
                   }
                 )
               )
-              (tset notifications client-id token { :title value.title :id notification-id })
+              (tset notifications client-id token { :id notification-id :start-ms start-ms :title value.title })
             )
           "report"
             (do
-              (local { :title title :id old-notification-id } (. notifications client-id token))
+              (local { :id old-notification-id :title title } (. notifications client-id token))
               (local
                 new-notification-id
                 (vim.notify
                   (..
+                    "        | "
                     client.name
                     ":"
                     (if title (.. " " title) "")
@@ -678,12 +682,20 @@
             )
           "end"
             (do
-              (local { :id notification-id } (. notifications client-id token))
+              (local stop-ms (vim.loop.now))
+              (local { :id notification-id :start-ms start-ms :title title } (. notifications client-id token))
               (vim.notify
-                ""
+                (..
+                  (string.format "%6.2fs" (/ (- stop-ms start-ms) 1000))
+                  " | "
+                  client.name
+                  ":"
+                  (if title (.. " " title) "")
+                  (if value.message (.. " " value.message) "")
+                )
                 vim.log.levels.INFO
                 { :replace notification-id
-                  :timeout 0
+                  :timeout (if (< (- stop-ms start-ms) 100) 0 3000)
                 }
               )
               (tset notifications client-id token nil)
@@ -724,13 +736,15 @@
       (fn []
         (when (seems-like-haskell-project)
           (var initialize-notification-id nil)
+          (var start-ms nil)
           (vim.lsp.start
             { :before_init
                 (fn [_ _]
+                  (set start-ms (vim.loop.now))
                   (set
                     initialize-notification-id
                     (vim.notify
-                      "hls: Initializing"
+                      "        | hls: Initializing"
                       vim.log.levels.INFO
                       { :render "minimal"
                         :timeout false
@@ -740,7 +754,14 @@
                 )
               :on_init
                 (fn [_ _]
-                  (vim.notify "" vim.log.levels.INFO { :replace initialize-notification-id :timeout 0 })
+                  (local stop-ms (vim.loop.now))
+                  (vim.notify
+                    (.. (string.format "%6.2fs" (/ (- stop-ms start-ms) 1000)) " | hls: Initialized")
+                    vim.log.levels.INFO
+                    { :replace initialize-notification-id
+                      :timeout 3000
+                    }
+                  )
                 )
               ; :on_attach (fn [_ _] (vim.notify "Hello." vim.log.levels.INFO { :title "hls" }))
               :cmd ["haskell-language-server-wrapper" "--lsp"]

@@ -1033,8 +1033,10 @@ do
     if client then
       local token = result.token
       local value = result.value
+      local start_ms = nil
       local _46_ = value.kind
       if (_46_ == "begin") then
+        start_ms = vim.loop.now()
         if not notifications[client_id] then
           notifications[client_id] = {}
         else
@@ -1054,12 +1056,12 @@ do
             return ""
           end
         end
-        notification_id = vim.notify((client.name .. ":" .. _48_() .. _49_()), vim.log.levels.INFO, {render = "minimal", timeout = false})
-        do end (notifications)[client_id][token] = {title = value.title, id = notification_id}
+        notification_id = vim.notify(("        | " .. client.name .. ":" .. _48_() .. _49_()), vim.log.levels.INFO, {render = "minimal", timeout = false})
+        do end (notifications)[client_id][token] = {id = notification_id, ["start-ms"] = start_ms, title = value.title}
       elseif (_46_ == "report") then
         local _local_50_ = notifications[client_id][token]
-        local title = _local_50_["title"]
         local old_notification_id = _local_50_["id"]
+        local title = _local_50_["title"]
         local new_notification_id
         local function _51_()
           if title then
@@ -1075,12 +1077,35 @@ do
             return ""
           end
         end
-        new_notification_id = vim.notify((client.name .. ":" .. _51_() .. _52_()), vim.log.levels.INFO, {replace = old_notification_id})
+        new_notification_id = vim.notify(("        | " .. client.name .. ":" .. _51_() .. _52_()), vim.log.levels.INFO, {replace = old_notification_id})
         do end (notifications)[client_id][token]["id"] = new_notification_id
       elseif (_46_ == "end") then
+        local stop_ms = vim.loop.now()
         local _local_53_ = notifications[client_id][token]
         local notification_id = _local_53_["id"]
-        vim.notify("", vim.log.levels.INFO, {replace = notification_id, timeout = 0})
+        local start_ms0 = _local_53_["start-ms"]
+        local title = _local_53_["title"]
+        local function _54_()
+          if title then
+            return (" " .. title)
+          else
+            return ""
+          end
+        end
+        local function _55_()
+          if value.message then
+            return (" " .. value.message)
+          else
+            return ""
+          end
+        end
+        local _56_
+        if ((stop_ms - start_ms0) < 100) then
+          _56_ = 0
+        else
+          _56_ = 3000
+        end
+        vim.notify((string.format("%6.2fs", ((stop_ms - start_ms0) / 1000)) .. " | " .. client.name .. ":" .. _54_() .. _55_()), vim.log.levels.INFO, {replace = notification_id, timeout = _56_})
         do end (notifications)[client_id][token] = nil
       else
       end
@@ -1103,36 +1128,39 @@ local function seems_like_haskell_project()
   end
   return acc
 end
-local function _57_()
+local function _61_()
   if seems_like_haskell_project() then
     local initialize_notification_id = nil
-    local function _58_(_, _0)
-      initialize_notification_id = vim.notify("hls: Initializing", vim.log.levels.INFO, {render = "minimal", timeout = false})
+    local start_ms = nil
+    local function _62_(_, _0)
+      start_ms = vim.loop.now()
+      initialize_notification_id = vim.notify("        | hls: Initializing", vim.log.levels.INFO, {render = "minimal", timeout = false})
       return nil
     end
-    local function _59_(_, _0)
-      return vim.notify("", vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 0})
+    local function _63_(_, _0)
+      local stop_ms = vim.loop.now()
+      return vim.notify((string.format("%6.2fs", ((stop_ms - start_ms) / 1000)) .. " | hls: Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
     end
-    return vim.lsp.start({before_init = _58_, on_init = _59_, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "hls", root_dir = ".", settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
+    return vim.lsp.start({before_init = _62_, on_init = _63_, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "hls", root_dir = ".", settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _57_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _61_})
 vim.api.nvim_create_autocmd("TermOpen", {command = "startinsert", group = "mitchellwrosen"})
 local lsp = require("lspconfig")
 local status = require("lsp-status")
 local capabilities
-local function _61_(config)
-  _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:779")
+local function _65_(config)
+  _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:800")
   local cmp_nvim_lsp = require("cmp_nvim_lsp")
   return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
 end
-capabilities = _61_
+capabilities = _65_
 vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
-local function _62_(client, buf)
-  _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:811")
-  _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:811")
+local function _66_(client, buf)
+  _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:832")
+  _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:832")
   if client.config.flags then
     client.config.flags.allow_incremental_sync = true
     return nil
@@ -1140,5 +1168,5 @@ local function _62_(client, buf)
     return nil
   end
 end
-lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _62_})
+lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _66_})
 return lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua)})

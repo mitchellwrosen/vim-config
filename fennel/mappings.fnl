@@ -108,11 +108,43 @@
     (local buffer-id (. buffer-ids i))
     (when buffer-id (vim.cmd.buffer buffer-id))
   )
+  ; idrop 2 [ A B C X Y Z ] = [ C X Y Z ]
+  (fn idrop [n xs] (icollect [i x (ipairs xs)] (if (<= i n) nil x)))
+  (fn move-buffer-to-index [desired-buffer-index]
+    (local buffer-ids (list-buffers))
+    (local current-buffer-id (vim.api.nvim_get_current_buf))
+    (var current-buffer-index nil)
+    (each [buffer-index buffer-id (ipairs buffer-ids) &until current-buffer-index]
+      (when (= buffer-id current-buffer-id) (set current-buffer-index buffer-index))
+    )
+    (if
+      (< desired-buffer-index current-buffer-index) (print "TODO: move buffer left")
+      (> desired-buffer-index current-buffer-index)
+        (do
+          ; if we want to move listed buffer to index N, we need to wipe out all listed buffers at index N+1 and above
+          (local buffer-ids-to-delete (idrop desired-buffer-index buffer-ids))
+          (local filenames-to-reopen (icollect [_ buffer-id (ipairs buffer-ids-to-delete)] (vim.api.nvim_buf_get_name buffer-id)))
+          (local current-filename (vim.api.nvim_buf_get_name 0))
+          (fn delete-buffer [buffer-id]
+            (vim.cmd { :cmd "bw" :args [ buffer-id ] :mods { :silent true } })
+          )
+          (delete-buffer current-buffer-id)
+          (each [_ buffer-id (ipairs buffer-ids-to-delete)] (delete-buffer buffer-id))
+          (vim.cmd.edit current-filename)
+          (each [_ filename (ipairs filenames-to-reopen)] (vim.cmd.badd filename))
+        )
+    )
+  )
   (vim.keymap.set "n" "1" (fn [] (go-to-buffer 1)))
   (vim.keymap.set "n" "2" (fn [] (go-to-buffer 2)))
   (vim.keymap.set "n" "3" (fn [] (go-to-buffer 3)))
   (vim.keymap.set "n" "4" (fn [] (go-to-buffer 4)))
   (vim.keymap.set "n" "5" (fn [] (go-to-buffer 5)))
+  (vim.keymap.set "n" "<Space>1" (fn [] (move-buffer-to-index 1)))
+  (vim.keymap.set "n" "<Space>2" (fn [] (move-buffer-to-index 2)))
+  (vim.keymap.set "n" "<Space>3" (fn [] (move-buffer-to-index 3)))
+  (vim.keymap.set "n" "<Space>4" (fn [] (move-buffer-to-index 4)))
+  (vim.keymap.set "n" "<Space>5" (fn [] (move-buffer-to-index 5)))
 )
 
 ; " github.com/mitchellwrosen/repld stuff

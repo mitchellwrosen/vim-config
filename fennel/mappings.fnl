@@ -85,6 +85,30 @@
 (vim.keymap.set "n" "<C-j>" ":bn<CR>" { :silent true })
 (vim.keymap.set "n" "<C-k>" ":bp<CR>" { :silent true })
 
+; Experimenting with 1-5 to select buffer 1-5. Pretty annoying that vim doesn't support reordering buffers. I guess I
+; need some custom functions and a custom bufferline to get the UX I want?
+(do
+  ; list *listed* buffers (matching the output of :ls) (doesn't matter if buffer is *unloaded*)
+  ; this seems to be what bufferlines and such show by default
+  (fn list-buffers []
+    (local buffer-ids (vim.api.nvim_list_bufs))
+    (icollect
+      [_ buffer-id (ipairs buffer-ids)]
+      (if (vim.api.nvim_buf_get_option buffer-id "buflisted") buffer-id nil)
+    )
+  )
+  (fn go-to-buffer [i]
+    (local buffer-ids (list-buffers))
+    (local buffer-id (. buffer-ids i))
+    (when buffer-id (vim.cmd.buffer buffer-id))
+  )
+  (vim.keymap.set "n" "1" (fn [] (go-to-buffer 1)))
+  (vim.keymap.set "n" "2" (fn [] (go-to-buffer 2)))
+  (vim.keymap.set "n" "3" (fn [] (go-to-buffer 3)))
+  (vim.keymap.set "n" "4" (fn [] (go-to-buffer 4)))
+  (vim.keymap.set "n" "5" (fn [] (go-to-buffer 5)))
+)
+
 ; " github.com/mitchellwrosen/repld stuff
 (vim.keymap.set "n" "<Space>s" "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``" { :silent true })
 (vim.keymap.set "n" "<Space>S" "m`:silent w !repld-send<CR>``" { :silent true })

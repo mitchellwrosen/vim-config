@@ -319,35 +319,35 @@
 
       ; some lua utils that other plugins want:
       ;   - harpoon
-      { :url "https://github.com/nvim-lua/plenary.nvim"
-        :tag "v0.1.3"
-        :config (fn [] nil)
-        :event "VeryLazy" ; defer loading until way after UI
-      }
+      ; { :url "https://github.com/nvim-lua/plenary.nvim"
+      ;   :tag "v0.1.3"
+      ;   :config (fn [] nil)
+      ;   :event "VeryLazy" ; defer loading until way after UI
+      ; }
 
-      { :url "https://github.com/ThePrimeagen/harpoon"
-        :commit "f7040fd0c44e7a4010369136547de5604b9c22a1"
-        :config
-          (fn []
-            (local harpoon (require "harpoon"))
-            (local harpoon-mark (require "harpoon.mark"))
-            (local harpoon-ui (require "harpoon.ui"))
-            (vim.keymap.set "n" "<Space>p" harpoon-mark.add_file)
-            (vim.keymap.set "n" "<Space>P" harpoon-ui.toggle_quick_menu)
-            (vim.keymap.set "n" "1" (fn [] (harpoon-ui.nav_file 1)))
-            (vim.keymap.set "n" "2" (fn [] (harpoon-ui.nav_file 2)))
-            (vim.keymap.set "n" "3" (fn [] (harpoon-ui.nav_file 3)))
-            (vim.keymap.set "n" "4" (fn [] (harpoon-ui.nav_file 4)))
-            (vim.keymap.set "n" "5" (fn [] (harpoon-ui.nav_file 5)))
-            (harpoon.setup
-              { :menu
-                  { :width 80
-                  }
-              }
-            )
-          )
-        :event "VeryLazy" ; defer loading until way after UI
-      }
+      ; { :url "https://github.com/ThePrimeagen/harpoon"
+      ;   :commit "f7040fd0c44e7a4010369136547de5604b9c22a1"
+      ;   :config
+      ;     (fn []
+      ;       (local harpoon (require "harpoon"))
+      ;       (local harpoon-mark (require "harpoon.mark"))
+      ;       (local harpoon-ui (require "harpoon.ui"))
+      ;       (vim.keymap.set "n" "<Space>p" harpoon-mark.add_file)
+      ;       (vim.keymap.set "n" "<Space>P" harpoon-ui.toggle_quick_menu)
+      ;       (vim.keymap.set "n" "1" (fn [] (harpoon-ui.nav_file 1)))
+      ;       (vim.keymap.set "n" "2" (fn [] (harpoon-ui.nav_file 2)))
+      ;       (vim.keymap.set "n" "3" (fn [] (harpoon-ui.nav_file 3)))
+      ;       (vim.keymap.set "n" "4" (fn [] (harpoon-ui.nav_file 4)))
+      ;       (vim.keymap.set "n" "5" (fn [] (harpoon-ui.nav_file 5)))
+      ;       (harpoon.setup
+      ;         { :menu
+      ;             { :width 80
+      ;             }
+      ;         }
+      ;       )
+      ;     )
+      ;   :event "VeryLazy" ; defer loading until way after UI
+      ; }
     ]
   )
 )

@@ -230,110 +230,207 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
         return nil
       end
     end
-    local function idrop(n, xs)
-      local tbl_17_auto = {}
-      local i_18_auto = #tbl_17_auto
-      for i, x in ipairs(xs) do
-        local val_19_auto
-        if (i <= n) then
-          val_19_auto = nil
-        else
-          val_19_auto = x
-        end
-        if (nil ~= val_19_auto) then
-          i_18_auto = (i_18_auto + 1)
-          do end (tbl_17_auto)[i_18_auto] = val_19_auto
-        else
-        end
-      end
-      return tbl_17_auto
-    end
     local function move_buffer_to_index(desired_buffer_index)
-      local buffer_ids = list_buffers()
-      local current_buffer_id = vim.api.nvim_get_current_buf()
-      local current_buffer_index = nil
-      for buffer_index, buffer_id in ipairs(buffer_ids) do
-        if current_buffer_index then break end
-        if (buffer_id == current_buffer_id) then
-          current_buffer_index = buffer_index
-        else
-        end
-      end
-      if (desired_buffer_index < current_buffer_index) then
-        return print("TODO: move buffer left")
-      elseif (desired_buffer_index > current_buffer_index) then
-        local buffer_ids_to_delete = idrop(desired_buffer_index, buffer_ids)
-        local filenames_to_reopen
-        do
-          local tbl_17_auto = {}
-          local i_18_auto = #tbl_17_auto
-          for _, buffer_id in ipairs(buffer_ids_to_delete) do
-            local val_19_auto = vim.api.nvim_buf_get_name(buffer_id)
-            if (nil ~= val_19_auto) then
-              i_18_auto = (i_18_auto + 1)
-              do end (tbl_17_auto)[i_18_auto] = val_19_auto
-            else
-            end
+      if (desired_buffer_index >= 1) then
+        local buffer_ids = list_buffers()
+        local current_buffer_id = vim.api.nvim_get_current_buf()
+        local current_buffer_index = nil
+        for buffer_index, buffer_id in ipairs(buffer_ids) do
+          if current_buffer_index then break end
+          if (buffer_id == current_buffer_id) then
+            current_buffer_index = buffer_index
+          else
           end
-          filenames_to_reopen = tbl_17_auto
         end
-        local current_filename = vim.api.nvim_buf_get_name(0)
-        local function delete_buffer(buffer_id)
-          return vim.cmd({cmd = "bw", args = {buffer_id}, mods = {silent = true}})
+        if (desired_buffer_index < current_buffer_index) then
+          local left_buffer_ids_to_delete
+          do
+            local tbl_17_auto = {}
+            local i_18_auto = #tbl_17_auto
+            local function _20_()
+              local tbl_17_auto0 = {}
+              local i_18_auto0 = #tbl_17_auto0
+              for i_1_auto, x_2_auto in ipairs(buffer_ids) do
+                local val_19_auto
+                if (i_1_auto <= (desired_buffer_index - 1)) then
+                  val_19_auto = nil
+                else
+                  val_19_auto = x_2_auto
+                end
+                if (nil ~= val_19_auto) then
+                  i_18_auto0 = (i_18_auto0 + 1)
+                  do end (tbl_17_auto0)[i_18_auto0] = val_19_auto
+                else
+                end
+              end
+              return tbl_17_auto0
+            end
+            for i_3_auto, x_4_auto in ipairs(_20_()) do
+              local val_19_auto
+              if (i_3_auto <= (current_buffer_index - desired_buffer_index)) then
+                val_19_auto = x_4_auto
+              else
+                val_19_auto = nil
+              end
+              if (nil ~= val_19_auto) then
+                i_18_auto = (i_18_auto + 1)
+                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              else
+              end
+            end
+            left_buffer_ids_to_delete = tbl_17_auto
+          end
+          local left_filenames_to_reopen
+          do
+            local tbl_17_auto = {}
+            local i_18_auto = #tbl_17_auto
+            for __5_auto, x_6_auto in ipairs(left_buffer_ids_to_delete) do
+              local val_19_auto = vim.api.nvim_buf_get_name(x_6_auto)
+              if (nil ~= val_19_auto) then
+                i_18_auto = (i_18_auto + 1)
+                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              else
+              end
+            end
+            left_filenames_to_reopen = tbl_17_auto
+          end
+          local right_buffer_ids_to_delete
+          do
+            local tbl_17_auto = {}
+            local i_18_auto = #tbl_17_auto
+            for i_1_auto, x_2_auto in ipairs(buffer_ids) do
+              local val_19_auto
+              if (i_1_auto <= current_buffer_index) then
+                val_19_auto = nil
+              else
+                val_19_auto = x_2_auto
+              end
+              if (nil ~= val_19_auto) then
+                i_18_auto = (i_18_auto + 1)
+                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              else
+              end
+            end
+            right_buffer_ids_to_delete = tbl_17_auto
+          end
+          local right_filenames_to_reopen
+          do
+            local tbl_17_auto = {}
+            local i_18_auto = #tbl_17_auto
+            for __5_auto, x_6_auto in ipairs(right_buffer_ids_to_delete) do
+              local val_19_auto = vim.api.nvim_buf_get_name(x_6_auto)
+              if (nil ~= val_19_auto) then
+                i_18_auto = (i_18_auto + 1)
+                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              else
+              end
+            end
+            right_filenames_to_reopen = tbl_17_auto
+          end
+          for _, buffer_id in ipairs(left_buffer_ids_to_delete) do
+            vim.cmd({args = {buffer_id}, cmd = "bw", mods = {silent = true}})
+          end
+          for _, buffer_id in ipairs(right_buffer_ids_to_delete) do
+            vim.cmd({args = {buffer_id}, cmd = "bw", mods = {silent = true}})
+          end
+          for _, filename in ipairs(left_filenames_to_reopen) do
+            vim.cmd.badd(filename)
+          end
+          for _, filename in ipairs(right_filenames_to_reopen) do
+            vim.cmd.badd(filename)
+          end
+          return nil
+        elseif (desired_buffer_index > current_buffer_index) then
+          local buffer_ids_to_delete
+          do
+            local tbl_17_auto = {}
+            local i_18_auto = #tbl_17_auto
+            for i_1_auto, x_2_auto in ipairs(buffer_ids) do
+              local val_19_auto
+              if (i_1_auto <= desired_buffer_index) then
+                val_19_auto = nil
+              else
+                val_19_auto = x_2_auto
+              end
+              if (nil ~= val_19_auto) then
+                i_18_auto = (i_18_auto + 1)
+                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              else
+              end
+            end
+            buffer_ids_to_delete = tbl_17_auto
+          end
+          local filenames_to_reopen
+          do
+            local tbl_17_auto = {}
+            local i_18_auto = #tbl_17_auto
+            for __5_auto, x_6_auto in ipairs(buffer_ids_to_delete) do
+              local val_19_auto = vim.api.nvim_buf_get_name(x_6_auto)
+              if (nil ~= val_19_auto) then
+                i_18_auto = (i_18_auto + 1)
+                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              else
+              end
+            end
+            filenames_to_reopen = tbl_17_auto
+          end
+          local current_filename = vim.api.nvim_buf_get_name(0)
+          vim.cmd({args = {current_buffer_id}, cmd = "bw", mods = {silent = true}})
+          for _, buffer_id in ipairs(buffer_ids_to_delete) do
+            vim.cmd({args = {buffer_id}, cmd = "bw", mods = {silent = true}})
+          end
+          vim.cmd.edit(current_filename)
+          for _, filename in ipairs(filenames_to_reopen) do
+            vim.cmd.badd(filename)
+          end
+          return nil
+        else
+          return nil
         end
-        delete_buffer(current_buffer_id)
-        for _, buffer_id in ipairs(buffer_ids_to_delete) do
-          delete_buffer(buffer_id)
-        end
-        vim.cmd.edit(current_filename)
-        for _, filename in ipairs(filenames_to_reopen) do
-          vim.cmd.badd(filename)
-        end
-        return nil
       else
         return nil
       end
     end
-    local function _24_()
+    local function _34_()
       return go_to_buffer(1)
     end
-    vim.keymap.set("n", "1", _24_)
-    local function _25_()
+    vim.keymap.set("n", "1", _34_)
+    local function _35_()
       return go_to_buffer(2)
     end
-    vim.keymap.set("n", "2", _25_)
-    local function _26_()
+    vim.keymap.set("n", "2", _35_)
+    local function _36_()
       return go_to_buffer(3)
     end
-    vim.keymap.set("n", "3", _26_)
-    local function _27_()
+    vim.keymap.set("n", "3", _36_)
+    local function _37_()
       return go_to_buffer(4)
     end
-    vim.keymap.set("n", "4", _27_)
-    local function _28_()
+    vim.keymap.set("n", "4", _37_)
+    local function _38_()
       return go_to_buffer(5)
     end
-    vim.keymap.set("n", "5", _28_)
-    local function _29_()
+    vim.keymap.set("n", "5", _38_)
+    local function _39_()
       return move_buffer_to_index(1)
     end
-    vim.keymap.set("n", "<Space>1", _29_)
-    local function _30_()
+    vim.keymap.set("n", "<Space>1", _39_)
+    local function _40_()
       return move_buffer_to_index(2)
     end
-    vim.keymap.set("n", "<Space>2", _30_)
-    local function _31_()
+    vim.keymap.set("n", "<Space>2", _40_)
+    local function _41_()
       return move_buffer_to_index(3)
     end
-    vim.keymap.set("n", "<Space>3", _31_)
-    local function _32_()
+    vim.keymap.set("n", "<Space>3", _41_)
+    local function _42_()
       return move_buffer_to_index(4)
     end
-    vim.keymap.set("n", "<Space>4", _32_)
-    local function _33_()
+    vim.keymap.set("n", "<Space>4", _42_)
+    local function _43_()
       return move_buffer_to_index(5)
     end
-    vim.keymap.set("n", "<Space>5", _33_)
+    vim.keymap.set("n", "<Space>5", _43_)
   end
   vim.keymap.set("n", "<Space>s", "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``", {silent = true})
   vim.keymap.set("n", "<Space>S", "m`:silent w !repld-send<CR>``", {silent = true})
@@ -346,7 +443,7 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.keymap.set("n", "~", "mzlblgueh~`z", {silent = true})
   do
     local number_regex = "0x\\x\\+\\|\\d\\+\\(\\.\\d\\+\\)\\?"
-    local function _34_()
+    local function _44_()
       local matched_line = vim.fn.search(number_regex, "ceW")
       if (matched_line ~= 0) then
         vim.cmd("normal! v")
@@ -355,7 +452,7 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
         return nil
       end
     end
-    vim.keymap.set("o", "n", _34_)
+    vim.keymap.set("o", "n", _44_)
   end
   vim.keymap.set("i", "<C-u><<", "\194\171")
   vim.keymap.set("i", "<C-u>>>", "\194\187")
@@ -1003,8 +1100,8 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
 end
 require("fennel/mappings")
 vim.api.nvim_create_augroup("mitchellwrosen", {})
-local function _36_(opts)
-  local function _37_()
+local function _46_(opts)
+  local function _47_()
     local last_known_line = (vim.api.nvim_buf_get_mark(opts.buf, "\""))[1]
     if ((last_known_line > 1) and (last_known_line <= vim.api.nvim_buf_line_count(opts.buf))) then
       return vim.api.nvim_feedkeys("g`\"", "x", false)
@@ -1012,27 +1109,27 @@ local function _36_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, callback = _37_})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, callback = _47_})
 end
-vim.api.nvim_create_autocmd("BufRead", {callback = _36_})
-local function _39_()
+vim.api.nvim_create_autocmd("BufRead", {callback = _46_})
+local function _49_()
   vim.bo.modifiable = not vim.bo.readonly
   return nil
 end
-vim.api.nvim_create_autocmd("BufReadPost", {callback = _39_, group = "mitchellwrosen"})
-local function _40_()
+vim.api.nvim_create_autocmd("BufReadPost", {callback = _49_, group = "mitchellwrosen"})
+local function _50_()
   return vim.highlight.on_yank({higroup = "IncSearch", timeout = 300})
 end
-vim.api.nvim_create_autocmd("TextYankPost", {callback = _40_, group = "mitchellwrosen"})
-local function _41_()
+vim.api.nvim_create_autocmd("TextYankPost", {callback = _50_, group = "mitchellwrosen"})
+local function _51_()
   if (vim.fn.getcmdwintype() == "") then
     return vim.cmd("checktime")
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _41_, group = "mitchellwrosen"})
-local function _43_()
+vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _51_, group = "mitchellwrosen"})
+local function _53_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
     local view = vim.fn.winsaveview()
     vim.cmd("keeppatterns silent! %s/\\s\\+$//e")
@@ -1042,9 +1139,9 @@ local function _43_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _43_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _53_, group = "mitchellwrosen"})
 local extract_haskell_typesig_from_markdown
-local function _45_(str0)
+local function _55_(str0)
   local str = str0
   local i = nil
   i = string.find(str, "```haskell\n")
@@ -1075,10 +1172,10 @@ local function _45_(str0)
     return nil
   end
 end
-extract_haskell_typesig_from_markdown = _45_
+extract_haskell_typesig_from_markdown = _55_
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"})
 local hover_namespace = vim.api.nvim_create_namespace("hover")
-local function _50_(args)
+local function _60_(args)
   local buf = args.buf
   local client = vim.lsp.get_client_by_id(args.data.client_id)
   local augroup_name = ("mitchellwrosenLsp" .. buf)
@@ -1096,15 +1193,15 @@ local function _50_(args)
   vim.keymap.set("n", "<Space>r", vim.lsp.buf.references, {buffer = buf, silent = true})
   vim.keymap.set("n", "<Space>e", vim.lsp.buf.rename, {buffer = buf, silent = true})
   vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, {buffer = buf, silent = true})
-  local function _51_()
+  local function _61_()
     return vim.diagnostic.goto_prev({float = false})
   end
-  vim.keymap.set("n", "<Up>", _51_, {buffer = buf, silent = true})
-  local function _52_()
+  vim.keymap.set("n", "<Up>", _61_, {buffer = buf, silent = true})
+  local function _62_()
     return vim.diagnostic.goto_next({float = false})
   end
-  vim.keymap.set("n", "<Down>", _52_, {buffer = buf, silent = true})
-  local function _53_()
+  vim.keymap.set("n", "<Down>", _62_, {buffer = buf, silent = true})
+  local function _63_()
     if (vim.api.nvim_get_mode().mode == "n") then
       if (vim.api.nvim_get_current_line() ~= "") then
         if client.server_capabilities.documentHighlightProvider then
@@ -1113,15 +1210,15 @@ local function _50_(args)
         else
         end
         local position = vim.lsp.util.make_position_params()
-        local function _55_(_err, result, _ctx, _config)
+        local function _65_(_err, result, _ctx, _config)
           local contents
           do
-            local t_56_ = result
-            if (nil ~= t_56_) then
-              t_56_ = (t_56_).contents
+            local t_66_ = result
+            if (nil ~= t_66_) then
+              t_66_ = (t_66_).contents
             else
             end
-            contents = t_56_
+            contents = t_66_
           end
           if (not (contents == nil) and (type(contents) == "table") and ("markdown" == contents.kind)) then
             local line = extract_haskell_typesig_from_markdown(contents.value)
@@ -1135,7 +1232,7 @@ local function _50_(args)
             return nil
           end
         end
-        return vim.lsp.buf_request(buf, "textDocument/hover", position, _55_)
+        return vim.lsp.buf_request(buf, "textDocument/hover", position, _65_)
       else
         return nil
       end
@@ -1143,19 +1240,19 @@ local function _50_(args)
       return nil
     end
   end
-  vim.api.nvim_create_autocmd("CursorMoved", {buffer = buf, callback = _53_, group = augroup_name})
+  vim.api.nvim_create_autocmd("CursorMoved", {buffer = buf, callback = _63_, group = augroup_name})
   vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
   return nil
 end
-vim.api.nvim_create_autocmd("LspAttach", {callback = _50_, group = "mitchellwrosen"})
-local function _62_()
+vim.api.nvim_create_autocmd("LspAttach", {callback = _60_, group = "mitchellwrosen"})
+local function _72_()
   return vim.keymap.set("n", "!", "qz")
 end
-vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _62_, group = "mitchellwrosen"})
-local function _63_()
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _72_, group = "mitchellwrosen"})
+local function _73_()
   return vim.keymap.set("n", "!", "q")
 end
-vim.api.nvim_create_autocmd("RecordingEnter", {callback = _63_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("RecordingEnter", {callback = _73_, group = "mitchellwrosen"})
 vim.keymap.set("n", "9", "@z")
 vim.api.nvim_create_autocmd("FileType", {command = "startinsert", group = "mitchellwrosen", pattern = "gitcommit"})
 do
@@ -1168,78 +1265,78 @@ do
       local token = result.token
       local value = result.value
       local start_ms = nil
-      local _64_ = value.kind
-      if (_64_ == "begin") then
+      local _74_ = value.kind
+      if (_74_ == "begin") then
         start_ms = vim.loop.now()
         if not notifications[client_id] then
           notifications[client_id] = {}
         else
         end
         local notification_id
-        local function _66_()
+        local function _76_()
           if value.title then
             return (" " .. value.title)
           else
             return ""
           end
         end
-        local function _67_()
+        local function _77_()
           if value.message then
             return (" " .. value.message)
           else
             return ""
           end
         end
-        notification_id = vim.notify(("        | " .. client.name .. ":" .. _66_() .. _67_()), vim.log.levels.INFO, {render = "minimal", timeout = false})
+        notification_id = vim.notify(("        | " .. client.name .. ":" .. _76_() .. _77_()), vim.log.levels.INFO, {render = "minimal", timeout = false})
         do end (notifications)[client_id][token] = {id = notification_id, ["start-ms"] = start_ms, title = value.title}
-      elseif (_64_ == "report") then
-        local _local_68_ = notifications[client_id][token]
-        local old_notification_id = _local_68_["id"]
-        local title = _local_68_["title"]
+      elseif (_74_ == "report") then
+        local _local_78_ = notifications[client_id][token]
+        local old_notification_id = _local_78_["id"]
+        local title = _local_78_["title"]
         local new_notification_id
-        local function _69_()
+        local function _79_()
           if title then
             return (" " .. title)
           else
             return ""
           end
         end
-        local function _70_()
+        local function _80_()
           if value.message then
             return (" " .. value.message)
           else
             return ""
           end
         end
-        new_notification_id = vim.notify(("        | " .. client.name .. ":" .. _69_() .. _70_()), vim.log.levels.INFO, {replace = old_notification_id})
+        new_notification_id = vim.notify(("        | " .. client.name .. ":" .. _79_() .. _80_()), vim.log.levels.INFO, {replace = old_notification_id})
         do end (notifications)[client_id][token]["id"] = new_notification_id
-      elseif (_64_ == "end") then
+      elseif (_74_ == "end") then
         local stop_ms = vim.loop.now()
-        local _local_71_ = notifications[client_id][token]
-        local notification_id = _local_71_["id"]
-        local start_ms0 = _local_71_["start-ms"]
-        local title = _local_71_["title"]
-        local function _72_()
+        local _local_81_ = notifications[client_id][token]
+        local notification_id = _local_81_["id"]
+        local start_ms0 = _local_81_["start-ms"]
+        local title = _local_81_["title"]
+        local function _82_()
           if title then
             return (" " .. title)
           else
             return ""
           end
         end
-        local function _73_()
+        local function _83_()
           if value.message then
             return (" " .. value.message)
           else
             return ""
           end
         end
-        local _74_
+        local _84_
         if ((stop_ms - start_ms0) < 100) then
-          _74_ = 0
+          _84_ = 0
         else
-          _74_ = 3000
+          _84_ = 3000
         end
-        vim.notify((string.format("%6.2fs", ((stop_ms - start_ms0) / 1000)) .. " | " .. client.name .. ":" .. _72_() .. _73_()), vim.log.levels.INFO, {replace = notification_id, timeout = _74_})
+        vim.notify((string.format("%6.2fs", ((stop_ms - start_ms0) / 1000)) .. " | " .. client.name .. ":" .. _82_() .. _83_()), vim.log.levels.INFO, {replace = notification_id, timeout = _84_})
         do end (notifications)[client_id][token] = nil
       else
       end
@@ -1262,37 +1359,37 @@ local function seems_like_haskell_project()
   end
   return acc
 end
-local function _79_()
+local function _89_()
   if seems_like_haskell_project() then
     local initialize_notification_id = nil
     local start_ms = nil
-    local function _80_(_, _0)
+    local function _90_(_, _0)
       start_ms = vim.loop.now()
       initialize_notification_id = vim.notify("        | hls: Initializing", vim.log.levels.INFO, {render = "minimal", timeout = false})
       return nil
     end
-    local function _81_(_, _0)
+    local function _91_(_, _0)
       local stop_ms = vim.loop.now()
       return vim.notify((string.format("%6.2fs", ((stop_ms - start_ms) / 1000)) .. " | hls: Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
     end
-    return vim.lsp.start({before_init = _80_, on_init = _81_, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "hls", root_dir = ".", settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
+    return vim.lsp.start({before_init = _90_, on_init = _91_, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "hls", root_dir = ".", settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _79_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _89_})
 vim.api.nvim_create_autocmd("TermOpen", {command = "startinsert", group = "mitchellwrosen"})
 local lsp = require("lspconfig")
 local status = require("lsp-status")
 local capabilities
-local function _83_(config)
+local function _93_(config)
   _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:831")
   local cmp_nvim_lsp = require("cmp_nvim_lsp")
   return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
 end
-capabilities = _83_
+capabilities = _93_
 vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
-local function _84_(client, buf)
+local function _94_(client, buf)
   _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:863")
   _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:863")
   if client.config.flags then
@@ -1302,5 +1399,5 @@ local function _84_(client, buf)
     return nil
   end
 end
-lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _84_})
+lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _94_})
 return lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua)})

@@ -1,3 +1,5 @@
+(import-macros { : drop : take : wither } "stdlibm")
+
 ; Swap : and ;
 (vim.keymap.set [ "c" "i" "n" "o" "v" ] ";" ":")
 (vim.keymap.set [ "c" "i" "n" "o" "v" ] ":" ";")
@@ -108,31 +110,68 @@
     (local buffer-id (. buffer-ids i))
     (when buffer-id (vim.cmd.buffer buffer-id))
   )
-  ; idrop 2 [ A B C X Y Z ] = [ C X Y Z ]
-  (fn idrop [n xs] (icollect [i x (ipairs xs)] (if (<= i n) nil x)))
+
+  ; (move-buffer-to-index i) moves the current buffer to index i (1-based)
   (fn move-buffer-to-index [desired-buffer-index]
-    (local buffer-ids (list-buffers))
-    (local current-buffer-id (vim.api.nvim_get_current_buf))
-    (var current-buffer-index nil)
-    (each [buffer-index buffer-id (ipairs buffer-ids) &until current-buffer-index]
-      (when (= buffer-id current-buffer-id) (set current-buffer-index buffer-index))
-    )
-    (if
-      (< desired-buffer-index current-buffer-index) (print "TODO: move buffer left")
-      (> desired-buffer-index current-buffer-index)
-        (do
-          ; if we want to move listed buffer to index N, we need to wipe out all listed buffers at index N+1 and above
-          (local buffer-ids-to-delete (idrop desired-buffer-index buffer-ids))
-          (local filenames-to-reopen (icollect [_ buffer-id (ipairs buffer-ids-to-delete)] (vim.api.nvim_buf_get_name buffer-id)))
-          (local current-filename (vim.api.nvim_buf_get_name 0))
-          (fn delete-buffer [buffer-id]
-            (vim.cmd { :cmd "bw" :args [ buffer-id ] :mods { :silent true } })
+    (when (>= desired-buffer-index 1)
+      (local buffer-ids (list-buffers))
+      (local current-buffer-id (vim.api.nvim_get_current_buf))
+      (var current-buffer-index nil)
+      (each [buffer-index buffer-id (ipairs buffer-ids) &until current-buffer-index]
+        (when (= buffer-id current-buffer-id) (set current-buffer-index buffer-index))
+      )
+      (macro delete-buffer [buffer-id]
+        `(vim.cmd { :cmd "bw" :args [ ,buffer-id ] :mods { :silent true } })
+      )
+      (if
+        (< desired-buffer-index current-buffer-index)
+          (do
+            ; Say we have 8 buffers and we want to swap the current (5) to index 2
+            ;
+            ;   1 2 3 4 5 6 7 8
+            ;     ^     ^
+
+            ; First we compute the "left buffer ids to delete" by taking (5-2=3) buffers from the buffer list after
+            ; dropping (2-1=1) buffers from it
+            ;
+            ;   1 2 3 4 5 6 7 8
+            ;     ^^^^^
+            (local left-buffer-ids-to-delete
+              (take
+                (- current-buffer-index desired-buffer-index)
+                (drop (- desired-buffer-index 1) buffer-ids)))
+            (local left-filenames-to-reopen (wither vim.api.nvim_buf_get_name left-buffer-ids-to-delete))
+
+            ; Next we compute the "right buffer ids to delete" by dropping 5 buffers from the buffer list
+            ;
+            ;   1 2 3 4 5 6 7 8
+            ;             ^^^^^
+            (local right-buffer-ids-to-delete (drop current-buffer-index buffer-ids))
+            (local right-filenames-to-reopen (wither vim.api.nvim_buf_get_name right-buffer-ids-to-delete))
+
+            ; Now we delete those buffers
+            ;
+            ;   1 5
+            (each [_ buffer-id (ipairs left-buffer-ids-to-delete)] (delete-buffer buffer-id))
+            (each [_ buffer-id (ipairs right-buffer-ids-to-delete)] (delete-buffer buffer-id))
+
+            ; And finally we re-open the left and right buffers
+            ;
+            ;   1 5 2 3 4 6 7 8
+            (each [_ filename (ipairs left-filenames-to-reopen)] (vim.cmd.badd filename))
+            (each [_ filename (ipairs right-filenames-to-reopen)] (vim.cmd.badd filename))
           )
-          (delete-buffer current-buffer-id)
-          (each [_ buffer-id (ipairs buffer-ids-to-delete)] (delete-buffer buffer-id))
-          (vim.cmd.edit current-filename)
-          (each [_ filename (ipairs filenames-to-reopen)] (vim.cmd.badd filename))
-        )
+        (> desired-buffer-index current-buffer-index)
+          (do
+            (local buffer-ids-to-delete (drop desired-buffer-index buffer-ids))
+            (local filenames-to-reopen (wither vim.api.nvim_buf_get_name buffer-ids-to-delete))
+            (local current-filename (vim.api.nvim_buf_get_name 0))
+            (delete-buffer current-buffer-id)
+            (each [_ buffer-id (ipairs buffer-ids-to-delete)] (delete-buffer buffer-id))
+            (vim.cmd.edit current-filename)
+            (each [_ filename (ipairs filenames-to-reopen)] (vim.cmd.badd filename))
+          )
+      )
     )
   )
   (vim.keymap.set "n" "1" (fn [] (go-to-buffer 1)))

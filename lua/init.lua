@@ -182,7 +182,7 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
       if (num_listed <= 1) then
         return "q"
       else
-        return "bd"
+        return "bw"
       end
     end
     return vim.cmd(_15_())

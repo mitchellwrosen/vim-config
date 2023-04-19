@@ -46,7 +46,13 @@
 (vim.keymap.set [ "n" "v" ] "n" "nzz")
 (vim.keymap.set [ "n" "v" ] "N" "Nzz")
 
-; q to quit the current buffer, or quit vim if there's only 1 listed buffer
+; q to quit (with :bwipeout) the current buffer, or quit vim if there's only 1 listed buffer
+;
+; we use bwipeout rather than bdelete because then it's really fully deleted, and re-opening the buffer puts it at the
+; end of the buffer list (which is kinda nice since vim doesn't let you change buffer order in any way)
+;
+; the docs warn to only use bwipeout if you "really know what you are doing" - but I don't really use marks or
+; buffer-local options much, and I'm fine with them going away when I close a buffer
 (vim.keymap.set
   "n"
   "q"
@@ -57,7 +63,7 @@
         (if (= 1 buffer.listed) (+ acc 1) acc)
       )
     )
-    (vim.cmd (if (<= num-listed 1) "q" "bd"))
+    (vim.cmd (if (<= num-listed 1) "q" "bw"))
   )
 )
 

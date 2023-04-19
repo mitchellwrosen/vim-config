@@ -64,14 +64,14 @@
   )
 )
 
-(set-bo :expandtab true)   ; convert tabs to spaces
-(set-bo :modeline false)   ; disable modelines
-(set-bo :smartindent true) ; smart autoindenting when starting a new line
-(set-bo :undofile true)    ; persist undo history across buffer exits
+(set-bo "expandtab" true)   ; convert tabs to spaces
+(set-bo "modeline" false)   ; disable modelines
+(set-bo "smartindent" true) ; smart autoindenting when starting a new line
+(set-bo "undofile" true)    ; persist undo history across buffer exits
 
-(set-bo :shiftwidth 2)
-(set-bo :synmaxcol 200) ; dont bother syntax-highlighting past this column
-(set-bo :softtabstop 2)
+(set-bo "shiftwidth" 2)
+(set-bo "synmaxcol" 200) ; dont bother syntax-highlighting past this column
+(set-bo "softtabstop" 2)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Plugins
@@ -91,7 +91,7 @@
         :commit "8140fd7cface9592a44b3151203fc6ca95ad9598"
         :event "InsertEnter" ; defer loading of this plugin until insert mode is entered
         :config
-          (fn [_ _]
+          (fn []
             (local deadcolumn (require "deadcolumn"))
             (deadcolumn.setup
               { :blending { :threshold 100 } ; start showing color column here
@@ -107,7 +107,7 @@
         :commit "f74473d23ebf60957e0db3ff8172349a82e5a442"
         :event "VeryLazy" ; defer loading until way after UI
         :config
-          (fn [_ _]
+          (fn []
             (local leap (require "leap"))
             (leap.add_default_mappings)
           )
@@ -130,7 +130,7 @@
           ]
         :event "InsertEnter" ; defer loading of this plugin until insert mode is entered
         :config
-          (fn [_ _]
+          (fn []
             (local cmp (require "cmp"))
             (cmp.setup
               { :mapping
@@ -153,7 +153,7 @@
         :tag "v1.1.0"
         :ft "qf"
         :config
-          (fn [_ _]
+          (fn []
             (local bqf (require "bqf"))
             (bqf.setup)
           )
@@ -163,7 +163,7 @@
       { :url "https://github.com/nvim-lualine/lualine.nvim"
         :commit "84ffb80e452d95e2c46fa29a98ea11a240f7843e"
         :config
-          (fn [_ _]
+          (fn []
             (local lualine (require "lualine"))
             (lualine.setup
               { :component_separators ""
@@ -212,7 +212,7 @@
       { :url "https://github.com/lukas-reineke/indent-blankline.nvim"
         :tag "v2.20.4"
         :config
-          (fn [_ _]
+          (fn []
             (local plugin (require "indent_blankline"))
             (plugin.setup { :show_current_context true })
           )
@@ -239,7 +239,7 @@
         :tag "v0.8.5.2"
         :build ":TSUpdate"
         :config
-          (fn [_ _]
+          (fn []
             (local treesitter (require "nvim-treesitter.configs"))
             (treesitter.setup
               { :highlight { :enable true }
@@ -253,7 +253,7 @@
       { :url "https://github.com/rcarriga/nvim-notify"
         :tag "v3.11.0"
         :config
-          (fn [_ _]
+          (fn []
             (local notify (require "notify"))
             (notify.setup
               { :stages "static" ; don't animate, it looks janky
@@ -311,16 +311,47 @@
       { :url "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
         :commit "dcff567b3a2d730f31b6da229ca3bb40640ec5a6"
         :config
-          (fn [_ _]
+          (fn []
             (local lsp_lines (require "lsp_lines"))
             (lsp_lines.setup)
           )
+      }
+
+      ; some lua utils that other plugins want:
+      ;   - harpoon
+      { :url "https://github.com/nvim-lua/plenary.nvim"
+        :tag "v0.1.3"
+        :config (fn [] nil)
+        :event "VeryLazy" ; defer loading until way after UI
+      }
+
+      { :url "https://github.com/ThePrimeagen/harpoon"
+        :commit "f7040fd0c44e7a4010369136547de5604b9c22a1"
+        :config
+          (fn []
+            (local harpoon (require "harpoon"))
+            (local harpoon-mark (require "harpoon.mark"))
+            (local harpoon-ui (require "harpoon.ui"))
+            (vim.keymap.set "n" "<Space>p" harpoon-mark.add_file)
+            (vim.keymap.set "n" "<Space>P" harpoon-ui.toggle_quick_menu)
+            (vim.keymap.set "n" "1" (fn [] (harpoon-ui.nav_file 1)))
+            (vim.keymap.set "n" "2" (fn [] (harpoon-ui.nav_file 2)))
+            (vim.keymap.set "n" "3" (fn [] (harpoon-ui.nav_file 3)))
+            (vim.keymap.set "n" "4" (fn [] (harpoon-ui.nav_file 4)))
+            (vim.keymap.set "n" "5" (fn [] (harpoon-ui.nav_file 5)))
+            (harpoon.setup
+              { :menu
+                  { :width 80
+                  }
+              }
+            )
+          )
+        :event "VeryLazy" ; defer loading until way after UI
       }
     ]
   )
 )
 
-; (vim.cmd "Plug 'nvim-lua/plenary.nvim', { 'commit': '8bae2c1fadc9ed5bfcfb5ecbd0c0c4d7d40cb974' }")
 ; (vim.cmd "Plug 'nvim-lua/popup.nvim', { 'commit': '5e3bece7b4b4905f4ec89bee74c09cfd8172a16a' }")
 
 ; (vim.cmd "Plug 'nvim-telescope/telescope.nvim', { 'commit': '5b597e7709eec08331ce71b45193117f6fb5626b' }")
@@ -593,16 +624,16 @@
   }
 )
 
-; record macro with 1, replay macro with 9
+; record macro with !, replay macro with 9
 (vim.api.nvim_create_autocmd
   [ "RecordingLeave" "VimEnter" ]
-  { :callback (fn [] (vim.keymap.set "n" "1" "qz"))
+  { :callback (fn [] (vim.keymap.set "n" "!" "qz"))
     :group "mitchellwrosen"
   }
 )
 (vim.api.nvim_create_autocmd
   "RecordingEnter"
-  { :callback (fn [] (vim.keymap.set "n" "1" "q"))
+  { :callback (fn [] (vim.keymap.set "n" "!" "q"))
     :group "mitchellwrosen"
   }
 )

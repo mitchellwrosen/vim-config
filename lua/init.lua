@@ -347,7 +347,8 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
           for _, filename in ipairs(right_filenames_to_reopen) do
             vim.cmd.badd(filename)
           end
-          return nil
+          local lualine = require("lualine")
+          return lualine.refresh()
         elseif (desired_buffer_index > current_buffer_index) then
           local buffer_ids_to_delete
           do

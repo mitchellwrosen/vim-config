@@ -172,11 +172,10 @@
             (each [_ filename (ipairs left-filenames-to-reopen)] (vim.cmd.badd filename))
             (each [_ filename (ipairs right-filenames-to-reopen)] (vim.cmd.badd filename))
 
-            ; without this, the buffer tabline thing seems to only update after some (probably updatetime) milliseconds
+            ; without this, the buffer tabline thing doesn't update right away
             ; weirdly we don't need it when moving the buffer right. that's probably because we :edit
-            ; urgh - it doesn't work. yet putting a (vim.notify "done!") here makes the reorder seem instantaneous. so
-            ; how the hell do you redraw the statusline with this fuckass editor? HELLO?
-            ; (vim.cmd.redraws)
+            (local lualine (require "lualine"))
+            (lualine.refresh)
           )
         (> desired-buffer-index current-buffer-index)
           (do

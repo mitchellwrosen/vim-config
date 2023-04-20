@@ -69,13 +69,14 @@
   )
 )
 
+; Q to save session and quit
 (vim.keymap.set
   "n"
   "Q"
   (fn []
     (when (> (vim.fn.argc) 0) (vim.cmd "%argdel")) ; throw away arglist before saving session
     (vim.cmd { :cmd "mksession" :bang true })
-    (vim.notify "Saved session.")
+    (vim.cmd.qa)
   )
 )
 

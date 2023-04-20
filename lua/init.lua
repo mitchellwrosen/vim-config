@@ -139,7 +139,7 @@ vim.keymap.set("n", "xc", "<Plug>(ExchangeClear)")
 vim.keymap.set("n", "-", "m`<Plug>CommentaryLine``")
 vim.keymap.set("v", "-", "<Plug>Commentary")
 vim.g.surround_no_mappings = 1
-package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or function(...)
+package.preload["mappings"] = package.preload["mappings"] or function(...)
   vim.keymap.set({"c", "i", "n", "o", "v"}, ";", ":")
   vim.keymap.set({"c", "i", "n", "o", "v"}, ":", ";")
   vim.keymap.set("n", "r;", "r:")
@@ -193,7 +193,7 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
     else
     end
     vim.cmd({cmd = "mksession", bang = true})
-    return vim.notify("Saved session.")
+    return vim.cmd.qa()
   end
   vim.keymap.set("n", "Q", _17_)
   vim.keymap.set("n", ">", "<Plug>MyRightShift", {silent = true})
@@ -1106,7 +1106,7 @@ package.preload["fennel/mappings"] = package.preload["fennel/mappings"] or funct
   vim.keymap.set("i", "<C-U>b8", "\240\157\159\150")
   return vim.keymap.set("i", "<C-U>b9", "\240\157\159\151")
 end
-require("fennel/mappings")
+require("mappings")
 vim.api.nvim_create_augroup("mitchellwrosen", {})
 local function _49_(opts)
   local function _50_()
@@ -1399,15 +1399,15 @@ local lsp = require("lspconfig")
 local status = require("lsp-status")
 local capabilities
 local function _98_(config)
-  _G.assert((nil ~= config), "Missing argument config on fennel/init.fnl:855")
+  _G.assert((nil ~= config), "Missing argument config on init.fnl:855")
   local cmp_nvim_lsp = require("cmp_nvim_lsp")
   return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
 end
 capabilities = _98_
 vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
 local function _99_(client, buf)
-  _G.assert((nil ~= buf), "Missing argument buf on fennel/init.fnl:887")
-  _G.assert((nil ~= client), "Missing argument client on fennel/init.fnl:887")
+  _G.assert((nil ~= buf), "Missing argument buf on init.fnl:887")
+  _G.assert((nil ~= client), "Missing argument client on init.fnl:887")
   if client.config.flags then
     client.config.flags.allow_incremental_sync = true
     return nil

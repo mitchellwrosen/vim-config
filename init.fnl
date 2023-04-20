@@ -37,6 +37,10 @@
 (set vim.o.scrolloff 15) ; start scrolling before the cursor reaches the edge
 (set vim.o.shiftround true) ; shift to multiple of shiftwidth
 (set vim.o.shortmess "filnxtToOFIc")
+; this is enabled by default, but:
+;   - I don't really want to see the character preview (e.g. 'cw' does not need to briefly show 'c')
+;   - I have the visual selection size duplicated in lualine
+(set vim.o.showcmd false)
 (set vim.o.showmode false) ; don't show mode, since statusline handles that
 (set vim.o.showtabline 2) ; always show the tabline
 (set vim.o.sidescrolloff 16) ; start scrolling before the cursor reaches the edge
@@ -177,7 +181,7 @@
                     :lualine_c [ "filename" ]
                     :lualine_x [ "filetype" ]
                     :lualine_y [ "progress" ]
-                    :lualine_z [ "location" ]
+                    :lualine_z [ "selectioncount" "location" ]
                   }
                 :tabline
                   { :lualine_a

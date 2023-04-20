@@ -20,6 +20,7 @@ vim.o.report = 0
 vim.o.scrolloff = 15
 vim.o.shiftround = true
 vim.o.shortmess = "filnxtToOFIc"
+vim.o.showcmd = false
 vim.o.showmode = false
 vim.o.showtabline = 2
 vim.o.sidescrolloff = 16
@@ -89,7 +90,7 @@ do
   end
   local function _7_()
     local lualine = require("lualine")
-    return lualine.setup({component_separators = "", section_separators = "", sections = {lualine_a = {"mode"}, lualine_b = {"branch", "diff", "diagnostics"}, lualine_c = {"filename"}, lualine_x = {"filetype"}, lualine_y = {"progress"}, lualine_z = {"location"}}, tabline = {lualine_a = {{"buffers", show_filenames_only = true}}, lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = {}, lualine_z = {}}, icons_enabled = false})
+    return lualine.setup({component_separators = "", section_separators = "", sections = {lualine_a = {"mode"}, lualine_b = {"branch", "diff", "diagnostics"}, lualine_c = {"filename"}, lualine_x = {"filetype"}, lualine_y = {"progress"}, lualine_z = {"selectioncount", "location"}}, tabline = {lualine_a = {{"buffers", show_filenames_only = true}}, lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = {}, lualine_z = {}}, icons_enabled = false})
   end
   local function _8_()
     local plugin = require("indent_blankline")
@@ -148,7 +149,7 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
   vim.keymap.set("n", "/", "/\\v")
   vim.keymap.set("v", "/", "/\\v")
   local function _13_()
-    return vim.cmd("keepjumps normal! *``")
+    return vim.cmd("keepjumps normal! mz*`z")
   end
   vim.keymap.set("n", "*", _13_)
   vim.keymap.set("n", "<BS>", "<C-^>")
@@ -1400,15 +1401,15 @@ local lsp = require("lspconfig")
 local status = require("lsp-status")
 local capabilities
 local function _98_(config)
-  _G.assert((nil ~= config), "Missing argument config on init.fnl:855")
+  _G.assert((nil ~= config), "Missing argument config on init.fnl:859")
   local cmp_nvim_lsp = require("cmp_nvim_lsp")
   return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
 end
 capabilities = _98_
 vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
 local function _99_(client, buf)
-  _G.assert((nil ~= buf), "Missing argument buf on init.fnl:887")
-  _G.assert((nil ~= client), "Missing argument client on init.fnl:887")
+  _G.assert((nil ~= buf), "Missing argument buf on init.fnl:891")
+  _G.assert((nil ~= client), "Missing argument client on init.fnl:891")
   if client.config.flags then
     client.config.flags.allow_incremental_sync = true
     return nil

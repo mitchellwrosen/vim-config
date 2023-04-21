@@ -96,7 +96,7 @@
       ; highlight colorcolumn in insert mode
       { :url "https://github.com/Bekaboo/deadcolumn.nvim"
         :commit "8140fd7cface9592a44b3151203fc6ca95ad9598"
-        :event "InsertEnter" ; defer loading of this plugin until insert mode is entered
+        :event "InsertEnter" ; defer loading until insert mode is entered
         :config
           (fn []
             (local deadcolumn (require "deadcolumn"))
@@ -250,7 +250,7 @@
       ; :Git
       { :url "https://github.com/tpope/vim-fugitive"
         :tag "v3.7"
-        :event "VeryLazy" ; defer loading until way after UI
+        :cmd "Git" ; don't load until we run :Git
         :config (fn [] nil)
       }
 
@@ -303,20 +303,25 @@
       ; swap the location of two selections
       { :url "https://github.com/tommcdo/vim-exchange"
         :commit "784d63083ad7d613aa96f00021cd0dfb126a781a"
-        :config (fn [_ _] nil)
+        :config (fn [] nil)
 
       }
 
       ; improved "ga" for information about the character under the cursor
       { :url "https://github.com/tpope/vim-characterize"
         :commit "885a00a3c21dd52ca8f2fd7d62850134934179d9"
-        :event "VeryLazy" ; defer loading until way after UI
+        :keys [ [ "ga" ] ] ; defer loading until I press ga
+        :config
+          (fn []
+            (nmap "ga" "<Plug>(characterize)")
+          )
       }
 
       ; quick (un-)commenting
       { :url "https://github.com/tpope/vim-commentary"
         :commit "627308e30639be3e2d5402808ce18690557e8292"
         :event "VeryLazy" ; defer loading until way after UI
+        :config (fn [] nil)
       }
 
       ; make "." repeat more things out of the box
@@ -339,6 +344,12 @@
             (local lsp_lines (require "lsp_lines"))
             (lsp_lines.setup)
           )
+      }
+
+      { :url "https://github.com/dstein64/vim-startuptime"
+        :tag "v4.4.0"
+        :cmd "StartupTime" ; defer loading until I run :StartupTime
+        :config (fn [] nil)
       }
 
       ; some lua utils that other plugins want:
@@ -392,8 +403,6 @@
 ; case-preserving search-and-replace with e.g. %Subvert/Foo/Bar/g (foo -> bar, FOO -> BAR, etc)
 ; 22-11-01
 ; (vim.cmd "Plug 'tpope/vim-abolish', { 'commit': '3f0c8faadf0c5b68bcf40785c1c42e3731bfa522' }")
-
-; (vim.cmd "Plug 'tpope/vim-fugitive', { 'commit': 'bb4f9e660b0934f70af693c56c5b8a4c322e7a1f' }")
 
 ; colorscheme settings
 (set vim.g.gruvbox_material_background "soft") ; soft, medium, hard

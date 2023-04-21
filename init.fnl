@@ -168,36 +168,7 @@
       ; status line
       { :url "https://github.com/nvim-lualine/lualine.nvim"
         :commit "84ffb80e452d95e2c46fa29a98ea11a240f7843e"
-        :config
-          (fn []
-            (local lualine (require "lualine"))
-            (lualine.setup
-              { :component_separators ""
-                :icons_enabled false
-                :section_separators ""
-                :sections
-                  { :lualine_a [ "mode" ]
-                    :lualine_b [ "branch" "diff" "diagnostics" ]
-                    :lualine_c [ "filename" ]
-                    :lualine_x [ "filetype" ]
-                    :lualine_y [ "progress" ]
-                    :lualine_z [ "selectioncount" "location" ]
-                  }
-                :tabline
-                  { :lualine_a
-                       [ { 1 "buffers"
-                           :show_filenames_only true
-                         }
-                       ]
-                    :lualine_b [ ]
-                    :lualine_c [ ]
-                    :lualine_x [ ]
-                    :lualine_y [ ]
-                    :lualine_z [ ]
-                  }
-              }
-            )
-          )
+        :config (require "config-lualine")
       }
 
       ; fuzzy search source code, files, etc

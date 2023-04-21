@@ -14,7 +14,16 @@
 (vim.keymap.set "v" "/" "/\\v")
 
 ; Don't highlight matches *and* jump at the same time; only highlight. Also don't mess with the jumplist.
-(vim.keymap.set "n" "*" (fn [] (vim.cmd "keepjumps normal! mz*`z")))
+(vim.keymap.set
+  "n"
+  "*"
+  (fn []
+    (vim.cmd "keepjumps normal! mz*`z")
+    ; laughable that lualine needs to be manually refreshed to catch these
+    (local lualine (require "lualine"))
+    (lualine.refresh)
+  )
+)
 
 ; Backspace to switch to the previously edited buffer
 (vim.keymap.set "n" "<BS>" "<C-^>")
@@ -174,8 +183,6 @@
 
             ; without this, the buffer tabline thing doesn't update right away
             ; weirdly we don't need it when moving the buffer right. that's probably because we :edit
-            ; urgh - it doesn't work. yet putting a (vim.notify "done!") here makes the reorder seem instantaneous. so
-            ; how the hell do you redraw the statusline with this fuckass editor? HELLO?
             (local lualine (require "lualine"))
             (lualine.refresh)
           )

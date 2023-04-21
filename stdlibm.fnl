@@ -8,9 +8,11 @@
   `(icollect [i# x# (ipairs ,xs)] (if (<= i# ,n) x# nil))
 )
 
-; (wither f xs) applies f to each element in xs
-(fn wither [f xs]
-  `(icollect [_# x# (ipairs ,xs)] (,f x#))
+; (wither xs [x] body) maps `(\x -> body)` over `xs`
+(fn wither [xs [x] body ...]
+  (assert (not= nil body) "wither body must not be nil")
+  (assert (= nil ...) "wither body must be one expression")
+  `(icollect [_# ,x (ipairs ,xs)] ,body)
 )
 
 { : drop : take : wither }

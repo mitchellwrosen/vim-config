@@ -212,7 +212,7 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
       local buffer_ids = vim.api.nvim_list_bufs()
       local tbl_17_auto = {}
       local i_18_auto = #tbl_17_auto
-      for _, buffer_id in ipairs(buffer_ids) do
+      for __7_auto, buffer_id in ipairs(buffer_ids) do
         local val_19_auto
         if vim.api.nvim_buf_get_option(buffer_id, "buflisted") then
           val_19_auto = buffer_id
@@ -290,8 +290,8 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
           do
             local tbl_17_auto = {}
             local i_18_auto = #tbl_17_auto
-            for __5_auto, x_6_auto in ipairs(left_buffer_ids_to_delete) do
-              local val_19_auto = vim.api.nvim_buf_get_name(x_6_auto)
+            for __7_auto, buffer_id in ipairs(left_buffer_ids_to_delete) do
+              local val_19_auto = vim.api.nvim_buf_get_name(buffer_id)
               if (nil ~= val_19_auto) then
                 i_18_auto = (i_18_auto + 1)
                 do end (tbl_17_auto)[i_18_auto] = val_19_auto
@@ -323,8 +323,8 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
           do
             local tbl_17_auto = {}
             local i_18_auto = #tbl_17_auto
-            for __5_auto, x_6_auto in ipairs(right_buffer_ids_to_delete) do
-              local val_19_auto = vim.api.nvim_buf_get_name(x_6_auto)
+            for __7_auto, buffer_id in ipairs(right_buffer_ids_to_delete) do
+              local val_19_auto = vim.api.nvim_buf_get_name(buffer_id)
               if (nil ~= val_19_auto) then
                 i_18_auto = (i_18_auto + 1)
                 do end (tbl_17_auto)[i_18_auto] = val_19_auto
@@ -371,8 +371,8 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
           do
             local tbl_17_auto = {}
             local i_18_auto = #tbl_17_auto
-            for __5_auto, x_6_auto in ipairs(buffer_ids_to_delete) do
-              local val_19_auto = vim.api.nvim_buf_get_name(x_6_auto)
+            for __7_auto, buffer_id in ipairs(buffer_ids_to_delete) do
+              local val_19_auto = vim.api.nvim_buf_get_name(buffer_id)
               if (nil ~= val_19_auto) then
                 i_18_auto = (i_18_auto + 1)
                 do end (tbl_17_auto)[i_18_auto] = val_19_auto

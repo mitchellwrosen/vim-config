@@ -119,8 +119,9 @@
   ; this seems to be what bufferlines and such show by default
   (fn list-buffers []
     (local buffer-ids (vim.api.nvim_list_bufs))
-    (icollect
-      [_ buffer-id (ipairs buffer-ids)]
+    (wither
+      buffer-ids
+      [buffer-id]
       (if (vim.api.nvim_buf_get_option buffer-id "buflisted") buffer-id nil)
     )
   )
@@ -159,14 +160,26 @@
               (take
                 (- current-buffer-index desired-buffer-index)
                 (drop (- desired-buffer-index 1) buffer-ids)))
-            (local left-filenames-to-reopen (wither vim.api.nvim_buf_get_name left-buffer-ids-to-delete))
+            (local left-filenames-to-reopen
+              (wither
+                left-buffer-ids-to-delete
+                [buffer-id]
+                (vim.api.nvim_buf_get_name buffer-id)
+              )
+            )
 
             ; Next we compute the "right buffer ids to delete" by dropping 5 buffers from the buffer list
             ;
             ;   1 2 3 4 5 6 7 8
             ;             ^^^^^
             (local right-buffer-ids-to-delete (drop current-buffer-index buffer-ids))
-            (local right-filenames-to-reopen (wither vim.api.nvim_buf_get_name right-buffer-ids-to-delete))
+            (local right-filenames-to-reopen
+              (wither
+                right-buffer-ids-to-delete
+                [buffer-id]
+                (vim.api.nvim_buf_get_name buffer-id)
+              )
+            )
 
             ; Now we delete those buffers
             ;
@@ -188,7 +201,13 @@
         (> desired-buffer-index current-buffer-index)
           (do
             (local buffer-ids-to-delete (drop desired-buffer-index buffer-ids))
-            (local filenames-to-reopen (wither vim.api.nvim_buf_get_name buffer-ids-to-delete))
+            (local filenames-to-reopen
+              (wither
+                buffer-ids-to-delete
+                [buffer-id]
+                (vim.api.nvim_buf_get_name buffer-id)
+              )
+            )
             (local current-filename (vim.api.nvim_buf_get_name 0))
             (delete-buffer current-buffer-id)
             (each [_ buffer-id (ipairs buffer-ids-to-delete)] (delete-buffer buffer-id))

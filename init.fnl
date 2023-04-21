@@ -173,7 +173,7 @@
 
       ; fuzzy search source code, files, etc
       { :url "https://github.com/junegunn/fzf"
-        :commit "6dcf5c3d7d6c321b17e6a5673f1533d6e8350462"
+        :commit "96670d5f16dcf23d590eb1d83d1de351b2e8fb15"
       }
       { :url "https://github.com/junegunn/fzf.vim"
         :commit "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0"

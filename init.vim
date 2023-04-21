@@ -9,8 +9,6 @@ lua require('init')
 " Plugin settings
 " ==============================================================================
 
-command! -bar BCommits call fzf#vim#buffer_commits(1)
-
 " Would be nice if '-1' worked here https://github.com/junegunn/fzf/issues/1750
 " function! <SID>Rg(query)
 "   let command_fmt = 'rg --column --line-number --no-heading --color=always -- %s || true'

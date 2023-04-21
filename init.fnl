@@ -178,7 +178,7 @@
         :event "VeryLazy" ; defer loading until way after UI
         :config
           (fn []
-            (set vim.g.fzf_layout { :window { :height 0.8 :width 0.8 } })
+            (set vim.g.fzf_layout { :window { :height 0.95 :width 0.95 } })
           )
       }
       { :url "https://github.com/junegunn/fzf.vim"
@@ -236,6 +236,7 @@
       }
 
       ; lsp configs
+      ; TODO get rid of these, just configure myself
       { :url "https://github.com/neovim/nvim-lsp"
         :commit "2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491"
       }
@@ -245,6 +246,13 @@
       { :url "https://github.com/neovimhaskell/haskell-vim"
         :commit "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e"
         :ft "haskell"
+      }
+
+      ; :Git
+      { :url "https://github.com/tpope/vim-fugitive"
+        :tag "v3.7"
+        :event "VeryLazy" ; defer loading until way after UI
+        :config (fn [] nil)
       }
 
       { :url "https://github.com/nvim-lua/lsp-status.nvim"

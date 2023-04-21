@@ -204,13 +204,12 @@
             ; I don't use this much, maybe I should delete it
             (nmap "<Space>k" (fn [] (fzf-vim-buffers opts1)))
 
-
             ; Space-o ("open") to fuzzy file search, both git- and everything-variants
             (nmap
               "<Space>o"
               ; just check if we're in a git repo once, not every <Space>-o, which seems fine because I don't cd
               (if
-                (= 0 (os.execute "git rev-parse"))
+                (= 0 (os.execute "git rev-parse 2>/dev/null"))
                 ; fzf#vim#gitfiles takes an undocumented first arg, but I peeked at the source - it's a string lol
                 (fn [] (fzf-vim-gitfiles "" opts1))
                 (fn [] (fzf-vim-files "." opts1))

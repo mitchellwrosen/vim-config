@@ -105,7 +105,7 @@ do
     end
     vim.keymap.set("n", "<Space>k", _9_)
     local function _12_()
-      if (0 == os.execute("git rev-parse")) then
+      if (0 == os.execute("git rev-parse 2>/dev/null")) then
         local function _10_()
           return fzf_vim_gitfiles("", opts1)
         end
@@ -1150,18 +1150,18 @@ local function _55_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, callback = _56_, group = "mitchellwrosen"})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, group = "mitchellwrosen", callback = _56_})
 end
-vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _55_})
+vim.api.nvim_create_autocmd("BufRead", {callback = _55_, group = "mitchellwrosen"})
 local function _58_()
   vim.bo.modifiable = not vim.bo.readonly
   return nil
 end
-vim.api.nvim_create_autocmd("BufReadPost", {group = "mitchellwrosen", callback = _58_})
+vim.api.nvim_create_autocmd("BufReadPost", {callback = _58_, group = "mitchellwrosen"})
 local function _59_()
   return vim.highlight.on_yank({higroup = "IncSearch", timeout = 300})
 end
-vim.api.nvim_create_autocmd("TextYankPost", {group = "mitchellwrosen", callback = _59_})
+vim.api.nvim_create_autocmd("TextYankPost", {callback = _59_, group = "mitchellwrosen"})
 local function _60_()
   if (vim.fn.getcmdwintype() == "") then
     return vim.cmd.checktime()
@@ -1169,7 +1169,7 @@ local function _60_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {group = "mitchellwrosen", callback = _60_})
+vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _60_, group = "mitchellwrosen"})
 local function _62_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
     local view = vim.fn.winsaveview()
@@ -1180,7 +1180,7 @@ local function _62_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {group = "mitchellwrosen", callback = _62_})
+vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _62_, group = "mitchellwrosen"})
 local extract_haskell_typesig_from_markdown
 local function _64_(str0)
   local str = str0
@@ -1285,20 +1285,20 @@ local function _69_(args)
   vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
   return nil
 end
-vim.api.nvim_create_autocmd("LspAttach", {group = "mitchellwrosen", callback = _69_})
+vim.api.nvim_create_autocmd("LspAttach", {callback = _69_, group = "mitchellwrosen"})
 local function _81_()
   return vim.keymap.set("n", "!", "qz")
 end
-vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {group = "mitchellwrosen", callback = _81_})
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _81_, group = "mitchellwrosen"})
 local function _82_()
   return vim.keymap.set("n", "!", "q")
 end
-vim.api.nvim_create_autocmd("RecordingEnter", {group = "mitchellwrosen", callback = _82_})
+vim.api.nvim_create_autocmd("RecordingEnter", {callback = _82_, group = "mitchellwrosen"})
 vim.keymap.set("n", "9", "@z")
 local function _83_()
   return vim.cmd.startinsert()
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "gitcommit", callback = _83_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "gitcommit", group = "mitchellwrosen", callback = _83_})
 do
   local default_progress_handler = vim.lsp.handlers["$/progress"]
   local notifications = {}
@@ -1421,13 +1421,13 @@ local function _99_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _99_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _99_})
 local function _103_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
   return vim.cmd.startinsert()
 end
-vim.api.nvim_create_autocmd("TermOpen", {group = "mitchellwrosen", callback = _103_})
+vim.api.nvim_create_autocmd("TermOpen", {callback = _103_, group = "mitchellwrosen"})
 local function _104_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     return vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})
@@ -1440,15 +1440,15 @@ local lsp = require("lspconfig")
 local status = require("lsp-status")
 local capabilities
 local function _106_(config)
-  _G.assert((nil ~= config), "Missing argument config on init.fnl:845")
+  _G.assert((nil ~= config), "Missing argument config on init.fnl:844")
   local cmp_nvim_lsp = require("cmp_nvim_lsp")
   return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
 end
 capabilities = _106_
 vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
 local function _107_(client, buf)
-  _G.assert((nil ~= buf), "Missing argument buf on init.fnl:877")
-  _G.assert((nil ~= client), "Missing argument client on init.fnl:877")
+  _G.assert((nil ~= buf), "Missing argument buf on init.fnl:876")
+  _G.assert((nil ~= client), "Missing argument client on init.fnl:876")
   if client.config.flags then
     client.config.flags.allow_incremental_sync = true
     return nil

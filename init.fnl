@@ -1,4 +1,5 @@
 (local { : file-exists } (require "stdlib"))
+(import-macros { : nmap } "nvim-stdlibm")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bootstrap lazy.nvim
@@ -197,16 +198,15 @@
             (set vim.g.fzf_buffers_jump 1)
 
             ; Space-f ("find") the word under the cursor
-            (vim.keymap.set "n" "<Space>f" ":Rg <C-r><C-w><CR>")
+            (nmap "<Space>f" ":Rg <C-r><C-w><CR>")
 
             ; Space-k (because it's a home-row key) to fuzzy-search buffers
             ; I don't use this much, maybe I should delete it
-            (vim.keymap.set "n" "<Space>k" (fn [] (fzf-vim-buffers opts1)))
+            (nmap "<Space>k" (fn [] (fzf-vim-buffers opts1)))
 
 
             ; Space-o ("open") to fuzzy file search, both git- and everything-variants
-            (vim.keymap.set
-              "n"
+            (nmap
               "<Space>o"
               ; just check if we're in a git repo once, not every <Space>-o, which seems fine because I don't cd
               (if
@@ -409,21 +409,21 @@
 (set vim.g.git_messenger_extra_blame_args "-w")
 (set vim.g.git_messenger_no_default_mappings true)
 ; blame the line under the cursor
-(vim.keymap.set "n" "<Space>b" "<Plug>(git-messenger)")
+(nmap "<Space>b" "<Plug>(git-messenger)")
 
 ; tommcdo/vim-exchange
 (set vim.g.exchange_no_mappings 1) ; Don't make any key mappings
 ; x ("exchange") once to yank, x again to exchange with the first yank
 (vim.keymap.set [ "n" "v" ] "x" "<Plug>(Exchange)")
 ; Manually make exhange replace 'w' with 'e', as vim does for e.g. 'c'
-(vim.keymap.set "n" "xw" "<Plug>(Exchange)e")
-(vim.keymap.set "n" "xW" "<Plug>(Exchange)E")
-(vim.keymap.set "n" "xx" "m`<Plug>(ExchangeLine)``") ; exchange the entire line
-(vim.keymap.set "n" "X" "<Plug>(Exchange)$") ; exchange from here to the end of line
-(vim.keymap.set "n" "xc" "<Plug>(ExchangeClear)") ; clear the exchange highlight
+(nmap "xw" "<Plug>(Exchange)e")
+(nmap "xW" "<Plug>(Exchange)E")
+(nmap "xx" "m`<Plug>(ExchangeLine)``") ; exchange the entire line
+(nmap "X" "<Plug>(Exchange)$") ; exchange from here to the end of line
+(nmap "xc" "<Plug>(ExchangeClear)") ; clear the exchange highlight
 
 ; tpope/vim-commentary
-(vim.keymap.set "n" "-" "m`<Plug>CommentaryLine``")
+(nmap "-" "m`<Plug>CommentaryLine``")
 (vim.keymap.set "v" "-" "<Plug>Commentary")
 
 ; tpope/vim-surround
@@ -561,18 +561,18 @@
     (vim.cmd "highlight! link LspReferenceRead LspReference")
     (vim.cmd "highlight! link LspReferenceWrite LspReference")
 
-    (vim.keymap.set "n" "<Space>a" vim.lsp.buf.code_action { :buffer buf :silent true })
-    (vim.keymap.set "n" "gd" vim.lsp.buf.definition { :buffer buf :silent true })
-    (vim.keymap.set "n" "<Space>d" vim.lsp.buf.format { :buffer buf :silent true })
-    (vim.keymap.set "n" "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
-    (vim.keymap.set "n" "<Space>i" vim.lsp.buf.incoming_calls { :buffer buf :silent true })
-    (vim.keymap.set "n" "<Space>u" vim.lsp.buf.outgoing_calls { :buffer buf :silent true })
-    (vim.keymap.set "n" "<Space>r" vim.lsp.buf.references { :buffer buf :silent true })
-    (vim.keymap.set "n" "<Space>e" vim.lsp.buf.rename { :buffer buf :silent true })
-    (vim.keymap.set "n" "gt" vim.lsp.buf.type_definition { :buffer buf :silent true })
+    (nmap "<Space>a" vim.lsp.buf.code_action { :buffer buf :silent true })
+    (nmap "gd" vim.lsp.buf.definition { :buffer buf :silent true })
+    (nmap "<Space>d" vim.lsp.buf.format { :buffer buf :silent true })
+    (nmap "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
+    (nmap "<Space>i" vim.lsp.buf.incoming_calls { :buffer buf :silent true })
+    (nmap "<Space>u" vim.lsp.buf.outgoing_calls { :buffer buf :silent true })
+    (nmap "<Space>r" vim.lsp.buf.references { :buffer buf :silent true })
+    (nmap "<Space>e" vim.lsp.buf.rename { :buffer buf :silent true })
+    (nmap "gt" vim.lsp.buf.type_definition { :buffer buf :silent true })
     ; float=false here means don't call vim.diagnostic.open_float once we land
-    (vim.keymap.set "n" "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
-    (vim.keymap.set "n" "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
+    (nmap "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
+    (nmap "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
 
     (vim.api.nvim_create_autocmd
       "CursorMoved"
@@ -624,9 +624,9 @@
 )
 
 ; record macro with !, replay macro with 9
-(create-autocmd [ "RecordingLeave" "VimEnter" ] {} (fn [] (vim.keymap.set "n" "!" "qz")))
-(create-autocmd "RecordingEnter" {} (fn [] (vim.keymap.set "n" "!" "q")))
-(vim.keymap.set "n" "9" "@z")
+(create-autocmd [ "RecordingLeave" "VimEnter" ] {} (fn [] (nmap "!" "qz")))
+(create-autocmd "RecordingEnter" {} (fn [] (nmap "!" "q")))
+(nmap "9" "@z")
 
 ; Start a git commit in insert mode
 (create-autocmd "FileType" { :pattern "gitcommit" } (fn [] (vim.cmd.startinsert)))
@@ -802,7 +802,7 @@
     ; Esc to get into normal mode from a terminal
     (vim.keymap.set "t" "<Esc>" "<C-\\><C-n>" { :buffer true })
     ; Even in normal mode, send Ctrl+c to the terminal
-    (vim.keymap.set "n" "<C-c>" "i<C-c>" { :buffer true })
+    (nmap "<C-c>" "i<C-c>" { :buffer true })
 
     ; Start in insert mode
     (vim.cmd.startinsert)

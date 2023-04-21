@@ -1147,7 +1147,7 @@ local function _54_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, callback = _55_, group = "mitchellwrosen"})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, group = "mitchellwrosen", callback = _55_})
 end
 vim.api.nvim_create_autocmd("BufRead", {callback = _54_, group = "mitchellwrosen"})
 local function _57_()
@@ -1295,7 +1295,7 @@ vim.keymap.set("n", "9", "@z")
 local function _82_()
   return vim.cmd.startinsert()
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "gitcommit", callback = _82_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "gitcommit", group = "mitchellwrosen", callback = _82_})
 do
   local default_progress_handler = vim.lsp.handlers["$/progress"]
   local notifications = {}
@@ -1418,7 +1418,7 @@ local function _98_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _98_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _98_})
 local function _102_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})

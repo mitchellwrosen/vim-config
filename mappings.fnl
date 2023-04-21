@@ -1,16 +1,17 @@
 (import-macros { : drop : take : wither } "stdlibm")
+(import-macros { : nmap } "nvim-stdlibm")
 
 ; Swap : and ;
 (vim.keymap.set [ "c" "i" "n" "o" "v" ] ";" ":")
 (vim.keymap.set [ "c" "i" "n" "o" "v" ] ":" ";")
-(vim.keymap.set "n" "r;" "r:")
-(vim.keymap.set "n" "r:" "r;")
+(nmap "r;" "r:")
+(nmap "r:" "r;")
 
 ; make ' jump back to mark's exact position, not just line
-(vim.keymap.set "n" "'" "`")
+(nmap "'" "`")
 
 ; very magic mode search
-(vim.keymap.set "n" "/" "/\\v")
+(nmap "/" "/\\v")
 (vim.keymap.set "v" "/" "/\\v")
 
 ; Don't highlight matches *and* jump at the same time; only highlight. Also don't mess with the jumplist.
@@ -26,11 +27,11 @@
 )
 
 ; Backspace to switch to the previously edited buffer
-(vim.keymap.set "n" "<BS>" "<C-^>")
+(nmap "<BS>" "<C-^>")
 
 ; Prevent the cursor from jumping past a wrapped line when moving up and down
-(vim.keymap.set "n" "j" "gj")
-(vim.keymap.set "n" "k" "gk")
+(nmap "j" "gj")
+(nmap "k" "gk")
 
 ; HJKL to move around the file.
 (vim.keymap.set [ "n" "v" ] "J" "6j" { :remap true })
@@ -47,10 +48,10 @@
 
 ; Select last changed or yanked area
 ; I... never use this. Should probably delete it.
-(vim.keymap.set "n" "gV" "'`[' . strpart(getregtype(), 0, 1) . '`]'" { :expr true })
+(nmap "gV" "'`[' . strpart(getregtype(), 0, 1) . '`]'" { :expr true })
 
 ; U to redo
-(vim.keymap.set "n" "U" "<C-r>")
+(nmap "U" "<C-r>")
 
 ; Center after every search movement
 (vim.keymap.set [ "n" "v" ] "n" "nzz")
@@ -90,13 +91,13 @@
 
 ; Follow >/< shifted text around with the cursor
 ; Get it to repeat with '.'
-(vim.keymap.set "n" ">" "<Plug>MyRightShift" { :silent true })
-(vim.keymap.set "n" "<" "<Plug>MyLeftShift" { :silent true })
-(vim.keymap.set "n" "<Plug>MyRightShift" ">>ll:call repeat#set(\"\\<Plug>MyRightShift\")<CR>" { :silent true })
-(vim.keymap.set "n" "<Plug>MyLeftShift" "<<hh:call repeat#set(\"\\<Plug>MyLeftShift\")<CR>" { :silent true })
+(nmap ">" "<Plug>MyRightShift" { :silent true })
+(nmap "<" "<Plug>MyLeftShift" { :silent true })
+(nmap "<Plug>MyRightShift" ">>ll:call repeat#set(\"\\<Plug>MyRightShift\")<CR>" { :silent true })
+(nmap "<Plug>MyLeftShift" "<<hh:call repeat#set(\"\\<Plug>MyLeftShift\")<CR>" { :silent true })
 
 ; [M]erge to join (since J moves down)
-(vim.keymap.set "n" "M" "m`J``")
+(nmap "M" "m`J``")
 
 ; inner/around line text objects
 (vim.keymap.set "v" "al" "$o0" { :silent true })
@@ -105,12 +106,12 @@
 (vim.keymap.set "o" "il" ":<C-u>normal vil<CR>" { :silent true })
 
 ; Ctrl+S to search-and-replace in the file
-(vim.keymap.set "n" "<C-s>" ":%s/\\v//cg<Left><Left><Left><Left>")
+(nmap "<C-s>" ":%s/\\v//cg<Left><Left><Left><Left>")
 (vim.keymap.set "v" "<C-s>" ":s/\\v//cg<Left><Left><Left><Left>")
 
 ; Move buffers with Ctrl+jk
-(vim.keymap.set "n" "<C-j>" ":bn<CR>" { :silent true })
-(vim.keymap.set "n" "<C-k>" ":bp<CR>" { :silent true })
+(nmap "<C-j>" ":bn<CR>" { :silent true })
+(nmap "<C-k>" ":bp<CR>" { :silent true })
 
 ; Experimenting with 1-5 to select buffer 1-5. Pretty annoying that vim doesn't support reordering buffers. I guess I
 ; need some custom functions and a custom bufferline to get the UX I want?
@@ -217,22 +218,22 @@
       )
     )
   )
-  (vim.keymap.set "n" "1" (fn [] (go-to-buffer 1)))
-  (vim.keymap.set "n" "2" (fn [] (go-to-buffer 2)))
-  (vim.keymap.set "n" "3" (fn [] (go-to-buffer 3)))
-  (vim.keymap.set "n" "4" (fn [] (go-to-buffer 4)))
-  (vim.keymap.set "n" "5" (fn [] (go-to-buffer 5)))
-  (vim.keymap.set "n" "<Space>1" (fn [] (move-buffer-to-index 1)))
-  (vim.keymap.set "n" "<Space>2" (fn [] (move-buffer-to-index 2)))
-  (vim.keymap.set "n" "<Space>3" (fn [] (move-buffer-to-index 3)))
-  (vim.keymap.set "n" "<Space>4" (fn [] (move-buffer-to-index 4)))
-  (vim.keymap.set "n" "<Space>5" (fn [] (move-buffer-to-index 5)))
+  (nmap "1" (fn [] (go-to-buffer 1)))
+  (nmap "2" (fn [] (go-to-buffer 2)))
+  (nmap "3" (fn [] (go-to-buffer 3)))
+  (nmap "4" (fn [] (go-to-buffer 4)))
+  (nmap "5" (fn [] (go-to-buffer 5)))
+  (nmap "<Space>1" (fn [] (move-buffer-to-index 1)))
+  (nmap "<Space>2" (fn [] (move-buffer-to-index 2)))
+  (nmap "<Space>3" (fn [] (move-buffer-to-index 3)))
+  (nmap "<Space>4" (fn [] (move-buffer-to-index 4)))
+  (nmap "<Space>5" (fn [] (move-buffer-to-index 5)))
 )
 
 ; github.com/mitchellwrosen/repld stuff
 ; FIXME these are useful hotkeys but I'm rarely running repld. what to do?
-(vim.keymap.set "n" "<Space>s" "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``" { :silent true })
-(vim.keymap.set "n" "<Space>S" "m`:silent w !repld-send<CR>``" { :silent true })
+(nmap "<Space>s" "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``" { :silent true })
+(nmap "<Space>S" "m`:silent w !repld-send<CR>``" { :silent true })
 (vim.keymap.set "v" "<Space>s" "m`<Esc>:silent '<,'>w !repld-send<CR>``" { :silent true })
 
 ; <C-v> to paste from * register
@@ -249,7 +250,7 @@
 ; (map [ "i" ] "<CR>" "pumvisible() ? \"\\<C-y>\" : \"\\<CR>\"" { "expr" true "noremap" true })
 
 ; make tilde toggle the capitalization of the first letter of the current word (not sure i like this)
-(vim.keymap.set "n" "~" "mzlblgueh~`z" { :silent true })
+(nmap "~" "mzlblgueh~`z" { :silent true })
 
 ; make "n" like a number text object, with forward seeking behavior
 ; cn to change (inner) number, dn to delete it, etc

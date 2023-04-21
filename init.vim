@@ -1,9 +1,6 @@
 " TODO
-" switch to vim-packager?
 " insert when focus terminal
 " Space-/ BLines
-" cabbrev rg Rg?
-" don't cd with startify
 " make surrounding with quotes repeatable
 
 lua require('init')
@@ -13,24 +10,6 @@ lua require('init')
 " ==============================================================================
 
 command! -bar BCommits call fzf#vim#buffer_commits(1)
-
-command! -bar -nargs=? -complete=buffer Buffers
-  \ call fzf#vim#buffers(
-  \   <q-args>,
-  \   fzf#vim#with_preview({'options': ['--info=inline', '--layout=reverse']}, 'down:60%'),
-  \   0)
-
-command! -nargs=? -complete=dir Files
-  \ call fzf#vim#files(
-  \   <q-args>,
-  \   fzf#vim#with_preview({'options': ['--info=inline', '--layout=reverse']}, 'down:60%'),
-  \   0)
-
-command! -nargs=? GFiles
-  \ call fzf#vim#gitfiles(
-  \   <q-args>,
-  \   fzf#vim#with_preview({'options': ['--info=inline', '--layout=reverse']}, 'down:60%'),
-  \   0)
 
 " Would be nice if '-1' worked here https://github.com/junegunn/fzf/issues/1750
 " function! <SID>Rg(query)

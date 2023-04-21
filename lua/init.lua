@@ -162,7 +162,6 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
   vim.keymap.set("v", "Y", "y`>")
   vim.keymap.set("n", "gV", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {expr = true})
   vim.keymap.set("n", "U", "<C-r>")
-  vim.keymap.set("n", "<C-r>", "<Nop>")
   vim.keymap.set({"n", "v"}, "n", "nzz")
   vim.keymap.set({"n", "v"}, "N", "Nzz")
   local function _13_()
@@ -1386,28 +1385,33 @@ local function _91_()
   end
 end
 vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _91_})
-vim.api.nvim_create_autocmd("TermOpen", {command = "startinsert", group = "mitchellwrosen"})
 local function _95_()
+  vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
+  vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
+  return vim.cmd.startinsert()
+end
+vim.api.nvim_create_autocmd("TermOpen", {callback = _95_, group = "mitchellwrosen"})
+local function _96_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     return vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd("VimEnter", {callback = _95_, nested = true, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("VimEnter", {callback = _96_, nested = true, group = "mitchellwrosen"})
 local lsp = require("lspconfig")
 local status = require("lsp-status")
 local capabilities
-local function _97_(config)
-  _G.assert((nil ~= config), "Missing argument config on init.fnl:830")
+local function _98_(config)
+  _G.assert((nil ~= config), "Missing argument config on init.fnl:836")
   local cmp_nvim_lsp = require("cmp_nvim_lsp")
   return cmp_nvim_lsp.update_capabilities(vim.tbl_extend("keep", (config.capabilities or {}), status.capabilities))
 end
-capabilities = _97_
+capabilities = _98_
 vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
-local function _98_(client, buf)
-  _G.assert((nil ~= buf), "Missing argument buf on init.fnl:862")
-  _G.assert((nil ~= client), "Missing argument client on init.fnl:862")
+local function _99_(client, buf)
+  _G.assert((nil ~= buf), "Missing argument buf on init.fnl:868")
+  _G.assert((nil ~= client), "Missing argument client on init.fnl:868")
   if client.config.flags then
     client.config.flags.allow_incremental_sync = true
     return nil
@@ -1415,5 +1419,5 @@ local function _98_(client, buf)
     return nil
   end
 end
-lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _98_})
+lsp.elmls.setup({capabilities = capabilities(lsp.elmls), on_attach = _99_})
 return lsp.sumneko_lua.setup({capabilities = capabilities(lsp.sumneko_lua)})

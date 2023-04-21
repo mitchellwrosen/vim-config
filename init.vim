@@ -8,12 +8,6 @@
 
 lua require('init')
 
-" Esc escapes terminal mode
-autocmd mitchellwrosen TermOpen * tnoremap <buffer> <Esc> <C-\><C-n>
-autocmd mitchellwrosen TermOpen * setlocal nonumber norelativenumber
-" forcibly exit a terminal buffer, because there's nothing to save
-autocmd mitchellwrosen TermOpen * nnoremap <silent> <buffer> <Space>d :bw!<CR>
-
 " ==============================================================================
 " Plugin settings
 " ==============================================================================

@@ -348,8 +348,6 @@
 
 ; (vim.cmd "Plug 'tpope/vim-fugitive', { 'commit': 'bb4f9e660b0934f70af693c56c5b8a4c322e7a1f' }")
 
-; ((. vim.fn "plug#end"))
-
 ; colorscheme settings
 (set vim.g.gruvbox_material_background "soft") ; soft, medium, hard
 (set vim.g.gruvbox_material_better_performance 1) ; what
@@ -792,10 +790,18 @@
   }
 )
 
-; Start a terminal in insert mode
 (vim.api.nvim_create_autocmd
   "TermOpen"
-  { :command "startinsert"
+  { :callback
+      (fn []
+        ; Esc to get into normal mode from a terminal
+        (vim.keymap.set "t" "<Esc>" "<C-\\><C-n>" { :buffer true })
+        ; Even in normal mode, send Ctrl+c to the terminal
+        (vim.keymap.set "n" "<C-c>" "i<C-c>" { :buffer true })
+
+        ; Start in insert mode
+        (vim.cmd.startinsert)
+      )
     :group "mitchellwrosen"
   }
 )

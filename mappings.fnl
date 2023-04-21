@@ -46,12 +46,11 @@
 (vim.keymap.set "v" "Y" "y`>")
 
 ; Select last changed or yanked area
+; I... never use this. Should probably delete it.
 (vim.keymap.set "n" "gV" "'`[' . strpart(getregtype(), 0, 1) . '`]'" { :expr true })
 
-; U to redo. <C-r> comes from some plugin, maybe vim-repeat? (annoying)
+; U to redo
 (vim.keymap.set "n" "U" "<C-r>")
-; Weaning myself of <C-R> to redo
-(vim.keymap.set "n" "<C-r>" "<Nop>")
 
 ; Center after every search movement
 (vim.keymap.set [ "n" "v" ] "n" "nzz")
@@ -211,7 +210,8 @@
   (vim.keymap.set "n" "<Space>5" (fn [] (move-buffer-to-index 5)))
 )
 
-; " github.com/mitchellwrosen/repld stuff
+; github.com/mitchellwrosen/repld stuff
+; FIXME these are useful hotkeys but I'm rarely running repld. what to do?
 (vim.keymap.set "n" "<Space>s" "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``" { :silent true })
 (vim.keymap.set "n" "<Space>S" "m`:silent w !repld-send<CR>``" { :silent true })
 (vim.keymap.set "v" "<Space>s" "m`<Esc>:silent '<,'>w !repld-send<CR>``" { :silent true })

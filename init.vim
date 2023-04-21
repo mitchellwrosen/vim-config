@@ -8,9 +8,6 @@
 
 lua require('init')
 
-" On <Enter>, go to error and close quickfix list
-autocmd mitchellwrosen FileType qf nnoremap <silent> <buffer> <CR> <CR>:ccl<CR>
-
 " Esc escapes terminal mode
 autocmd mitchellwrosen TermOpen * tnoremap <buffer> <Esc> <C-\><C-n>
 autocmd mitchellwrosen TermOpen * setlocal nonumber norelativenumber

@@ -12,20 +12,6 @@ lua require('init')
 " Plugin settings
 " ==============================================================================
 
-" [junegunn/fzf.vim]
-" If the buffer is already open in another tab or window, jump to it rather
-" than replace the current buffer (which would open 2 copies)
-let g:fzf_buffers_jump = 1
-let g:fzf_layout = { 'window': { 'height': 0.9, 'width': 0.9 } }
-
-" [junegunn/fzf.vim]
-" Space-o ("open") to fuzzy file search, both git- and everything-variants
-nnoremap <expr> <Space>o (len(system('git rev-parse')) ? ':Files' : ':GFiles')."\<CR>"
-" Space-f ("find") the word under the cursor
-nnoremap <Space>f :Rg <C-r><C-w><CR>
-" Space-k (because it's a home-row key) to fuzzy-search buffers
-nnoremap <Space>k :Buffers<CR>
-
 command! -bar BCommits call fzf#vim#buffer_commits(1)
 
 command! -bar -nargs=? -complete=buffer Buffers

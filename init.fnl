@@ -174,9 +174,38 @@
       ; fuzzy search source code, files, etc
       { :url "https://github.com/junegunn/fzf"
         :commit "96670d5f16dcf23d590eb1d83d1de351b2e8fb15"
+        :config
+          (fn []
+            (set vim.g.fzf_layout { :window { :height 0.8 :width 0.8 } })
+          )
       }
       { :url "https://github.com/junegunn/fzf.vim"
         :commit "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0"
+        :config
+          (fn []
+            ; If the buffer is already open in another tab or window, jump to it
+            (set vim.g.fzf_buffers_jump 1)
+
+            ; Space-f ("find") the word under the cursor
+            (vim.keymap.set "n" "<Space>f" ":Rg <C-r><C-w><CR>")
+
+            ; Space-k (because it's a home-row key) to fuzzy-search buffers
+            ; I don't use this much, maybe I should delete it
+            (vim.keymap.set "n" "<Space>k" (. vim.fn "fzf#vim#buffers"))
+
+            ; Space-o ("open") to fuzzy file search, both git- and everything-variants
+            (vim.keymap.set
+              "n"
+              "<Space>o"
+              ; just check if we're in a git repo once, not every <Space>-o, which seems fine because I don't cd
+              (if
+                (= 0 (os.execute "git rev-parse"))
+                ; fzf#vim#gitfiles takes an undocumented first arg, but I peeked at the source - it's a string lol
+                (fn [] ((. vim.fn "fzf#vim#gitfiles") ""))
+                (fn [] ((. vim.fn "fzf#vim#files") "."))
+              )
+            )
+          )
       }
 
       ; nix syntax highlighting - 22-12-14

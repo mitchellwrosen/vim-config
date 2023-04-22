@@ -234,12 +234,6 @@
           )
       }
 
-      ; lsp configs
-      ; TODO get rid of these, just configure myself
-      { :url "https://github.com/neovim/nvim-lsp"
-        :commit "2c70b7b0095b4bbe55aaf0dc27a2581d1cafe491"
-      }
-
       ; Haskell syntax highlighting
       ; Does treesitter obviate this?
       { :url "https://github.com/neovimhaskell/haskell-vim"
@@ -252,10 +246,6 @@
         :tag "v3.7"
         :cmd "Git" ; don't load until we run :Git
         :config (fn [] nil)
-      }
-
-      { :url "https://github.com/nvim-lua/lsp-status.nvim"
-        :commit "4073f766f1303fb602802075e558fe43e382cc92"
       }
 
       ; treesitter
@@ -446,6 +436,26 @@
 (set vim.g.surround_no_mappings 1) ; don't let surround map anything
 
 (include "mappings")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Diagnostics
+
+(vim.diagnostic.config
+  { :float
+      { ; require cursor to be over diagnostic in order to open a float window of it
+        :scope "cursor"
+        ; remove the default "Diagnostics:" header
+        :header ""
+      }
+    ; only underline errors
+    :underline { "severity" vim.diagnostic.severity.ERROR }
+    ; the lsp_lines plugin seems to want to configure itself by making up a new `virtual_lines` key in
+    ; `vim.diagnostic.config`. seems stupid as hell but here we are.
+    :virtual_lines { :only_current_line true }
+    ; don't put diagnostics inline
+    :virtual_text false
+  }
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Autocommands
@@ -852,52 +862,12 @@
   )
 )
 
-(do
-  (local lsp (require "lspconfig"))
-  (local status (require "lsp-status"))
-
-  (local capabilities
-    (lambda [config]
-      (local cmp-nvim-lsp (require "cmp_nvim_lsp"))
-      (cmp-nvim-lsp.update_capabilities
-        (vim.tbl_extend
-          "keep"
-          (or config.capabilities {})
-          status.capabilities
-        )
-      )
-    )
-  )
-
-  (vim.diagnostic.config
-    { :float
-        { ; require cursor to be over diagnostic in order to open a float window of it
-          :scope "cursor"
-          ; remove the default "Diagnostics:" header
-          :header ""
-        }
-      ; only underline errors
-      :underline { "severity" vim.diagnostic.severity.ERROR }
-      ; the lsp_lines plugin seems to want to configure itself by making up a new `virtual_lines` key in
-      ; `vim.diagnostic.config`. seems stupid as hell but here we are.
-      :virtual_lines { :only_current_line true }
-      ; don't put diagnostics inline
-      :virtual_text false
-    }
-  )
-
-  (lsp.elmls.setup
-    { :capabilities (capabilities lsp.elmls)
-      :on_attach
-        (lambda [client buf]
-          ; https://github.com/elm-tooling/elm-language-server/issues/503
-          (when client.config.flags (set client.config.flags.allow_incremental_sync true))
-        )
-    }
-  )
-
-  (lsp.sumneko_lua.setup
-    { :capabilities (capabilities lsp.sumneko_lua)
-    }
-  )
-)
+; (lsp.elmls.setup
+;   { :capabilities (capabilities lsp.elmls)
+;     :on_attach
+;       (lambda [client buf]
+;         ; https://github.com/elm-tooling/elm-language-server/issues/503
+;         (when client.config.flags (set client.config.flags.allow_incremental_sync true))
+;       )
+;   }
+; )

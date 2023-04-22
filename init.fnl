@@ -654,9 +654,6 @@
 (create-autocmd "RecordingEnter" {} (fn [] (nmap "!" "q")))
 (nmap "9" "@z")
 
-; Start a git commit in insert mode
-(create-autocmd "FileType" { :pattern "gitcommit" } (fn [] (vim.cmd.startinsert)))
-
 ; neovim's progress handler seems like a bit of a work-in-progress, and I don't think it's a good idea to just
 ; overwrite it. it currently appends messages to an internal struct, emits a User LspStatusUpdate autocmd, and you can
 ; react to this by calling vim.lsp.util.get_client_messages, which returns a list of unseen messages
@@ -788,23 +785,6 @@
   )
 )
 
-; seems-like-haskell-project returns true if there's a "cabal.project", "stack.yaml", or "*.cabal" file here
-(macro seems-like-haskell-project []
-  `(accumulate [acc# false name# typ# (vim.fs.dir ".") &until acc#]
-    (or
-      (and
-        (= typ# "file")
-        (or
-          (= name# "cabal.project")
-          (= name# "stack.yaml")
-          (string.match name# "%.cabal$")
-        )
-      )
-      acc#
-    )
-  )
-)
-
 (create-autocmd
   "FileType"
   { :pattern "fennel" }
@@ -820,6 +800,23 @@
         :root_dir "."
         :settings {}
       }
+    )
+  )
+)
+
+; seems-like-haskell-project returns true if there's a "cabal.project", "stack.yaml", or "*.cabal" file here
+(macro seems-like-haskell-project []
+  `(accumulate [acc# false name# typ# (vim.fs.dir ".") &until acc#]
+    (or
+      (and
+        (= typ# "file")
+        (or
+          (= name# "cabal.project")
+          (= name# "stack.yaml")
+          (string.match name# "%.cabal$")
+        )
+      )
+      acc#
     )
   )
 )

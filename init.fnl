@@ -807,6 +807,25 @@
 
 (create-autocmd
   "FileType"
+  { :pattern "fennel" }
+  (fn []
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "fennel-ls")
+        :capabilities lsp-capabilities
+        :cmd ["fennel-ls"]
+        :name "fennel-ls"
+        :on_init (make-on-init start-ms initialize-notification-id "fennel-ls")
+        :root_dir "."
+        :settings {}
+      }
+    )
+  )
+)
+
+(create-autocmd
+  "FileType"
   { :pattern "haskell" }
   (fn []
     (when (seems-like-haskell-project)

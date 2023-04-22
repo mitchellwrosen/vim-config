@@ -741,20 +741,27 @@
   (tset vim.lsp.handlers "$/progress" my-progress-handler)
 )
 
-; seems-like-haskell-project : io bool
-(fn seems-like-haskell-project []
-  (accumulate [acc false name typ (vim.fs.dir ".") &until acc]
-    (if
+; lsp capabilities: defaults plus whatever cmp_nvim_lsp wants to say it can do
+(local lsp-capabilities
+  (do
+    (local cmp-nvim-lsp (require "cmp_nvim_lsp"))
+    (cmp-nvim-lsp.update_capabilities (vim.lsp.protocol.make_client_capabilities))
+  )
+)
+
+; seems-like-haskell-project returns true if there's a "cabal.project", "stack.yaml", or "*.cabal" file here
+(macro seems-like-haskell-project []
+  `(accumulate [acc# false name# typ# (vim.fs.dir ".") &until acc#]
+    (or
       (and
-        (= typ "file")
+        (= typ# "file")
         (or
-          (= name "cabal.project")
-          (= name "stack.yaml")
-          (string.match name "%.cabal$")
+          (= name# "cabal.project")
+          (= name# "stack.yaml")
+          (string.match name# "%.cabal$")
         )
       )
-      true
-      acc
+      acc#
     )
   )
 )
@@ -780,6 +787,10 @@
                 )
               )
             )
+          :capabilities lsp-capabilities
+          :cmd ["haskell-language-server-wrapper" "--lsp"]
+          ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
+          :name "hls"
           :on_init
             (fn [_ _]
               (local stop-ms (vim.loop.now))
@@ -791,10 +802,6 @@
                 }
               )
             )
-          ; :on_attach (fn [_ _] (vim.notify "Hello." vim.log.levels.INFO { :title "hls" }))
-          :cmd ["haskell-language-server-wrapper" "--lsp"]
-          ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
-          :name "hls"
           :root_dir "."
           :settings
             { :haskell

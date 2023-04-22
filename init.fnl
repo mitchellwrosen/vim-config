@@ -759,6 +759,35 @@
   )
 )
 
+(macro make-on-init [start-ms notification-id name]
+  `(fn [_client# _result#]
+    (local stop-ms# (vim.loop.now))
+    (vim.notify
+      (.. (string.format "%6.2fs" (/ (- stop-ms# ,start-ms) 1000)) " | " ,name ": Initialized")
+      vim.log.levels.INFO
+      { :replace ,notification-id
+        :timeout 3000
+      }
+    )
+  )
+)
+
+(macro make-before-init [start-ms notification-id name]
+  `(fn [_params# _config#]
+    (set ,start-ms (vim.loop.now))
+    (set
+      ,notification-id
+      (vim.notify
+        (.. "        | " ,name ": Initializing")
+        vim.log.levels.INFO
+        { :render "minimal"
+          :timeout false
+        }
+      )
+    )
+  )
+)
+
 ; seems-like-haskell-project returns true if there's a "cabal.project", "stack.yaml", or "*.cabal" file here
 (macro seems-like-haskell-project []
   `(accumulate [acc# false name# typ# (vim.fs.dir ".") &until acc#]
@@ -775,6 +804,7 @@
     )
   )
 )
+
 (create-autocmd
   "FileType"
   { :pattern "haskell" }
@@ -783,35 +813,12 @@
       (var initialize-notification-id nil)
       (var start-ms nil)
       (vim.lsp.start
-        { :before_init
-            (fn [_ _]
-              (set start-ms (vim.loop.now))
-              (set
-                initialize-notification-id
-                (vim.notify
-                  "        | hls: Initializing"
-                  vim.log.levels.INFO
-                  { :render "minimal"
-                    :timeout false
-                  }
-                )
-              )
-            )
+        { :before_init (make-before-init start-ms initialize-notification-id "hls")
           :capabilities lsp-capabilities
           :cmd ["haskell-language-server-wrapper" "--lsp"]
           ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
           :name "hls"
-          :on_init
-            (fn [_ _]
-              (local stop-ms (vim.loop.now))
-              (vim.notify
-                (.. (string.format "%6.2fs" (/ (- stop-ms start-ms) 1000)) " | hls: Initialized")
-                vim.log.levels.INFO
-                { :replace initialize-notification-id
-                  :timeout 3000
-                }
-              )
-            )
+          :on_init (make-on-init start-ms initialize-notification-id "hls")
           :root_dir "."
           :settings
             { :haskell

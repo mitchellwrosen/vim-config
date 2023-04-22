@@ -1165,7 +1165,7 @@ local function _59_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, callback = _60_, group = "mitchellwrosen"})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, group = "mitchellwrosen", callback = _60_})
 end
 vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _59_})
 local function _62_()

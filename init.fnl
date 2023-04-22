@@ -791,6 +791,7 @@
   (fn []
     (var initialize-notification-id nil)
     (var start-ms nil)
+    ; using commit f4298b02be9d3af8d27bba67dc129b9a1014fc55 of https://git.sr.ht/~xerool/fennel-ls
     (vim.lsp.start
       { :before_init (make-before-init start-ms initialize-notification-id "fennel-ls")
         :capabilities lsp-capabilities

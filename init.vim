@@ -9,16 +9,6 @@ lua require('init')
 " Plugin settings
 " ==============================================================================
 
-" Would be nice if '-1' worked here https://github.com/junegunn/fzf/issues/1750
-" function! <SID>Rg(query)
-"   let command_fmt = 'rg --column --line-number --no-heading --color=always -- %s || true'
-"   let initial_command = printf(command_fmt, shellescape(a:query))
-"   let reload_command = printf(command_fmt, '{q}')
-"   let spec = {'options': ['-0', '-1', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-"   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), 1)
-" endfunction
-" command! -nargs=* Rg call <SID>Rg(<q-args>)
-
 command! -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always -- '.shellescape(<q-args>),

@@ -1,76 +1,59 @@
 local _local_1_ = require("stdlib")
 local file_exists = _local_1_["file-exists"]
-do
-  local lazypath = (vim.fn.stdpath("data") .. "/lazy/lazy.nvim")
-  if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({"git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim", "--branch=v9.14.2", lazypath})
-  else
+package.preload["options"] = package.preload["options"] or function(...)
+  vim.o.autowriteall = true
+  vim.o.expandtab = true
+  vim.o.grepprg = "rg --vimgrep"
+  vim.o.hidden = true
+  vim.o.ignorecase = true
+  vim.o.inccommand = "split"
+  vim.o.joinspaces = false
+  vim.o.lazyredraw = true
+  vim.o.modeline = false
+  vim.o.mouse = ""
+  vim.o.report = 0
+  vim.o.scrolloff = 15
+  vim.o.shiftround = true
+  vim.o.shiftwidth = 2
+  vim.o.shortmess = "filnxtToOFIc"
+  vim.o.showcmd = false
+  vim.o.showmode = false
+  vim.o.showtabline = 2
+  vim.o.sidescrolloff = 16
+  vim.o.smartcase = true
+  vim.o.smartindent = true
+  vim.o.softtabstop = 2
+  vim.o.startofline = false
+  vim.o.synmaxcol = 200
+  vim.o.termguicolors = true
+  vim.o.timeoutlen = 300
+  vim.o.title = true
+  vim.o.undofile = true
+  vim.o.updatetime = 300
+  vim.o.wildmenu = true
+  vim.o.wildmode = "list:longest,full"
+  vim.o.wrap = false
+  vim.opt.clipboard = {"unnamed", "unnamedplus"}
+  vim.opt.completeopt = {"menuone", "noinsert", "noselect"}
+  vim.opt.listchars = {nbsp = "+", tab = "> ", trail = "\194\183"}
+  vim.wo.colorcolumn = "120"
+  vim.wo.cursorline = true
+  vim.wo.foldenable = false
+  vim.wo.list = true
+  vim.wo.number = true
+  vim.wo.signcolumn = "yes"
+  return nil
+end
+require("options")
+package.preload["plugins"] = package.preload["plugins"] or function(...)
+  do
+    local lazypath = (vim.fn.stdpath("data") .. "/lazy/lazy.nvim")
+    if not vim.loop.fs_stat(lazypath) then
+      vim.fn.system({"git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim", "--branch=v9.14.2", lazypath})
+    else
+    end
+    do end (vim.opt.rtp):prepend(lazypath)
   end
-  do end (vim.opt.rtp):prepend(lazypath)
-end
-vim.o.autowriteall = true
-vim.o.grepprg = "rg --vimgrep"
-vim.o.hidden = true
-vim.o.ignorecase = true
-vim.o.inccommand = "split"
-vim.o.joinspaces = false
-vim.o.lazyredraw = true
-vim.o.mouse = ""
-vim.o.report = 0
-vim.o.scrolloff = 15
-vim.o.shiftround = true
-vim.o.shortmess = "filnxtToOFIc"
-vim.o.showcmd = false
-vim.o.showmode = false
-vim.o.showtabline = 2
-vim.o.sidescrolloff = 16
-vim.o.smartcase = true
-vim.o.startofline = false
-vim.o.termguicolors = true
-vim.o.timeoutlen = 400
-vim.o.title = true
-vim.o.updatetime = 300
-vim.o.wildmenu = true
-vim.o.wildmode = "list:longest,full"
-vim.o.wrap = false
-vim.opt.clipboard = {"unnamed", "unnamedplus"}
-vim.opt.completeopt = {"menuone", "noinsert", "noselect"}
-vim.opt.listchars = {nbsp = "+", tab = "> ", trail = "\194\183"}
-vim.wo.colorcolumn = "120"
-vim.wo.cursorline = true
-vim.wo.foldenable = false
-vim.wo.list = true
-vim.wo.number = true
-vim.wo.signcolumn = "yes"
-do
-  vim.bo["expandtab"] = true
-  vim.o["expandtab"] = true
-end
-do
-  vim.bo["modeline"] = false
-  vim.o["modeline"] = false
-end
-do
-  vim.bo["smartindent"] = true
-  vim.o["smartindent"] = true
-end
-do
-  vim.bo["undofile"] = true
-  vim.o["undofile"] = true
-end
-do
-  vim.bo["shiftwidth"] = 2
-  vim.o["shiftwidth"] = 2
-end
-do
-  vim.bo["synmaxcol"] = 200
-  vim.o["synmaxcol"] = 200
-end
-do
-  vim.bo["softtabstop"] = 2
-  vim.o["softtabstop"] = 2
-end
-do
   local lazy = require("lazy")
   local function _3_()
     local deadcolumn = require("deadcolumn")
@@ -153,32 +136,34 @@ do
     return nil
   end
   lazy.setup({{url = "https://github.com/bakpakin/fennel.vim", commit = "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89", ft = "fennel"}, {url = "https://github.com/Bekaboo/deadcolumn.nvim", commit = "8140fd7cface9592a44b3151203fc6ca95ad9598", event = "InsertEnter", config = _3_}, {url = "https://github.com/ggandor/leap.nvim", commit = "f74473d23ebf60957e0db3ff8172349a82e5a442", event = "VeryLazy", config = _4_}, {url = "https://github.com/hrsh7th/nvim-cmp", commit = "f841fa6ced194aa930136a7671439e6bd4c51722", dependencies = {{url = "https://github.com/hrsh7th/cmp-nvim-lsp", commit = "b4251f0fca1daeb6db5d60a23ca81507acf858c2"}, {url = "https://github.com/hrsh7th/cmp-buffer", commit = "f83773e2f433a923997c5faad7ea689ec24d1785"}}, event = "InsertEnter", config = _5_}, {url = "https://github.com/kevinhwang91/nvim-bqf", tag = "v1.1.0", ft = "qf", config = _6_}, {url = "https://github.com/nvim-lualine/lualine.nvim", commit = "84ffb80e452d95e2c46fa29a98ea11a240f7843e", config = require("config-lualine")}, {url = "https://github.com/junegunn/fzf", commit = "96670d5f16dcf23d590eb1d83d1de351b2e8fb15", event = "VeryLazy", config = _7_}, {url = "https://github.com/junegunn/fzf.vim", commit = "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0", dependencies = {"fzf"}, event = "VeryLazy", config = _8_}, {url = "https://github.com/LnL7/vim-nix", commit = "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee", ft = "nix"}, {url = "https://github.com/lukas-reineke/indent-blankline.nvim", tag = "v2.20.4", config = _13_}, {url = "https://github.com/neovimhaskell/haskell-vim", commit = "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e", ft = "haskell"}, {url = "https://github.com/tpope/vim-fugitive", tag = "v3.7", cmd = "Git", config = _14_}, {url = "https://github.com/nvim-treesitter/nvim-treesitter", tag = "v0.8.5.2", build = ":TSUpdate", config = _15_}, {url = "https://github.com/rcarriga/nvim-notify", tag = "v3.11.0", config = _16_}, {url = "https://github.com/romainl/vim-cool", commit = "27ad4ecf7532b750fadca9f36e1c5498fc225af2", event = "VeryLazy"}, {url = "https://github.com/sainnhe/gruvbox-material", commit = "a6c5f652788b36c6ff2a0fdbefa271cb46f8f5e7", priority = 1000}, {url = "https://github.com/tommcdo/vim-exchange", commit = "784d63083ad7d613aa96f00021cd0dfb126a781a", config = _17_}, {url = "https://github.com/tpope/vim-characterize", commit = "885a00a3c21dd52ca8f2fd7d62850134934179d9", keys = {{"ga"}}, config = _18_}, {url = "https://github.com/tpope/vim-commentary", commit = "627308e30639be3e2d5402808ce18690557e8292", event = "VeryLazy", config = _19_}, {url = "https://github.com/tpope/vim-repeat", commit = "24afe922e6a05891756ecf331f39a1f6743d3d5a", event = "VeryLazy"}, {url = "https://github.com/tpope/vim-surround", commit = "aeb933272e72617f7c4d35e1f003be16836b948d", event = "VeryLazy"}, {url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim", commit = "dcff567b3a2d730f31b6da229ca3bb40640ec5a6", config = _20_}, {url = "https://github.com/dstein64/vim-startuptime", tag = "v4.4.0", cmd = "StartupTime", config = _21_}})
+  vim.g.gruvbox_material_background = "soft"
+  vim.g.gruvbox_material_better_performance = 1
+  vim.g.gruvbox_material_enable_italic = 1
+  vim.cmd("colorscheme gruvbox-material")
+  vim.g.haskell_enable_backpack = 1
+  vim.g.haskell_enable_pattern_synonyms = 1
+  vim.g.haskell_enable_quantification = 1
+  vim.g.haskell_enable_recursivedo = 1
+  vim.g.haskell_enable_static_pointers = 1
+  vim.g.haskell_enable_typeroles = 1
+  vim.g.haskell_indent_disable = 1
+  vim.g.git_messenger_always_into_popup = true
+  vim.g.git_messenger_extra_blame_args = "-w"
+  vim.g.git_messenger_no_default_mappings = true
+  vim.keymap.set("n", "<Space>b", "<Plug>(git-messenger)")
+  vim.g.exchange_no_mappings = 1
+  vim.keymap.set({"n", "v"}, "x", "<Plug>(Exchange)")
+  vim.keymap.set("n", "xw", "<Plug>(Exchange)e")
+  vim.keymap.set("n", "xW", "<Plug>(Exchange)E")
+  vim.keymap.set("n", "xx", "m`<Plug>(ExchangeLine)``")
+  vim.keymap.set("n", "X", "<Plug>(Exchange)$")
+  vim.keymap.set("n", "xc", "<Plug>(ExchangeClear)")
+  vim.keymap.set("n", "-", "m`<Plug>CommentaryLine``")
+  vim.keymap.set("v", "-", "<Plug>Commentary")
+  vim.g.surround_no_mappings = 1
+  return nil
 end
-vim.g.gruvbox_material_background = "soft"
-vim.g.gruvbox_material_better_performance = 1
-vim.g.gruvbox_material_enable_italic = 1
-vim.cmd("colorscheme gruvbox-material")
-vim.g.haskell_enable_backpack = 1
-vim.g.haskell_enable_pattern_synonyms = 1
-vim.g.haskell_enable_quantification = 1
-vim.g.haskell_enable_recursivedo = 1
-vim.g.haskell_enable_static_pointers = 1
-vim.g.haskell_enable_typeroles = 1
-vim.g.haskell_indent_disable = 1
-vim.g.git_messenger_always_into_popup = true
-vim.g.git_messenger_extra_blame_args = "-w"
-vim.g.git_messenger_no_default_mappings = true
-vim.keymap.set("n", "<Space>b", "<Plug>(git-messenger)")
-vim.g.exchange_no_mappings = 1
-vim.keymap.set({"n", "v"}, "x", "<Plug>(Exchange)")
-vim.keymap.set("n", "xw", "<Plug>(Exchange)e")
-vim.keymap.set("n", "xW", "<Plug>(Exchange)E")
-vim.keymap.set("n", "xx", "m`<Plug>(ExchangeLine)``")
-vim.keymap.set("n", "X", "<Plug>(Exchange)$")
-vim.keymap.set("n", "xc", "<Plug>(ExchangeClear)")
-vim.keymap.set("n", "-", "m`<Plug>CommentaryLine``")
-vim.keymap.set("v", "-", "<Plug>Commentary")
-vim.g.surround_no_mappings = 1
+require("plugins")
 package.preload["mappings"] = package.preload["mappings"] or function(...)
   vim.keymap.set({"c", "i", "n", "o", "v"}, ";", ":")
   vim.keymap.set({"c", "i", "n", "o", "v"}, ":", ";")
@@ -1165,7 +1150,7 @@ local function _59_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {once = true, buffer = opts.buf, callback = _60_, group = "mitchellwrosen"})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, group = "mitchellwrosen", callback = _60_})
 end
 vim.api.nvim_create_autocmd("BufRead", {callback = _59_, group = "mitchellwrosen"})
 local function _62_()

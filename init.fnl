@@ -42,9 +42,10 @@
         :once true
       }
       (fn []
-        (local last_known_line (. (vim.api.nvim_buf_get_mark opts.buf "\"") 1))
+        (local last_known_pos (vim.api.nvim_buf_get_mark opts.buf "\""))
+        (local last_known_line (. last_known_pos 1))
         (when (and (> last_known_line 1) (<= last_known_line (vim.api.nvim_buf_line_count opts.buf)))
-          (vim.api.nvim_feedkeys "g`\"" "x" false)
+          (vim.api.nvim_feedkeys "g`\"" "nx" false)
         )
       )
     )
@@ -149,15 +150,16 @@
     (vim.cmd "highlight! link LspReferenceRead LspReference")
     (vim.cmd "highlight! link LspReferenceWrite LspReference")
 
-    (nmap "<Space>a" vim.lsp.buf.code_action { :buffer buf :silent true })
-    (nmap "gd" vim.lsp.buf.definition { :buffer buf :silent true })
-    (nmap "<Space>d" vim.lsp.buf.format { :buffer buf :silent true })
+    (nmap "<Space>la" vim.lsp.buf.code_action { :buffer buf :desc "Apply code action" :silent true })
+    (nmap "gd" vim.lsp.buf.definition { :buffer buf :desc "Go to definition" :silent true })
+    (nmap "<Space>d" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
+    (nmap "<Space>lf" vim.lsp.buf.format { :buffer buf :desc "Format code (<Space>d)" :silent true })
     (nmap "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
-    (nmap "<Space>i" vim.lsp.buf.incoming_calls { :buffer buf :silent true })
-    (nmap "<Space>u" vim.lsp.buf.outgoing_calls { :buffer buf :silent true })
-    (nmap "<Space>r" vim.lsp.buf.references { :buffer buf :silent true })
-    (nmap "<Space>e" vim.lsp.buf.rename { :buffer buf :silent true })
-    (nmap "gt" vim.lsp.buf.type_definition { :buffer buf :silent true })
+    (nmap "<Space>li" vim.lsp.buf.incoming_calls { :buffer buf :desc "Incoming calls" :silent true })
+    (nmap "<Space>lo" vim.lsp.buf.outgoing_calls { :buffer buf :desc "Outgoing calls" :silent true })
+    (nmap "<Space>lr" vim.lsp.buf.references { :buffer buf :desc "References" :silent true })
+    (nmap "<Space>ln" vim.lsp.buf.rename { :buffer buf :desc "Rename" :silent true })
+    (nmap "gt" vim.lsp.buf.type_definition { :buffer buf :desc "Go to type" :silent true })
     ; float=false here means don't call vim.diagnostic.open_float once we land
     (nmap "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
     (nmap "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })

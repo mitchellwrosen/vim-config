@@ -8,7 +8,8 @@
 (nmap "r:" "r;")
 
 ; make ' jump back to mark's exact position, not just line
-(nmap "'" "`")
+; this got more complicated after using which-key; simpler version left commented-out here
+; (nmap "'" "`")
 
 ; very magic mode search
 (nmap "/" "/\\v")

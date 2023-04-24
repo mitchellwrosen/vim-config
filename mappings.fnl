@@ -1,5 +1,5 @@
 (import-macros { : drop : take : wither } "stdlibm")
-(import-macros { : nmap } "nvim-stdlibm")
+(import-macros { : get-current-buffer-region : nmap : set-current-buffer-region } "nvim-stdlibm")
 
 ; Swap : and ;
 (vim.keymap.set [ "c" "i" "n" "o" "v" ] ";" ":")
@@ -44,12 +44,66 @@
 ; when pasting over visual selection, don't copy that visual selection to the default register
 (vim.keymap.set "v" "p" "\"0p")
 
+; TODO document this
+; TODO don't assume " register (https://vimhelp.org/eval.txt.html#v%3Aregister)
+; TODO make it work for V mode too
+(vim.keymap.set
+  "x"
+  "x"
+  (fn []
+    ; previous yank positions, (1,0)-indexed
+    ; if there was no previous yank, first-row = first col = 0
+    (local [ prev-first-row prev-first-col ] (vim.api.nvim_buf_get_mark 0 "["))
+    (local [ prev-last-row prev-last-col ] (vim.api.nvim_buf_get_mark 0 "]"))
+    (local prev-region [ [ prev-first-row prev-first-col ] [ prev-last-row prev-last-col ] ])
+    ; v, V, or <Ctrl-v>
+    ; (local prev-mode (string.sub (vim.fn.getregtype) 1 1))
+
+    ; current selection begin and end positions, (1,0)-indexed
+    ; note that the begin position might be after the end position (e.g. "vbbbb")
+    (local [ _bufnum cur-begin-row cur-begin-col-1 _off ] (vim.fn.getpos "v"))
+    (local cur-begin-col (- cur-begin-col-1 1))
+    (local [ cur-end-row cur-end-col ] (vim.api.nvim_win_get_cursor 0))
+    (local cur-first-row (math.min cur-begin-row cur-end-row))
+    (local cur-first-col (math.min cur-begin-col cur-end-col))
+    (local cur-last-row (math.max cur-begin-row cur-end-col))
+    (local cur-last-col (math.max cur-begin-col cur-end-col))
+    (local cur-region [ [ cur-first-row cur-first-col ] [ cur-last-row cur-last-col ] ])
+    ; (local cur-mode (. (vim.api.nvim_get_mode) "mode"))
+
+    (if
+      (and
+        ; is there a previous yank at all?
+        (not (and (= prev-first-row 0) (= prev-first-col 0)))
+        ; is the previous yank only one line?
+        (= prev-first-row prev-last-row)
+        ; is the current selection only one line?
+        (= cur-begin-row cur-end-row)
+      )
+      ; easy case: the first and second regions are on different lines. just swap 'em
+      (if (not= prev-first-row cur-begin-row)
+        (do
+          (local prev-contents (get-current-buffer-region prev-region))
+          (local cur-contents (get-current-buffer-region cur-region))
+
+          (vim.api.nvim_feedkeys "\27" "xn" false)
+          (set-current-buffer-region prev-region cur-contents)
+          (set-current-buffer-region cur-region prev-contents)
+        )
+        ; harder case: the first and second regions are on the same line
+        (do
+          (print "TODO: implement exchanging text on the same line")
+          (vim.api.nvim_feedkeys "\27" "xn" false)
+        )
+      )
+      (vim.api.nvim_feedkeys "\27" "xn" false)
+    )
+  )
+)
+
+
 ; After visual mode yank, leave cursor at the end of the highlight
 (vim.keymap.set "v" "Y" "y`>")
-
-; Select last changed or yanked area
-; I... never use this. Should probably delete it.
-(nmap "gV" "'`[' . strpart(getregtype(), 0, 1) . '`]'" { :expr true })
 
 ; U to redo
 (nmap "U" "<C-r>")

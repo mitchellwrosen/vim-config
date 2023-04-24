@@ -225,13 +225,6 @@
       :priority 1000
     }
 
-    ; swap the location of two selections
-    { :url "https://github.com/tommcdo/vim-exchange"
-      :commit "784d63083ad7d613aa96f00021cd0dfb126a781a"
-      :config (fn [] nil)
-
-    }
-
     ; improved "ga" for information about the character under the cursor
     { :url "https://github.com/tpope/vim-characterize"
       :commit "885a00a3c21dd52ca8f2fd7d62850134934179d9"
@@ -288,20 +281,20 @@
             { :icons
                 { :separator ""
                 }
-              :marks true
               :plugins
-                { :spelling { :enabled false }
+                { :marks true
+                  :presets
+                    { :g false
+                      :motions false
+                      :nav false
+                      :operators false
+                      :text_objects false
+                      :windows false
+                      :z false
+                    }
+                  :registers true
+                  :spelling { :enabled false }
                 }
-              :presets
-                { :g false
-                  :motions false
-                  :nav false
-                  :operators false
-                  :text_objects false
-                  :windows false
-                  :z false
-                }
-              :registers true
               :window
                 { :border "single"
                   :margin [ 0 0 0 0 ]
@@ -395,17 +388,6 @@
 (set vim.g.git_messenger_no_default_mappings true)
 ; blame the line under the cursor
 (nmap "<Space>b" "<Plug>(git-messenger)")
-
-; tommcdo/vim-exchange
-(set vim.g.exchange_no_mappings 1) ; Don't make any key mappings
-; x ("exchange") once to yank, x again to exchange with the first yank
-(vim.keymap.set [ "n" "v" ] "x" "<Plug>(Exchange)")
-; Manually make exhange replace 'w' with 'e', as vim does for e.g. 'c'
-(nmap "xw" "<Plug>(Exchange)e")
-(nmap "xW" "<Plug>(Exchange)E")
-(nmap "xx" "m`<Plug>(ExchangeLine)``") ; exchange the entire line
-(nmap "X" "<Plug>(Exchange)$") ; exchange from here to the end of line
-(nmap "xc" "<Plug>(ExchangeClear)") ; clear the exchange highlight
 
 ; tpope/vim-commentary
 (nmap "-" "m`<Plug>CommentaryLine``")

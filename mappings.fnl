@@ -45,7 +45,6 @@
 (vim.keymap.set "v" "p" "\"0p")
 
 ; TODO document this
-; TODO don't assume " register (https://vimhelp.org/eval.txt.html#v%3Aregister)
 ; TODO make it work for V mode too
 (vim.keymap.set
   "x"
@@ -55,7 +54,12 @@
     ; if there was no previous yank, first-row = first col = 0
     (local [ prev-first-row prev-first-col ] (vim.api.nvim_buf_get_mark 0 "["))
     (local [ prev-last-row prev-last-col ] (vim.api.nvim_buf_get_mark 0 "]"))
-    (local prev-region [ [ prev-first-row prev-first-col ] [ prev-last-row prev-last-col ] ])
+    (local
+      prev-region
+      { :start { :row prev-first-row :col prev-first-col }
+        :end { :row prev-last-row :col prev-last-col }
+      }
+    )
     ; v, V, or <Ctrl-v>
     ; (local prev-mode (string.sub (vim.fn.getregtype) 1 1))
 
@@ -68,9 +72,32 @@
     (local cur-first-col (math.min cur-begin-col cur-end-col))
     (local cur-last-row (math.max cur-begin-row cur-end-col))
     (local cur-last-col (math.max cur-begin-col cur-end-col))
-    (local cur-region [ [ cur-first-row cur-first-col ] [ cur-last-row cur-last-col ] ])
+    (local
+      cur-region
+      { :start { :row cur-first-row :col cur-first-col }
+        :end { :row cur-last-row :col cur-last-col }
+      }
+    )
     ; (local cur-mode (. (vim.api.nvim_get_mode) "mode"))
 
+    (local prev-contents (get-current-buffer-region prev-region))
+    (local cur-contents (get-current-buffer-region cur-region))
+
+    ; swap two regions on the same line
+    (fn swap-inline [left-region left-contents right-region right-contents]
+      (set-current-buffer-region left-region right-contents)
+      (local right-region-len (- right-region.end.col right-region.start.col))
+      (local left-region-len (- left-region.end.co left-region.start.col))
+      (local delta (- right-region-len left-region-len))
+      (local adjusted-right-region
+        { :start { :row right-region.start.row :col (+ right-region.start.col delta) }
+          :end { :row right-region.end.row :col (+ right-region.end.col delta) }
+        }
+      )
+      (set-current-buffer-region adjusted-right-region left-contents)
+    )
+
+    (vim.api.nvim_feedkeys "\27" "xn" false)
     (if
       (and
         ; is there a previous yank at all?
@@ -80,23 +107,20 @@
         ; is the current selection only one line?
         (= cur-begin-row cur-end-row)
       )
-      ; easy case: the first and second regions are on different lines. just swap 'em
-      (if (not= prev-first-row cur-begin-row)
+      ; if the first and second regions are on different lines, just swap 'em
+      (if
+        (not= prev-first-row cur-begin-row)
         (do
-          (local prev-contents (get-current-buffer-region prev-region))
-          (local cur-contents (get-current-buffer-region cur-region))
-
-          (vim.api.nvim_feedkeys "\27" "xn" false)
           (set-current-buffer-region prev-region cur-contents)
           (set-current-buffer-region cur-region prev-contents)
         )
-        ; harder case: the first and second regions are on the same line
-        (do
-          (print "TODO: implement exchanging text on the same line")
-          (vim.api.nvim_feedkeys "\27" "xn" false)
-        )
+        ; otherwise, the regions are on the same line; if they don't overlap, swap 'em
+        (and (< prev-first-col cur-first-col) (< prev-last-col cur-first-col))
+        (swap-inline prev-region prev-contents cur-region cur-contents)
+        (and (< cur-first-col prev-first-col) (< cur-last-col prev-first-col))
+        (swap-inline cur-region cur-contents prev-region prev-contents)
+        ; otherwise, they overlap, so swapping is nonsense
       )
-      (vim.api.nvim_feedkeys "\27" "xn" false)
     )
   )
 )

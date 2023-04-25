@@ -1,12 +1,14 @@
 ;; fennel-ls: macro-file
 
-; get a region of the current buffer. region is a tuple of (1,0)-indexed (row, col) tuples, inclusive.
+; position : { row : int, col : int } (1,0)-indexed
+; region : { start : position, end : position }
+
+; get a region of the current buffer
 (fn get-current-buffer-region [region]
-  ; (local [[row0 col0] [row1 col1]] region)
   `(do
-     (local [[row0# col0#] [row1# col1#]] ,region)
-     (vim.api.nvim_buf_get_text 0 (- row0# 1) col0# (- row1# 1) (+ col1# 1) {})
-   )
+     (local { :start { :row start-row# :col start-col# } :end { :row end-row# :col end-col# } } ,region)
+     (vim.api.nvim_buf_get_text 0 (- start-row# 1) start-col# (- end-row# 1) (+ end-col# 1) {})
+  )
 )
 
 ; normal-mode mapping
@@ -14,11 +16,11 @@
   `(vim.keymap.set "n" ,lhs ,rhs ,opts)
 )
 
-; set a region of the current buffer. region is a tuple of (1,0)-indexed (row, col) tuples, inclusive.
+; set a region of the current buffer
 (fn set-current-buffer-region [region lines]
   `(do
-     (local [[row0# col0#] [row1# col1#]] ,region)
-     (vim.api.nvim_buf_set_text 0 (- row0# 1) col0# (- row1# 1) (+ col1# 1) ,lines)
+     (local { :start { :row start-row# :col start-col# } :end { :row end-row# :col end-col# } } ,region)
+     (vim.api.nvim_buf_set_text 0 (- start-row# 1) start-col# (- end-row# 1) (+ end-col# 1) ,lines)
   )
 )
 

@@ -1,12 +1,12 @@
 (import-macros { : drop : take : wither } "stdlibm")
 (import-macros
-  { : get-current-buffer-previous-yank
-    : get-current-buffer-region
-    : get-current-visual-selection
-    : get-current-window-cursor
+  {
+    : get-previous-yank
+    : get-region
+    : get-visual-selection
     : nmap
-    : set-current-buffer-region
-    : set-current-window-cursor
+    : set-cursor
+    : set-region
   }
   "nvim-stdlibm"
 )
@@ -61,17 +61,17 @@
   "x"
   "x"
   (fn []
-    (local prev-region (get-current-buffer-previous-yank))
+    (local prev-region (get-previous-yank))
     ; if there was no previous yank, first-row = first col = 0
     (when (not (and (= prev-region.start.row 0) (= prev-region.start.col 0)))
       ; v, V, or <Ctrl-v>
       ; (local prev-mode (string.sub (vim.fn.getregtype) 1 1))
 
-      (local cur-region (get-current-visual-selection))
+      (local cur-region (get-visual-selection))
       ; (local cur-mode (. (vim.api.nvim_get_mode) "mode"))
 
-      (local prev-contents (get-current-buffer-region prev-region))
-      (local cur-contents (get-current-buffer-region cur-region))
+      (local prev-contents (get-region prev-region))
+      (local cur-contents (get-region cur-region))
 
       ; swap two regions on the same line
       (fn adjust-region [left-region right-region]
@@ -90,26 +90,26 @@
           (not= prev-region.start.row cur-region.start.row)
           (do
             (vim.api.nvim_feedkeys "\27" "xn" false)
-            (set-current-buffer-region prev-region cur-contents)
-            (set-current-buffer-region cur-region prev-contents)
-            (set-current-window-cursor cur-region.start)
+            (set-region prev-region cur-contents)
+            (set-region cur-region prev-contents)
+            (set-cursor cur-region.start)
           )
           ; otherwise, the regions are on the same line; if they don't overlap, swap 'em
           (and (< prev-region.start.col cur-region.start.col) (< prev-region.end.col cur-region.start.col))
           (do
             (vim.api.nvim_feedkeys "\27" "xn" false)
-            (set-current-buffer-region prev-region cur-contents)
+            (set-region prev-region cur-contents)
             (local adjusted-cur-region (adjust-region prev-region cur-region))
-            (set-current-buffer-region adjusted-cur-region prev-contents)
-            (set-current-window-cursor adjusted-cur-region.start)
+            (set-region adjusted-cur-region prev-contents)
+            (set-cursor adjusted-cur-region.start)
           )
           (and (< cur-region.start.col prev-region.start.col) (< cur-region.end.col prev-region.start.col))
           (do
             (vim.api.nvim_feedkeys "\27" "xn" false)
-            (set-current-buffer-region cur-region prev-contents)
+            (set-region cur-region prev-contents)
             (local adjusted-prev-region (adjust-region cur-region prev-region))
-            (set-current-buffer-region adjusted-prev-region cur-contents)
-            (set-current-window-cursor cur-region.start)
+            (set-region adjusted-prev-region cur-contents)
+            (set-cursor cur-region.start)
           )
           ; otherwise, they overlap, so swapping is nonsense
         )

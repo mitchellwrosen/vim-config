@@ -3,15 +3,22 @@
 ; position : { row : int, col : int } (1,0)-indexed
 ; region : { start : position, end : position }
 
+(fn get-cursor []
+  `(do
+    (local [ row# col# ] (vim.api.nvim_win_get_cursor 0))
+    { :row row# :col col# }
+  )
+)
+
 ; get a region of the current buffer
-(fn get-current-buffer-region [region]
+(fn get-region [region]
   `(do
      (local { :start { :row start-row# :col start-col# } :end { :row end-row# :col end-col# } } ,region)
      (vim.api.nvim_buf_get_text 0 (- start-row# 1) start-col# (- end-row# 1) (+ end-col# 1) {})
   )
 )
 
-(fn get-current-buffer-previous-yank []
+(fn get-previous-yank []
   `(do
     (local [ start-row# start-col# ] (vim.api.nvim_buf_get_mark 0 "["))
     (local [ end-row# end-col# ] (vim.api.nvim_buf_get_mark 0 "]"))
@@ -21,11 +28,11 @@
   )
 )
 
-(fn get-current-visual-selection []
+(fn get-visual-selection []
   `(do
     (local [ _bufnum# begin-row# begin-col# _off# ] (vim.fn.getpos "v"))
     (local begin-pos# { :row begin-row# :col (- begin-col# 1) })
-    (local end-pos# (get-current-window-cursor))
+    (local end-pos# ,(get-cursor))
     (if
       (or
         (< begin-pos#.row end-pos#.row)
@@ -40,38 +47,32 @@
   )
 )
 
-(fn get-current-window-cursor []
-  `(do
-    (local [ row# col# ] (vim.api.nvim_win_get_cursor 0))
-    { :row row# :col col# }
-  )
-)
-
 ; normal-mode mapping
 (fn nmap [lhs rhs opts]
   `(vim.keymap.set "n" ,lhs ,rhs ,opts)
 )
 
 ; set a region of the current buffer
-(fn set-current-buffer-region [region lines]
+(fn set-region [region lines]
   `(do
      (local { :start { :row start-row# :col start-col# } :end { :row end-row# :col end-col# } } ,region)
      (vim.api.nvim_buf_set_text 0 (- start-row# 1) start-col# (- end-row# 1) (+ end-col# 1) ,lines)
   )
 )
 
-(fn set-current-window-cursor [position]
+(fn set-cursor [position]
   `(do
     (local { :row row# :col col# } ,position)
     (vim.api.nvim_win_set_cursor 0 [ row# col# ])
   )
 )
 
-{ : get-current-buffer-previous-yank
-  : get-current-buffer-region
-  : get-current-visual-selection
-  : get-current-window-cursor
+{
+  : get-cursor
+  : get-previous-yank
+  : get-region
+  : get-visual-selection
   : nmap
-  : set-current-buffer-region
-  : set-current-window-cursor
+  : set-cursor
+  : set-region
 }

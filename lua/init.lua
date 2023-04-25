@@ -134,7 +134,7 @@ package.preload["plugins"] = package.preload["plugins"] or function(...)
   end
   local function _21_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {windows = false, z = false, text_objects = false, g = false, motions = false, nav = false, operators = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {text_objects = false, motions = false, operators = false, g = false, z = false, windows = false, nav = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _22_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -189,56 +189,56 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
     local prev_region
     do
       local _local_25_ = vim.api.nvim_buf_get_mark(0, "[")
-      local start_row_5_auto = _local_25_[1]
-      local start_col_6_auto = _local_25_[2]
+      local start_row_7_auto = _local_25_[1]
+      local start_col_8_auto = _local_25_[2]
       local _local_26_ = vim.api.nvim_buf_get_mark(0, "]")
-      local end_row_7_auto = _local_26_[1]
-      local end_col_8_auto = _local_26_[2]
-      prev_region = {["end"] = {col = end_col_8_auto, row = end_row_7_auto}, start = {col = start_col_6_auto, row = start_row_5_auto}}
+      local end_row_9_auto = _local_26_[1]
+      local end_col_10_auto = _local_26_[2]
+      prev_region = {["end"] = {col = end_col_10_auto, row = end_row_9_auto}, start = {col = start_col_8_auto, row = start_row_7_auto}}
     end
     if not ((prev_region.start.row == 0) and (prev_region.start.col == 0)) then
       local cur_region
       do
         local _local_27_ = vim.fn.getpos("v")
-        local _bufnum_9_auto = _local_27_[1]
-        local begin_row_10_auto = _local_27_[2]
-        local begin_col_11_auto = _local_27_[3]
-        local _off_12_auto = _local_27_[4]
-        local begin_pos_13_auto = {col = (begin_col_11_auto - 1), row = begin_row_10_auto}
-        local end_pos_14_auto
+        local _bufnum_11_auto = _local_27_[1]
+        local begin_row_12_auto = _local_27_[2]
+        local begin_col_13_auto = _local_27_[3]
+        local _off_14_auto = _local_27_[4]
+        local begin_pos_15_auto = {col = (begin_col_13_auto - 1), row = begin_row_12_auto}
+        local end_pos_16_auto
         do
           local _local_28_ = vim.api.nvim_win_get_cursor(0)
-          local row_15_auto = _local_28_[1]
-          local col_16_auto = _local_28_[2]
-          end_pos_14_auto = {col = col_16_auto, row = row_15_auto}
+          local row_1_auto = _local_28_[1]
+          local col_2_auto = _local_28_[2]
+          end_pos_16_auto = {col = col_2_auto, row = row_1_auto}
         end
-        if ((begin_pos_13_auto.row < end_pos_14_auto.row) or ((begin_pos_13_auto.row == end_pos_14_auto.row) and (begin_pos_13_auto.col <= end_pos_14_auto.col))) then
-          cur_region = {["end"] = end_pos_14_auto, start = begin_pos_13_auto}
+        if ((begin_pos_15_auto.row < end_pos_16_auto.row) or ((begin_pos_15_auto.row == end_pos_16_auto.row) and (begin_pos_15_auto.col <= end_pos_16_auto.col))) then
+          cur_region = {["end"] = end_pos_16_auto, start = begin_pos_15_auto}
         else
-          cur_region = {["end"] = begin_pos_13_auto, start = end_pos_14_auto}
+          cur_region = {["end"] = begin_pos_15_auto, start = end_pos_16_auto}
         end
       end
       local prev_contents
       do
         local _local_30_ = prev_region
         local _local_31_ = _local_30_["end"]
-        local end_col_4_auto = _local_31_["col"]
-        local end_row_3_auto = _local_31_["row"]
+        local end_col_6_auto = _local_31_["col"]
+        local end_row_5_auto = _local_31_["row"]
         local _local_32_ = _local_30_["start"]
-        local start_col_2_auto = _local_32_["col"]
-        local start_row_1_auto = _local_32_["row"]
-        prev_contents = vim.api.nvim_buf_get_text(0, (start_row_1_auto - 1), start_col_2_auto, (end_row_3_auto - 1), (end_col_4_auto + 1), {})
+        local start_col_4_auto = _local_32_["col"]
+        local start_row_3_auto = _local_32_["row"]
+        prev_contents = vim.api.nvim_buf_get_text(0, (start_row_3_auto - 1), start_col_4_auto, (end_row_5_auto - 1), (end_col_6_auto + 1), {})
       end
       local cur_contents
       do
         local _local_33_ = cur_region
         local _local_34_ = _local_33_["end"]
-        local end_col_4_auto = _local_34_["col"]
-        local end_row_3_auto = _local_34_["row"]
+        local end_col_6_auto = _local_34_["col"]
+        local end_row_5_auto = _local_34_["row"]
         local _local_35_ = _local_33_["start"]
-        local start_col_2_auto = _local_35_["col"]
-        local start_row_1_auto = _local_35_["row"]
-        cur_contents = vim.api.nvim_buf_get_text(0, (start_row_1_auto - 1), start_col_2_auto, (end_row_3_auto - 1), (end_col_4_auto + 1), {})
+        local start_col_4_auto = _local_35_["col"]
+        local start_row_3_auto = _local_35_["row"]
+        cur_contents = vim.api.nvim_buf_get_text(0, (start_row_3_auto - 1), start_col_4_auto, (end_row_5_auto - 1), (end_col_6_auto + 1), {})
       end
       local function adjust_region(left_region, right_region)
         local right_region_len = (right_region["end"].col - right_region.start.col)
@@ -1558,7 +1558,7 @@ local function _138_()
   end
   return vim.lsp.start({before_init = _139_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel-ls", on_init = _140_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _138_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", group = "mitchellwrosen", callback = _138_})
 local function _141_()
   local _142_
   do
@@ -1586,7 +1586,7 @@ local function _141_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _141_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _141_})
 local function _146_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
@@ -1600,4 +1600,4 @@ local function _147_()
     return nil
   end
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _147_, group = "mitchellwrosen"})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, group = "mitchellwrosen", callback = _147_})

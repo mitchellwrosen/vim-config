@@ -11,6 +11,42 @@
   )
 )
 
+(fn get-current-buffer-previous-yank []
+  `(do
+    (local [ start-row# start-col# ] (vim.api.nvim_buf_get_mark 0 "["))
+    (local [ end-row# end-col# ] (vim.api.nvim_buf_get_mark 0 "]"))
+    { :start { :row start-row# :col start-col# }
+      :end { :row end-row# :col end-col# }
+    }
+  )
+)
+
+(fn get-current-visual-selection []
+  `(do
+    (local [ _bufnum# begin-row# begin-col# _off# ] (vim.fn.getpos "v"))
+    (local begin-pos# { :row begin-row# :col (- begin-col# 1) })
+    (local end-pos# (get-current-window-cursor))
+    (if
+      (or
+        (< begin-pos#.row end-pos#.row)
+        (and
+          (= begin-pos#.row end-pos#.row)
+          (<= begin-pos#.col end-pos#.col)
+        )
+      )
+      { :start begin-pos# :end end-pos# }
+      { :start end-pos# :end begin-pos# }
+    )
+  )
+)
+
+(fn get-current-window-cursor []
+  `(do
+    (local [ row# col# ] (vim.api.nvim_win_get_cursor 0))
+    { :row row# :col col# }
+  )
+)
+
 ; normal-mode mapping
 (fn nmap [lhs rhs opts]
   `(vim.keymap.set "n" ,lhs ,rhs ,opts)
@@ -24,7 +60,18 @@
   )
 )
 
-{ : get-current-buffer-region
+(fn set-current-window-cursor [position]
+  `(do
+    (local { :row row# :col col# } ,position)
+    (vim.api.nvim_win_set_cursor 0 [ row# col# ])
+  )
+)
+
+{ : get-current-buffer-previous-yank
+  : get-current-buffer-region
+  : get-current-visual-selection
+  : get-current-window-cursor
   : nmap
   : set-current-buffer-region
+  : set-current-window-cursor
 }

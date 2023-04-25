@@ -1,5 +1,15 @@
 (import-macros { : drop : take : wither } "stdlibm")
-(import-macros { : get-current-buffer-region : nmap : set-current-buffer-region } "nvim-stdlibm")
+(import-macros
+  { : get-current-buffer-previous-yank
+    : get-current-buffer-region
+    : get-current-visual-selection
+    : get-current-window-cursor
+    : nmap
+    : set-current-buffer-region
+    : set-current-window-cursor
+  }
+  "nvim-stdlibm"
+)
 
 ; Swap : and ;
 (vim.keymap.set [ "c" "i" "n" "o" "v" ] ";" ":")
@@ -46,85 +56,67 @@
 
 ; TODO document this
 ; TODO make it work for V mode too
+; TODO X variant that leaves cursor at end of current region
 (vim.keymap.set
   "x"
   "x"
   (fn []
-    ; previous yank positions, (1,0)-indexed
+    (local prev-region (get-current-buffer-previous-yank))
     ; if there was no previous yank, first-row = first col = 0
-    (local [ prev-first-row prev-first-col ] (vim.api.nvim_buf_get_mark 0 "["))
-    (local [ prev-last-row prev-last-col ] (vim.api.nvim_buf_get_mark 0 "]"))
-    (local
-      prev-region
-      { :start { :row prev-first-row :col prev-first-col }
-        :end { :row prev-last-row :col prev-last-col }
-      }
-    )
-    ; v, V, or <Ctrl-v>
-    ; (local prev-mode (string.sub (vim.fn.getregtype) 1 1))
+    (when (not (and (= prev-region.start.row 0) (= prev-region.start.col 0)))
+      ; v, V, or <Ctrl-v>
+      ; (local prev-mode (string.sub (vim.fn.getregtype) 1 1))
 
-    ; current selection begin and end positions, (1,0)-indexed
-    ; note that the begin position might be after the end position (e.g. "vbbbb")
-    (local [ _bufnum cur-begin-row cur-begin-col-1 _off ] (vim.fn.getpos "v"))
-    (local cur-begin-col (- cur-begin-col-1 1))
-    (local [ cur-end-row cur-end-col ] (vim.api.nvim_win_get_cursor 0))
-    (local cur-first-row (math.min cur-begin-row cur-end-row))
-    (local cur-first-col (math.min cur-begin-col cur-end-col))
-    (local cur-last-row (math.max cur-begin-row cur-end-col))
-    (local cur-last-col (math.max cur-begin-col cur-end-col))
-    (local
-      cur-region
-      { :start { :row cur-first-row :col cur-first-col }
-        :end { :row cur-last-row :col cur-last-col }
-      }
-    )
-    ; (local cur-mode (. (vim.api.nvim_get_mode) "mode"))
+      (local cur-region (get-current-visual-selection))
+      ; (local cur-mode (. (vim.api.nvim_get_mode) "mode"))
 
-    (local prev-contents (get-current-buffer-region prev-region))
-    (local cur-contents (get-current-buffer-region cur-region))
+      (local prev-contents (get-current-buffer-region prev-region))
+      (local cur-contents (get-current-buffer-region cur-region))
 
-    ; swap two regions on the same line
-    (fn swap-inline [left-region left-contents right-region right-contents]
-      (set-current-buffer-region left-region right-contents)
-      (local right-region-len (- right-region.end.col right-region.start.col))
-      (local left-region-len (- left-region.end.co left-region.start.col))
-      (local delta (- right-region-len left-region-len))
-      (local adjusted-right-region
+      ; swap two regions on the same line
+      (fn adjust-region [left-region right-region]
+        (local right-region-len (- right-region.end.col right-region.start.col))
+        (local left-region-len (- left-region.end.col left-region.start.col))
+        (local delta (- right-region-len left-region-len))
         { :start { :row right-region.start.row :col (+ right-region.start.col delta) }
           :end { :row right-region.end.row :col (+ right-region.end.col delta) }
         }
       )
-      (set-current-buffer-region adjusted-right-region left-contents)
-    )
 
-    (vim.api.nvim_feedkeys "\27" "xn" false)
-    (if
-      (and
-        ; is there a previous yank at all?
-        (not (and (= prev-first-row 0) (= prev-first-col 0)))
-        ; is the previous yank only one line?
-        (= prev-first-row prev-last-row)
-        ; is the current selection only one line?
-        (= cur-begin-row cur-end-row)
-      )
-      ; if the first and second regions are on different lines, just swap 'em
-      (if
-        (not= prev-first-row cur-begin-row)
-        (do
-          (set-current-buffer-region prev-region cur-contents)
-          (set-current-buffer-region cur-region prev-contents)
+      ; we currently only handle single-line swaps
+      (when (and (= prev-region.start.row prev-region.end.row) (= cur-region.start.row cur-region.end.row))
+        (if
+          ; if the first and second regions are on different lines, just swap 'em
+          (not= prev-region.start.row cur-region.start.row)
+          (do
+            (vim.api.nvim_feedkeys "\27" "xn" false)
+            (set-current-buffer-region prev-region cur-contents)
+            (set-current-buffer-region cur-region prev-contents)
+            (set-current-window-cursor cur-region.start)
+          )
+          ; otherwise, the regions are on the same line; if they don't overlap, swap 'em
+          (and (< prev-region.start.col cur-region.start.col) (< prev-region.end.col cur-region.start.col))
+          (do
+            (vim.api.nvim_feedkeys "\27" "xn" false)
+            (set-current-buffer-region prev-region cur-contents)
+            (local adjusted-cur-region (adjust-region prev-region cur-region))
+            (set-current-buffer-region adjusted-cur-region prev-contents)
+            (set-current-window-cursor adjusted-cur-region.start)
+          )
+          (and (< cur-region.start.col prev-region.start.col) (< cur-region.end.col prev-region.start.col))
+          (do
+            (vim.api.nvim_feedkeys "\27" "xn" false)
+            (set-current-buffer-region cur-region prev-contents)
+            (local adjusted-prev-region (adjust-region cur-region prev-region))
+            (set-current-buffer-region adjusted-prev-region cur-contents)
+            (set-current-window-cursor cur-region.start)
+          )
+          ; otherwise, they overlap, so swapping is nonsense
         )
-        ; otherwise, the regions are on the same line; if they don't overlap, swap 'em
-        (and (< prev-first-col cur-first-col) (< prev-last-col cur-first-col))
-        (swap-inline prev-region prev-contents cur-region cur-contents)
-        (and (< cur-first-col prev-first-col) (< cur-last-col prev-first-col))
-        (swap-inline cur-region cur-contents prev-region prev-contents)
-        ; otherwise, they overlap, so swapping is nonsense
       )
     )
   )
 )
-
 
 ; After visual mode yank, leave cursor at the end of the highlight
 (vim.keymap.set "v" "Y" "y`>")

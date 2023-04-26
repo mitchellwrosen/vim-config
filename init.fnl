@@ -417,6 +417,25 @@
 )
 
 (create-autocmd
+  "FileType"
+  { :pattern "zig" }
+  (fn []
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "zls")
+        :capabilities lsp-capabilities
+        :cmd [ "zls" ]
+        :name "zls"
+        :on_init (make-on-init start-ms initialize-notification-id "zls")
+        :root_dir "."
+        :settings {}
+      }
+    )
+  )
+)
+
+(create-autocmd
   "TermOpen"
   {}
   (fn []

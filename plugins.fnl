@@ -315,6 +315,12 @@
         )
     }
 
+    { :url "https://github.com/ziglang/zig.vim"
+      :commit "a0d9adedafeb1a33a0159d16ddcdf194b7cea881"
+      :ft "zig"
+      :config (fn [] nil)
+    }
+
     ; some lua utils that other plugins want:
     ;   - harpoon
     ; { :url "https://github.com/nvim-lua/plenary.nvim"

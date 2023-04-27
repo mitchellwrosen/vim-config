@@ -145,7 +145,7 @@ package.preload["plugins"] = package.preload["plugins"] or function(...)
   end
   local function _23_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {operators = false, motions = false, z = false, windows = false, text_objects = false, nav = false, g = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {z = false, nav = false, text_objects = false, motions = false, windows = false, g = false, operators = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _24_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -178,8 +178,8 @@ package.preload["plugins"] = package.preload["plugins"] or function(...)
 end
 require("plugins")
 package.preload["mappings"] = package.preload["mappings"] or function(...)
-  vim.keymap.set("n", ";", ":")
-  vim.keymap.set("n", ":", ";")
+  vim.keymap.set({"n", "v"}, ";", ":")
+  vim.keymap.set({"n", "v"}, ":", ";")
   vim.keymap.set("n", "/", "/\\v")
   vim.keymap.set("v", "/", "/\\v")
   local function _26_()
@@ -1313,7 +1313,7 @@ local function _99_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, group = "mitchellwrosen", callback = _100_})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, callback = _100_, group = "mitchellwrosen"})
 end
 vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _99_})
 local function _102_()
@@ -1570,7 +1570,7 @@ local function _141_()
   end
   return vim.lsp.start({before_init = _142_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel-ls", on_init = _143_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", group = "mitchellwrosen", callback = _141_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _141_, group = "mitchellwrosen"})
 local function _144_()
   local _145_
   do
@@ -1598,7 +1598,7 @@ local function _144_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _144_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _144_, group = "mitchellwrosen"})
 local function _149_()
   local initialize_notification_id = nil
   local start_ms = nil
@@ -1613,7 +1613,7 @@ local function _149_()
   end
   return vim.lsp.start({before_init = _150_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zls", on_init = _151_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", group = "mitchellwrosen", callback = _149_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _149_, group = "mitchellwrosen"})
 local function _152_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
@@ -1627,4 +1627,4 @@ local function _153_()
     return nil
   end
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, group = "mitchellwrosen", callback = _153_})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _153_, group = "mitchellwrosen"})

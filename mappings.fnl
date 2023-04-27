@@ -11,9 +11,9 @@
   "nvim-stdlibm"
 )
 
-; Swap : and ;, but only in normal mode, since going to command-mode is (for me) more common than repeating the last f
-(nmap ";" ":")
-(nmap ":" ";")
+; Swap : and ;, since going to command-mode is (for me) more common than repeating the last f
+(vim.keymap.set [ "n" "v" ] ";" ":")
+(vim.keymap.set [ "n" "v" ] ":" ";")
 
 ; make ' jump back to mark's exact position, not just line
 ; this got more complicated after using which-key; simpler version left commented-out here

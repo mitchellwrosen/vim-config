@@ -138,7 +138,6 @@
   {}
   (fn [ { : buf :data { : client_id } } ]
     (local client (vim.lsp.get_client_by_id client_id))
-    (vim.print client)
 
     (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
     (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -154,7 +153,9 @@
       (nmap "<Space>d" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
       (nmap "<Space>lf" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
     )
-    (nmap "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
+    (when (client.supports_method "textDocument/hover")
+      (nmap "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
+    )
     (when (client.supports_method "textDocument/prepareCallHierarchy")
       (nmap "<Space>li" vim.lsp.buf.incoming_calls { :buffer buf :desc "Incoming calls" :silent true })
       (nmap "<Space>lo" vim.lsp.buf.outgoing_calls { :buffer buf :desc "Outgoing calls" :silent true })
@@ -172,6 +173,9 @@
     ; float=false here means don't call vim.diagnostic.open_float once we land
     (nmap "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
     (nmap "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
+
+    ; temp
+    (nmap "<Space>lq" vim.diagnostic.setqflist { :buffer buf :desc "Set QuickFix list" :silent true })
 
     ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
     ; gets deleted and re-opend
@@ -263,9 +267,20 @@
 
     (vim.api.nvim_create_autocmd
       "CursorMoved"
-      {
-        :buffer buf
+      { :buffer buf
         :callback on-cursor-move
+        :group augroup-name
+      }
+    )
+
+    ; forward workspace diagnostics the quickfix list
+    (vim.api.nvim_create_autocmd
+      "DiagnosticChanged"
+      { :buffer buf
+        :callback
+          (fn [ { :data { : diagnostics } } ]
+            (vim.fn.setqflist (vim.diagnostic.toqflist diagnostics) "r")
+          )
         :group augroup-name
       }
     )

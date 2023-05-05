@@ -50,7 +50,8 @@
 (vim.keymap.set "v" "L" "g_")
 
 ; when pasting over visual selection, don't copy that visual selection to the default register
-(vim.keymap.set "v" "p" "\"0p")
+; commented out because this doesn't work for text deleted in visual mode - it doesn't go to "0
+; (vim.keymap.set "v" "p" "\"0p")
 
 ; TODO document this
 ; TODO make it work for V mode too

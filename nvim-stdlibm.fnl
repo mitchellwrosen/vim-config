@@ -47,6 +47,10 @@
   )
 )
 
+(fn in-normal-mode []
+  `(= (. (vim.api.nvim_get_mode) :mode) "n")
+)
+
 ; normal-mode mapping
 (fn nmap [lhs rhs opts]
   `(vim.keymap.set "n" ,lhs ,rhs ,opts)
@@ -72,6 +76,7 @@
   : get-previous-yank
   : get-region
   : get-visual-selection
+  : in-normal-mode
   : nmap
   : set-cursor
   : set-region

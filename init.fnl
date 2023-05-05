@@ -1,5 +1,5 @@
 (local { : file-exists } (require "stdlib"))
-(import-macros { : nmap } "nvim-stdlibm")
+(import-macros { : get-cursor : in-normal-mode : nmap } "nvim-stdlibm")
 
 (include "options")
 (include "plugins")
@@ -136,14 +136,8 @@
 (create-autocmd
   "LspAttach"
   {}
-  (fn [args]
-    (local buf args.buf)
-    (local client (vim.lsp.get_client_by_id args.data.client_id))
-
-    ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
-    ; gets deleted and re-opend
-    (local augroup-name (.. "mitchellwrosenLsp" buf))
-    (vim.api.nvim_create_augroup augroup-name {})
+  (fn [ { : buf :data { : client_id } } ]
+    (local client (vim.lsp.get_client_by_id client_id))
 
     (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
     (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -164,47 +158,99 @@
     (nmap "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
     (nmap "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
 
-    (vim.api.nvim_create_autocmd
-      "CursorMoved"
-      {
-        :buffer buf
-        :callback
-          (fn []
-            (when (= (. (vim.api.nvim_get_mode) :mode) "n")
-              (when (not= (vim.api.nvim_get_current_line) "")
-                ; highlight other occurrences of the thing under the cursor
-                ; the colors are determined by LspReferenceText, etc. highlight groups
-                (when client.server_capabilities.documentHighlightProvider
-                  (vim.lsp.buf.clear_references)
-                  (vim.lsp.buf.document_highlight)
-                )
-                ; try to put a type sig in the virtual text area
-                (local position (vim.lsp.util.make_position_params))
-                (vim.lsp.buf_request
-                  buf
-                  "textDocument/hover"
-                  position
-                  (fn [_err result _ctx _config]
-                    (local contents (?. result :contents))
-                    (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
-                      (local line (extract-haskell-typesig-from-markdown contents.value))
-                      (vim.api.nvim_buf_clear_namespace buf hover-namespace 0 -1)
-                      (when line
-                        (vim.api.nvim_buf_set_extmark
-                          buf
-                          hover-namespace
-                          position.position.line
-                          0 ; column (ignored unless we set :virt_text_pos to "overlay" below
-                          { :virt_text [ [ line "Comment" ] ]
-                          }
-                        )
-                      )
+    ; make an autocommand group named e.g. "mitchellwrosenLsp3" for just this buffer, so we can clear it whenever it
+    ; gets deleted and re-opend
+    (local augroup-name (.. "mitchellwrosenLsp" buf))
+    (vim.api.nvim_create_augroup augroup-name {})
+
+    ; highlight other occurrences of the thing under the cursor
+    ; the colors are determined by LspReferenceText, etc. highlight groups
+    (local highlight-thing-under-cursor
+      (case client.name
+        "hls"
+          (fn [position]
+            (vim.lsp.buf.clear_references)
+            (vim.lsp.buf_request
+              buf
+              "textDocument/documentHighlight"
+              position
+              nil
+            )
+          )
+        _ (fn [] nil)
+      )
+    )
+    (local unhighlight-thing-under-cursor
+      (case client.name
+        "hls" (fn [] (vim.lsp.buf.clear_references))
+        _ (fn [] nil)
+      )
+    )
+
+    (local show-hover-somehow
+      (case client.name
+        "hls"
+          (fn [position]
+            ; try to put a type sig in the virtual text area
+            (vim.lsp.buf_request
+              buf
+              "textDocument/hover"
+              position
+              (fn [_err result _ctx _config]
+                (local contents (?. result :contents))
+                (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
+                  (local line (extract-haskell-typesig-from-markdown contents.value))
+                  (vim.api.nvim_buf_clear_namespace buf hover-namespace 0 -1)
+                  (when line
+                    (vim.api.nvim_buf_set_extmark
+                      buf
+                      hover-namespace
+                      position.position.line
+                      0 ; column (ignored unless we set :virt_text_pos to "overlay" below
+                      { :virt_text [ [ line "Comment" ] ]
+                      }
                     )
                   )
                 )
               )
             )
           )
+        _ (fn [] nil)
+      )
+    )
+    (local unshow-hover-somehow
+      (case client.name
+        "hls" (fn [] (vim.api.nvim_buf_clear_namespace buf hover-namespace 0 -1))
+        _ (fn [] nil)
+      )
+    )
+
+    (local on-cursor-move
+      (fn []
+        (when (in-normal-mode)
+          (local { : row : col } (get-cursor))
+          (local current-line (vim.api.nvim_get_current_line))
+          (local current-character (string.sub current-line (+ 1 col) (+ 1 col)))
+          (if (and (not= current-character "") (not= current-character " "))
+            (do
+              (local position (vim.lsp.util.make_position_params))
+              (highlight-thing-under-cursor position)
+              (show-hover-somehow position)
+            )
+            (do
+              (unhighlight-thing-under-cursor)
+              (unshow-hover-somehow)
+            )
+          )
+        )
+      )
+    )
+
+    (vim.api.nvim_create_autocmd
+      "CursorMoved"
+      {
+        :buffer buf
+        :callback on-cursor-move
         :group augroup-name
       }
     )

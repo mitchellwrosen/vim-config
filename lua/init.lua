@@ -149,7 +149,7 @@ package.preload["plugins"] = package.preload["plugins"] or function(...)
   end
   local function _24_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {text_objects = false, motions = false, windows = false, z = false, g = false, operators = false, nav = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {windows = false, z = false, motions = false, text_objects = false, nav = false, operators = false, g = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _25_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -400,6 +400,8 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
   vim.keymap.set("v", "<C-s>", ":s/\\v//cg<Left><Left><Left><Left>")
   vim.keymap.set("n", "<C-j>", ":bn<CR>", {silent = true})
   vim.keymap.set("n", "<C-k>", ":bp<CR>", {silent = true})
+  vim.keymap.set("n", "<C-h>", "<C-w><C-h>", {})
+  vim.keymap.set("n", "<C-l>", "<C-w><C-l>", {})
   do
     local function list_buffers()
       local buffer_ids = vim.api.nvim_list_bufs()
@@ -1316,18 +1318,18 @@ local function _100_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, callback = _101_, group = "mitchellwrosen"})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, group = "mitchellwrosen", callback = _101_})
 end
-vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _100_})
+vim.api.nvim_create_autocmd("BufRead", {callback = _100_, group = "mitchellwrosen"})
 local function _103_()
   vim.bo.modifiable = not vim.bo.readonly
   return nil
 end
-vim.api.nvim_create_autocmd("BufReadPost", {group = "mitchellwrosen", callback = _103_})
+vim.api.nvim_create_autocmd("BufReadPost", {callback = _103_, group = "mitchellwrosen"})
 local function _104_()
   return vim.highlight.on_yank({higroup = "IncSearch", timeout = 300})
 end
-vim.api.nvim_create_autocmd("TextYankPost", {group = "mitchellwrosen", callback = _104_})
+vim.api.nvim_create_autocmd("TextYankPost", {callback = _104_, group = "mitchellwrosen"})
 local function _105_()
   if (vim.fn.getcmdwintype() == "") then
     return vim.cmd.checktime()
@@ -1335,7 +1337,7 @@ local function _105_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {group = "mitchellwrosen", callback = _105_})
+vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _105_, group = "mitchellwrosen"})
 local function _107_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
     local view = vim.fn.winsaveview()
@@ -1346,7 +1348,7 @@ local function _107_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {group = "mitchellwrosen", callback = _107_})
+vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _107_, group = "mitchellwrosen"})
 local extract_haskell_typesig_from_markdown
 local function _109_(str0)
   local str = str0
@@ -1579,15 +1581,15 @@ local function _117_(_114_)
   vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
   return nil
 end
-vim.api.nvim_create_autocmd("LspAttach", {group = "mitchellwrosen", callback = _117_})
+vim.api.nvim_create_autocmd("LspAttach", {callback = _117_, group = "mitchellwrosen"})
 local function _160_()
   return vim.keymap.set("n", "!", "qz")
 end
-vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {group = "mitchellwrosen", callback = _160_})
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _160_, group = "mitchellwrosen"})
 local function _161_()
   return vim.keymap.set("n", "!", "q")
 end
-vim.api.nvim_create_autocmd("RecordingEnter", {group = "mitchellwrosen", callback = _161_})
+vim.api.nvim_create_autocmd("RecordingEnter", {callback = _161_, group = "mitchellwrosen"})
 vim.keymap.set("n", "9", "@z")
 do
   local default_progress_handler = vim.lsp.handlers["$/progress"]
@@ -1700,7 +1702,7 @@ local function _176_()
   end
   return vim.lsp.start({before_init = _177_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel-ls", on_init = _178_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _176_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", group = "mitchellwrosen", callback = _176_})
 local function _179_()
   local _180_
   do
@@ -1728,7 +1730,7 @@ local function _179_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _179_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _179_})
 local function _184_()
   local initialize_notification_id = nil
   local start_ms = nil
@@ -1743,13 +1745,13 @@ local function _184_()
   end
   return vim.lsp.start({before_init = _185_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zls", on_init = _186_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _184_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", group = "mitchellwrosen", callback = _184_})
 local function _187_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
   return vim.cmd.startinsert()
 end
-vim.api.nvim_create_autocmd("TermOpen", {group = "mitchellwrosen", callback = _187_})
+vim.api.nvim_create_autocmd("TermOpen", {callback = _187_, group = "mitchellwrosen"})
 local function _188_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     return vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})
@@ -1757,4 +1759,4 @@ local function _188_()
     return nil
   end
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _188_, group = "mitchellwrosen"})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, group = "mitchellwrosen", callback = _188_})

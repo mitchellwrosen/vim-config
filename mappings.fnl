@@ -183,6 +183,10 @@
 (nmap "<C-j>" ":bn<CR>" { :silent true })
 (nmap "<C-k>" ":bp<CR>" { :silent true })
 
+; Move vertical splits with Ctrl+hl
+(nmap "<C-h>" "<C-w><C-h>" {})
+(nmap "<C-l>" "<C-w><C-l>" {})
+
 ; Experimenting with 1-5 to select buffer 1-5. Pretty annoying that vim doesn't support reordering buffers. I guess I
 ; need some custom functions and a custom bufferline to get the UX I want?
 (do

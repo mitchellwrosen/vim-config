@@ -1,3 +1,7 @@
+; https://github.com/neovim/neovim/pull/22668
+; this might become the default some day, but as of 0.9, it's not
+(vim.loader.enable)
+
 (local { : file-exists } (require "stdlib"))
 (import-macros { : get-cursor : in-normal-mode : nmap } "nvim-stdlibm")
 

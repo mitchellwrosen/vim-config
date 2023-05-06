@@ -22,367 +22,75 @@
 
 (lazy.setup
   [
-    ; fennel syntax highlighting
-    { :url "https://github.com/bakpakin/fennel.vim"
-      :commit "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89"
-      :ft "fennel"
-    }
-
-    ; highlight colorcolumn in insert mode
-    { :url "https://github.com/Bekaboo/deadcolumn.nvim"
-      :commit "8140fd7cface9592a44b3151203fc6ca95ad9598"
-      :event "InsertEnter" ; defer loading until insert mode is entered
-      :config
-        (fn []
-          (local deadcolumn (require "deadcolumn"))
-          (deadcolumn.setup
-            { :blending { :threshold 100 } ; start showing color column here
-              :scope "visible" ; show color column per all visible lines
-              :warning { :alpha 0.1 :hlgroup [ "ErrorMsg" "background" ] }
-            }
-          )
-        )
-    }
-
-    ; use 's' to move far away
-    { :url "https://github.com/ggandor/leap.nvim"
-      :commit "f74473d23ebf60957e0db3ff8172349a82e5a442"
-      :event "VeryLazy" ; defer loading until way after UI
-      :config
-        (fn []
-          (local leap (require "leap"))
-          (leap.add_default_mappings)
-        )
-      :name "leap"
-    }
-    { :url "https://github.com/ggandor/leap-spooky.nvim"
-      :commit "3e940464b1728b22052dd565accc949c0b02b025"
-      :event "VeryLazy" ; defer loading until way after UI
-      :config
-        (fn []
-          (local leap-spooky (require "leap-spooky"))
-          (leap-spooky.setup {})
-        )
-      :dependencies [ "leap" ]
-    }
-
-    ; autocompletion
-    ; 22-04-30
-    { :url "https://github.com/hrsh7th/nvim-cmp"
-      :commit "f841fa6ced194aa930136a7671439e6bd4c51722"
-      ; don't load these plugins until this one is loaded
-      ; todo add cmp-path?
-      :dependencies
-        [
-          { :url "https://github.com/hrsh7th/cmp-nvim-lsp"
-            :commit "b4251f0fca1daeb6db5d60a23ca81507acf858c2"
-          }
-          { :url "https://github.com/hrsh7th/cmp-buffer"
-            :commit "f83773e2f433a923997c5faad7ea689ec24d1785"
-          }
-        ]
-      :event "InsertEnter" ; defer loading of this plugin until insert mode is entered
-      :config
-        (fn []
-          (local cmp (require "cmp"))
-          (cmp.setup
-            { :mapping
-                { "<CR>" (cmp.mapping.confirm { "select" false })
-                  "<Tab>" (cmp.mapping.select_next_item)
-                }
-              :sources
-                (cmp.config.sources
-                  [ {:name "nvim_lsp"}
-                    {:name "buffer"}
-                  ]
-                )
-            }
-          )
-        )
-    }
+    ; basic language syntax highlighting, indent, keywords, etc. (does treesitter kinda obviate these?)
+    { :name "fennel" :url "https://github.com/bakpakin/fennel.vim" :commit "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89" :ft "fennel" :config (fn [] nil) }
+    { :name "haskell" :url "https://github.com/neovimhaskell/haskell-vim" :commit "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e" :ft "haskell" :config (fn [] nil) }
+    { :name "nix" :url "https://github.com/LnL7/vim-nix" :commit "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee" :ft "nix" :config (fn [] nil) }
+    { :name "zig" :url "https://github.com/ziglang/zig.vim" :commit "a0d9adedafeb1a33a0159d16ddcdf194b7cea881" :ft "zig" :config (fn [] nil) }
 
     ; better quickfix with preview
-    { :url "https://github.com/kevinhwang91/nvim-bqf"
-      :tag "v1.1.0"
-      :ft "qf"
-      :config
-        (fn []
-          (local bqf (require "bqf"))
-          (bqf.setup)
-        )
-    }
-
-    ; status line
-    { :url "https://github.com/nvim-lualine/lualine.nvim"
-      :commit "84ffb80e452d95e2c46fa29a98ea11a240f7843e"
-      :config (require "config-lualine")
-    }
-
-    ; fuzzy search source code, files, etc
-    { :url "https://github.com/junegunn/fzf"
-      :commit "96670d5f16dcf23d590eb1d83d1de351b2e8fb15"
-      :event "VeryLazy" ; defer loading until way after UI
-      :config
-        (fn []
-          (set vim.g.fzf_layout { :window { :height 0.95 :width 0.95 } })
-        )
-      :name "fzf"
-    }
-    { :url "https://github.com/junegunn/fzf.vim"
-      :commit "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0"
-      :dependencies [ "fzf" ]
-      :event "VeryLazy" ; defer loading until way after UI
-      :config
-        (fn []
-          (local fzf-vim-buffers (. vim.fn "fzf#vim#buffers"))
-          (local fzf-vim-files (. vim.fn "fzf#vim#files"))
-          (local fzf-vim-gitfiles (. vim.fn "fzf#vim#gitfiles"))
-          (local fzf-vim-with-preview (. vim.fn "fzf#vim#with_preview"))
-
-          (local opts1 (fzf-vim-with-preview { :options [ "--info=inline" "--layout=reverse" ] } "down:60%"))
-
-          ; If the buffer is already open in another tab or window, jump to it
-          (set vim.g.fzf_buffers_jump 1)
-
-          ; Space-f ("find") the word under the cursor
-          (nmap "<Space>f" ":Rg <C-r><C-w><CR>")
-
-          ; Space-k (because it's a home-row key) to fuzzy-search buffers
-          ; I don't use this much, maybe I should delete it
-          (nmap "<Space>k" (fn [] (fzf-vim-buffers opts1)))
-
-          ; Space-o ("open") to fuzzy file search, both git- and everything-variants
-          (nmap
-            "<Space>o"
-            ; just check if we're in a git repo once, not every <Space>-o, which seems fine because I don't cd
-            (if
-              (= 0 (os.execute "git rev-parse 2>/dev/null"))
-              ; fzf#vim#gitfiles takes an undocumented first arg, but I peeked at the source - it's a string lol
-              (fn [] (fzf-vim-gitfiles "" opts1))
-              (fn [] (fzf-vim-files "." opts1))
-            )
-          )
-        )
-    }
-
-    ; nix syntax highlighting - 22-12-14
-    { :url "https://github.com/LnL7/vim-nix"
-      :commit "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee"
-      :ft "nix"
-    }
-
-    ; Show markers every 2 columns of leading whitespace
-    { :url "https://github.com/lukas-reineke/indent-blankline.nvim"
-      :tag "v2.20.4"
-      :config
-        (fn []
-          (local plugin (require "indent_blankline"))
-          (plugin.setup { :show_current_context true })
-        )
-    }
-
-    ; Haskell syntax highlighting
-    ; Does treesitter obviate this?
-    { :url "https://github.com/neovimhaskell/haskell-vim"
-      :commit "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e"
-      :ft "haskell"
-    }
-
-    ; :Git
-    { :url "https://github.com/tpope/vim-fugitive"
-      :tag "v3.7"
-      :cmd "Git" ; don't load until we run :Git
-      :config (fn [] nil)
-    }
-
-    ; treesitter
-    { :url "https://github.com/nvim-treesitter/nvim-treesitter"
-      :tag "v0.8.5.2"
-      :build ":TSUpdate"
-      :config
-        (fn []
-          (local treesitter (require "nvim-treesitter.configs"))
-          (treesitter.setup
-            { :highlight { :enable true }
-            }
-          )
-        )
-    }
-
-    ; fancy notifications (not sure if any of my plugins use this)
-    ; we do want this loaded right away
-    { :url "https://github.com/rcarriga/nvim-notify"
-      :tag "v3.11.0"
-      :config
-        (fn []
-          (local notify (require "notify"))
-          (notify.setup
-            { :stages "static" ; don't animate, it looks janky
-            }
-          )
-          (set vim.notify notify)
-        )
-    }
-
-    ; automatically unhighlight when cursor moves
-    { :url "https://github.com/romainl/vim-cool"
-      :commit "27ad4ecf7532b750fadca9f36e1c5498fc225af2"
-      :event "VeryLazy" ; defer loading until way after UI
-    }
-
-    ; nice low-contrast fork of gruvbox color scheme
-    { :url "https://github.com/sainnhe/gruvbox-material"
-      :commit "a6c5f652788b36c6ff2a0fdbefa271cb46f8f5e7"
-      ; the lazy.nvim readme recommends colorscheme plugins load first
-      :priority 1000
-    }
+    { :name "bqf" :url "https://github.com/kevinhwang91/nvim-bqf" :tag "v1.1.0" :ft "qf" :config (include "config-nvim-bqf") }
 
     ; improved "ga" for information about the character under the cursor
-    { :url "https://github.com/tpope/vim-characterize"
-      :commit "885a00a3c21dd52ca8f2fd7d62850134934179d9"
-      :keys [ [ "ga" ] ] ; defer loading until I press ga
-      :config
-        (fn []
-          (nmap "ga" "<Plug>(characterize)")
-        )
-    }
+    { :name "characterize" :url "https://github.com/tpope/vim-characterize" :commit "885a00a3c21dd52ca8f2fd7d62850134934179d9" :keys [ [ "ga" ] ] :config (include "config-characterize") }
+
+    ; autocompletion (22-04-30)
+    { :name "cmp" :url "https://github.com/hrsh7th/nvim-cmp" :commit "f841fa6ced194aa930136a7671439e6bd4c51722" :dependencies [ "cmp-buffer" "cmp-lsp" ] :event "InsertEnter" :config (include "config-nvim-cmp") }
+    { :name "cmp-buffer" :url "https://github.com/hrsh7th/cmp-buffer" :commit "f83773e2f433a923997c5faad7ea689ec24d1785" :lazy true }
+    { :name "cmp-lsp" :url "https://github.com/hrsh7th/cmp-nvim-lsp" :commit "b4251f0fca1daeb6db5d60a23ca81507acf858c2" :lazy true }
 
     ; quick (un-)commenting
-    { :url "https://github.com/tpope/vim-commentary"
-      :commit "627308e30639be3e2d5402808ce18690557e8292"
-      :event "VeryLazy" ; defer loading until way after UI
-      :config (fn [] nil)
-    }
+    { :name "commentary" :url "https://github.com/tpope/vim-commentary" :commit "627308e30639be3e2d5402808ce18690557e8292" :event "VeryLazy" :config (fn [] nil) }
 
-    ; make "." repeat more things out of the box
-    { :url "https://github.com/tpope/vim-repeat"
-      :commit "24afe922e6a05891756ecf331f39a1f6743d3d5a"
-      :event "VeryLazy" ; defer loading until way after UI
-    }
+    ; automatically unhighlight when cursor moves
+    { :name "cool" :url "https://github.com/romainl/vim-cool" :commit "27ad4ecf7532b750fadca9f36e1c5498fc225af2" :event "VeryLazy" :config (fn [] nil) }
 
-    ; some surround helpers
-    { :url "https://github.com/tpope/vim-surround"
-      :commit "aeb933272e72617f7c4d35e1f003be16836b948d"
-      :event "VeryLazy" ; defer loading until way after UI
-    }
+    ; highlight colorcolumn in insert mode
+    { :name "deadcolumn" :url "https://github.com/Bekaboo/deadcolumn.nvim" :commit "8140fd7cface9592a44b3151203fc6ca95ad9598" :event "InsertEnter" :config (include "config-deadcolumn") }
+
+    ; :Git
+    { :name "fugitive" :url "https://github.com/tpope/vim-fugitive" :tag "v3.7" :cmd "Git" :config (fn [] nil) }
+
+    ; nice low-contrast fork of gruvbox color scheme
+    ; the lazy.nvim readme recommends colorscheme plugins load first
+    { :name "gruvbox-material" :url "https://github.com/sainnhe/gruvbox-material" :commit "a6c5f652788b36c6ff2a0fdbefa271cb46f8f5e7" :priority 1000 }
+
+    ; fuzzy search source code, files, etc
+    { :name "fzf" :url "https://github.com/junegunn/fzf" :commit "96670d5f16dcf23d590eb1d83d1de351b2e8fb15" :event "VeryLazy" :config (include "config-fzf") }
+    { :name "fzf-vim" :url "https://github.com/junegunn/fzf.vim" :commit "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0" :dependencies [ "fzf" ] :event "VeryLazy" :config (include "config-fzf-vim") }
+
+    ; Show markers every 2 columns of leading whitespace
+    { :name "indent-blankline" :url "https://github.com/lukas-reineke/indent-blankline.nvim" :tag "v2.20.4" :config (include "config-indent-blankline") }
+
+    ; use 's' to move far away
+    { :name "leap" :url "https://github.com/ggandor/leap.nvim" :commit "f74473d23ebf60957e0db3ff8172349a82e5a442" :event "VeryLazy" :config (include "config-leap") }
+
+    ; [rR]emote and [mM]agnetic text objects (e.g. cirw change inner remote word)
+    { :name "leap-spooky" :url "https://github.com/ggandor/leap-spooky.nvim" :commit "3e940464b1728b22052dd565accc949c0b02b025" :event "VeryLazy" :config (include "config-leap-spooky") :dependencies [ "leap" ] }
 
     ; show lsp error under cursor in virtual text block
-    { :url "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
-      :commit "dcff567b3a2d730f31b6da229ca3bb40640ec5a6"
-      :config
-        (fn []
-          (local lsp_lines (require "lsp_lines"))
-          ; Cycle through [off, on current line, on all lines]
-          (nmap
-            "<Space>ll"
-            (fn []
-              (local value (. (vim.diagnostic.config) "virtual_lines"))
-              (if
-                (= value true)
-                (do
-                  (vim.diagnostic.config { :virtual_lines { :only_current_line true } })
-                  (vim.notify "LSP diagnostics on (current line only)")
-                )
-                (do
-                  (vim.diagnostic.config { :virtual_lines true })
-                  (vim.notify "LSP diagnostics on")
-                )
-              )
-            )
-            { :desc "Toggle diagnostics" }
-          )
-          (lsp_lines.setup)
-        )
-    }
+    { :name "lsp-lines" :url "https://git.sr.ht/~whynothugo/lsp_lines.nvim" :commit "dcff567b3a2d730f31b6da229ca3bb40640ec5a6" :event "LspAttach" :config (include "config-lsp-lines") }
 
-    { :url "https://github.com/dstein64/vim-startuptime"
-      :tag "v4.4.0"
-      :cmd "StartupTime" ; defer loading until I run :StartupTime
-      :config (fn [] nil)
-    }
+    ; status line
+    { :name "lualine" :url "https://github.com/nvim-lualine/lualine.nvim" :commit "84ffb80e452d95e2c46fa29a98ea11a240f7843e" :config (include "config-lualine") }
 
-    { :url "https://github.com/folke/which-key.nvim"
-      :tag "v1.4.0"
-      :event "VeryLazy" ; defer loading until way after UI
-      :config
-        (fn []
-          (local which-key (require "which-key"))
+    ; fancy notifications
+    { :name "notify" :url "https://github.com/rcarriga/nvim-notify" :tag "v3.11.0" :config (include "config-notify") }
 
-          (which-key.setup
-            { :icons
-                { :separator ""
-                }
-              :plugins
-                { :marks true
-                  :presets
-                    { :g false
-                      :motions false
-                      :nav false
-                      :operators false
-                      :text_objects false
-                      :windows false
-                      :z false
-                    }
-                  :registers true
-                  :spelling { :enabled false }
-                }
-              :window
-                { :border "single"
-                  :margin [ 0 0 0 0 ]
-                  :padding [ 0 0 0 0 ]
-                }
-            }
-          )
+    ; make "." repeat more things out of the box
+    { :name "repeat" :url "https://github.com/tpope/vim-repeat" :commit "24afe922e6a05891756ecf331f39a1f6743d3d5a" :event "VeryLazy" :config (fn [] nil) }
 
-          (which-key.register
-            { :mode [ "n" "v" ]
-              "<Space>l" { :name "+LSP" }
-            }
-          )
+    ; run :StartupTime to profile vim start time
+    { :name "startuptime" :url "https://github.com/dstein64/vim-startuptime" :tag "v4.4.0" :cmd "StartupTime" :config (fn [] nil) }
 
-          ; this has to go *after* setup because which-key sucks ass and overwrites mappings
-          ; setting "marks = false" doesn't work; it just disables the mark feature entirely
-          (nmap "'" (fn [] (which-key.show "`" { :auto true :mode "n" })))
-        )
-    }
+    ; some surround helpers
+    { :name "surround" :url "https://github.com/tpope/vim-surround" :commit "aeb933272e72617f7c4d35e1f003be16836b948d" :event "VeryLazy" :config (fn [] nil) }
 
-    { :url "https://github.com/ziglang/zig.vim"
-      :commit "a0d9adedafeb1a33a0159d16ddcdf194b7cea881"
-      :ft "zig"
-      :config (fn [] nil)
-    }
+    ; treesitter
+    { :name "treesitter" :url "https://github.com/nvim-treesitter/nvim-treesitter" :tag "v0.8.5.2" :build ":TSUpdate" :config (fn [] (include "config-treesitter")) }
 
-    ; some lua utils that other plugins want:
-    ;   - harpoon
-    ; { :url "https://github.com/nvim-lua/plenary.nvim"
-    ;   :tag "v0.1.3"
-    ;   :config (fn [] nil)
-    ;   :event "VeryLazy" ; defer loading until way after UI
-    ; }
-
-    ; { :url "https://github.com/ThePrimeagen/harpoon"
-    ;   :commit "f7040fd0c44e7a4010369136547de5604b9c22a1"
-    ;   :config
-    ;     (fn []
-    ;       (local harpoon (require "harpoon"))
-    ;       (local harpoon-mark (require "harpoon.mark"))
-    ;       (local harpoon-ui (require "harpoon.ui"))
-    ;       (vim.keymap.set "n" "<Space>p" harpoon-mark.add_file)
-    ;       (vim.keymap.set "n" "<Space>P" harpoon-ui.toggle_quick_menu)
-    ;       (vim.keymap.set "n" "1" (fn [] (harpoon-ui.nav_file 1)))
-    ;       (vim.keymap.set "n" "2" (fn [] (harpoon-ui.nav_file 2)))
-    ;       (vim.keymap.set "n" "3" (fn [] (harpoon-ui.nav_file 3)))
-    ;       (vim.keymap.set "n" "4" (fn [] (harpoon-ui.nav_file 4)))
-    ;       (vim.keymap.set "n" "5" (fn [] (harpoon-ui.nav_file 5)))
-    ;       (harpoon.setup
-    ;         { :menu
-    ;             { :width 80
-    ;             }
-    ;         }
-    ;       )
-    ;     )
-    ;   :event "VeryLazy" ; defer loading until way after UI
-    ; }
+    ; show key bindings after a short delay
+    { :name "which-key" :url "https://github.com/folke/which-key.nvim" :tag "v1.4.0" :event "VeryLazy" :config (include "config-which-key") }
   ]
 )
 

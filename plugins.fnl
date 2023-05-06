@@ -53,6 +53,17 @@
           (local leap (require "leap"))
           (leap.add_default_mappings)
         )
+      :name "leap"
+    }
+    { :url "https://github.com/ggandor/leap-spooky.nvim"
+      :commit "3e940464b1728b22052dd565accc949c0b02b025"
+      :event "VeryLazy" ; defer loading until way after UI
+      :config
+        (fn []
+          (local leap-spooky (require "leap-spooky"))
+          (leap-spooky.setup {})
+        )
+      :dependencies [ "leap" ]
     }
 
     ; autocompletion
@@ -115,6 +126,7 @@
         (fn []
           (set vim.g.fzf_layout { :window { :height 0.95 :width 0.95 } })
         )
+      :name "fzf"
     }
     { :url "https://github.com/junegunn/fzf.vim"
       :commit "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0"

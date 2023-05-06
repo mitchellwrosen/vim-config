@@ -171,8 +171,28 @@
       (nmap "<Space>lt" vim.lsp.buf.type_definition { :buffer buf :desc "Go to type" :silent true })
     )
     ; float=false here means don't call vim.diagnostic.open_float once we land
-    (nmap "<Up>" (fn [] (vim.diagnostic.goto_prev { :float false })) { :buffer buf :silent true })
-    (nmap "<Down>" (fn [] (vim.diagnostic.goto_next { :float false })) { :buffer buf :silent true })
+    (nmap
+      "<S-Tab>"
+      (fn []
+        (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
+        (if (> num-errors 0)
+          (vim.diagnostic.goto_prev { :float false :severity vim.diagnostic.severity.ERROR })
+          (vim.diagnostic.goto_prev { :float false })
+        )
+      )
+      { :buffer buf :silent true }
+    )
+    (nmap
+      "<Tab>"
+      (fn []
+        (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
+        (if (> num-errors 0)
+          (vim.diagnostic.goto_next { :float false :severity vim.diagnostic.severity.ERROR })
+          (vim.diagnostic.goto_next { :float false })
+        )
+      )
+      { :buffer buf :silent true }
+    )
 
     ; temp
     (nmap "<Space>lq" vim.diagnostic.setqflist { :buffer buf :desc "Set QuickFix list" :silent true })

@@ -174,28 +174,29 @@
       (nmap "gt" vim.lsp.buf.type_definition { :buffer buf :desc "Go to type" :silent true })
       (nmap "<Space>lt" vim.lsp.buf.type_definition { :buffer buf :desc "Go to type" :silent true })
     )
-    ; float=false here means don't call vim.diagnostic.open_float once we land
-    (nmap
-      "<S-Tab>"
-      (fn []
-        (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
-        (if (> num-errors 0)
-          (vim.diagnostic.goto_prev { :float false :severity vim.diagnostic.severity.ERROR })
-          (vim.diagnostic.goto_prev { :float false })
-        )
-      )
-      { :buffer buf :silent true }
-    )
-    (nmap
-      "<Tab>"
-      (fn []
-        (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
-        (if (> num-errors 0)
-          (vim.diagnostic.goto_next { :float false :severity vim.diagnostic.severity.ERROR })
-          (vim.diagnostic.goto_next { :float false })
-        )
-      )
-      { :buffer buf :silent true }
+    (let
+      [ prev-diagnostic
+          (fn []
+            (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
+            (if (> num-errors 0)
+              (vim.diagnostic.goto_prev { :float false :severity vim.diagnostic.severity.ERROR })
+              (vim.diagnostic.goto_prev { :float false })
+            )
+          )
+        next-diagnostic
+          (fn []
+            (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
+            (if (> num-errors 0)
+              (vim.diagnostic.goto_next { :float false :severity vim.diagnostic.severity.ERROR })
+              (vim.diagnostic.goto_next { :float false })
+            )
+          )
+      ]
+      ; float=false here means don't call vim.diagnostic.open_float once we land
+      (nmap "<Up>" prev-diagnostic { :buffer buf :silent true })
+      (nmap "<Down>" next-diagnostic { :buffer buf :silent true })
+      (nmap "<S-Tab>" prev-diagnostic { :buffer buf :silent true })
+      (nmap "<Tab>" next-diagnostic { :buffer buf :silent true })
     )
 
     ; temp

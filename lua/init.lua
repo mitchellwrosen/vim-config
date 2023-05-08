@@ -252,7 +252,7 @@ end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _36_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {text_objects = false, windows = false, z = false, motions = false, operators = false, nav = false, g = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {text_objects = false, z = false, motions = false, operators = false, windows = false, nav = false, g = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _37_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -1475,6 +1475,9 @@ local function _128_(_125_)
   vim.cmd("highlight! link LspReferenceText LspReference")
   vim.cmd("highlight! link LspReferenceRead LspReference")
   vim.cmd("highlight! link LspReferenceWrite LspReference")
+  vim.cmd("highlight! link DiagnosticVirtualTextError DiagnosticSignError")
+  vim.cmd("highlight! link DiagnosticVirtualTextInfo DiagnosticSignInfo")
+  vim.cmd("highlight! link DiagnosticVirtualTextWarn DiagnosticSignWarn")
   if client.supports_method("textDocument/codeAction") then
     vim.keymap.set("n", "<Space>la", vim.lsp.buf.code_action, {buffer = buf, desc = "Apply code action", silent = true})
   else
@@ -1848,4 +1851,4 @@ local function _199_()
     return nil
   end
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _199_, group = "mitchellwrosen"})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, group = "mitchellwrosen", callback = _199_})

@@ -21,7 +21,7 @@
     ; the lsp_lines plugin seems to want to configure itself by making up a new `virtual_lines` key in
     ; `vim.diagnostic.config`. seems stupid as hell but here we are.
     :virtual_lines { :only_current_line true }
-    ; don't put diagnostics inline
+    ; don't put diagnostics inline, since we use lsp_lines
     :virtual_text false
   }
 )
@@ -147,6 +147,14 @@
     (vim.cmd "highlight! link LspReferenceText LspReference")
     (vim.cmd "highlight! link LspReferenceRead LspReference")
     (vim.cmd "highlight! link LspReferenceWrite LspReference")
+
+    ; it seems only the first three are used? (but when are the Lsp ones used, then?)
+    (vim.cmd "highlight! link DiagnosticVirtualTextError DiagnosticSignError")
+    (vim.cmd "highlight! link DiagnosticVirtualTextInfo DiagnosticSignInfo")
+    (vim.cmd "highlight! link DiagnosticVirtualTextWarn DiagnosticSignWarn")
+    ; (vim.cmd "highlight! link LspDiagnosticsVirtualTextError DiagnosticSignError")
+    ; (vim.cmd "highlight! link LspDiagnosticsVirtualTextInformation DiagnosticSignInfo")
+    ; (vim.cmd "highlight! link LspDiagnosticsVirtualTextWarning DiagnosticSignWarn")
 
     (when (client.supports_method "textDocument/codeAction")
       (nmap "<Space>la" vim.lsp.buf.code_action { :buffer buf :desc "Apply code action" :silent true })

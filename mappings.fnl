@@ -312,11 +312,8 @@
 ; <C-v> to paste from * register
 (vim.keymap.set "i" "<C-v>" "<C-r>*")
 
-; <C-Backspace> to delete a word
-; Why doesn't this work? What the fuck? What the fuck? Hate wasting my life bashing my face against dumb broken shit
-; Tried recursive map too - no dice
-; Fuck this earth
-(vim.keymap.set "i" "<C-BS>" "<C-w>")
+; <C-BS> (which my terminal apparently maps to <C-h>??) to delete a word
+(vim.keymap.set "i" "<C-h>" "<C-w>")
 
 ; Command mode movement
 (vim.keymap.set "c" "<C-h>" "<Left>")

@@ -1,4 +1,8 @@
 (fn []
   (local plugin (require "indent_blankline"))
-  (plugin.setup { :show_current_context true })
+  (plugin.setup
+    { :char_list [ "│" "┊" ]
+      :indent_level 40
+    }
+  )
 )

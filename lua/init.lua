@@ -177,7 +177,7 @@ end
 package.preload["config-indent-blankline"] = package.preload["config-indent-blankline"] or function(...)
   local function _20_()
     local plugin = require("indent_blankline")
-    return plugin.setup({show_current_context = true})
+    return plugin.setup({char_list = {"\226\148\130", "\226\148\138"}, indent_level = 40})
   end
   return _20_
 end
@@ -252,7 +252,7 @@ end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _36_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {z = false, windows = false, text_objects = false, operators = false, motions = false, nav = false, g = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {motions = false, z = false, windows = false, text_objects = false, operators = false, g = false, nav = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _37_()
       return which_key.show("`", {auto = true, mode = "n"})

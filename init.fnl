@@ -132,9 +132,6 @@
   )
 )
 
-; overwrite default hover handler with the same one, but with rounded borders
-(tset vim.lsp.handlers "textDocument/hover" (vim.lsp.with vim.lsp.handlers.hover { :border "rounded" }))
-
 (local hover-namespace (vim.api.nvim_create_namespace "hover"))
 
 (create-autocmd
@@ -148,13 +145,9 @@
     (vim.cmd "highlight! link LspReferenceRead LspReference")
     (vim.cmd "highlight! link LspReferenceWrite LspReference")
 
-    ; it seems only the first three are used? (but when are the Lsp ones used, then?)
     (vim.cmd "highlight! link DiagnosticVirtualTextError DiagnosticSignError")
     (vim.cmd "highlight! link DiagnosticVirtualTextInfo DiagnosticSignInfo")
     (vim.cmd "highlight! link DiagnosticVirtualTextWarn DiagnosticSignWarn")
-    ; (vim.cmd "highlight! link LspDiagnosticsVirtualTextError DiagnosticSignError")
-    ; (vim.cmd "highlight! link LspDiagnosticsVirtualTextInformation DiagnosticSignInfo")
-    ; (vim.cmd "highlight! link LspDiagnosticsVirtualTextWarning DiagnosticSignWarn")
 
     (when (client.supports_method "textDocument/codeAction")
       (nmap "<Space>la" vim.lsp.buf.code_action { :buffer buf :desc "Apply code action" :silent true })
@@ -166,6 +159,16 @@
       (nmap "<Space>lf" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
     )
     (when (client.supports_method "textDocument/hover")
+      (tset
+        vim.lsp.handlers
+        "textDocument/hover"
+        (vim.lsp.with
+          vim.lsp.handlers.hover
+          { :border "rounded"
+            :silent true ; don't notify "No information available" on empty response
+          }
+        )
+      )
       (nmap "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
     )
     (when (client.supports_method "textDocument/prepareCallHierarchy")

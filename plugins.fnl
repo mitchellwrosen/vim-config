@@ -51,9 +51,9 @@
     ; :Git
     { :name "fugitive" :url "https://github.com/tpope/vim-fugitive" :tag "v3.7" :cmd "Git" :config (fn [] nil) }
 
-    ; nice low-contrast fork of gruvbox color scheme
+    ; nice low-contrast fork of gruvbox color scheme [2023-05-08]
     ; the lazy.nvim readme recommends colorscheme plugins load first
-    { :name "gruvbox-material" :url "https://github.com/sainnhe/gruvbox-material" :commit "a6c5f652788b36c6ff2a0fdbefa271cb46f8f5e7" :priority 1000 }
+    { :name "gruvbox-material" :url "https://github.com/sainnhe/gruvbox-material" :commit "3fff63b0d6a425ad1076a260cd4f6da61d1632b1" :priority 1000 }
 
     ; fuzzy search source code, files, etc
     { :name "fzf" :url "https://github.com/junegunn/fzf" :commit "96670d5f16dcf23d590eb1d83d1de351b2e8fb15" :event "VeryLazy" :config (include "config-fzf") }

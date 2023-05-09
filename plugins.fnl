@@ -87,7 +87,7 @@
     { :name "surround" :url "https://github.com/tpope/vim-surround" :commit "aeb933272e72617f7c4d35e1f003be16836b948d" :event "VeryLazy" :config (fn [] nil) }
 
     ; treesitter
-    { :name "treesitter" :url "https://github.com/nvim-treesitter/nvim-treesitter" :tag "v0.8.5.2" :build ":TSUpdate" :config (fn [] (include "config-treesitter")) }
+    { :name "treesitter" :url "https://github.com/nvim-treesitter/nvim-treesitter" :tag "v0.8.5.2" :build ":TSUpdate" :config (include "config-treesitter") }
 
     ; show key bindings after a short delay
     { :name "which-key" :url "https://github.com/folke/which-key.nvim" :tag "v1.4.0" :event "VeryLazy" :config (include "config-which-key") }

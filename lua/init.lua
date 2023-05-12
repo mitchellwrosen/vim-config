@@ -47,6 +47,11 @@ package.preload["options"] = package.preload["options"] or function(...)
 end
 require("options")
 package.preload["plugins"] = package.preload["plugins"] or function(...)
+  vim.g.loaded_2html_plugin = true
+  vim.g.loaded_man = true
+  vim.g.loaded_netrwPlugin = true
+  vim.g.loaded_tutor_mode_plugin = true
+  vim.g.loaded_zipPlugin = true
   do
     local lazypath = (vim.fn.stdpath("data") .. "/lazy/lazy.nvim")
     if not vim.loop.fs_stat(lazypath) then
@@ -252,7 +257,7 @@ end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _36_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {motions = false, z = false, windows = false, text_objects = false, operators = false, g = false, nav = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {windows = false, g = false, operators = false, nav = false, text_objects = false, motions = false, z = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _37_()
       return which_key.show("`", {auto = true, mode = "n"})

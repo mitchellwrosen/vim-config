@@ -3,6 +3,7 @@
 (fn []
   (local fzf-vim-buffers (. vim.fn "fzf#vim#buffers"))
   (local fzf-vim-files (. vim.fn "fzf#vim#files"))
+  (local fzf-vim-grep (. vim.fn "fzf#vim#grep"))
   (local fzf-vim-gitfiles (. vim.fn "fzf#vim#gitfiles"))
   (local fzf-vim-with-preview (. vim.fn "fzf#vim#with_preview"))
 
@@ -11,8 +12,42 @@
   ; If the buffer is already open in another tab or window, jump to it
   (set vim.g.fzf_buffers_jump 1)
 
+  (local ripgrep
+    (fn [args]
+      (fzf-vim-grep
+        (..
+          "rg --column --line-number --no-heading --color=always -- "
+          (vim.fn.shellescape
+            (accumulate
+              [ acc "" _ arg (ipairs args) ]
+              (if (= acc "") arg (.. acc " " arg))
+            )
+          )
+        )
+        1
+        opts1
+        0
+      )
+    )
+  )
+
+  (vim.api.nvim_create_user_command
+    "Rg"
+    (fn [opts] (ripgrep opts.fargs))
+    { :desc "ripgrep"
+      :nargs "*"
+    }
+  )
+
+  ; command! -nargs=* Rgu
+  ;   \ call fzf#vim#grep(
+  ;   \   'rg --line-number --multiline --multiline-dotall --no-heading --color=always -- '.shellescape(<q-args>),
+  ;   \   0,
+  ;   \   fzf#vim#with_preview({'options': ['--border', '--info=inline', '--layout=reverse']}, 'down:60%'),
+  ;   \   0)
+
   ; Space-f ("find") the word under the cursor
-  (nmap "<Space>f" ":Rg <C-r><C-w><CR>")
+  (nmap "<Space>f" (fn [] (ripgrep [ (vim.fn.expand "<cword>") ])))
 
   ; Space-k (because it's a home-row key) to fuzzy-search buffers
   ; I don't use this much, maybe I should delete it

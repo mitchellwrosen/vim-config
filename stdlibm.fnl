@@ -10,7 +10,7 @@
   `(icollect [i# x# (ipairs ,xs)] (if (<= i# ,n) x# nil))
 )
 
-; (wither xs [x] body) maps `(\x -> body)` over `xs`
+; (wither xs [x] body) maps `(\x -> body)` over `xs`] (.. acc " " arg)))
 (fn wither [xs [x] body ...]
   (assert (not= nil body) "wither body must not be nil")
   (assert (= nil ...) "wither body must be one expression")

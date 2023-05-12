@@ -9,20 +9,6 @@ lua require('init')
 " Plugin settings
 " ==============================================================================
 
-command! -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always -- '.shellescape(<q-args>),
-  \   1,
-  \   fzf#vim#with_preview({'options': ['--border', '--info=inline', '--layout=reverse']}, 'down:60%'),
-  \   0)
-
-command! -nargs=* Rgu
-  \ call fzf#vim#grep(
-  \   'rg --line-number --multiline --multiline-dotall --no-heading --color=always -- '.shellescape(<q-args>),
-  \   0,
-  \   fzf#vim#with_preview({'options': ['--border', '--info=inline', '--layout=reverse']}, 'down:60%'),
-  \   0)
-
 " autocmd mitchellwrosen FileType fzf setlocal laststatus=0
 "   \| autocmd BufLeave <buffer> setlocal laststatus=2
 " " Escape to quit little annoying temporary buffers

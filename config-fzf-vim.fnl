@@ -17,12 +17,7 @@
       (fzf-vim-grep
         (..
           "rg --column --line-number --no-heading --color=always -- "
-          (vim.fn.shellescape
-            (accumulate
-              [ acc "" _ arg (ipairs args) ]
-              (if (= acc "") arg (.. acc " " arg))
-            )
-          )
+          (vim.fn.shellescape (table.concat args " "))
         )
         1
         opts1

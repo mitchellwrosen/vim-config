@@ -4,7 +4,7 @@
     { :custom_surroundings nil
       :highlight_duration 300
       :mappings
-        { :add "za"
+        { :add "z"
           :delete "zd"
           :find ""
           :find_left ""

@@ -1,3 +1,4 @@
+(import-macros { : string-join } "stdlibm")
 (import-macros { : nmap } "nvim-stdlibm")
 
 (fn []
@@ -17,7 +18,7 @@
       (fzf-vim-grep
         (..
           "rg --column --line-number --no-heading --color=always -- "
-          (vim.fn.shellescape (table.concat args " "))
+          (vim.fn.shellescape (string-join args " "))
         )
         1
         opts1

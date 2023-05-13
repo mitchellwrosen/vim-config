@@ -270,7 +270,7 @@ end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _39_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {g = false, z = false, windows = false, motions = false, text_objects = false, operators = false, nav = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {z = false, operators = false, nav = false, text_objects = false, windows = false, g = false, motions = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _40_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -1421,16 +1421,16 @@ local function _114_(opts)
   end
   return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, group = "mitchellwrosen", callback = _115_})
 end
-vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _114_})
+vim.api.nvim_create_autocmd("BufRead", {callback = _114_, group = "mitchellwrosen"})
 local function _117_()
   vim.bo.modifiable = not vim.bo.readonly
   return nil
 end
-vim.api.nvim_create_autocmd("BufReadPost", {group = "mitchellwrosen", callback = _117_})
+vim.api.nvim_create_autocmd("BufReadPost", {callback = _117_, group = "mitchellwrosen"})
 local function _118_()
   return vim.highlight.on_yank({higroup = "IncSearch", timeout = 300})
 end
-vim.api.nvim_create_autocmd("TextYankPost", {group = "mitchellwrosen", callback = _118_})
+vim.api.nvim_create_autocmd("TextYankPost", {callback = _118_, group = "mitchellwrosen"})
 local function _119_()
   if (vim.fn.getcmdwintype() == "") then
     return vim.cmd.checktime()
@@ -1438,7 +1438,7 @@ local function _119_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {group = "mitchellwrosen", callback = _119_})
+vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _119_, group = "mitchellwrosen"})
 local function _121_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
     local view = vim.fn.winsaveview()
@@ -1449,7 +1449,7 @@ local function _121_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {group = "mitchellwrosen", callback = _121_})
+vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _121_, group = "mitchellwrosen"})
 local extract_haskell_typesig_from_markdown
 local function _123_(str0)
   local str = str0
@@ -1693,15 +1693,15 @@ local function _131_(_128_)
   vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
   return nil
 end
-vim.api.nvim_create_autocmd("LspAttach", {group = "mitchellwrosen", callback = _131_})
+vim.api.nvim_create_autocmd("LspAttach", {callback = _131_, group = "mitchellwrosen"})
 local function _174_()
   return vim.keymap.set("n", "!", "qz")
 end
-vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {group = "mitchellwrosen", callback = _174_})
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _174_, group = "mitchellwrosen"})
 local function _175_()
   return vim.keymap.set("n", "!", "q")
 end
-vim.api.nvim_create_autocmd("RecordingEnter", {group = "mitchellwrosen", callback = _175_})
+vim.api.nvim_create_autocmd("RecordingEnter", {callback = _175_, group = "mitchellwrosen"})
 vim.keymap.set("n", "9", "@z")
 do
   local default_progress_handler = vim.lsp.handlers["$/progress"]
@@ -1814,7 +1814,7 @@ local function _190_()
   end
   return vim.lsp.start({before_init = _191_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel-ls", on_init = _192_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", group = "mitchellwrosen", callback = _190_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _190_, group = "mitchellwrosen"})
 local function _193_()
   local _194_
   do
@@ -1842,7 +1842,7 @@ local function _193_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _193_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _193_, group = "mitchellwrosen"})
 local function _198_()
   local initialize_notification_id = nil
   local start_ms = nil
@@ -1857,13 +1857,13 @@ local function _198_()
   end
   return vim.lsp.start({before_init = _199_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zls", on_init = _200_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", group = "mitchellwrosen", callback = _198_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _198_, group = "mitchellwrosen"})
 local function _201_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
   return vim.cmd.startinsert()
 end
-vim.api.nvim_create_autocmd("TermOpen", {group = "mitchellwrosen", callback = _201_})
+vim.api.nvim_create_autocmd("TermOpen", {callback = _201_, group = "mitchellwrosen"})
 local function _202_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     return vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})

@@ -5,6 +5,11 @@
   `(icollect [i# x# (ipairs ,xs)] (if (<= i# ,n) nil x#))
 )
 
+(fn string-join [strings separator]
+  `(table.concat ,strings ,separator)
+)
+
+
 ; (take n xs) takes n elements from xs
 (fn take [n xs]
   `(icollect [i# x# (ipairs ,xs)] (if (<= i# ,n) x# nil))
@@ -17,4 +22,4 @@
   `(icollect [_# ,x (ipairs ,xs)] ,body)
 )
 
-{ : drop : take : wither }
+{ : drop : string-join : take : wither }

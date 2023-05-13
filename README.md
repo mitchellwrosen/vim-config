@@ -2,6 +2,12 @@
 
 ### Getting stuff done in Lua with the `neovim` API
 
+#### Concatenate an array of strings
+
+```
+:help table.concat
+```
+
 #### Escape visual mode
 
 ```fennel

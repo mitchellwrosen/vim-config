@@ -9,6 +9,11 @@
 (include "plugins")
 (include "mappings")
 
+(vim.cmd.sign "define" "DiagnosticSignError" "text=✗" "texthl=DiagnosticSignError" "linehl=" "numhl=")
+(vim.cmd.sign "define" "DiagnosticSignWarn" "text=⚠" "texthl=DiagnosticSignWarn" "linehl=" "numhl=")
+(vim.cmd.sign "define" "DiagnosticSignInfo" "text=ℹ" "texthl=DiagnosticSignInfo" "linehl=" "numhl=")
+(vim.cmd.sign "define" "DiagnosticSignHint" "text=➤" "texthl=DiagnosticSignHint" "linehl=" "numhl=")
+
 (vim.diagnostic.config
   { :float
       { ; require cursor to be over diagnostic in order to open a float window of it

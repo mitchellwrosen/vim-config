@@ -29,7 +29,7 @@
 (set vim.o.startofline false) ; don't jump cursor to start of line when moving
 (set vim.o.synmaxcol 200) ; dont bother syntax-highlighting past this column
 (set vim.o.termguicolors true)
-(set vim.o.timeoutlen 300) ; only wait this many ms for key sequence to complete
+(set vim.o.timeoutlen 1000) ; only wait this many ms for key sequence to complete
 (set vim.o.title true) ; put filename in window title
 (set vim.o.undofile true) ; persist undo history across buffer exits
 (set vim.o.updatetime 300) ; fire CursorHold after this many ms (default 4000ms)

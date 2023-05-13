@@ -82,6 +82,9 @@
     ; status line
     { :name "lualine" :url "https://github.com/nvim-lualine/lualine.nvim" :commit "84ffb80e452d95e2c46fa29a98ea11a240f7843e" :config (include "config-lualine") }
 
+    ; surround
+    { :name "mini-surround" :url "https://github.com/echasnovski/mini.surround" :commit "ea2e9c4cdbddc826dc6eeac69b035f8220f65de5" :event "VeryLazy" :config (include "config-mini-surround") }
+
     ; fancy notifications
     { :name "notify" :url "https://github.com/rcarriga/nvim-notify" :tag "v3.11.0" :config (include "config-notify") }
 

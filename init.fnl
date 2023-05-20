@@ -177,6 +177,11 @@
             (when (> (length references) 1)
               (local next-ref-ix (next-reference-index (get-cursor) references))
               (local { :range { :start { :line next-ref-row :character next-ref-col } } } (. references next-ref-ix))
+              ; add current cursor position to jumplist before jumping
+              (vim.api.nvim_feedkeys "m'" "nx" false)
+              ; can't use nvim_buf_set_mark for this purpose yet
+              ; https://github.com/neovim/neovim/issues/17861
+              ; (vim.api.nvim_buf_set_mark 0 "'" cursor.row cursor.col {})
               (set-cursor { :row (+ next-ref-row 1) :col next-ref-col })
             )
             (vim.cmd "normal! nzz") ; kept manually in sync with mappings.fnl
@@ -193,14 +198,14 @@
               (when (> num-refs 1)
                 (local next-ref-ix (next-reference-index (get-cursor) references))
                 (local prev-ref-ix
-                  (if
-                    (= next-ref-ix 1)
-                    (- num-refs 1)
-                    (= next-ref-ix 2)
-                    num-refs
-                    (- next-ref-ix 2))
+                  (case next-ref-ix
+                    1 (- num-refs 1)
+                    2 num-refs
+                    _ (- next-ref-ix 2)
                   )
+                )
                 (local { :range { :start { :line prev-ref-row :character prev-ref-col } } } (. references prev-ref-ix))
+                (vim.api.nvim_feedkeys "m'" "nx" false)
                 (set-cursor { :row (+ prev-ref-row 1) :col prev-ref-col })
               )
             )

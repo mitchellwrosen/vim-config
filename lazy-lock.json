@@ -24,6 +24,7 @@
   "notify": { "branch": "master", "commit": "bdd647f61a05c9b8a57c83b78341a0690e9c29d7" },
   "playground": { "branch": "master", "commit": "2b81a018a49f8e476341dfcb228b7b808baba68b" },
   "repeat": { "branch": "master", "commit": "24afe922e6a05891756ecf331f39a1f6743d3d5a" },
+  "spider": { "branch": "main", "commit": "1aa7054a1b8b7c3605839603c6015c8c7446d8a2" },
   "startuptime": { "branch": "master", "commit": "daacd02e773944b8de312ddac83f436fae92cbb9" },
   "surround": { "branch": "master", "commit": "aeb933272e72617f7c4d35e1f003be16836b948d" },
   "treesitter": { "branch": "master", "commit": "0ec48923e526d55892b7a1564a01b5111e5e9ba0" },

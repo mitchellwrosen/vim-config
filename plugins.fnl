@@ -91,6 +91,8 @@
     ; make "." repeat more things out of the box
     { :name "repeat" :url "https://github.com/tpope/vim-repeat" :commit "24afe922e6a05891756ecf331f39a1f6743d3d5a" :event "VeryLazy" :config (fn [] nil) }
 
+    { :name "spider" :url "https://github.com/chrisgrieser/nvim-spider" :commit "1aa7054a1b8b7c3605839603c6015c8c7446d8a2" :event "VeryLazy" :config (include "config-spider") }
+
     ; run :StartupTime to profile vim start time
     { :name "startuptime" :url "https://github.com/dstein64/vim-startuptime" :tag "v4.4.0" :cmd "StartupTime" :config (fn [] nil) }
 

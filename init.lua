@@ -287,7 +287,7 @@ end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _42_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {g = false, windows = false, nav = false, z = false, text_objects = false, motions = false, operators = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {operators = false, g = false, motions = false, text_objects = false, nav = false, windows = false, z = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _43_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -1440,7 +1440,7 @@ local function _117_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, group = "mitchellwrosen", callback = _118_})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, callback = _118_, group = "mitchellwrosen"})
 end
 vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _117_})
 local function _120_()
@@ -1545,7 +1545,7 @@ local function _134_(_131_)
   if client.supports_method("textDocument/documentHighlight") then
     local function _142_()
       local references = vim.b["document-highlights"]
-      if ((vim.g.cool_is_searching == 0) and references) then
+      if ((vim.v.hlsearch == 0) and references) then
         if (#references > 1) then
           local next_ref_ix
           local _143_
@@ -1575,7 +1575,7 @@ local function _134_(_131_)
     vim.keymap.set("n", "n", _142_)
     local function _151_()
       local references = vim.b["document-highlights"]
-      if ((vim.g.cool_is_searching == 0) and references) then
+      if ((vim.v.hlsearch == 0) and references) then
         local num_refs = #references
         if (num_refs > 1) then
           local next_ref_ix
@@ -1950,7 +1950,7 @@ local function _223_()
   end
   return vim.lsp.start({before_init = _224_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel-ls", on_init = _225_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", group = "mitchellwrosen", callback = _223_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _223_, group = "mitchellwrosen"})
 local function _226_()
   local _227_
   do
@@ -1978,7 +1978,7 @@ local function _226_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _226_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _226_, group = "mitchellwrosen"})
 local function _231_()
   local initialize_notification_id = nil
   local start_ms = nil
@@ -1993,7 +1993,7 @@ local function _231_()
   end
   return vim.lsp.start({before_init = _232_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zls", on_init = _233_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", group = "mitchellwrosen", callback = _231_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _231_, group = "mitchellwrosen"})
 local function _234_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
@@ -2007,4 +2007,4 @@ local function _235_()
     return nil
   end
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, group = "mitchellwrosen", callback = _235_})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _235_, group = "mitchellwrosen"})

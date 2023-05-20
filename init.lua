@@ -85,16 +85,16 @@ package.preload["plugins"] = package.preload["plugins"] or function(...)
   local function _37_()
     return nil
   end
-  local function _42_()
+  local function _38_()
     return nil
   end
-  local function _43_()
+  local function _39_()
     return nil
   end
-  local function _45_()
+  local function _41_()
     return nil
   end
-  lazy.setup({{name = "fennel", url = "https://github.com/bakpakin/fennel.vim", commit = "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89", ft = "fennel", config = _3_}, {name = "haskell", url = "https://github.com/neovimhaskell/haskell-vim", commit = "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e", ft = "haskell", config = _4_}, {name = "nix", url = "https://github.com/LnL7/vim-nix", commit = "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee", ft = "nix", config = _5_}, {name = "zig", url = "https://github.com/ziglang/zig.vim", commit = "a0d9adedafeb1a33a0159d16ddcdf194b7cea881", ft = "zig", config = _6_}, {name = "bqf", url = "https://github.com/kevinhwang91/nvim-bqf", tag = "v1.1.0", ft = "qf", config = require("config-nvim-bqf")}, {name = "characterize", url = "https://github.com/tpope/vim-characterize", commit = "885a00a3c21dd52ca8f2fd7d62850134934179d9", keys = {{"ga"}}, config = require("config-characterize")}, {name = "cmp", url = "https://github.com/hrsh7th/nvim-cmp", commit = "f841fa6ced194aa930136a7671439e6bd4c51722", dependencies = {"cmp-buffer", "cmp-lsp"}, event = "InsertEnter", config = require("config-nvim-cmp")}, {name = "cmp-buffer", url = "https://github.com/hrsh7th/cmp-buffer", commit = "f83773e2f433a923997c5faad7ea689ec24d1785", lazy = true}, {name = "cmp-lsp", url = "https://github.com/hrsh7th/cmp-nvim-lsp", commit = "b4251f0fca1daeb6db5d60a23ca81507acf858c2", lazy = true}, {name = "commentary", url = "https://github.com/tpope/vim-commentary", commit = "627308e30639be3e2d5402808ce18690557e8292", event = "VeryLazy", config = _10_}, {name = "cool", url = "https://github.com/romainl/vim-cool", commit = "27ad4ecf7532b750fadca9f36e1c5498fc225af2", event = "VeryLazy", config = _11_}, {name = "deadcolumn", url = "https://github.com/Bekaboo/deadcolumn.nvim", commit = "8140fd7cface9592a44b3151203fc6ca95ad9598", event = "InsertEnter", config = require("config-deadcolumn")}, {name = "fugitive", url = "https://github.com/tpope/vim-fugitive", tag = "v3.7", cmd = "Git", config = _13_}, {name = "gruvbox-material", url = "https://github.com/sainnhe/gruvbox-material", commit = "3fff63b0d6a425ad1076a260cd4f6da61d1632b1", priority = 1000}, {name = "fzf", url = "https://github.com/junegunn/fzf", commit = "96670d5f16dcf23d590eb1d83d1de351b2e8fb15", event = "VeryLazy", config = require("config-fzf")}, {name = "fzf-vim", url = "https://github.com/junegunn/fzf.vim", commit = "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0", dependencies = {"fzf"}, event = "VeryLazy", config = require("config-fzf-vim")}, {name = "indent-blankline", url = "https://github.com/lukas-reineke/indent-blankline.nvim", tag = "v2.20.4", config = require("config-indent-blankline")}, {name = "leap", url = "https://github.com/ggandor/leap.nvim", commit = "f74473d23ebf60957e0db3ff8172349a82e5a442", event = "VeryLazy", config = require("config-leap")}, {name = "leap-spooky", url = "https://github.com/ggandor/leap-spooky.nvim", commit = "3e940464b1728b22052dd565accc949c0b02b025", event = "VeryLazy", config = require("config-leap-spooky"), dependencies = {"leap"}}, {name = "lsp-lines", url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim", commit = "dcff567b3a2d730f31b6da229ca3bb40640ec5a6", event = "LspAttach", config = require("config-lsp-lines")}, {name = "lualine", url = "https://github.com/nvim-lualine/lualine.nvim", commit = "84ffb80e452d95e2c46fa29a98ea11a240f7843e", config = require("config-lualine")}, {name = "mini-surround", url = "https://github.com/echasnovski/mini.surround", commit = "ea2e9c4cdbddc826dc6eeac69b035f8220f65de5", event = "VeryLazy", config = require("config-mini-surround")}, {name = "notify", url = "https://github.com/rcarriga/nvim-notify", tag = "v3.11.0", config = require("config-notify")}, {name = "repeat", url = "https://github.com/tpope/vim-repeat", commit = "24afe922e6a05891756ecf331f39a1f6743d3d5a", event = "VeryLazy", config = _37_}, {name = "spider", url = "https://github.com/chrisgrieser/nvim-spider", commit = "1aa7054a1b8b7c3605839603c6015c8c7446d8a2", event = "VeryLazy", config = require("config-spider")}, {name = "startuptime", url = "https://github.com/dstein64/vim-startuptime", tag = "v4.4.0", cmd = "StartupTime", config = _42_}, {name = "surround", url = "https://github.com/tpope/vim-surround", commit = "aeb933272e72617f7c4d35e1f003be16836b948d", event = "VeryLazy", config = _43_}, {name = "treesitter", url = "https://github.com/nvim-treesitter/nvim-treesitter", commit = "0ec48923e526d55892b7a1564a01b5111e5e9ba0", build = ":TSUpdate", config = require("config-treesitter")}, {name = "playground", url = "https://github.com/nvim-treesitter/playground", commit = "2b81a018a49f8e476341dfcb228b7b808baba68b", cmd = "TSPlaygroundToggle", config = _45_}, {name = "which-key", url = "https://github.com/folke/which-key.nvim", tag = "v1.4.0", event = "VeryLazy", config = require("config-which-key")}})
+  lazy.setup({{name = "fennel", url = "https://github.com/bakpakin/fennel.vim", commit = "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89", ft = "fennel", config = _3_}, {name = "haskell", url = "https://github.com/neovimhaskell/haskell-vim", commit = "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e", ft = "haskell", config = _4_}, {name = "nix", url = "https://github.com/LnL7/vim-nix", commit = "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee", ft = "nix", config = _5_}, {name = "zig", url = "https://github.com/ziglang/zig.vim", commit = "a0d9adedafeb1a33a0159d16ddcdf194b7cea881", ft = "zig", config = _6_}, {name = "bqf", url = "https://github.com/kevinhwang91/nvim-bqf", tag = "v1.1.0", ft = "qf", config = require("config-nvim-bqf")}, {name = "characterize", url = "https://github.com/tpope/vim-characterize", commit = "885a00a3c21dd52ca8f2fd7d62850134934179d9", keys = {{"ga"}}, config = require("config-characterize")}, {name = "cmp", url = "https://github.com/hrsh7th/nvim-cmp", commit = "f841fa6ced194aa930136a7671439e6bd4c51722", dependencies = {"cmp-buffer", "cmp-lsp"}, event = "InsertEnter", config = require("config-nvim-cmp")}, {name = "cmp-buffer", url = "https://github.com/hrsh7th/cmp-buffer", commit = "f83773e2f433a923997c5faad7ea689ec24d1785", lazy = true}, {name = "cmp-lsp", url = "https://github.com/hrsh7th/cmp-nvim-lsp", commit = "b4251f0fca1daeb6db5d60a23ca81507acf858c2", lazy = true}, {name = "commentary", url = "https://github.com/tpope/vim-commentary", commit = "627308e30639be3e2d5402808ce18690557e8292", event = "VeryLazy", config = _10_}, {name = "cool", url = "https://github.com/romainl/vim-cool", commit = "27ad4ecf7532b750fadca9f36e1c5498fc225af2", event = "VeryLazy", config = _11_}, {name = "deadcolumn", url = "https://github.com/Bekaboo/deadcolumn.nvim", commit = "8140fd7cface9592a44b3151203fc6ca95ad9598", event = "InsertEnter", config = require("config-deadcolumn")}, {name = "fugitive", url = "https://github.com/tpope/vim-fugitive", tag = "v3.7", cmd = "Git", config = _13_}, {name = "gruvbox-material", url = "https://github.com/sainnhe/gruvbox-material", commit = "3fff63b0d6a425ad1076a260cd4f6da61d1632b1", priority = 1000}, {name = "fzf", url = "https://github.com/junegunn/fzf", commit = "96670d5f16dcf23d590eb1d83d1de351b2e8fb15", event = "VeryLazy", config = require("config-fzf")}, {name = "fzf-vim", url = "https://github.com/junegunn/fzf.vim", commit = "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0", dependencies = {"fzf"}, event = "VeryLazy", config = require("config-fzf-vim")}, {name = "indent-blankline", url = "https://github.com/lukas-reineke/indent-blankline.nvim", tag = "v2.20.4", config = require("config-indent-blankline")}, {name = "leap", url = "https://github.com/ggandor/leap.nvim", commit = "f74473d23ebf60957e0db3ff8172349a82e5a442", event = "VeryLazy", config = require("config-leap")}, {name = "leap-spooky", url = "https://github.com/ggandor/leap-spooky.nvim", commit = "3e940464b1728b22052dd565accc949c0b02b025", event = "VeryLazy", config = require("config-leap-spooky"), dependencies = {"leap"}}, {name = "lsp-lines", url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim", commit = "dcff567b3a2d730f31b6da229ca3bb40640ec5a6", event = "LspAttach", config = require("config-lsp-lines")}, {name = "lualine", url = "https://github.com/nvim-lualine/lualine.nvim", commit = "84ffb80e452d95e2c46fa29a98ea11a240f7843e", config = require("config-lualine")}, {name = "mini-surround", url = "https://github.com/echasnovski/mini.surround", commit = "ea2e9c4cdbddc826dc6eeac69b035f8220f65de5", event = "VeryLazy", config = require("config-mini-surround")}, {name = "notify", url = "https://github.com/rcarriga/nvim-notify", tag = "v3.11.0", config = require("config-notify")}, {name = "repeat", url = "https://github.com/tpope/vim-repeat", commit = "24afe922e6a05891756ecf331f39a1f6743d3d5a", event = "VeryLazy", config = _37_}, {name = "startuptime", url = "https://github.com/dstein64/vim-startuptime", tag = "v4.4.0", cmd = "StartupTime", config = _38_}, {name = "surround", url = "https://github.com/tpope/vim-surround", commit = "aeb933272e72617f7c4d35e1f003be16836b948d", event = "VeryLazy", config = _39_}, {name = "treesitter", url = "https://github.com/nvim-treesitter/nvim-treesitter", commit = "0ec48923e526d55892b7a1564a01b5111e5e9ba0", build = ":TSUpdate", config = require("config-treesitter")}, {name = "playground", url = "https://github.com/nvim-treesitter/playground", commit = "2b81a018a49f8e476341dfcb228b7b808baba68b", cmd = "TSPlaygroundToggle", config = _41_}, {name = "which-key", url = "https://github.com/folke/which-key.nvim", tag = "v1.4.0", event = "VeryLazy", config = require("config-which-key")}})
   vim.g.gruvbox_material_background = "soft"
   vim.g.gruvbox_material_better_performance = 1
   vim.g.gruvbox_material_enable_italic = 1
@@ -277,42 +277,24 @@ package.preload["config-notify"] = package.preload["config-notify"] or function(
   end
   return _36_
 end
-package.preload["config-spider"] = package.preload["config-spider"] or function(...)
-  local function _38_()
-    local spider = require("spider")
-    local function _39_()
-      return spider.motion("b")
-    end
-    vim.keymap.set({"n", "o", "x"}, "b", _39_)
-    local function _40_()
-      return spider.motion("e")
-    end
-    vim.keymap.set({"n", "o", "x"}, "e", _40_)
-    local function _41_()
-      return spider.motion("w")
-    end
-    return vim.keymap.set({"n", "o", "x"}, "w", _41_)
-  end
-  return _38_
-end
 package.preload["config-treesitter"] = package.preload["config-treesitter"] or function(...)
-  local function _44_()
+  local function _40_()
     local treesitter = require("nvim-treesitter.configs")
     return treesitter.setup({highlight = {enable = true}, playground = {enable = true}})
   end
-  return _44_
+  return _40_
 end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
-  local function _46_()
+  local function _42_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {text_objects = false, g = false, operators = false, motions = false, windows = false, nav = false, z = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {motions = false, g = false, nav = false, windows = false, text_objects = false, operators = false, z = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
-    local function _47_()
+    local function _43_()
       return which_key.show("`", {auto = true, mode = "n"})
     end
-    return vim.keymap.set("n", "'", _47_)
+    return vim.keymap.set("n", "'", _43_)
   end
-  return _46_
+  return _42_
 end
 require("plugins")
 package.preload["mappings"] = package.preload["mappings"] or function(...)
@@ -320,12 +302,12 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
   vim.keymap.set({"n", "v"}, ":", ";")
   vim.keymap.set("n", "/", "/\\v")
   vim.keymap.set("v", "/", "/\\v")
-  local function _48_()
+  local function _44_()
     vim.cmd("keepjumps normal! mz*`z")
     local lualine = require("lualine")
     return lualine.refresh()
   end
-  vim.keymap.set("n", "*", _48_)
+  vim.keymap.set("n", "*", _44_)
   vim.keymap.set("n", "<BS>", "<C-^>")
   vim.keymap.set("n", "j", "gj")
   vim.keymap.set("n", "k", "gk")
@@ -335,31 +317,31 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
   vim.keymap.set({"n", "o"}, "L", "$")
   vim.keymap.set("v", "L", "g_")
   vim.keymap.set("v", "p", "P")
-  local function _49_()
+  local function _45_()
     local prev_region
     do
-      local _local_50_ = vim.api.nvim_buf_get_mark(0, "[")
-      local start_row_7_auto = _local_50_[1]
-      local start_col_8_auto = _local_50_[2]
-      local _local_51_ = vim.api.nvim_buf_get_mark(0, "]")
-      local end_row_9_auto = _local_51_[1]
-      local end_col_10_auto = _local_51_[2]
+      local _local_46_ = vim.api.nvim_buf_get_mark(0, "[")
+      local start_row_7_auto = _local_46_[1]
+      local start_col_8_auto = _local_46_[2]
+      local _local_47_ = vim.api.nvim_buf_get_mark(0, "]")
+      local end_row_9_auto = _local_47_[1]
+      local end_col_10_auto = _local_47_[2]
       prev_region = {["end"] = {col = end_col_10_auto, row = end_row_9_auto}, start = {col = start_col_8_auto, row = start_row_7_auto}}
     end
     if not ((prev_region.start.row == 0) and (prev_region.start.col == 0)) then
       local cur_region
       do
-        local _local_52_ = vim.fn.getpos("v")
-        local _bufnum_11_auto = _local_52_[1]
-        local begin_row_12_auto = _local_52_[2]
-        local begin_col_13_auto = _local_52_[3]
-        local _off_14_auto = _local_52_[4]
+        local _local_48_ = vim.fn.getpos("v")
+        local _bufnum_11_auto = _local_48_[1]
+        local begin_row_12_auto = _local_48_[2]
+        local begin_col_13_auto = _local_48_[3]
+        local _off_14_auto = _local_48_[4]
         local begin_pos_15_auto = {col = (begin_col_13_auto - 1), row = begin_row_12_auto}
         local end_pos_16_auto
         do
-          local _local_53_ = vim.api.nvim_win_get_cursor(0)
-          local row_1_auto = _local_53_[1]
-          local col_2_auto = _local_53_[2]
+          local _local_49_ = vim.api.nvim_win_get_cursor(0)
+          local row_1_auto = _local_49_[1]
+          local col_2_auto = _local_49_[2]
           end_pos_16_auto = {col = col_2_auto, row = row_1_auto}
         end
         if ((begin_pos_15_auto.row < end_pos_16_auto.row) or ((begin_pos_15_auto.row == end_pos_16_auto.row) and (begin_pos_15_auto.col <= end_pos_16_auto.col))) then
@@ -370,24 +352,24 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
       end
       local prev_contents
       do
-        local _local_55_ = prev_region
-        local _local_56_ = _local_55_["end"]
-        local end_col_6_auto = _local_56_["col"]
-        local end_row_5_auto = _local_56_["row"]
-        local _local_57_ = _local_55_["start"]
-        local start_col_4_auto = _local_57_["col"]
-        local start_row_3_auto = _local_57_["row"]
+        local _local_51_ = prev_region
+        local _local_52_ = _local_51_["end"]
+        local end_col_6_auto = _local_52_["col"]
+        local end_row_5_auto = _local_52_["row"]
+        local _local_53_ = _local_51_["start"]
+        local start_col_4_auto = _local_53_["col"]
+        local start_row_3_auto = _local_53_["row"]
         prev_contents = vim.api.nvim_buf_get_text(0, (start_row_3_auto - 1), start_col_4_auto, (end_row_5_auto - 1), (end_col_6_auto + 1), {})
       end
       local cur_contents
       do
-        local _local_58_ = cur_region
-        local _local_59_ = _local_58_["end"]
-        local end_col_6_auto = _local_59_["col"]
-        local end_row_5_auto = _local_59_["row"]
-        local _local_60_ = _local_58_["start"]
-        local start_col_4_auto = _local_60_["col"]
-        local start_row_3_auto = _local_60_["row"]
+        local _local_54_ = cur_region
+        local _local_55_ = _local_54_["end"]
+        local end_col_6_auto = _local_55_["col"]
+        local end_row_5_auto = _local_55_["row"]
+        local _local_56_ = _local_54_["start"]
+        local start_col_4_auto = _local_56_["col"]
+        local start_row_3_auto = _local_56_["row"]
         cur_contents = vim.api.nvim_buf_get_text(0, (start_row_3_auto - 1), start_col_4_auto, (end_row_5_auto - 1), (end_col_6_auto + 1), {})
       end
       local function adjust_region(left_region, right_region)
@@ -400,44 +382,60 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
         if (prev_region.start.row ~= cur_region.start.row) then
           vim.api.nvim_feedkeys("\27", "xn", false)
           do
-            local _local_61_ = prev_region
-            local _local_62_ = _local_61_["end"]
-            local end_col_20_auto = _local_62_["col"]
-            local end_row_19_auto = _local_62_["row"]
-            local _local_63_ = _local_61_["start"]
-            local start_col_18_auto = _local_63_["col"]
-            local start_row_17_auto = _local_63_["row"]
+            local _local_57_ = prev_region
+            local _local_58_ = _local_57_["end"]
+            local end_col_20_auto = _local_58_["col"]
+            local end_row_19_auto = _local_58_["row"]
+            local _local_59_ = _local_57_["start"]
+            local start_col_18_auto = _local_59_["col"]
+            local start_row_17_auto = _local_59_["row"]
             vim.api.nvim_buf_set_text(0, (start_row_17_auto - 1), start_col_18_auto, (end_row_19_auto - 1), (end_col_20_auto + 1), cur_contents)
           end
           do
-            local _local_64_ = cur_region
+            local _local_60_ = cur_region
+            local _local_61_ = _local_60_["end"]
+            local end_col_20_auto = _local_61_["col"]
+            local end_row_19_auto = _local_61_["row"]
+            local _local_62_ = _local_60_["start"]
+            local start_col_18_auto = _local_62_["col"]
+            local start_row_17_auto = _local_62_["row"]
+            vim.api.nvim_buf_set_text(0, (start_row_17_auto - 1), start_col_18_auto, (end_row_19_auto - 1), (end_col_20_auto + 1), prev_contents)
+          end
+          local _local_63_ = cur_region.start
+          local col_22_auto = _local_63_["col"]
+          local row_21_auto = _local_63_["row"]
+          return vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
+        elseif ((prev_region.start.col < cur_region.start.col) and (prev_region["end"].col < cur_region.start.col)) then
+          vim.api.nvim_feedkeys("\27", "xn", false)
+          do
+            local _local_64_ = prev_region
             local _local_65_ = _local_64_["end"]
             local end_col_20_auto = _local_65_["col"]
             local end_row_19_auto = _local_65_["row"]
             local _local_66_ = _local_64_["start"]
             local start_col_18_auto = _local_66_["col"]
             local start_row_17_auto = _local_66_["row"]
-            vim.api.nvim_buf_set_text(0, (start_row_17_auto - 1), start_col_18_auto, (end_row_19_auto - 1), (end_col_20_auto + 1), prev_contents)
-          end
-          local _local_67_ = cur_region.start
-          local col_22_auto = _local_67_["col"]
-          local row_21_auto = _local_67_["row"]
-          return vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
-        elseif ((prev_region.start.col < cur_region.start.col) and (prev_region["end"].col < cur_region.start.col)) then
-          vim.api.nvim_feedkeys("\27", "xn", false)
-          do
-            local _local_68_ = prev_region
-            local _local_69_ = _local_68_["end"]
-            local end_col_20_auto = _local_69_["col"]
-            local end_row_19_auto = _local_69_["row"]
-            local _local_70_ = _local_68_["start"]
-            local start_col_18_auto = _local_70_["col"]
-            local start_row_17_auto = _local_70_["row"]
             vim.api.nvim_buf_set_text(0, (start_row_17_auto - 1), start_col_18_auto, (end_row_19_auto - 1), (end_col_20_auto + 1), cur_contents)
           end
           local adjusted_cur_region = adjust_region(prev_region, cur_region)
           do
-            local _local_71_ = adjusted_cur_region
+            local _local_67_ = adjusted_cur_region
+            local _local_68_ = _local_67_["end"]
+            local end_col_20_auto = _local_68_["col"]
+            local end_row_19_auto = _local_68_["row"]
+            local _local_69_ = _local_67_["start"]
+            local start_col_18_auto = _local_69_["col"]
+            local start_row_17_auto = _local_69_["row"]
+            vim.api.nvim_buf_set_text(0, (start_row_17_auto - 1), start_col_18_auto, (end_row_19_auto - 1), (end_col_20_auto + 1), prev_contents)
+          end
+          local _local_70_ = adjusted_cur_region.start
+          local col_22_auto = _local_70_["col"]
+          local row_21_auto = _local_70_["row"]
+          return vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
+        elseif ((cur_region.start.col < prev_region.start.col) and (cur_region["end"].col < prev_region.start.col)) then
+          vim.api.nvim_feedkeys("\27", "xn", false)
+          do
+            local _local_71_ = cur_region
             local _local_72_ = _local_71_["end"]
             local end_col_20_auto = _local_72_["col"]
             local end_row_19_auto = _local_72_["row"]
@@ -446,36 +444,20 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
             local start_row_17_auto = _local_73_["row"]
             vim.api.nvim_buf_set_text(0, (start_row_17_auto - 1), start_col_18_auto, (end_row_19_auto - 1), (end_col_20_auto + 1), prev_contents)
           end
-          local _local_74_ = adjusted_cur_region.start
-          local col_22_auto = _local_74_["col"]
-          local row_21_auto = _local_74_["row"]
-          return vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
-        elseif ((cur_region.start.col < prev_region.start.col) and (cur_region["end"].col < prev_region.start.col)) then
-          vim.api.nvim_feedkeys("\27", "xn", false)
-          do
-            local _local_75_ = cur_region
-            local _local_76_ = _local_75_["end"]
-            local end_col_20_auto = _local_76_["col"]
-            local end_row_19_auto = _local_76_["row"]
-            local _local_77_ = _local_75_["start"]
-            local start_col_18_auto = _local_77_["col"]
-            local start_row_17_auto = _local_77_["row"]
-            vim.api.nvim_buf_set_text(0, (start_row_17_auto - 1), start_col_18_auto, (end_row_19_auto - 1), (end_col_20_auto + 1), prev_contents)
-          end
           local adjusted_prev_region = adjust_region(cur_region, prev_region)
           do
-            local _local_78_ = adjusted_prev_region
-            local _local_79_ = _local_78_["end"]
-            local end_col_20_auto = _local_79_["col"]
-            local end_row_19_auto = _local_79_["row"]
-            local _local_80_ = _local_78_["start"]
-            local start_col_18_auto = _local_80_["col"]
-            local start_row_17_auto = _local_80_["row"]
+            local _local_74_ = adjusted_prev_region
+            local _local_75_ = _local_74_["end"]
+            local end_col_20_auto = _local_75_["col"]
+            local end_row_19_auto = _local_75_["row"]
+            local _local_76_ = _local_74_["start"]
+            local start_col_18_auto = _local_76_["col"]
+            local start_row_17_auto = _local_76_["row"]
             vim.api.nvim_buf_set_text(0, (start_row_17_auto - 1), start_col_18_auto, (end_row_19_auto - 1), (end_col_20_auto + 1), cur_contents)
           end
-          local _local_81_ = cur_region.start
-          local col_22_auto = _local_81_["col"]
-          local row_21_auto = _local_81_["row"]
+          local _local_77_ = cur_region.start
+          local col_22_auto = _local_77_["col"]
+          local row_21_auto = _local_77_["row"]
           return vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
         else
           return nil
@@ -487,12 +469,12 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
       return nil
     end
   end
-  vim.keymap.set("x", "x", _49_)
+  vim.keymap.set("x", "x", _45_)
   vim.keymap.set("v", "Y", "y`>")
   vim.keymap.set("n", "U", "<C-r>")
   vim.keymap.set({"n", "v"}, "n", "nzz")
   vim.keymap.set({"n", "v"}, "N", "Nzz")
-  local function _85_()
+  local function _81_()
     local buffers = vim.fn.getbufinfo()
     local num_listed
     do
@@ -512,8 +494,8 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
       return vim.api.nvim_buf_delete(0, {force = true})
     end
   end
-  vim.keymap.set("n", "q", _85_)
-  local function _88_()
+  vim.keymap.set("n", "q", _81_)
+  local function _84_()
     if (vim.fn.argc() > 0) then
       vim.cmd("%argdel")
     else
@@ -521,7 +503,7 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
     vim.cmd({cmd = "mksession", bang = true})
     return vim.cmd.qa()
   end
-  vim.keymap.set("n", "Q", _88_)
+  vim.keymap.set("n", "Q", _84_)
   vim.keymap.set("n", ">", "<Plug>MyRightShift", {silent = true})
   vim.keymap.set("n", "<", "<Plug>MyLeftShift", {silent = true})
   vim.keymap.set("n", "<Plug>MyRightShift", ">>ll:call repeat#set(\"\\<Plug>MyRightShift\")<CR>", {silent = true})
@@ -583,7 +565,7 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
           do
             local tbl_17_auto = {}
             local i_18_auto = #tbl_17_auto
-            local function _94_()
+            local function _90_()
               local tbl_17_auto0 = {}
               local i_18_auto0 = #tbl_17_auto0
               for i_1_auto, x_2_auto in ipairs(buffer_ids) do
@@ -601,7 +583,7 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
               end
               return tbl_17_auto0
             end
-            for i_3_auto, x_4_auto in ipairs(_94_()) do
+            for i_3_auto, x_4_auto in ipairs(_90_()) do
               local val_19_auto
               if (i_3_auto <= (current_buffer_index - desired_buffer_index)) then
                 val_19_auto = x_4_auto
@@ -728,46 +710,46 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
         return nil
       end
     end
-    local function _108_()
+    local function _104_()
       return go_to_buffer(1)
     end
-    vim.keymap.set("n", "1", _108_)
-    local function _109_()
+    vim.keymap.set("n", "1", _104_)
+    local function _105_()
       return go_to_buffer(2)
     end
-    vim.keymap.set("n", "2", _109_)
-    local function _110_()
+    vim.keymap.set("n", "2", _105_)
+    local function _106_()
       return go_to_buffer(3)
     end
-    vim.keymap.set("n", "3", _110_)
-    local function _111_()
+    vim.keymap.set("n", "3", _106_)
+    local function _107_()
       return go_to_buffer(4)
     end
-    vim.keymap.set("n", "4", _111_)
-    local function _112_()
+    vim.keymap.set("n", "4", _107_)
+    local function _108_()
       return go_to_buffer(5)
     end
-    vim.keymap.set("n", "5", _112_)
-    local function _113_()
+    vim.keymap.set("n", "5", _108_)
+    local function _109_()
       return move_buffer_to_index(1)
     end
-    vim.keymap.set("n", "<Space>1", _113_)
-    local function _114_()
+    vim.keymap.set("n", "<Space>1", _109_)
+    local function _110_()
       return move_buffer_to_index(2)
     end
-    vim.keymap.set("n", "<Space>2", _114_)
-    local function _115_()
+    vim.keymap.set("n", "<Space>2", _110_)
+    local function _111_()
       return move_buffer_to_index(3)
     end
-    vim.keymap.set("n", "<Space>3", _115_)
-    local function _116_()
+    vim.keymap.set("n", "<Space>3", _111_)
+    local function _112_()
       return move_buffer_to_index(4)
     end
-    vim.keymap.set("n", "<Space>4", _116_)
-    local function _117_()
+    vim.keymap.set("n", "<Space>4", _112_)
+    local function _113_()
       return move_buffer_to_index(5)
     end
-    vim.keymap.set("n", "<Space>5", _117_)
+    vim.keymap.set("n", "<Space>5", _113_)
   end
   vim.keymap.set("n", "<Space>s", "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``", {silent = true})
   vim.keymap.set("n", "<Space>S", "m`:silent w !repld-send<CR>``", {silent = true})
@@ -781,7 +763,7 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
   vim.keymap.set("n", "~", "mzlblgueh~`z", {silent = true})
   do
     local number_regex = "0x\\x\\+\\|\\d\\+\\(\\.\\d\\+\\)\\?"
-    local function _118_()
+    local function _114_()
       local matched_line = vim.fn.search(number_regex, "ceW")
       if (matched_line ~= 0) then
         vim.cmd("normal! v")
@@ -790,9 +772,9 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
         return nil
       end
     end
-    vim.keymap.set("o", "n", _118_)
+    vim.keymap.set("o", "n", _114_)
   end
-  local function _120_()
+  local function _116_()
     vim.keymap.del("i", "<C-u>")
     vim.keymap.set("i", "<C-u><<", "\194\171")
     vim.keymap.set("i", "<C-u>>>", "\194\187")
@@ -1439,7 +1421,7 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
     vim.keymap.set("i", "<C-U>b9", "\240\157\159\151")
     return vim.notify("Set Unicode mappings.")
   end
-  return vim.keymap.set("i", "<C-u>", _120_)
+  return vim.keymap.set("i", "<C-u>", _116_)
 end
 require("mappings")
 vim.cmd.sign("define", "DiagnosticSignError", "text=\226\156\151", "texthl=DiagnosticSignError", "linehl=", "numhl=")
@@ -1448,8 +1430,8 @@ vim.cmd.sign("define", "DiagnosticSignInfo", "text=\226\132\185", "texthl=Diagno
 vim.cmd.sign("define", "DiagnosticSignHint", "text=\226\158\164", "texthl=DiagnosticSignHint", "linehl=", "numhl=")
 vim.diagnostic.config({float = {scope = "cursor", header = ""}, underline = {severity = vim.diagnostic.severity.ERROR}, virtual_lines = {only_current_line = true}, virtual_text = false})
 vim.api.nvim_create_augroup("mitchellwrosen", {})
-local function _121_(opts)
-  local function _122_()
+local function _117_(opts)
+  local function _118_()
     local last_known_pos = vim.api.nvim_buf_get_mark(opts.buf, "\"")
     local last_known_line = last_known_pos[1]
     if ((last_known_line > 1) and (last_known_line <= vim.api.nvim_buf_line_count(opts.buf))) then
@@ -1458,27 +1440,27 @@ local function _121_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, callback = _122_, group = "mitchellwrosen"})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, callback = _118_, group = "mitchellwrosen"})
 end
-vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _121_})
-local function _124_()
+vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _117_})
+local function _120_()
   vim.bo.modifiable = not vim.bo.readonly
   return nil
 end
-vim.api.nvim_create_autocmd("BufReadPost", {group = "mitchellwrosen", callback = _124_})
-local function _125_()
+vim.api.nvim_create_autocmd("BufReadPost", {group = "mitchellwrosen", callback = _120_})
+local function _121_()
   return vim.highlight.on_yank({higroup = "IncSearch", timeout = 300})
 end
-vim.api.nvim_create_autocmd("TextYankPost", {group = "mitchellwrosen", callback = _125_})
-local function _126_()
+vim.api.nvim_create_autocmd("TextYankPost", {group = "mitchellwrosen", callback = _121_})
+local function _122_()
   if (vim.fn.getcmdwintype() == "") then
     return vim.cmd.checktime()
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {group = "mitchellwrosen", callback = _126_})
-local function _128_()
+vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {group = "mitchellwrosen", callback = _122_})
+local function _124_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
     local view = vim.fn.winsaveview()
     vim.cmd("keeppatterns silent! %s/\\s\\+$//e")
@@ -1488,9 +1470,9 @@ local function _128_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {group = "mitchellwrosen", callback = _128_})
+vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {group = "mitchellwrosen", callback = _124_})
 local extract_haskell_typesig_from_markdown
-local function _130_(str0)
+local function _126_(str0)
   local str = str0
   local i = nil
   i = string.find(str, "```haskell\n")
@@ -1521,13 +1503,13 @@ local function _130_(str0)
     return nil
   end
 end
-extract_haskell_typesig_from_markdown = _130_
+extract_haskell_typesig_from_markdown = _126_
 local hover_namespace = vim.api.nvim_create_namespace("hover")
-local function _138_(_135_)
-  local _arg_136_ = _135_
-  local buf = _arg_136_["buf"]
-  local _arg_137_ = _arg_136_["data"]
-  local client_id = _arg_137_["client_id"]
+local function _134_(_131_)
+  local _arg_132_ = _131_
+  local buf = _arg_132_["buf"]
+  local _arg_133_ = _arg_132_["data"]
+  local client_id = _arg_133_["client_id"]
   local client = vim.lsp.get_client_by_id(client_id)
   vim.cmd("highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
   vim.cmd("highlight! link LspReferenceText LspReference")
@@ -1536,6 +1518,102 @@ local function _138_(_135_)
   vim.cmd("highlight! link DiagnosticVirtualTextError DiagnosticSignError")
   vim.cmd("highlight! link DiagnosticVirtualTextInfo DiagnosticSignInfo")
   vim.cmd("highlight! link DiagnosticVirtualTextWarn DiagnosticSignWarn")
+  local function next_reference_index(_135_, references)
+    local _arg_136_ = _135_
+    local cursor_row = _arg_136_["row"]
+    local cursor_col = _arg_136_["col"]
+    local ref_ix = nil
+    for i, ref in ipairs(references) do
+      if ref_ix then break end
+      local _local_137_ = ref
+      local _local_138_ = _local_137_["range"]
+      local _local_139_ = _local_138_["start"]
+      local ref_row0 = _local_139_["line"]
+      local ref_col = _local_139_["character"]
+      local ref_row = (ref_row0 + 1)
+      if ((ref_row > cursor_row) or ((ref_row == cursor_row) and (ref_col > cursor_col))) then
+        ref_ix = i
+      else
+      end
+    end
+    if ref_ix then
+      return ref_ix
+    else
+      return 1
+    end
+  end
+  if client.supports_method("textDocument/documentHighlight") then
+    local function _142_()
+      local references = vim.b["document-highlights"]
+      if references then
+        if (#references > 1) then
+          local next_ref_ix
+          local _143_
+          do
+            local _local_144_ = vim.api.nvim_win_get_cursor(0)
+            local row_1_auto = _local_144_[1]
+            local col_2_auto = _local_144_[2]
+            _143_ = {col = col_2_auto, row = row_1_auto}
+          end
+          next_ref_ix = next_reference_index(_143_, references)
+          local _local_145_ = references[next_ref_ix]
+          local _local_146_ = _local_145_["range"]
+          local _local_147_ = _local_146_["start"]
+          local next_ref_row = _local_147_["line"]
+          local next_ref_col = _local_147_["character"]
+          local _local_148_ = {row = (next_ref_row + 1), col = next_ref_col}
+          local col_22_auto = _local_148_["col"]
+          local row_21_auto = _local_148_["row"]
+          return vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
+        else
+          return nil
+        end
+      else
+        return vim.cmd("normal! nzz")
+      end
+    end
+    vim.keymap.set("n", "n", _142_)
+    local function _151_()
+      local references = vim.b["document-highlights"]
+      if references then
+        local num_refs = #references
+        if (num_refs > 1) then
+          local next_ref_ix
+          local _152_
+          do
+            local _local_153_ = vim.api.nvim_win_get_cursor(0)
+            local row_1_auto = _local_153_[1]
+            local col_2_auto = _local_153_[2]
+            _152_ = {col = col_2_auto, row = row_1_auto}
+          end
+          next_ref_ix = next_reference_index(_152_, references)
+          local prev_ref_ix
+          if (next_ref_ix == 1) then
+            prev_ref_ix = (num_refs - 1)
+          elseif (next_ref_ix == 2) then
+            prev_ref_ix = num_refs
+          else
+            prev_ref_ix = (next_ref_ix - 2)
+          end
+          local _local_155_ = references[prev_ref_ix]
+          local _local_156_ = _local_155_["range"]
+          local _local_157_ = _local_156_["start"]
+          local prev_ref_row = _local_157_["line"]
+          local prev_ref_col = _local_157_["character"]
+          local _local_158_ = {row = (prev_ref_row + 1), col = prev_ref_col}
+          local col_22_auto = _local_158_["col"]
+          local row_21_auto = _local_158_["row"]
+          return vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
+        else
+          return nil
+        end
+      else
+        return vim.cmd("normal! Nzz")
+      end
+    end
+    vim.keymap.set("n", "N", _151_)
+  else
+  end
   if client.supports_method("textDocument/codeAction") then
     vim.keymap.set("n", "<Space>la", vim.lsp.buf.code_action, {buffer = buf, desc = "Apply code action", silent = true})
   else
@@ -1572,7 +1650,7 @@ local function _138_(_135_)
   end
   do
     local prev_diagnostic
-    local function _146_()
+    local function _169_()
       local num_errors = #vim.diagnostic.get(buf, {severity = vim.diagnostic.severity.ERROR})
       if (num_errors > 0) then
         return vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR, float = false})
@@ -1580,9 +1658,9 @@ local function _138_(_135_)
         return vim.diagnostic.goto_prev({float = false})
       end
     end
-    prev_diagnostic = _146_
+    prev_diagnostic = _169_
     local next_diagnostic
-    local function _148_()
+    local function _171_()
       local num_errors = #vim.diagnostic.get(buf, {severity = vim.diagnostic.severity.ERROR})
       if (num_errors > 0) then
         return vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR, float = false})
@@ -1590,7 +1668,7 @@ local function _138_(_135_)
         return vim.diagnostic.goto_next({float = false})
       end
     end
-    next_diagnostic = _148_
+    next_diagnostic = _171_
     vim.keymap.set("n", "<Up>", prev_diagnostic, {buffer = buf, silent = true})
     vim.keymap.set("n", "<Down>", next_diagnostic, {buffer = buf, silent = true})
     vim.keymap.set("n", "<S-Tab>", prev_diagnostic, {buffer = buf, silent = true})
@@ -1601,55 +1679,58 @@ local function _138_(_135_)
   vim.api.nvim_create_augroup(augroup_name, {})
   local highlight_thing_under_cursor
   do
-    local _150_ = client.name
-    if (_150_ == "hls") then
-      local function _151_(position)
+    local _173_ = client.name
+    if (_173_ == "hls") then
+      local function _174_(position)
         vim.lsp.buf.clear_references()
+        vim.b["document-highlights"] = nil
         return vim.lsp.buf_request(buf, "textDocument/documentHighlight", position, nil)
       end
-      highlight_thing_under_cursor = _151_
+      highlight_thing_under_cursor = _174_
     elseif true then
-      local _ = _150_
-      local function _152_()
+      local _ = _173_
+      local function _175_()
         return nil
       end
-      highlight_thing_under_cursor = _152_
+      highlight_thing_under_cursor = _175_
     else
       highlight_thing_under_cursor = nil
     end
   end
   local unhighlight_thing_under_cursor
   do
-    local _154_ = client.name
-    if (_154_ == "hls") then
-      local function _155_()
-        return vim.lsp.buf.clear_references()
-      end
-      unhighlight_thing_under_cursor = _155_
-    elseif true then
-      local _ = _154_
-      local function _156_()
+    local _177_ = client.name
+    if (_177_ == "hls") then
+      local function _178_()
+        vim.lsp.buf.clear_references()
+        vim.b["document-highlights"] = nil
         return nil
       end
-      unhighlight_thing_under_cursor = _156_
+      unhighlight_thing_under_cursor = _178_
+    elseif true then
+      local _ = _177_
+      local function _179_()
+        return nil
+      end
+      unhighlight_thing_under_cursor = _179_
     else
       unhighlight_thing_under_cursor = nil
     end
   end
   local show_hover_somehow
   do
-    local _158_ = client.name
-    if (_158_ == "hls") then
-      local function _159_(position)
-        local function _160_(_err, result, _ctx, _config)
+    local _181_ = client.name
+    if (_181_ == "hls") then
+      local function _182_(position)
+        local function _183_(_err, result, _ctx, _config)
           local contents
           do
-            local t_161_ = result
-            if (nil ~= t_161_) then
-              t_161_ = (t_161_).contents
+            local t_184_ = result
+            if (nil ~= t_184_) then
+              t_184_ = (t_184_).contents
             else
             end
-            contents = t_161_
+            contents = t_184_
           end
           if (not (contents == nil) and (type(contents) == "table") and ("markdown" == contents.kind)) then
             local line = extract_haskell_typesig_from_markdown(contents.value)
@@ -1663,49 +1744,49 @@ local function _138_(_135_)
             return nil
           end
         end
-        return vim.lsp.buf_request(buf, "textDocument/hover", position, _160_)
+        return vim.lsp.buf_request(buf, "textDocument/hover", position, _183_)
       end
-      show_hover_somehow = _159_
+      show_hover_somehow = _182_
     elseif true then
-      local _ = _158_
-      local function _165_()
+      local _ = _181_
+      local function _188_()
         return nil
       end
-      show_hover_somehow = _165_
+      show_hover_somehow = _188_
     else
       show_hover_somehow = nil
     end
   end
   local unshow_hover_somehow
   do
-    local _167_ = client.name
-    if (_167_ == "hls") then
-      local function _168_()
+    local _190_ = client.name
+    if (_190_ == "hls") then
+      local function _191_()
         return vim.api.nvim_buf_clear_namespace(buf, hover_namespace, 0, -1)
       end
-      unshow_hover_somehow = _168_
+      unshow_hover_somehow = _191_
     elseif true then
-      local _ = _167_
-      local function _169_()
+      local _ = _190_
+      local function _192_()
         return nil
       end
-      unshow_hover_somehow = _169_
+      unshow_hover_somehow = _192_
     else
       unshow_hover_somehow = nil
     end
   end
   local on_cursor_move
-  local function _171_()
+  local function _194_()
     if (vim.api.nvim_get_mode().mode == "n") then
-      local function _173_()
-        local _local_174_ = vim.api.nvim_win_get_cursor(0)
-        local row_1_auto = _local_174_[1]
-        local col_2_auto = _local_174_[2]
+      local function _196_()
+        local _local_197_ = vim.api.nvim_win_get_cursor(0)
+        local row_1_auto = _local_197_[1]
+        local col_2_auto = _local_197_[2]
         return {col = col_2_auto, row = row_1_auto}
       end
-      local _local_172_ = _173_()
-      local row = _local_172_["row"]
-      local col = _local_172_["col"]
+      local _local_195_ = _196_()
+      local row = _local_195_["row"]
+      local col = _local_195_["col"]
       local current_line = vim.api.nvim_get_current_line()
       local current_character = string.sub(current_line, (1 + col), (1 + col))
       if ((current_character ~= "") and (current_character ~= " ")) then
@@ -1720,27 +1801,27 @@ local function _138_(_135_)
       return nil
     end
   end
-  on_cursor_move = _171_
+  on_cursor_move = _194_
   vim.api.nvim_create_autocmd("CursorMoved", {buffer = buf, callback = on_cursor_move, group = augroup_name})
-  local function _180_(_177_)
-    local _arg_178_ = _177_
-    local _arg_179_ = _arg_178_["data"]
-    local diagnostics = _arg_179_["diagnostics"]
+  local function _203_(_200_)
+    local _arg_201_ = _200_
+    local _arg_202_ = _arg_201_["data"]
+    local diagnostics = _arg_202_["diagnostics"]
     return vim.fn.setqflist(vim.diagnostic.toqflist(diagnostics), "r")
   end
-  vim.api.nvim_create_autocmd("DiagnosticChanged", {buffer = buf, callback = _180_, group = augroup_name})
+  vim.api.nvim_create_autocmd("DiagnosticChanged", {buffer = buf, callback = _203_, group = augroup_name})
   vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
   return nil
 end
-vim.api.nvim_create_autocmd("LspAttach", {group = "mitchellwrosen", callback = _138_})
-local function _181_()
+vim.api.nvim_create_autocmd("LspAttach", {group = "mitchellwrosen", callback = _134_})
+local function _204_()
   return vim.keymap.set("n", "!", "qz")
 end
-vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {group = "mitchellwrosen", callback = _181_})
-local function _182_()
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {group = "mitchellwrosen", callback = _204_})
+local function _205_()
   return vim.keymap.set("n", "!", "q")
 end
-vim.api.nvim_create_autocmd("RecordingEnter", {group = "mitchellwrosen", callback = _182_})
+vim.api.nvim_create_autocmd("RecordingEnter", {group = "mitchellwrosen", callback = _205_})
 vim.keymap.set("n", "9", "@z")
 do
   local default_progress_handler = vim.lsp.handlers["$/progress"]
@@ -1752,78 +1833,78 @@ do
       local token = result.token
       local value = result.value
       local start_ms = nil
-      local _183_ = value.kind
-      if (_183_ == "begin") then
+      local _206_ = value.kind
+      if (_206_ == "begin") then
         start_ms = vim.loop.now()
         if not notifications[client_id] then
           notifications[client_id] = {}
         else
         end
         local notification_id
-        local function _185_()
+        local function _208_()
           if value.title then
             return (" " .. value.title)
           else
             return ""
           end
         end
-        local function _186_()
+        local function _209_()
           if value.message then
             return (" " .. value.message)
           else
             return ""
           end
         end
-        notification_id = vim.notify(("        | " .. client.name .. ":" .. _185_() .. _186_()), vim.log.levels.INFO, {render = "minimal", timeout = false})
+        notification_id = vim.notify(("        | " .. client.name .. ":" .. _208_() .. _209_()), vim.log.levels.INFO, {render = "minimal", timeout = false})
         do end (notifications)[client_id][token] = {id = notification_id, ["start-ms"] = start_ms, title = value.title}
-      elseif (_183_ == "report") then
-        local _local_187_ = notifications[client_id][token]
-        local old_notification_id = _local_187_["id"]
-        local title = _local_187_["title"]
+      elseif (_206_ == "report") then
+        local _local_210_ = notifications[client_id][token]
+        local old_notification_id = _local_210_["id"]
+        local title = _local_210_["title"]
         local new_notification_id
-        local function _188_()
+        local function _211_()
           if title then
             return (" " .. title)
           else
             return ""
           end
         end
-        local function _189_()
+        local function _212_()
           if value.message then
             return (" " .. value.message)
           else
             return ""
           end
         end
-        new_notification_id = vim.notify(("        | " .. client.name .. ":" .. _188_() .. _189_()), vim.log.levels.INFO, {replace = old_notification_id})
+        new_notification_id = vim.notify(("        | " .. client.name .. ":" .. _211_() .. _212_()), vim.log.levels.INFO, {replace = old_notification_id})
         do end (notifications)[client_id][token]["id"] = new_notification_id
-      elseif (_183_ == "end") then
+      elseif (_206_ == "end") then
         local stop_ms = vim.loop.now()
-        local _local_190_ = notifications[client_id][token]
-        local notification_id = _local_190_["id"]
-        local start_ms0 = _local_190_["start-ms"]
-        local title = _local_190_["title"]
-        local function _191_()
+        local _local_213_ = notifications[client_id][token]
+        local notification_id = _local_213_["id"]
+        local start_ms0 = _local_213_["start-ms"]
+        local title = _local_213_["title"]
+        local function _214_()
           if title then
             return (" " .. title)
           else
             return ""
           end
         end
-        local function _192_()
+        local function _215_()
           if value.message then
             return (" " .. value.message)
           else
             return ""
           end
         end
-        local _193_
+        local _216_
         if ((stop_ms - start_ms0) < 100) then
-          _193_ = 0
+          _216_ = 0
         else
-          _193_ = 3000
+          _216_ = 3000
         end
-        vim.notify((string.format("%6.2fs", ((stop_ms - start_ms0) / 1000)) .. " | " .. client.name .. ":" .. _191_() .. _192_()), vim.log.levels.INFO, {replace = notification_id, timeout = _193_})
+        vim.notify((string.format("%6.2fs", ((stop_ms - start_ms0) / 1000)) .. " | " .. client.name .. ":" .. _214_() .. _215_()), vim.log.levels.INFO, {replace = notification_id, timeout = _216_})
         do end (notifications)[client_id][token] = nil
       else
       end
@@ -1834,80 +1915,96 @@ do
   end
   vim.lsp.handlers["$/progress"] = my_progress_handler
 end
+local function _220_(_, references, context, _0)
+  if references then
+    local client_id = context.client_id
+    local client = vim.lsp.get_client_by_id(client_id)
+    if client then
+      local lsp_util = require("vim.lsp.util")
+      vim.b["document-highlights"] = references
+      return lsp_util.buf_highlight_references(context.bufnr, references, client.offset_encoding)
+    else
+      return nil
+    end
+  else
+    return nil
+  end
+end
+vim.lsp.handlers["textDocument/documentHighlight"] = _220_
 local lsp_capabilities
 do
   local cmp_nvim_lsp = require("cmp_nvim_lsp")
   lsp_capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
 end
-local function _197_()
+local function _223_()
   local initialize_notification_id = nil
   local start_ms = nil
-  local function _198_(_params_2_auto, _config_3_auto)
+  local function _224_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
     initialize_notification_id = vim.notify(("        | " .. "fennel-ls" .. ": Initializing"), vim.log.levels.INFO, {render = "minimal", timeout = false})
     return nil
   end
-  local function _199_(_client_2_auto, _result_3_auto)
+  local function _225_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
     return vim.notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "fennel-ls" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  return vim.lsp.start({before_init = _198_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel-ls", on_init = _199_, root_dir = ".", settings = {}})
+  return vim.lsp.start({before_init = _224_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel-ls", on_init = _225_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _197_, group = "mitchellwrosen"})
-local function _200_()
-  local _201_
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _223_, group = "mitchellwrosen"})
+local function _226_()
+  local _227_
   do
     local acc_2_auto = false
     for name_3_auto, typ_4_auto in vim.fs.dir(".") do
       if acc_2_auto then break end
       acc_2_auto = (((typ_4_auto == "file") and ((name_3_auto == "cabal.project") or (name_3_auto == "stack.yaml") or string.match(name_3_auto, "%.cabal$"))) or acc_2_auto)
     end
-    _201_ = acc_2_auto
+    _227_ = acc_2_auto
   end
-  if _201_ then
+  if _227_ then
     local initialize_notification_id = nil
     local start_ms = nil
-    local function _202_(_params_2_auto, _config_3_auto)
+    local function _228_(_params_2_auto, _config_3_auto)
       start_ms = vim.loop.now()
       initialize_notification_id = vim.notify(("        | " .. "hls" .. ": Initializing"), vim.log.levels.INFO, {render = "minimal", timeout = false})
       return nil
     end
-    local function _203_(_client_2_auto, _result_3_auto)
+    local function _229_(_client_2_auto, _result_3_auto)
       local stop_ms_4_auto = vim.loop.now()
       return vim.notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "hls" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
     end
-    return vim.lsp.start({before_init = _202_, capabilities = lsp_capabilities, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "hls", on_init = _203_, root_dir = ".", settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
+    return vim.lsp.start({before_init = _228_, capabilities = lsp_capabilities, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "hls", on_init = _229_, root_dir = ".", settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _200_, group = "mitchellwrosen"})
-local function _205_()
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _226_, group = "mitchellwrosen"})
+local function _231_()
   local initialize_notification_id = nil
   local start_ms = nil
-  local function _206_(_params_2_auto, _config_3_auto)
+  local function _232_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
     initialize_notification_id = vim.notify(("        | " .. "zls" .. ": Initializing"), vim.log.levels.INFO, {render = "minimal", timeout = false})
     return nil
   end
-  local function _207_(_client_2_auto, _result_3_auto)
+  local function _233_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
     return vim.notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "zls" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  return vim.lsp.start({before_init = _206_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zls", on_init = _207_, root_dir = ".", settings = {}})
+  return vim.lsp.start({before_init = _232_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zls", on_init = _233_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _205_, group = "mitchellwrosen"})
-local function _208_()
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _231_, group = "mitchellwrosen"})
+local function _234_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
   return vim.cmd.startinsert()
 end
-vim.api.nvim_create_autocmd("TermOpen", {group = "mitchellwrosen", callback = _208_})
-local function _209_()
+vim.api.nvim_create_autocmd("TermOpen", {group = "mitchellwrosen", callback = _234_})
+local function _235_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     return vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})
   else
     return nil
   end
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _209_, group = "mitchellwrosen"})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _235_, group = "mitchellwrosen"})

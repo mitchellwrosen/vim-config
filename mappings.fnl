@@ -24,8 +24,7 @@
 (vim.keymap.set "v" "/" "/\\v")
 
 ; Don't highlight matches *and* jump at the same time; only highlight. Also don't mess with the jumplist.
-(vim.keymap.set
-  "n"
+(nmap
   "*"
   (fn []
     (vim.cmd "keepjumps normal! mz*`z")
@@ -133,8 +132,7 @@
 ;
 ; the docs warn to only use bwipeout if you "really know what you are doing" - but I don't really use marks or
 ; buffer-local options much, and I'm fine with them going away when I close a buffer
-(vim.keymap.set
-  "n"
+(nmap
   "q"
   (fn []
     (local buffers (vim.fn.getbufinfo))
@@ -148,8 +146,7 @@
 )
 
 ; Q to save session and quit
-(vim.keymap.set
-  "n"
+(nmap
   "Q"
   (fn []
     (when (> (vim.fn.argc) 0) (vim.cmd "%argdel")) ; throw away arglist before saving session

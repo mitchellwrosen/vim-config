@@ -3,7 +3,7 @@
 (vim.loader.enable)
 
 (local { : file-exists } (require "stdlib"))
-(import-macros { : get-cursor : in-normal-mode : nmap } "nvim-stdlibm")
+(import-macros { : get-cursor : in-normal-mode : nmap : set-cursor } "nvim-stdlibm")
 
 (include "options")
 (include "plugins")
@@ -154,6 +154,61 @@
     (vim.cmd "highlight! link DiagnosticVirtualTextInfo DiagnosticSignInfo")
     (vim.cmd "highlight! link DiagnosticVirtualTextWarn DiagnosticSignWarn")
 
+    ; overwrite n/N mappings to go to next/previous highlight, which we also set/clear on cursor move
+    ; this makes it convenient to cycle through the occurrences of the thing under the cursor
+    (fn next-reference-index [ { :row cursor-row :col cursor-col } references]
+      (var ref-ix nil)
+      (each [ i ref (ipairs references) &until ref-ix ]
+        (local { :range { :start { :line ref-row0 :character ref-col } } } ref)
+        (local ref-row (+ ref-row0 1))
+        (when (or (> ref-row cursor-row) (and (= ref-row cursor-row) (> ref-col cursor-col)))
+          (set ref-ix i)
+        )
+      )
+      (if ref-ix ref-ix 1)
+    )
+    (when (client.supports_method "textDocument/documentHighlight")
+      (nmap
+        "n"
+        (fn []
+          (local references vim.b.document-highlights)
+          (if references
+            (when (> (length references) 1)
+              (local next-ref-ix (next-reference-index (get-cursor) references))
+              (local { :range { :start { :line next-ref-row :character next-ref-col } } } (. references next-ref-ix))
+              (set-cursor { :row (+ next-ref-row 1) :col next-ref-col })
+            )
+            (vim.cmd "normal! nzz") ; kept manually in sync with mappings.fnl
+          )
+        )
+      )
+      (nmap
+        "N"
+        (fn []
+          (local references vim.b.document-highlights)
+          (if references
+            (do
+              (local num-refs (length references))
+              (when (> num-refs 1)
+                (local next-ref-ix (next-reference-index (get-cursor) references))
+                (local prev-ref-ix
+                  (if
+                    (= next-ref-ix 1)
+                    (- num-refs 1)
+                    (= next-ref-ix 2)
+                    num-refs
+                    (- next-ref-ix 2))
+                  )
+                (local { :range { :start { :line prev-ref-row :character prev-ref-col } } } (. references prev-ref-ix))
+                (set-cursor { :row (+ prev-ref-row 1) :col prev-ref-col })
+              )
+            )
+            (vim.cmd "normal! Nzz") ; kept manually in sync with mappings.fnl
+          )
+        )
+      )
+    )
+
     (when (client.supports_method "textDocument/codeAction")
       (nmap "<Space>la" vim.lsp.buf.code_action { :buffer buf :desc "Apply code action" :silent true })
     )
@@ -230,19 +285,19 @@
         "hls"
           (fn [position]
             (vim.lsp.buf.clear_references)
-            (vim.lsp.buf_request
-              buf
-              "textDocument/documentHighlight"
-              position
-              nil
-            )
+            (set vim.b.document-highlights nil)
+            (vim.lsp.buf_request buf "textDocument/documentHighlight" position nil)
           )
         _ (fn [] nil)
       )
     )
     (local unhighlight-thing-under-cursor
       (case client.name
-        "hls" (fn [] (vim.lsp.buf.clear_references))
+        "hls"
+          (fn []
+            (vim.lsp.buf.clear_references)
+            (set vim.b.document-highlights nil)
+          )
         _ (fn [] nil)
       )
     )
@@ -427,6 +482,23 @@
     (default-progress-handler err result context config)
   )
   (tset vim.lsp.handlers "$/progress" my-progress-handler)
+)
+
+; default "textDocument/documentHighlight" handler, but save the ranges in a buffer-local variable
+(tset
+  vim.lsp.handlers
+  "textDocument/documentHighlight"
+  (fn [ _ references context _ ]
+    (when references
+      (local client-id context.client_id)
+      (local client (vim.lsp.get_client_by_id client-id))
+      (when client
+        (local lsp-util (require "vim.lsp.util"))
+        (set vim.b.document-highlights references)
+        (lsp-util.buf_highlight_references context.bufnr references client.offset_encoding)
+      )
+    )
+  )
 )
 
 ; lsp capabilities: defaults plus whatever cmp_nvim_lsp wants to say it can do

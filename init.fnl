@@ -156,6 +156,10 @@
 
     ; overwrite n/N mappings to go to next/previous highlight, which we also set/clear on cursor move
     ; this makes it convenient to cycle through the occurrences of the thing under the cursor
+    ;
+    ; if we're cycling through a /search, though, make that take priority.
+    ; neovim doesn't really support "is searching" (https://github.com/neovim/neovim/issues/18879)
+    ; happily, though, vim-cool does! heh
     (fn next-reference-index [ { :row cursor-row :col cursor-col } references]
       (var ref-ix nil)
       (each [ i ref (ipairs references) &until ref-ix ]
@@ -172,7 +176,7 @@
         "n"
         (fn []
           (local references vim.b.document-highlights)
-          (if references
+          (if (and (= vim.g.cool_is_searching 0) references)
             (when (> (length references) 1)
               (local next-ref-ix (next-reference-index (get-cursor) references))
               (local { :range { :start { :line next-ref-row :character next-ref-col } } } (. references next-ref-ix))
@@ -186,7 +190,7 @@
         "N"
         (fn []
           (local references vim.b.document-highlights)
-          (if references
+          (if (and (= vim.g.cool_is_searching 0) references)
             (do
               (local num-refs (length references))
               (when (> num-refs 1)

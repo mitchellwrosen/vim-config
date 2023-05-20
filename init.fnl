@@ -184,6 +184,7 @@
               ; (vim.api.nvim_buf_set_mark 0 "'" cursor.row cursor.col {})
               (set-cursor { :row (+ next-ref-row 1) :col next-ref-col })
               (vim.cmd "normal! zz")
+              (set vim.b.moved-to-document-highlight true)
             )
             (vim.cmd "normal! nzz")
           )
@@ -209,6 +210,7 @@
                 (vim.api.nvim_feedkeys "m'" "nx" false)
                 (set-cursor { :row (+ prev-ref-row 1) :col prev-ref-col })
                 (vim.cmd "normal! zz")
+                (set vim.b.moved-to-document-highlight true)
               )
             )
             (vim.cmd "normal! Nzz")
@@ -350,7 +352,9 @@
 
     (local on-cursor-move
       (fn []
-        (when (in-normal-mode)
+        (local moved-to-document-highlight vim.b.moved-to-document-highlight)
+        (set vim.b.moved-to-document-highlight false)
+        (when (and (in-normal-mode) (not moved-to-document-highlight))
           (local { : row : col } (get-cursor))
           (local current-line (vim.api.nvim_get_current_line))
           (local current-character (string.sub current-line (+ 1 col) (+ 1 col)))

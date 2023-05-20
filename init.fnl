@@ -3,7 +3,10 @@
 (vim.loader.enable)
 
 (local { : file-exists } (require "stdlib"))
-(import-macros { : get-cursor : in-normal-mode : nmap : set-cursor } "nvim-stdlibm")
+(import-macros { : create-autocmd : get-cursor : in-normal-mode : nmap : set-cursor } "nvim-stdlibm")
+
+; create-autocmd macro needs this :sweat-smile:
+(vim.api.nvim_create_augroup "mitchellwrosen" {})
 
 (include "options")
 (include "plugins")
@@ -29,14 +32,6 @@
     ; don't put diagnostics inline, since we use lsp_lines
     :virtual_text false
   }
-)
-
-(vim.api.nvim_create_augroup "mitchellwrosen" {})
-
-(macro create-autocmd [events opts callback]
-  (tset opts "callback" callback)
-  (tset opts "group" "mitchellwrosen")
-  `(vim.api.nvim_create_autocmd ,events ,opts)
 )
 
 ; Restore cursor position on open

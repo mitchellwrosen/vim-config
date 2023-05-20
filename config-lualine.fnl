@@ -55,8 +55,13 @@
     :sections
       { :lualine_a
           [ (fn []
-              (local mode-code (. (vim.api.nvim_get_mode) "mode"))
-              (or (. mode-code-to-name mode-code) mode-code)
+              (if vim.g.mitchell-leaping
+                "leap"
+                (do
+                  (local mode-code (. (vim.api.nvim_get_mode) "mode"))
+                  (or (. mode-code-to-name mode-code) mode-code)
+                )
+              )
             )
           ]
         :lualine_b [ "branch" ]
@@ -106,4 +111,7 @@
   }
 )
 
-(fn [] ((. (require "lualine") "setup") config))
+(fn []
+  (local lualine (require "lualine"))
+  (lualine.setup config)
+)

@@ -1,7 +1,14 @@
 ;; fennel-ls: macro-file
 
 ; position : { row : int, col : int } (1,0)-indexed
+
 ; region : { start : position, end : position }
+
+(fn create-autocmd [events opts callback]
+  (tset opts "callback" callback)
+  (tset opts "group" "mitchellwrosen")
+  `(vim.api.nvim_create_autocmd ,events ,opts)
+)
 
 (fn get-cursor []
   `(do
@@ -72,6 +79,7 @@
 )
 
 {
+  : create-autocmd
   : get-cursor
   : get-previous-yank
   : get-region

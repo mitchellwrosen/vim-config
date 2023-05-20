@@ -1,3 +1,5 @@
+(import-macros { : create-autocmd } "nvim-stdlibm")
+
 (fn []
   (local leap (require "leap"))
   (set leap.opts.equivalence_classes
@@ -29,6 +31,26 @@
           :target_windows [ (vim.api.nvim_get_current_win) ]
         }
       )
+    )
+  )
+
+  (create-autocmd
+    "User"
+    { :pattern "LeapEnter" }
+    (fn []
+      (set vim.g.mitchell-leaping true)
+      (local lualine (require "lualine"))
+      (lualine.refresh { :place [ "statusline" ] })
+    )
+  )
+
+  (create-autocmd
+    "User"
+    { :pattern "LeapLeave" }
+    (fn []
+      (set vim.g.mitchell-leaping false)
+      (local lualine (require "lualine"))
+      (lualine.refresh { :place [ "statusline" ] })
     )
   )
 )

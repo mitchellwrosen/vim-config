@@ -138,6 +138,7 @@
 )
 
 (local hover-namespace (vim.api.nvim_create_namespace "hover"))
+(macro clear-hover-namespace [buf] `(vim.api.nvim_buf_clear_namespace ,buf hover-namespace 0 -1))
 
 (create-autocmd
   "LspAttach"
@@ -325,7 +326,7 @@
                 (local contents (?. result :contents))
                 (when (and (not (= contents nil)) (= (type contents) "table") (= "markdown" contents.kind))
                   (local line (extract-haskell-typesig-from-markdown contents.value))
-                  (vim.api.nvim_buf_clear_namespace buf hover-namespace 0 -1)
+                  (clear-hover-namespace buf)
                   (when line
                     (vim.api.nvim_buf_set_extmark
                       buf
@@ -345,7 +346,7 @@
     )
     (local unshow-hover-somehow
       (case client.name
-        "hls" (fn [] (vim.api.nvim_buf_clear_namespace buf hover-namespace 0 -1))
+        "hls" (fn [] (clear-hover-namespace buf))
         _ (fn [] nil)
       )
     )

@@ -287,7 +287,7 @@ end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _42_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {operators = false, z = false, windows = false, g = false, text_objects = false, nav = false, motions = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {text_objects = false, z = false, operators = false, g = false, nav = false, motions = false, windows = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _43_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -1562,10 +1562,13 @@ local function _134_(_131_)
           local next_ref_row = _local_147_["line"]
           local next_ref_col = _local_147_["character"]
           vim.api.nvim_feedkeys("m'", "nx", false)
-          local _local_148_ = {row = (next_ref_row + 1), col = next_ref_col}
-          local col_22_auto = _local_148_["col"]
-          local row_21_auto = _local_148_["row"]
-          return vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
+          do
+            local _local_148_ = {row = (next_ref_row + 1), col = next_ref_col}
+            local col_22_auto = _local_148_["col"]
+            local row_21_auto = _local_148_["row"]
+            vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
+          end
+          return vim.cmd("normal! zz")
         else
           return nil
         end
@@ -1608,10 +1611,13 @@ local function _134_(_131_)
           local prev_ref_row = _local_158_["line"]
           local prev_ref_col = _local_158_["character"]
           vim.api.nvim_feedkeys("m'", "nx", false)
-          local _local_159_ = {row = (prev_ref_row + 1), col = prev_ref_col}
-          local col_22_auto = _local_159_["col"]
-          local row_21_auto = _local_159_["row"]
-          return vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
+          do
+            local _local_159_ = {row = (prev_ref_row + 1), col = prev_ref_col}
+            local col_22_auto = _local_159_["col"]
+            local row_21_auto = _local_159_["row"]
+            vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
+          end
+          return vim.cmd("normal! zz")
         else
           return nil
         end
@@ -1958,7 +1964,7 @@ local function _224_()
   end
   return vim.lsp.start({before_init = _225_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel-ls", on_init = _226_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", group = "mitchellwrosen", callback = _224_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _224_, group = "mitchellwrosen"})
 local function _227_()
   local _228_
   do
@@ -1986,7 +1992,7 @@ local function _227_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _227_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _227_, group = "mitchellwrosen"})
 local function _232_()
   local initialize_notification_id = nil
   local start_ms = nil
@@ -2001,7 +2007,7 @@ local function _232_()
   end
   return vim.lsp.start({before_init = _233_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zls", on_init = _234_, root_dir = ".", settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", group = "mitchellwrosen", callback = _232_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _232_, group = "mitchellwrosen"})
 local function _235_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})

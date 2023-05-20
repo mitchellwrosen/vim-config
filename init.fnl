@@ -183,8 +183,9 @@
               ; https://github.com/neovim/neovim/issues/17861
               ; (vim.api.nvim_buf_set_mark 0 "'" cursor.row cursor.col {})
               (set-cursor { :row (+ next-ref-row 1) :col next-ref-col })
+              (vim.cmd "normal! zz")
             )
-            (vim.cmd "normal! nzz") ; kept manually in sync with mappings.fnl
+            (vim.cmd "normal! nzz")
           )
         )
       )
@@ -207,9 +208,10 @@
                 (local { :range { :start { :line prev-ref-row :character prev-ref-col } } } (. references prev-ref-ix))
                 (vim.api.nvim_feedkeys "m'" "nx" false)
                 (set-cursor { :row (+ prev-ref-row 1) :col prev-ref-col })
+                (vim.cmd "normal! zz")
               )
             )
-            (vim.cmd "normal! Nzz") ; kept manually in sync with mappings.fnl
+            (vim.cmd "normal! Nzz")
           )
         )
       )

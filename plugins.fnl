@@ -51,7 +51,7 @@
     { :name "commentary" :url "https://github.com/tpope/vim-commentary" :commit "627308e30639be3e2d5402808ce18690557e8292" :event "VeryLazy" :config (fn [] nil) }
 
     ; automatically unhighlight when cursor moves
-    { :name "cool" :url "https://github.com/romainl/vim-cool" :commit "27ad4ecf7532b750fadca9f36e1c5498fc225af2" :event "VeryLazy" :config (fn [] nil) }
+    { :name "cool" :url "https://github.com/romainl/vim-cool" :commit "80536b9f2e23292708a64f2e7bcf5e596f9faf24" :event "VeryLazy" :config (fn [] nil) }
 
     ; highlight colorcolumn in insert mode
     { :name "deadcolumn" :url "https://github.com/Bekaboo/deadcolumn.nvim" :commit "8140fd7cface9592a44b3151203fc6ca95ad9598" :event "InsertEnter" :config (include "config-deadcolumn") }

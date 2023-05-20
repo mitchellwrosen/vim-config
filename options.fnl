@@ -27,7 +27,7 @@
 (set vim.o.smartindent true) ; smart autoindenting when starting a new line
 (set vim.o.softtabstop 2)
 (set vim.o.startofline false) ; don't jump cursor to start of line when moving
-(set vim.o.synmaxcol 200) ; dont bother syntax-highlighting past this column
+(set vim.o.synmaxcol 300) ; dont bother syntax-highlighting past this column
 (set vim.o.termguicolors true)
 (set vim.o.timeoutlen 1000) ; only wait this many ms for key sequence to complete
 (set vim.o.title true) ; put filename in window title

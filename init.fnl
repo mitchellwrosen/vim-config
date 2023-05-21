@@ -287,24 +287,32 @@
     ; highlight other occurrences of the thing under the cursor
     ; the colors are determined by LspReferenceText, etc. highlight groups
     (local highlight-thing-under-cursor
-      (case client.name
-        "hls"
+      (do
+        (local do-highlight
           (fn [position]
             (vim.lsp.buf.clear_references)
             (set vim.b.document-highlights nil)
             (vim.lsp.buf_request buf "textDocument/documentHighlight" position nil)
           )
-        _ (fn [] nil)
+        )
+        (case client.name
+          "hls" do-highlight
+          _ (fn [] nil)
+        )
       )
     )
     (local unhighlight-thing-under-cursor
-      (case client.name
-        "hls"
+      (do
+        (local do-unhighlight
           (fn []
             (vim.lsp.buf.clear_references)
             (set vim.b.document-highlights nil)
           )
-        _ (fn [] nil)
+        )
+        (case client.name
+          "hls" do-unhighlight
+          _ (fn [] nil)
+        )
       )
     )
 

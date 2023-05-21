@@ -305,7 +305,7 @@ end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _45_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {operators = false, nav = false, z = false, windows = false, text_objects = false, g = false, motions = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {nav = false, windows = false, text_objects = false, g = false, motions = false, operators = false, z = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _46_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -1457,18 +1457,18 @@ local function _120_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, callback = _121_, group = "mitchellwrosen"})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, group = "mitchellwrosen", callback = _121_})
 end
-vim.api.nvim_create_autocmd("BufRead", {callback = _120_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _120_})
 local function _123_()
   vim.bo.modifiable = not vim.bo.readonly
   return nil
 end
-vim.api.nvim_create_autocmd("BufReadPost", {callback = _123_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("BufReadPost", {group = "mitchellwrosen", callback = _123_})
 local function _124_()
   return vim.highlight.on_yank({higroup = "IncSearch", timeout = 300})
 end
-vim.api.nvim_create_autocmd("TextYankPost", {callback = _124_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("TextYankPost", {group = "mitchellwrosen", callback = _124_})
 local function _125_()
   if (vim.fn.getcmdwintype() == "") then
     return vim.cmd.checktime()
@@ -1476,7 +1476,7 @@ local function _125_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _125_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {group = "mitchellwrosen", callback = _125_})
 local function _127_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
     local view = vim.fn.winsaveview()
@@ -1487,7 +1487,7 @@ local function _127_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _127_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {group = "mitchellwrosen", callback = _127_})
 local extract_haskell_typesig_from_markdown
 local function _129_(str0)
   local str = str0
@@ -1714,16 +1714,18 @@ local function _137_(_134_)
   vim.api.nvim_create_augroup(augroup_name, {})
   local highlight_thing_under_cursor
   do
-    local _177_ = client.name
-    if (_177_ == "hls") then
-      local function _178_(position)
-        vim.lsp.buf.clear_references()
-        vim.b["document-highlights"] = nil
-        return vim.lsp.buf_request(buf, "textDocument/documentHighlight", position, nil)
-      end
-      highlight_thing_under_cursor = _178_
+    local do_highlight
+    local function _177_(position)
+      vim.lsp.buf.clear_references()
+      vim.b["document-highlights"] = nil
+      return vim.lsp.buf_request(buf, "textDocument/documentHighlight", position, nil)
+    end
+    do_highlight = _177_
+    local _178_ = client.name
+    if (_178_ == "hls") then
+      highlight_thing_under_cursor = do_highlight
     elseif true then
-      local _ = _177_
+      local _ = _178_
       local function _179_()
         return nil
       end
@@ -1734,16 +1736,18 @@ local function _137_(_134_)
   end
   local unhighlight_thing_under_cursor
   do
-    local _181_ = client.name
-    if (_181_ == "hls") then
-      local function _182_()
-        vim.lsp.buf.clear_references()
-        vim.b["document-highlights"] = nil
-        return nil
-      end
-      unhighlight_thing_under_cursor = _182_
+    local do_unhighlight
+    local function _181_()
+      vim.lsp.buf.clear_references()
+      vim.b["document-highlights"] = nil
+      return nil
+    end
+    do_unhighlight = _181_
+    local _182_ = client.name
+    if (_182_ == "hls") then
+      unhighlight_thing_under_cursor = do_unhighlight
     elseif true then
-      local _ = _181_
+      local _ = _182_
       local function _183_()
         return nil
       end
@@ -1853,15 +1857,15 @@ local function _137_(_134_)
   vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
   return nil
 end
-vim.api.nvim_create_autocmd("LspAttach", {callback = _137_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("LspAttach", {group = "mitchellwrosen", callback = _137_})
 local function _209_()
   return vim.keymap.set("n", "!", "qz")
 end
-vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _209_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {group = "mitchellwrosen", callback = _209_})
 local function _210_()
   return vim.keymap.set("n", "!", "q")
 end
-vim.api.nvim_create_autocmd("RecordingEnter", {callback = _210_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("RecordingEnter", {group = "mitchellwrosen", callback = _210_})
 vim.keymap.set("n", "9", "@z")
 do
   local default_progress_handler = vim.lsp.handlers["$/progress"]
@@ -2062,7 +2066,7 @@ local function _244_()
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
   return vim.cmd.startinsert()
 end
-vim.api.nvim_create_autocmd("TermOpen", {callback = _244_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("TermOpen", {group = "mitchellwrosen", callback = _244_})
 local function _245_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     return vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})

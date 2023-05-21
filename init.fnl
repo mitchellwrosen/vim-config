@@ -546,6 +546,35 @@
   )
 )
 
+; (lsp.elmls.setup
+;   { :capabilities (capabilities lsp.elmls)
+;     :on_attach
+;       (lambda [client buf]
+;         ; https://github.com/elm-tooling/elm-language-server/issues/503
+;         (when client.config.flags (set client.config.flags.allow_incremental_sync true))
+;       )
+;   }
+; )
+(create-autocmd
+  "FileType"
+  { :pattern "elm" }
+  (fn []
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "elm")
+        :capabilities lsp-capabilities
+        :cmd ["elm-language-server"]
+        :init_options { :elmAnalyseTrigger "change" }
+        :name "elm"
+        :on_init (make-on-init start-ms initialize-notification-id "elm")
+        :root_dir (vim.loop.cwd)
+        :settings {}
+      }
+    )
+  )
+)
+
 (create-autocmd
   "FileType"
   { :pattern "fennel" }
@@ -554,12 +583,12 @@
     (var start-ms nil)
     ; using commit f4298b02be9d3af8d27bba67dc129b9a1014fc55 of https://git.sr.ht/~xerool/fennel-ls
     (vim.lsp.start
-      { :before_init (make-before-init start-ms initialize-notification-id "fennel-ls")
+      { :before_init (make-before-init start-ms initialize-notification-id "fennel")
         :capabilities lsp-capabilities
         :cmd ["fennel-ls"]
-        :name "fennel-ls"
-        :on_init (make-on-init start-ms initialize-notification-id "fennel-ls")
-        :root_dir "."
+        :name "fennel"
+        :on_init (make-on-init start-ms initialize-notification-id "fennel")
+        :root_dir (vim.loop.cwd)
         :settings {}
       }
     )
@@ -591,13 +620,13 @@
       (var initialize-notification-id nil)
       (var start-ms nil)
       (vim.lsp.start
-        { :before_init (make-before-init start-ms initialize-notification-id "hls")
+        { :before_init (make-before-init start-ms initialize-notification-id "haskell")
           :capabilities lsp-capabilities
           :cmd ["haskell-language-server-wrapper" "--lsp"]
           ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
-          :name "hls"
-          :on_init (make-on-init start-ms initialize-notification-id "hls")
-          :root_dir "."
+          :name "haskell"
+          :on_init (make-on-init start-ms initialize-notification-id "haskell")
+          :root_dir (vim.loop.cwd)
           :settings
             { :haskell
                 { :formattingProvider "ormolu"
@@ -620,12 +649,12 @@
     (var initialize-notification-id nil)
     (var start-ms nil)
     (vim.lsp.start
-      { :before_init (make-before-init start-ms initialize-notification-id "zls")
+      { :before_init (make-before-init start-ms initialize-notification-id "zig")
         :capabilities lsp-capabilities
         :cmd [ "zls" ]
-        :name "zls"
-        :on_init (make-on-init start-ms initialize-notification-id "zls")
-        :root_dir "."
+        :name "zig"
+        :on_init (make-on-init start-ms initialize-notification-id "zig")
+        :root_dir (vim.loop.cwd)
         :settings {}
       }
     )
@@ -665,13 +694,3 @@
     )
   )
 )
-
-; (lsp.elmls.setup
-;   { :capabilities (capabilities lsp.elmls)
-;     :on_attach
-;       (lambda [client buf]
-;         ; https://github.com/elm-tooling/elm-language-server/issues/503
-;         (when client.config.flags (set client.config.flags.allow_incremental_sync true))
-;       )
-;   }
-; )

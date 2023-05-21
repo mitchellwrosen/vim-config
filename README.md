@@ -1,5 +1,19 @@
 ### Vim tips
 
+### LSP debugging
+
+1. Crank up the log level.
+
+    ```fennel
+    (vim.lsp.set_log_level "TRACE")
+    ```
+
+2. Read the logs at `(vim.lsp.get_log_path)`:
+
+    ````
+    tail -f ~/.local/state/nvim/lsp.log
+    ```
+
 ### Getting stuff done in Lua with the `neovim` API
 
 #### Concatenate an array of strings

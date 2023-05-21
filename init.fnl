@@ -567,6 +567,11 @@
         :cmd ["elm-language-server"]
         :init_options { :elmAnalyseTrigger "change" }
         :name "elm"
+        ; https://github.com/elm-tooling/elm-language-server/issues/503
+        :on_attach
+          (fn [client _buf]
+            (when client.config.flags (set client.config.flags.allow_incremental_sync true))
+          )
         :on_init (make-on-init start-ms initialize-notification-id "elm")
         :root_dir (vim.loop.cwd)
         :settings {}

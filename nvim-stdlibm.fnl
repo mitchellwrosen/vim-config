@@ -58,10 +58,10 @@
   `(= (. (vim.api.nvim_get_mode) :mode) "n")
 )
 
-; normal-mode mapping
-(fn nmap [lhs rhs opts]
-  `(vim.keymap.set "n" ,lhs ,rhs ,opts)
-)
+; shorter aliases for one-mode mappings
+(fn cmap [lhs rhs opts] `(vim.keymap.set "c" ,lhs ,rhs ,opts))
+(fn imap [lhs rhs opts] `(vim.keymap.set "i" ,lhs ,rhs ,opts))
+(fn nmap [lhs rhs opts] `(vim.keymap.set "n" ,lhs ,rhs ,opts))
 
 ; set a region of the current buffer
 (fn set-region [region lines]
@@ -79,11 +79,13 @@
 )
 
 {
+  : cmap
   : create-autocmd
   : get-cursor
   : get-previous-yank
   : get-region
   : get-visual-selection
+  : imap
   : in-normal-mode
   : nmap
   : set-cursor

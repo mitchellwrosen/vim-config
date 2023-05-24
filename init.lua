@@ -50,7 +50,6 @@ require("options")
 package.preload["plugins"] = package.preload["plugins"] or function(...)
   vim.g.loaded_2html_plugin = true
   vim.g.loaded_man = true
-  vim.g.loaded_netrwPlugin = true
   vim.g.loaded_tutor_mode_plugin = true
   vim.g.loaded_zipPlugin = true
   do
@@ -219,13 +218,13 @@ package.preload["config-leap"] = package.preload["config-leap"] or function(...)
       local lualine = require("lualine")
       return lualine.refresh({place = {"statusline"}})
     end
-    vim.api.nvim_create_autocmd("User", {pattern = "LeapEnter", group = "mitchellwrosen", callback = _27_})
+    vim.api.nvim_create_autocmd("User", {pattern = "LeapEnter", callback = _27_, group = "mitchellwrosen"})
     local function _28_()
       vim.g["mitchell-leaping"] = false
       local lualine = require("lualine")
       return lualine.refresh({place = {"statusline"}})
     end
-    return vim.api.nvim_create_autocmd("User", {pattern = "LeapLeave", group = "mitchellwrosen", callback = _28_})
+    return vim.api.nvim_create_autocmd("User", {pattern = "LeapLeave", callback = _28_, group = "mitchellwrosen"})
   end
   return _24_
 end
@@ -298,14 +297,14 @@ end
 package.preload["config-treesitter"] = package.preload["config-treesitter"] or function(...)
   local function _43_()
     local treesitter = require("nvim-treesitter.configs")
-    return treesitter.setup({highlight = {enable = true}, incremental_selection = {enable = true, keymaps = {node_incremental = "<Enter>", node_decremental = "<BS>", init_selection = false, scope_incremental = false}}, playground = {enable = true}})
+    return treesitter.setup({highlight = {enable = true}, incremental_selection = {enable = true, keymaps = {node_incremental = "<Enter>", node_decremental = "<BS>", scope_incremental = false, init_selection = false}}, playground = {enable = true}})
   end
   return _43_
 end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _45_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {g = false, z = false, text_objects = false, nav = false, windows = false, motions = false, operators = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {nav = false, motions = false, g = false, operators = false, text_objects = false, windows = false, z = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _46_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -2001,7 +2000,7 @@ local function _228_()
   end
   return vim.lsp.start({before_init = _229_, capabilities = lsp_capabilities, cmd = {"elm-language-server"}, init_options = {elmAnalyseTrigger = "change"}, name = "elm", on_attach = _230_, on_init = _232_, root_dir = vim.loop.cwd(), settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "elm", group = "mitchellwrosen", callback = _228_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "elm", callback = _228_, group = "mitchellwrosen"})
 local function _233_()
   local initialize_notification_id = nil
   local start_ms = nil
@@ -2016,7 +2015,7 @@ local function _233_()
   end
   return vim.lsp.start({before_init = _234_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel", on_init = _235_, root_dir = vim.loop.cwd(), settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", group = "mitchellwrosen", callback = _233_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _233_, group = "mitchellwrosen"})
 local function _236_()
   local _237_
   do
@@ -2044,7 +2043,7 @@ local function _236_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _236_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _236_, group = "mitchellwrosen"})
 local function _241_()
   local initialize_notification_id = nil
   local start_ms = nil
@@ -2059,7 +2058,7 @@ local function _241_()
   end
   return vim.lsp.start({before_init = _242_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _243_, root_dir = vim.loop.cwd(), settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", group = "mitchellwrosen", callback = _241_})
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _241_, group = "mitchellwrosen"})
 local function _244_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
@@ -2073,4 +2072,4 @@ local function _245_()
     return nil
   end
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, group = "mitchellwrosen", callback = _245_})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _245_, group = "mitchellwrosen"})

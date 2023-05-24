@@ -4,7 +4,6 @@
 
 (set vim.g.loaded_2html_plugin true)
 (set vim.g.loaded_man true)
-(set vim.g.loaded_netrwPlugin true)
 (set vim.g.loaded_tutor_mode_plugin true)
 (set vim.g.loaded_zipPlugin true)
 

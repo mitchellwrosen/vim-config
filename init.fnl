@@ -296,7 +296,7 @@
           )
         )
         (case client.name
-          "hls" do-highlight
+          "haskell" do-highlight
           _ (fn [] nil)
         )
       )
@@ -310,7 +310,7 @@
           )
         )
         (case client.name
-          "hls" do-unhighlight
+          "haskell" do-unhighlight
           _ (fn [] nil)
         )
       )
@@ -318,7 +318,7 @@
 
     (local show-hover-somehow
       (case client.name
-        "hls"
+        "haskell"
           (fn [position]
             ; try to put a type sig in the virtual text area
             (vim.lsp.buf_request
@@ -349,7 +349,7 @@
     )
     (local unshow-hover-somehow
       (case client.name
-        "hls" (fn [] (clear-hover-namespace buf))
+        "haskell" (fn [] (clear-hover-namespace buf))
         _ (fn [] nil)
       )
     )

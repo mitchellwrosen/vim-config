@@ -297,14 +297,14 @@ end
 package.preload["config-treesitter"] = package.preload["config-treesitter"] or function(...)
   local function _43_()
     local treesitter = require("nvim-treesitter.configs")
-    return treesitter.setup({highlight = {enable = true}, incremental_selection = {enable = true, keymaps = {node_incremental = "<Enter>", node_decremental = "<BS>", init_selection = false, scope_incremental = false}}, playground = {enable = true}})
+    return treesitter.setup({highlight = {enable = true}, incremental_selection = {enable = true, keymaps = {node_incremental = "<Enter>", node_decremental = "<BS>", scope_incremental = false, init_selection = false}}, playground = {enable = true}})
   end
   return _43_
 end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _45_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {windows = false, operators = false, nav = false, motions = false, text_objects = false, z = false, g = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {text_objects = false, operators = false, motions = false, z = false, windows = false, nav = false, g = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _46_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -1559,8 +1559,8 @@ local function _137_(_134_)
   end
   if client.supports_method("textDocument/documentHighlight") then
     local function _145_()
-      local references = vim.b["document-highlights"]
-      if ((vim.v.hlsearch == 0) and references) then
+      local references = (vim.b["document-highlights"] or {})
+      if ((vim.v.hlsearch == 0) and not vim.tbl_isempty(references)) then
         if (#references > 1) then
           local next_ref_ix
           local _146_
@@ -1595,8 +1595,8 @@ local function _137_(_134_)
     end
     vim.keymap.set("n", "n", _145_)
     local function _154_()
-      local references = vim.b["document-highlights"]
-      if ((vim.v.hlsearch == 0) and references) then
+      local references = (vim.b["document-highlights"] or {})
+      if ((vim.v.hlsearch == 0) and not vim.tbl_isempty(references)) then
         local num_refs = #references
         if (num_refs > 1) then
           local next_ref_ix
@@ -1715,7 +1715,7 @@ local function _137_(_134_)
     local do_highlight
     local function _177_(position)
       vim.lsp.buf.clear_references()
-      vim.b["document-highlights"] = nil
+      vim.b["document-highlights"] = {}
       return vim.lsp.buf_request(buf, "textDocument/documentHighlight", position, nil)
     end
     do_highlight = _177_
@@ -1737,7 +1737,7 @@ local function _137_(_134_)
     local do_unhighlight
     local function _181_()
       vim.lsp.buf.clear_references()
-      vim.b["document-highlights"] = nil
+      vim.b["document-highlights"] = {}
       return nil
     end
     do_unhighlight = _181_

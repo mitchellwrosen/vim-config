@@ -168,8 +168,8 @@
       (nmap
         "n"
         (fn []
-          (local references vim.b.document-highlights)
-          (if (and (= vim.v.hlsearch 0) references)
+          (local references (or vim.b.document-highlights {}))
+          (if (and (= vim.v.hlsearch 0) (not (vim.tbl_isempty references)))
             (when (> (length references) 1)
               (local next-ref-ix (next-reference-index (get-cursor) references))
               (local { :range { :start { :line next-ref-row :character next-ref-col } } } (. references next-ref-ix))
@@ -189,8 +189,8 @@
       (nmap
         "N"
         (fn []
-          (local references vim.b.document-highlights)
-          (if (and (= vim.v.hlsearch 0) references)
+          (local references (or vim.b.document-highlights {}))
+          (if (and (= vim.v.hlsearch 0) (not (vim.tbl_isempty references)))
             (do
               (local num-refs (length references))
               (when (> num-refs 1)
@@ -291,7 +291,7 @@
         (local do-highlight
           (fn [position]
             (vim.lsp.buf.clear_references)
-            (set vim.b.document-highlights nil)
+            (set vim.b.document-highlights {})
             (vim.lsp.buf_request buf "textDocument/documentHighlight" position nil)
           )
         )
@@ -306,7 +306,7 @@
         (local do-unhighlight
           (fn []
             (vim.lsp.buf.clear_references)
-            (set vim.b.document-highlights nil)
+            (set vim.b.document-highlights {})
           )
         )
         (case client.name

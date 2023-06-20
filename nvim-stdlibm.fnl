@@ -58,10 +58,15 @@
   `(= (. (vim.api.nvim_get_mode) :mode) "n")
 )
 
-; shorter aliases for one-mode mappings
-(fn cmap [lhs rhs opts] `(vim.keymap.set "c" ,lhs ,rhs ,opts))
-(fn imap [lhs rhs opts] `(vim.keymap.set "i" ,lhs ,rhs ,opts))
-(fn nmap [lhs rhs opts] `(vim.keymap.set "n" ,lhs ,rhs ,opts))
+; shorter aliases for common mappings
+(fn cmap   [lhs rhs opts] `(vim.keymap.set "c"             ,lhs ,rhs ,opts))
+(fn imap   [lhs rhs opts] `(vim.keymap.set "i"             ,lhs ,rhs ,opts))
+(fn nmap   [lhs rhs opts] `(vim.keymap.set "n"             ,lhs ,rhs ,opts))
+(fn nomap  [lhs rhs opts] `(vim.keymap.set [ "n" "o" ]     ,lhs ,rhs ,opts))
+(fn noxmap [lhs rhs opts] `(vim.keymap.set [ "n" "o" "x" ] ,lhs ,rhs ,opts))
+(fn nxmap  [lhs rhs opts] `(vim.keymap.set [ "n" "x" ]     ,lhs ,rhs ,opts))
+(fn omap   [lhs rhs opts] `(vim.keymap.set "o"             ,lhs ,rhs ,opts))
+(fn xmap   [lhs rhs opts] `(vim.keymap.set "x"             ,lhs ,rhs ,opts))
 
 ; set a region of the current buffer
 (fn set-region [region lines]
@@ -88,6 +93,11 @@
   : imap
   : in-normal-mode
   : nmap
+  : nomap
+  : noxmap
+  : nxmap
+  : omap
   : set-cursor
   : set-region
+  : xmap
 }

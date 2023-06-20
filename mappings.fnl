@@ -7,6 +7,11 @@
     : get-visual-selection
     : imap
     : nmap
+    : nomap
+    : nxmap
+    : noxmap
+    : omap
+    : xmap
     : set-cursor
     : set-region
   }
@@ -14,8 +19,8 @@
 )
 
 ; Swap : and ;, since going to command-mode is (for me) more common than repeating the last f
-(vim.keymap.set [ "n" "v" ] ";" ":")
-(vim.keymap.set [ "n" "v" ] ":" ";")
+(nxmap ";" ":")
+(nxmap ":" ";")
 
 ; make ' jump back to mark's exact position, not just line
 ; this got more complicated after using which-key; simpler version left commented-out here
@@ -23,7 +28,7 @@
 
 ; very magic mode search
 (nmap "/" "/\\v")
-(vim.keymap.set "v" "/" "/\\v")
+(xmap "/" "/\\v")
 
 ; Don't highlight matches *and* jump at the same time; only highlight. Also don't mess with the jumplist.
 (nmap
@@ -44,20 +49,19 @@
 (nmap "k" "gk")
 
 ; HJKL to move around the file.
-(vim.keymap.set [ "n" "v" ] "J" "6j" { :remap true })
-(vim.keymap.set [ "n" "v" ] "K" "6k" { :remap true })
-(vim.keymap.set [ "n" "o" "v" ] "H" "^")
-(vim.keymap.set [ "n" "o" ] "L" "$")
-(vim.keymap.set "v" "L" "g_")
+(noxmap "J" "6j" { :remap true })
+(noxmap "K" "6k" { :remap true })
+(noxmap "H" "^")
+(nomap "L" "$")
+(xmap "L" "g_")
 
 ; when pasting over visual selection, don't copy that visual selection to the default register
-(vim.keymap.set "v" "p" "P")
+(xmap "p" "P")
 
 ; TODO document this
 ; TODO make it work for V mode too
 ; TODO X variant that leaves cursor at end of current region
-(vim.keymap.set
-  "x"
+(xmap
   "x"
   (fn []
     (local prev-region (get-previous-yank))
@@ -118,14 +122,14 @@
 )
 
 ; After visual mode yank, leave cursor at the end of the highlight
-(vim.keymap.set "v" "Y" "y`>")
+(xmap "Y" "y`>")
 
 ; U to redo
 (nmap "U" "<C-r>")
 
 ; Center after every search movement
-(vim.keymap.set [ "n" "v" ] "n" "nzz")
-(vim.keymap.set [ "n" "v" ] "N" "Nzz")
+(nxmap "n" "nzz")
+(nxmap "N" "Nzz")
 
 ; q to quit (with :bwipeout) the current buffer, or quit vim if there's only 1 listed buffer
 ;
@@ -168,14 +172,14 @@
 (nmap "M" "m`J``")
 
 ; inner/around line text objects
-(vim.keymap.set "v" "al" "$o0" { :silent true })
-(vim.keymap.set "o" "al" ":<C-u>normal val<CR>" { :silent true })
-(vim.keymap.set "v" "il" "g_o^" { :silent true })
-(vim.keymap.set "o" "il" ":<C-u>normal vil<CR>" { :silent true })
+(xmap "al" "$o0" { :silent true })
+(omap "al" ":<C-u>normal val<CR>" { :silent true })
+(xmap "il" "g_o^" { :silent true })
+(omap "il" ":<C-u>normal vil<CR>" { :silent true })
 
 ; Ctrl+S to search-and-replace in the file
 (nmap "<C-s>" ":%s/\\v//cg<Left><Left><Left><Left>")
-(vim.keymap.set "v" "<C-s>" ":s/\\v//cg<Left><Left><Left><Left>")
+(xmap "<C-s>" ":s/\\v//cg<Left><Left><Left><Left>")
 
 ; Move buffers with Ctrl+jk
 (nmap "<C-j>" ":bn<CR>" { :silent true })
@@ -306,7 +310,7 @@
 ; FIXME these are useful hotkeys but I'm rarely running repld. what to do?
 (nmap "<Space>s" "m`vip<Esc>:silent '<,'>w !repld-send --no-echo<CR>``" { :silent true })
 (nmap "<Space>S" "m`:silent w !repld-send<CR>``" { :silent true })
-(vim.keymap.set "v" "<Space>s" "m`<Esc>:silent '<,'>w !repld-send<CR>``" { :silent true })
+(xmap "<Space>s" "m`<Esc>:silent '<,'>w !repld-send<CR>``" { :silent true })
 
 ; <C-v> to paste from * register
 (imap "<C-v>" "<C-r>*")
@@ -344,8 +348,7 @@
 ;   \\)  end group
 ;   \\|  alternative
 (let [number-regex "0x\\x\\+\\|\\d\\+\\(\\.\\d\\+\\)\\?"]
-  (vim.keymap.set
-    "o"
+  (omap
     "n"
     (fn []
       (local matched-line (vim.fn.search number-regex "ceW"))
@@ -355,6 +358,15 @@
       )
     )
   )
+)
+
+; toggle background=dark/light
+(nmap
+  "<Space>tb"
+  (fn []
+    (set vim.o.background (if (= vim.o.background "dark") "light" "dark"))
+  )
+  { :desc "Toggle background dark/light" }
 )
 
 ; unicode goodies

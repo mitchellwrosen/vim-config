@@ -431,63 +431,80 @@
         (case value.kind
           "begin"
             (do
-              (set start-ms (vim.loop.now))
-              (when (not (. notifications client-id)) (tset notifications client-id {}))
-              (local
-                notification-id
-                (vim.notify
-                  (..
-                    "        | "
-                    client.name
-                    ":"
-                    (if value.title (.. " " value.title) "")
-                    (if value.message (.. " " value.message) "")
+              ; Ignore annoying "Processing" messages from HLS since they happen far too frequently
+              (local should-notify
+                (not
+                  (and
+                    (= client.name "haskell")
+                    (= value.title "Processing")
                   )
-                  vim.log.levels.INFO
-                  { :render "minimal"
-                    :timeout false
-                  }
                 )
               )
-              (tset notifications client-id token { :id notification-id :start-ms start-ms :title value.title })
+              (when should-notify
+                (set start-ms (vim.loop.now))
+                (when (not (. notifications client-id)) (tset notifications client-id {}))
+                (local
+                  notification-id
+                  (vim.notify
+                    (..
+                      "        | "
+                      client.name
+                      ":"
+                      (if value.title (.. " " value.title) "")
+                      (if value.message (.. " " value.message) "")
+                    )
+                    vim.log.levels.INFO
+                    { :render "minimal"
+                      :timeout false
+                    }
+                  )
+                )
+                (tset notifications client-id token { :id notification-id :start-ms start-ms :title value.title })
+              )
             )
           "report"
             (do
-              (local { :id old-notification-id :title title } (. notifications client-id token))
-              (local
-                new-notification-id
+              (local notification (?. notifications client-id token))
+              (when notification
+                (local { :id old-notification-id :title title } notification)
+                (local
+                  new-notification-id
+                  (vim.notify
+                    (..
+                      "        | "
+                      client.name
+                      ":"
+                      (if title (.. " " title) "")
+                      (if value.message (.. " " value.message) "")
+                    )
+                    vim.log.levels.INFO
+                    { :replace old-notification-id })
+                )
+                (tset notifications client-id token :id new-notification-id)
+              )
+            )
+          "end"
+            (do
+              (local notification (?. notifications client-id token))
+              (when notification
+                (local { :id notification-id :start-ms start-ms :title title } notification)
+                (local stop-ms (vim.loop.now))
                 (vim.notify
                   (..
-                    "        | "
+                    (string.format "%6.2fs" (/ (- stop-ms start-ms) 1000))
+                    " | "
                     client.name
                     ":"
                     (if title (.. " " title) "")
                     (if value.message (.. " " value.message) "")
                   )
                   vim.log.levels.INFO
-                  { :replace old-notification-id })
-              )
-              (tset notifications client-id token :id new-notification-id)
-            )
-          "end"
-            (do
-              (local stop-ms (vim.loop.now))
-              (local { :id notification-id :start-ms start-ms :title title } (. notifications client-id token))
-              (vim.notify
-                (..
-                  (string.format "%6.2fs" (/ (- stop-ms start-ms) 1000))
-                  " | "
-                  client.name
-                  ":"
-                  (if title (.. " " title) "")
-                  (if value.message (.. " " value.message) "")
+                  { :replace notification-id
+                    :timeout (if (< (- stop-ms start-ms) 100) 0 3000)
+                  }
                 )
-                vim.log.levels.INFO
-                { :replace notification-id
-                  :timeout (if (< (- stop-ms start-ms) 100) 0 3000)
-                }
+                (tset notifications client-id token nil)
               )
-              (tset notifications client-id token nil)
             )
         )
       )
@@ -630,6 +647,7 @@
   { :pattern "haskell" }
   (fn []
     (when (seems-like-haskell-project)
+      ; (vim.lsp.set_log_level "TRACE")
       (var initialize-notification-id nil)
       (var start-ms nil)
       (vim.lsp.start

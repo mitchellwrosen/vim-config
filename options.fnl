@@ -39,7 +39,7 @@
 (set vim.opt.clipboard [ "unnamed" "unnamedplus" ]) ; yank also copies to both clipboards
 (set vim.opt.completeopt [ "menuone" "noinsert" "noselect" ]) ; sane completion behavior...
 (set vim.opt.listchars { :nbsp "+" :tab "> " :trail "·"}) ; trailing whitespace markers
-(set vim.wo.colorcolumn "120")
+(set vim.wo.colorcolumn "121")
 (set vim.wo.cursorline true) ; higlight the current line
 (set vim.wo.foldenable false) ; never fold
 (set vim.wo.list true) ; show trailing whitespace, tabs, etc.

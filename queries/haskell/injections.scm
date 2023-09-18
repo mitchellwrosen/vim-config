@@ -1,3 +1,5 @@
+((quasiquote (quoter)) @html (#lua-match? @html "html"))
+
 ((quasiquote_body) @sql (#lua-match? @sql "^%s*DELETE"))
 
 ((quasiquote_body) @sql (#lua-match? @sql "^%s*DROP"))

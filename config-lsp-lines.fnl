@@ -4,7 +4,7 @@
   (local lsp_lines (require "lsp_lines"))
   ; Cycle through [off, on current line, on all lines]
   (nmap
-    "<Space>ll"
+    "<Space>lz"
     (fn []
       (local value (. (vim.diagnostic.config) "virtual_lines"))
       (if

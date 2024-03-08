@@ -218,13 +218,13 @@ package.preload["config-leap"] = package.preload["config-leap"] or function(...)
       local lualine = require("lualine")
       return lualine.refresh({place = {"statusline"}})
     end
-    vim.api.nvim_create_autocmd("User", {pattern = "LeapEnter", group = "mitchellwrosen", callback = _27_})
+    vim.api.nvim_create_autocmd("User", {pattern = "LeapEnter", callback = _27_, group = "mitchellwrosen"})
     local function _28_()
       vim.g["mitchell-leaping"] = false
       local lualine = require("lualine")
       return lualine.refresh({place = {"statusline"}})
     end
-    return vim.api.nvim_create_autocmd("User", {pattern = "LeapLeave", group = "mitchellwrosen", callback = _28_})
+    return vim.api.nvim_create_autocmd("User", {pattern = "LeapLeave", callback = _28_, group = "mitchellwrosen"})
   end
   return _24_
 end
@@ -304,7 +304,7 @@ end
 package.preload["config-which-key"] = package.preload["config-which-key"] or function(...)
   local function _45_()
     local which_key = require("which-key")
-    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {text_objects = false, z = false, operators = false, motions = false, g = false, nav = false, windows = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
+    which_key.setup({icons = {separator = ""}, plugins = {marks = true, presets = {g = false, motions = false, nav = false, operators = false, text_objects = false, windows = false, z = false}, registers = true, spelling = {enabled = false}}, window = {border = "single", margin = {0, 0, 0, 0}, padding = {0, 0, 0, 0}}})
     which_key.register({mode = {"n", "v"}, ["<Space>l"] = {name = "+LSP"}})
     local function _46_()
       return which_key.show("`", {auto = true, mode = "n"})
@@ -539,22 +539,22 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
   do
     local function list_buffers()
       local buffer_ids = vim.api.nvim_list_bufs()
-      local tbl_17_auto = {}
-      local i_18_auto = #tbl_17_auto
+      local tbl_19_auto = {}
+      local i_20_auto = 0
       for __7_auto, buffer_id in ipairs(buffer_ids) do
-        local val_19_auto
+        local val_21_auto
         if vim.api.nvim_buf_get_option(buffer_id, "buflisted") then
-          val_19_auto = buffer_id
+          val_21_auto = buffer_id
         else
-          val_19_auto = nil
+          val_21_auto = nil
         end
-        if (nil ~= val_19_auto) then
-          i_18_auto = (i_18_auto + 1)
-          do end (tbl_17_auto)[i_18_auto] = val_19_auto
+        if (nil ~= val_21_auto) then
+          i_20_auto = (i_20_auto + 1)
+          do end (tbl_19_auto)[i_20_auto] = val_21_auto
         else
         end
       end
-      return tbl_17_auto
+      return tbl_19_auto
     end
     local function go_to_buffer(i)
       local buffer_ids = list_buffers()
@@ -580,87 +580,87 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
         if (desired_buffer_index < current_buffer_index) then
           local left_buffer_ids_to_delete
           do
-            local tbl_17_auto = {}
-            local i_18_auto = #tbl_17_auto
+            local tbl_19_auto = {}
+            local i_20_auto = 0
             local function _93_()
-              local tbl_17_auto0 = {}
-              local i_18_auto0 = #tbl_17_auto0
+              local tbl_19_auto0 = {}
+              local i_20_auto0 = 0
               for i_1_auto, x_2_auto in ipairs(buffer_ids) do
-                local val_19_auto
+                local val_21_auto
                 if (i_1_auto <= (desired_buffer_index - 1)) then
-                  val_19_auto = nil
+                  val_21_auto = nil
                 else
-                  val_19_auto = x_2_auto
+                  val_21_auto = x_2_auto
                 end
-                if (nil ~= val_19_auto) then
-                  i_18_auto0 = (i_18_auto0 + 1)
-                  do end (tbl_17_auto0)[i_18_auto0] = val_19_auto
+                if (nil ~= val_21_auto) then
+                  i_20_auto0 = (i_20_auto0 + 1)
+                  do end (tbl_19_auto0)[i_20_auto0] = val_21_auto
                 else
                 end
               end
-              return tbl_17_auto0
+              return tbl_19_auto0
             end
             for i_3_auto, x_4_auto in ipairs(_93_()) do
-              local val_19_auto
+              local val_21_auto
               if (i_3_auto <= (current_buffer_index - desired_buffer_index)) then
-                val_19_auto = x_4_auto
+                val_21_auto = x_4_auto
               else
-                val_19_auto = nil
+                val_21_auto = nil
               end
-              if (nil ~= val_19_auto) then
-                i_18_auto = (i_18_auto + 1)
-                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              if (nil ~= val_21_auto) then
+                i_20_auto = (i_20_auto + 1)
+                do end (tbl_19_auto)[i_20_auto] = val_21_auto
               else
               end
             end
-            left_buffer_ids_to_delete = tbl_17_auto
+            left_buffer_ids_to_delete = tbl_19_auto
           end
           local left_filenames_to_reopen
           do
-            local tbl_17_auto = {}
-            local i_18_auto = #tbl_17_auto
+            local tbl_19_auto = {}
+            local i_20_auto = 0
             for __7_auto, buffer_id in ipairs(left_buffer_ids_to_delete) do
-              local val_19_auto = vim.api.nvim_buf_get_name(buffer_id)
-              if (nil ~= val_19_auto) then
-                i_18_auto = (i_18_auto + 1)
-                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              local val_21_auto = vim.api.nvim_buf_get_name(buffer_id)
+              if (nil ~= val_21_auto) then
+                i_20_auto = (i_20_auto + 1)
+                do end (tbl_19_auto)[i_20_auto] = val_21_auto
               else
               end
             end
-            left_filenames_to_reopen = tbl_17_auto
+            left_filenames_to_reopen = tbl_19_auto
           end
           local right_buffer_ids_to_delete
           do
-            local tbl_17_auto = {}
-            local i_18_auto = #tbl_17_auto
+            local tbl_19_auto = {}
+            local i_20_auto = 0
             for i_1_auto, x_2_auto in ipairs(buffer_ids) do
-              local val_19_auto
+              local val_21_auto
               if (i_1_auto <= current_buffer_index) then
-                val_19_auto = nil
+                val_21_auto = nil
               else
-                val_19_auto = x_2_auto
+                val_21_auto = x_2_auto
               end
-              if (nil ~= val_19_auto) then
-                i_18_auto = (i_18_auto + 1)
-                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              if (nil ~= val_21_auto) then
+                i_20_auto = (i_20_auto + 1)
+                do end (tbl_19_auto)[i_20_auto] = val_21_auto
               else
               end
             end
-            right_buffer_ids_to_delete = tbl_17_auto
+            right_buffer_ids_to_delete = tbl_19_auto
           end
           local right_filenames_to_reopen
           do
-            local tbl_17_auto = {}
-            local i_18_auto = #tbl_17_auto
+            local tbl_19_auto = {}
+            local i_20_auto = 0
             for __7_auto, buffer_id in ipairs(right_buffer_ids_to_delete) do
-              local val_19_auto = vim.api.nvim_buf_get_name(buffer_id)
-              if (nil ~= val_19_auto) then
-                i_18_auto = (i_18_auto + 1)
-                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              local val_21_auto = vim.api.nvim_buf_get_name(buffer_id)
+              if (nil ~= val_21_auto) then
+                i_20_auto = (i_20_auto + 1)
+                do end (tbl_19_auto)[i_20_auto] = val_21_auto
               else
               end
             end
-            right_filenames_to_reopen = tbl_17_auto
+            right_filenames_to_reopen = tbl_19_auto
           end
           for _, buffer_id in ipairs(left_buffer_ids_to_delete) do
             vim.api.nvim_buf_delete(buffer_id, {force = true})
@@ -679,36 +679,36 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
         elseif (desired_buffer_index > current_buffer_index) then
           local buffer_ids_to_delete
           do
-            local tbl_17_auto = {}
-            local i_18_auto = #tbl_17_auto
+            local tbl_19_auto = {}
+            local i_20_auto = 0
             for i_1_auto, x_2_auto in ipairs(buffer_ids) do
-              local val_19_auto
+              local val_21_auto
               if (i_1_auto <= desired_buffer_index) then
-                val_19_auto = nil
+                val_21_auto = nil
               else
-                val_19_auto = x_2_auto
+                val_21_auto = x_2_auto
               end
-              if (nil ~= val_19_auto) then
-                i_18_auto = (i_18_auto + 1)
-                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              if (nil ~= val_21_auto) then
+                i_20_auto = (i_20_auto + 1)
+                do end (tbl_19_auto)[i_20_auto] = val_21_auto
               else
               end
             end
-            buffer_ids_to_delete = tbl_17_auto
+            buffer_ids_to_delete = tbl_19_auto
           end
           local filenames_to_reopen
           do
-            local tbl_17_auto = {}
-            local i_18_auto = #tbl_17_auto
+            local tbl_19_auto = {}
+            local i_20_auto = 0
             for __7_auto, buffer_id in ipairs(buffer_ids_to_delete) do
-              local val_19_auto = vim.api.nvim_buf_get_name(buffer_id)
-              if (nil ~= val_19_auto) then
-                i_18_auto = (i_18_auto + 1)
-                do end (tbl_17_auto)[i_18_auto] = val_19_auto
+              local val_21_auto = vim.api.nvim_buf_get_name(buffer_id)
+              if (nil ~= val_21_auto) then
+                i_20_auto = (i_20_auto + 1)
+                do end (tbl_19_auto)[i_20_auto] = val_21_auto
               else
               end
             end
-            filenames_to_reopen = tbl_17_auto
+            filenames_to_reopen = tbl_19_auto
           end
           local current_filename = vim.api.nvim_buf_get_name(0)
           vim.api.nvim_buf_delete(current_buffer_id, {force = true})
@@ -1464,18 +1464,18 @@ local function _122_(opts)
       return nil
     end
   end
-  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, group = "mitchellwrosen", callback = _123_})
+  return vim.api.nvim_create_autocmd("BufWinEnter", {buffer = opts.buf, once = true, callback = _123_, group = "mitchellwrosen"})
 end
-vim.api.nvim_create_autocmd("BufRead", {group = "mitchellwrosen", callback = _122_})
+vim.api.nvim_create_autocmd("BufRead", {callback = _122_, group = "mitchellwrosen"})
 local function _125_()
   vim.bo.modifiable = not vim.bo.readonly
   return nil
 end
-vim.api.nvim_create_autocmd("BufReadPost", {group = "mitchellwrosen", callback = _125_})
+vim.api.nvim_create_autocmd("BufReadPost", {callback = _125_, group = "mitchellwrosen"})
 local function _126_()
   return vim.highlight.on_yank({higroup = "IncSearch", timeout = 300})
 end
-vim.api.nvim_create_autocmd("TextYankPost", {group = "mitchellwrosen", callback = _126_})
+vim.api.nvim_create_autocmd("TextYankPost", {callback = _126_, group = "mitchellwrosen"})
 local function _127_()
   if (vim.fn.getcmdwintype() == "") then
     return vim.cmd.checktime()
@@ -1483,7 +1483,7 @@ local function _127_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {group = "mitchellwrosen", callback = _127_})
+vim.api.nvim_create_autocmd({"CursorHold", "FocusGained"}, {callback = _127_, group = "mitchellwrosen"})
 local function _129_()
   if ((vim.o.buftype == "") and (vim.api.nvim_buf_get_name(0) ~= "")) then
     local view = vim.fn.winsaveview()
@@ -1494,7 +1494,7 @@ local function _129_()
     return nil
   end
 end
-vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {group = "mitchellwrosen", callback = _129_})
+vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {callback = _129_, group = "mitchellwrosen"})
 local extract_haskell_typesig_from_markdown
 local function _131_(str0)
   local str = str0
@@ -1618,29 +1618,24 @@ local function _139_(_136_)
           end
           next_ref_ix = next_reference_index(_157_, references)
           local prev_ref_ix
-          do
-            local _159_ = next_ref_ix
-            if (_159_ == 1) then
-              prev_ref_ix = (num_refs - 1)
-            elseif (_159_ == 2) then
-              prev_ref_ix = num_refs
-            elseif true then
-              local _ = _159_
-              prev_ref_ix = (next_ref_ix - 2)
-            else
-              prev_ref_ix = nil
-            end
+          if (next_ref_ix == 1) then
+            prev_ref_ix = (num_refs - 1)
+          elseif (next_ref_ix == 2) then
+            prev_ref_ix = num_refs
+          else
+            local _ = next_ref_ix
+            prev_ref_ix = (next_ref_ix - 2)
           end
-          local _local_161_ = references[prev_ref_ix]
-          local _local_162_ = _local_161_["range"]
-          local _local_163_ = _local_162_["start"]
-          local prev_ref_row = _local_163_["line"]
-          local prev_ref_col = _local_163_["character"]
+          local _local_160_ = references[prev_ref_ix]
+          local _local_161_ = _local_160_["range"]
+          local _local_162_ = _local_161_["start"]
+          local prev_ref_row = _local_162_["line"]
+          local prev_ref_col = _local_162_["character"]
           vim.api.nvim_feedkeys("m'", "nx", false)
           do
-            local _local_164_ = {row = (prev_ref_row + 1), col = prev_ref_col}
-            local col_22_auto = _local_164_["col"]
-            local row_21_auto = _local_164_["row"]
+            local _local_163_ = {row = (prev_ref_row + 1), col = prev_ref_col}
+            local col_22_auto = _local_163_["col"]
+            local row_21_auto = _local_163_["row"]
             vim.api.nvim_win_set_cursor(0, {row_21_auto, col_22_auto})
           end
           vim.cmd("silent! normal! zz")
@@ -1661,10 +1656,10 @@ local function _139_(_136_)
   else
   end
   if client.supports_method("textDocument/codeLens") then
-    local function _169_()
+    local function _168_()
       return vim.lsp.codelens.refresh()
     end
-    vim.api.nvim_create_autocmd({"BufEnter", "CursorHold", "InsertLeave"}, {buffer = buf, group = "mitchellwrosen", callback = _169_})
+    vim.api.nvim_create_autocmd({"BufEnter", "CursorHold", "InsertLeave"}, {buffer = buf, callback = _168_, group = "mitchellwrosen"})
     vim.keymap.set("n", "<Space>ll", vim.lsp.codelens.run, {buffer = buf, desc = "Run code lens", silent = true})
   else
   end
@@ -1700,7 +1695,7 @@ local function _139_(_136_)
   end
   do
     local prev_diagnostic
-    local function _177_()
+    local function _176_()
       local num_errors = #vim.diagnostic.get(buf, {severity = vim.diagnostic.severity.ERROR})
       if (num_errors > 0) then
         return vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR, float = false})
@@ -1708,9 +1703,9 @@ local function _139_(_136_)
         return vim.diagnostic.goto_prev({float = false})
       end
     end
-    prev_diagnostic = _177_
+    prev_diagnostic = _176_
     local next_diagnostic
-    local function _179_()
+    local function _178_()
       local num_errors = #vim.diagnostic.get(buf, {severity = vim.diagnostic.severity.ERROR})
       if (num_errors > 0) then
         return vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR, float = false})
@@ -1718,7 +1713,7 @@ local function _139_(_136_)
         return vim.diagnostic.goto_next({float = false})
       end
     end
-    next_diagnostic = _179_
+    next_diagnostic = _178_
     vim.keymap.set("n", "<Up>", prev_diagnostic, {buffer = buf, silent = true})
     vim.keymap.set("n", "<Down>", next_diagnostic, {buffer = buf, silent = true})
     vim.keymap.set("n", "<S-Tab>", prev_diagnostic, {buffer = buf, silent = true})
@@ -1730,61 +1725,57 @@ local function _139_(_136_)
   local highlight_thing_under_cursor
   do
     local do_highlight
-    local function _181_(position)
+    local function _180_(position)
       vim.lsp.buf.clear_references()
       vim.b["document-highlights"] = {}
       return vim.lsp.buf_request(buf, "textDocument/documentHighlight", position, nil)
     end
-    do_highlight = _181_
-    local _182_ = client.name
-    if (_182_ == "haskell") then
+    do_highlight = _180_
+    local _181_ = client.name
+    if (_181_ == "haskell") then
       highlight_thing_under_cursor = do_highlight
-    elseif true then
-      local _ = _182_
-      local function _183_()
+    else
+      local _ = _181_
+      local function _182_()
         return nil
       end
-      highlight_thing_under_cursor = _183_
-    else
-      highlight_thing_under_cursor = nil
+      highlight_thing_under_cursor = _182_
     end
   end
   local unhighlight_thing_under_cursor
   do
     local do_unhighlight
-    local function _185_()
+    local function _184_()
       vim.lsp.buf.clear_references()
       vim.b["document-highlights"] = {}
       return nil
     end
-    do_unhighlight = _185_
-    local _186_ = client.name
-    if (_186_ == "haskell") then
+    do_unhighlight = _184_
+    local _185_ = client.name
+    if (_185_ == "haskell") then
       unhighlight_thing_under_cursor = do_unhighlight
-    elseif true then
-      local _ = _186_
-      local function _187_()
+    else
+      local _ = _185_
+      local function _186_()
         return nil
       end
-      unhighlight_thing_under_cursor = _187_
-    else
-      unhighlight_thing_under_cursor = nil
+      unhighlight_thing_under_cursor = _186_
     end
   end
   local show_hover_somehow
   do
-    local _189_ = client.name
-    if (_189_ == "haskell") then
-      local function _190_(position)
-        local function _191_(_err, result, _ctx, _config)
+    local _188_ = client.name
+    if (_188_ == "haskell") then
+      local function _189_(position)
+        local function _190_(_err, result, _ctx, _config)
           local contents
           do
-            local t_192_ = result
-            if (nil ~= t_192_) then
-              t_192_ = (t_192_).contents
+            local t_191_ = result
+            if (nil ~= t_191_) then
+              t_191_ = t_191_.contents
             else
             end
-            contents = t_192_
+            contents = t_191_
           end
           if (not (contents == nil) and (type(contents) == "table") and ("markdown" == contents.kind)) then
             local line = extract_haskell_typesig_from_markdown(contents.value)
@@ -1798,51 +1789,47 @@ local function _139_(_136_)
             return nil
           end
         end
-        return vim.lsp.buf_request(buf, "textDocument/hover", position, _191_)
+        return vim.lsp.buf_request(buf, "textDocument/hover", position, _190_)
       end
-      show_hover_somehow = _190_
-    elseif true then
-      local _ = _189_
-      local function _196_()
+      show_hover_somehow = _189_
+    else
+      local _ = _188_
+      local function _195_()
         return nil
       end
-      show_hover_somehow = _196_
-    else
-      show_hover_somehow = nil
+      show_hover_somehow = _195_
     end
   end
   local unshow_hover_somehow
   do
-    local _198_ = client.name
-    if (_198_ == "haskell") then
-      local function _199_()
+    local _197_ = client.name
+    if (_197_ == "haskell") then
+      local function _198_()
         return vim.api.nvim_buf_clear_namespace(buf, hover_namespace, 0, -1)
       end
-      unshow_hover_somehow = _199_
-    elseif true then
-      local _ = _198_
-      local function _200_()
+      unshow_hover_somehow = _198_
+    else
+      local _ = _197_
+      local function _199_()
         return nil
       end
-      unshow_hover_somehow = _200_
-    else
-      unshow_hover_somehow = nil
+      unshow_hover_somehow = _199_
     end
   end
   local on_cursor_move
-  local function _202_()
+  local function _201_()
     local moved_to_document_highlight = vim.b["moved-to-document-highlight"]
     vim.b["moved-to-document-highlight"] = false
     if (vim.api.nvim_get_mode().mode == "n") then
-      local function _204_()
-        local _local_205_ = vim.api.nvim_win_get_cursor(0)
-        local row_1_auto = _local_205_[1]
-        local col_2_auto = _local_205_[2]
+      local function _203_()
+        local _local_204_ = vim.api.nvim_win_get_cursor(0)
+        local row_1_auto = _local_204_[1]
+        local col_2_auto = _local_204_[2]
         return {col = col_2_auto, row = row_1_auto}
       end
-      local _local_203_ = _204_()
-      local row = _local_203_["row"]
-      local col = _local_203_["col"]
+      local _local_202_ = _203_()
+      local row = _local_202_["row"]
+      local col = _local_202_["col"]
       local current_line = vim.api.nvim_get_current_line()
       local current_character = string.sub(current_line, (1 + col), (1 + col))
       if ((current_character ~= "") and (current_character ~= " ")) then
@@ -1860,27 +1847,27 @@ local function _139_(_136_)
       return nil
     end
   end
-  on_cursor_move = _202_
+  on_cursor_move = _201_
   vim.api.nvim_create_autocmd("CursorMoved", {buffer = buf, callback = on_cursor_move, group = augroup_name})
-  local function _212_(_209_)
-    local _arg_210_ = _209_
-    local _arg_211_ = _arg_210_["data"]
-    local diagnostics = _arg_211_["diagnostics"]
+  local function _211_(_208_)
+    local _arg_209_ = _208_
+    local _arg_210_ = _arg_209_["data"]
+    local diagnostics = _arg_210_["diagnostics"]
     return vim.fn.setqflist(vim.diagnostic.toqflist(diagnostics), "r")
   end
-  vim.api.nvim_create_autocmd("DiagnosticChanged", {buffer = buf, callback = _212_, group = augroup_name})
+  vim.api.nvim_create_autocmd("DiagnosticChanged", {buffer = buf, callback = _211_, group = augroup_name})
   vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
   return nil
 end
-vim.api.nvim_create_autocmd("LspAttach", {group = "mitchellwrosen", callback = _139_})
-local function _213_()
+vim.api.nvim_create_autocmd("LspAttach", {callback = _139_, group = "mitchellwrosen"})
+local function _212_()
   return vim.keymap.set("n", "!", "qz")
 end
-vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {group = "mitchellwrosen", callback = _213_})
-local function _214_()
+vim.api.nvim_create_autocmd({"RecordingLeave", "VimEnter"}, {callback = _212_, group = "mitchellwrosen"})
+local function _213_()
   return vim.keymap.set("n", "!", "q")
 end
-vim.api.nvim_create_autocmd("RecordingEnter", {group = "mitchellwrosen", callback = _214_})
+vim.api.nvim_create_autocmd("RecordingEnter", {callback = _213_, group = "mitchellwrosen"})
 vim.keymap.set("n", "9", "@z")
 do
   local default_progress_handler = vim.lsp.handlers["$/progress"]
@@ -1892,8 +1879,8 @@ do
       local token = result.token
       local value = result.value
       local start_ms = nil
-      local _215_ = value.kind
-      if (_215_ == "begin") then
+      local _214_ = value.kind
+      if (_214_ == "begin") then
         local should_notify = not ((client.name == "haskell") and (value.title == "Processing"))
         if should_notify then
           start_ms = vim.loop.now()
@@ -1902,102 +1889,102 @@ do
           else
           end
           local notification_id
-          local function _217_()
+          local function _216_()
             if value.title then
               return (" " .. value.title)
             else
               return ""
             end
           end
-          local function _218_()
+          local function _217_()
             if value.message then
               return (" " .. value.message)
             else
               return ""
             end
           end
-          notification_id = vim.notify(("        | " .. client.name .. ":" .. _217_() .. _218_()), vim.log.levels.INFO, {render = "minimal", timeout = false})
+          notification_id = vim.notify(("        | " .. client.name .. ":" .. _216_() .. _217_()), vim.log.levels.INFO, {render = "minimal", timeout = false})
           do end (notifications)[client_id][token] = {id = notification_id, ["start-ms"] = start_ms, title = value.title}
         else
         end
-      elseif (_215_ == "report") then
+      elseif (_214_ == "report") then
         local notification
         do
-          local t_220_ = notifications
-          if (nil ~= t_220_) then
-            t_220_ = (t_220_)[client_id]
+          local t_219_ = notifications
+          if (nil ~= t_219_) then
+            t_219_ = t_219_[client_id]
           else
           end
-          if (nil ~= t_220_) then
-            t_220_ = (t_220_)[token]
+          if (nil ~= t_219_) then
+            t_219_ = t_219_[token]
           else
           end
-          notification = t_220_
+          notification = t_219_
         end
         if notification then
-          local _local_223_ = notification
-          local old_notification_id = _local_223_["id"]
-          local title = _local_223_["title"]
+          local _local_222_ = notification
+          local old_notification_id = _local_222_["id"]
+          local title = _local_222_["title"]
           local new_notification_id
-          local function _224_()
+          local function _223_()
             if title then
               return (" " .. title)
             else
               return ""
             end
           end
-          local function _225_()
+          local function _224_()
             if value.message then
               return (" " .. value.message)
             else
               return ""
             end
           end
-          new_notification_id = vim.notify(("        | " .. client.name .. ":" .. _224_() .. _225_()), vim.log.levels.INFO, {replace = old_notification_id})
+          new_notification_id = vim.notify(("        | " .. client.name .. ":" .. _223_() .. _224_()), vim.log.levels.INFO, {replace = old_notification_id})
           do end (notifications)[client_id][token]["id"] = new_notification_id
         else
         end
-      elseif (_215_ == "end") then
+      elseif (_214_ == "end") then
         local notification
         do
-          local t_227_ = notifications
-          if (nil ~= t_227_) then
-            t_227_ = (t_227_)[client_id]
+          local t_226_ = notifications
+          if (nil ~= t_226_) then
+            t_226_ = t_226_[client_id]
           else
           end
-          if (nil ~= t_227_) then
-            t_227_ = (t_227_)[token]
+          if (nil ~= t_226_) then
+            t_226_ = t_226_[token]
           else
           end
-          notification = t_227_
+          notification = t_226_
         end
         if notification then
-          local _local_230_ = notification
-          local notification_id = _local_230_["id"]
-          local start_ms0 = _local_230_["start-ms"]
-          local title = _local_230_["title"]
+          local _local_229_ = notification
+          local notification_id = _local_229_["id"]
+          local start_ms0 = _local_229_["start-ms"]
+          local title = _local_229_["title"]
           local stop_ms = vim.loop.now()
-          local function _231_()
+          local function _230_()
             if title then
               return (" " .. title)
             else
               return ""
             end
           end
-          local function _232_()
+          local function _231_()
             if value.message then
               return (" " .. value.message)
             else
               return ""
             end
           end
-          local _233_
+          local _232_
           if ((stop_ms - start_ms0) < 100) then
-            _233_ = 0
+            _232_ = 0
           else
-            _233_ = 3000
+            _232_ = 3000
           end
-          vim.notify((string.format("%6.2fs", ((stop_ms - start_ms0) / 1000)) .. " | " .. client.name .. ":" .. _231_() .. _232_()), vim.log.levels.INFO, {replace = notification_id, timeout = _233_})
+          vim.notify((string.format("%6.2fs", ((stop_ms - start_ms0) / 1000)) .. " | " .. client.name .. ":" .. _230_() .. _231_()), vim.log.levels.INFO, {replace = notification_id, timeout = _232_})
           do end (notifications)[client_id][token] = nil
         else
         end
@@ -2010,7 +1997,7 @@ do
   end
   vim.lsp.handlers["$/progress"] = my_progress_handler
 end
-local function _238_(_, references, context, _0)
+local function _237_(_, references, context, _0)
   if references then
     local client_id = context.client_id
     local client = vim.lsp.get_client_by_id(client_id)
@@ -2025,21 +2012,21 @@ local function _238_(_, references, context, _0)
     return nil
   end
 end
-vim.lsp.handlers["textDocument/documentHighlight"] = _238_
+vim.lsp.handlers["textDocument/documentHighlight"] = _237_
 local lsp_capabilities
 do
   local cmp_nvim_lsp = require("cmp_nvim_lsp")
   lsp_capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
 end
-local function _241_()
+local function _240_()
   local initialize_notification_id = nil
   local start_ms = nil
-  local function _242_(_params_2_auto, _config_3_auto)
+  local function _241_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
     initialize_notification_id = vim.notify(("        | " .. "elm" .. ": Initializing"), vim.log.levels.INFO, {render = "minimal", timeout = false})
     return nil
   end
-  local function _243_(client, _buf)
+  local function _242_(client, _buf)
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
       return nil
@@ -2047,101 +2034,101 @@ local function _241_()
       return nil
     end
   end
-  local function _245_(_client_2_auto, _result_3_auto)
+  local function _244_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
     return vim.notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "elm" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  return vim.lsp.start({before_init = _242_, capabilities = lsp_capabilities, cmd = {"elm-language-server"}, init_options = {elmAnalyseTrigger = "change"}, name = "elm", on_attach = _243_, on_init = _245_, root_dir = vim.loop.cwd(), settings = {}})
+  return vim.lsp.start({before_init = _241_, capabilities = lsp_capabilities, cmd = {"elm-language-server"}, init_options = {elmAnalyseTrigger = "change"}, name = "elm", on_attach = _242_, on_init = _244_, root_dir = vim.loop.cwd(), settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "elm", group = "mitchellwrosen", callback = _241_})
-local function _246_()
+vim.api.nvim_create_autocmd("FileType", {pattern = "elm", callback = _240_, group = "mitchellwrosen"})
+local function _245_()
   local initialize_notification_id = nil
   local start_ms = nil
-  local function _247_(_params_2_auto, _config_3_auto)
+  local function _246_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
     initialize_notification_id = vim.notify(("        | " .. "fennel" .. ": Initializing"), vim.log.levels.INFO, {render = "minimal", timeout = false})
     return nil
   end
-  local function _248_(_client_2_auto, _result_3_auto)
+  local function _247_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
     return vim.notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "fennel" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  return vim.lsp.start({before_init = _247_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel", on_init = _248_, root_dir = vim.loop.cwd(), settings = {}})
+  return vim.lsp.start({before_init = _246_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel", on_init = _247_, root_dir = vim.loop.cwd(), settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", group = "mitchellwrosen", callback = _246_})
-local function _249_()
-  local _250_
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _245_, group = "mitchellwrosen"})
+local function _248_()
+  local _249_
   do
     local acc_2_auto = false
     for name_3_auto, typ_4_auto in vim.fs.dir(".") do
       if acc_2_auto then break end
       acc_2_auto = (((typ_4_auto == "file") and ((name_3_auto == "cabal.project") or (name_3_auto == "stack.yaml") or string.match(name_3_auto, "%.cabal$"))) or acc_2_auto)
     end
-    _250_ = acc_2_auto
+    _249_ = acc_2_auto
   end
-  if _250_ then
+  if _249_ then
     local initialize_notification_id = nil
     local start_ms = nil
-    local function _251_(_params_2_auto, _config_3_auto)
+    local function _250_(_params_2_auto, _config_3_auto)
       start_ms = vim.loop.now()
       initialize_notification_id = vim.notify(("        | " .. "haskell" .. ": Initializing"), vim.log.levels.INFO, {render = "minimal", timeout = false})
       return nil
     end
-    local function _252_(_client_2_auto, _result_3_auto)
+    local function _251_(_client_2_auto, _result_3_auto)
       local stop_ms_4_auto = vim.loop.now()
       return vim.notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "haskell" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
     end
-    return vim.lsp.start({before_init = _251_, capabilities = lsp_capabilities, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "haskell", on_init = _252_, root_dir = vim.loop.cwd(), settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
+    return vim.lsp.start({before_init = _250_, capabilities = lsp_capabilities, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "haskell", on_init = _251_, root_dir = vim.loop.cwd(), settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, stan = {globalOn = false}}}}})
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", group = "mitchellwrosen", callback = _249_})
-local function _254_()
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _248_, group = "mitchellwrosen"})
+local function _253_()
   if (vim.fn.executable("pyls") == 1) then
     local initialize_notification_id = nil
     local start_ms = nil
-    local function _255_(_params_2_auto, _config_3_auto)
+    local function _254_(_params_2_auto, _config_3_auto)
       start_ms = vim.loop.now()
       initialize_notification_id = vim.notify(("        | " .. "python" .. ": Initializing"), vim.log.levels.INFO, {render = "minimal", timeout = false})
       return nil
     end
-    local function _256_(_client_2_auto, _result_3_auto)
+    local function _255_(_client_2_auto, _result_3_auto)
       local stop_ms_4_auto = vim.loop.now()
       return vim.notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "python" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
     end
-    return vim.lsp.start({before_init = _255_, capabilities = lsp_capabilities, cmd = {"pyls"}, name = "python", on_init = _256_, root_dir = vim.loop.cwd(), settings = {}})
+    return vim.lsp.start({before_init = _254_, capabilities = lsp_capabilities, cmd = {"pyls"}, name = "python", on_init = _255_, root_dir = vim.loop.cwd(), settings = {}})
   else
     return nil
   end
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "python", group = "mitchellwrosen", callback = _254_})
-local function _258_()
+vim.api.nvim_create_autocmd("FileType", {pattern = "python", callback = _253_, group = "mitchellwrosen"})
+local function _257_()
   local initialize_notification_id = nil
   local start_ms = nil
-  local function _259_(_params_2_auto, _config_3_auto)
+  local function _258_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
     initialize_notification_id = vim.notify(("        | " .. "zig" .. ": Initializing"), vim.log.levels.INFO, {render = "minimal", timeout = false})
     return nil
   end
-  local function _260_(_client_2_auto, _result_3_auto)
+  local function _259_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
     return vim.notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "zig" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  return vim.lsp.start({before_init = _259_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _260_, root_dir = vim.loop.cwd(), settings = {}})
+  return vim.lsp.start({before_init = _258_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _259_, root_dir = vim.loop.cwd(), settings = {}})
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", group = "mitchellwrosen", callback = _258_})
-local function _261_()
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _257_, group = "mitchellwrosen"})
+local function _260_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
   return vim.cmd.startinsert()
 end
-vim.api.nvim_create_autocmd("TermOpen", {group = "mitchellwrosen", callback = _261_})
-local function _262_()
+vim.api.nvim_create_autocmd("TermOpen", {callback = _260_, group = "mitchellwrosen"})
+local function _261_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     return vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})
   else
     return nil
   end
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, group = "mitchellwrosen", callback = _262_})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _261_, group = "mitchellwrosen"})

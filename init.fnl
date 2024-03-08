@@ -684,6 +684,27 @@
 
 (create-autocmd
   "FileType"
+  { :pattern "python" }
+  (fn []
+    (when (= (vim.fn.executable "pyls") 1)
+      (var initialize-notification-id nil)
+      (var start-ms nil)
+      (vim.lsp.start
+        { :before_init (make-before-init start-ms initialize-notification-id "python")
+          :capabilities lsp-capabilities
+          :cmd [ "pyls" ]
+          :name "python"
+          :on_init (make-on-init start-ms initialize-notification-id "python")
+          :root_dir (vim.loop.cwd)
+          :settings {}
+        }
+      )
+    )
+  )
+)
+
+(create-autocmd
+  "FileType"
   { :pattern "zig" }
   (fn []
     (var initialize-notification-id nil)

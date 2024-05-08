@@ -669,9 +669,11 @@
           :root_dir (vim.loop.cwd)
           :settings
             { :haskell
-                { :formattingProvider "ormolu"
+                { :checkProject false ; Don't typecheck the whole project on initial load
+                  :formattingProvider "ormolu"
                   :plugin
                     { :hlint { :globalOn false }
+                      :retrie { :globalOn false }
                       :stan { :globalOn false } ; FUCK stan. all my homies HATE stan
                     }
                 }

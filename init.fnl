@@ -705,6 +705,24 @@
   )
 )
 
+; (create-autocmd
+;   "FileType"
+;   { :pattern "unison" }
+;   (fn []
+;     (var initialize-notification-id nil)
+;     (var start-ms nil)
+;     (vim.lsp.start
+;       { :before_init (make-before-init start-ms initialize-notification-id "unison")
+;         :capabilities lsp-capabilities
+;         :cmd ["nc" "localhost" "5757"]
+;         :name "unison"
+;         :on_init (make-on-init start-ms initialize-notification-id "unison")
+;         :root_dir (vim.loop.cwd)
+;       }
+;     )
+;   )
+; )
+
 (create-autocmd
   "FileType"
   { :pattern "zig" }

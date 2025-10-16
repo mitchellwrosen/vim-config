@@ -495,7 +495,8 @@ package.preload["mappings"] = package.preload["mappings"] or function(...)
     if (num_listed <= 1) then
       return vim.cmd.q()
     else
-      return vim.api.nvim_buf_delete(0, {force = true})
+      vim.bo.buflisted = false
+      return vim.api.nvim_buf_delete(0, {unload = true})
     end
   end
   vim.keymap.set("n", "q", _73_)

@@ -147,7 +147,14 @@
         (if (= 1 buffer.listed) (+ acc 1) acc)
       )
     )
-    (if (<= num-listed 1) (vim.cmd.q) (vim.api.nvim_buf_delete 0 { :force true }))
+    (if
+      (<= num-listed 1) 
+      (vim.cmd.q) 
+      (do
+        (set vim.bo.buflisted false)
+        (vim.api.nvim_buf_delete 0 { :unload true })
+      )
+    )
   )
 )
 

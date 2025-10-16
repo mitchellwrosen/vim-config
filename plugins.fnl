@@ -17,7 +17,7 @@
         "clone"
         "--filter=blob:none"
         "https://github.com/folke/lazy.nvim"
-        "--branch=v9.14.2"
+        "--branch=v11.17.1"
         lazypath
       ]
     )
@@ -30,7 +30,13 @@
 (lazy.setup
   [
     ; basic language syntax highlighting, indent, keywords, etc. (does treesitter kinda obviate these?)
-    { :name "fennel" :url "https://github.com/bakpakin/fennel.vim" :commit "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89" :ft "fennel" :config (fn [] nil) }
+    {
+      :name "fennel"
+      :url "https://github.com/bakpakin/fennel.vim"
+      :commit "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89"
+      :ft "fennel"
+      :config (fn [] nil)
+    }
     { :name "haskell" :url "https://github.com/neovimhaskell/haskell-vim" :commit "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e" :ft "haskell" :config (fn [] nil) }
     { :name "nix" :url "https://github.com/LnL7/vim-nix" :commit "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee" :ft "nix" :config (fn [] nil) }
     { :name "zig" :url "https://github.com/ziglang/zig.vim" :commit "a0d9adedafeb1a33a0159d16ddcdf194b7cea881" :ft "zig" :config (fn [] nil) }
@@ -60,7 +66,12 @@
 
     ; nice low-contrast fork of gruvbox color scheme [2023-05-08]
     ; the lazy.nvim readme recommends colorscheme plugins load first
-    { :name "gruvbox-material" :url "https://github.com/sainnhe/gruvbox-material" :commit "3fff63b0d6a425ad1076a260cd4f6da61d1632b1" :priority 1000 }
+    {
+      :name "gruvbox-material"
+      :url "https://github.com/sainnhe/gruvbox-material"
+      :commit "834dbf21836862300ced7444db4262b796330ab7" ; 2025-10-16
+      :priority 1000
+    }
 
     ; fuzzy search source code, files, etc
     { :name "fzf" :url "https://github.com/junegunn/fzf" :commit "96670d5f16dcf23d590eb1d83d1de351b2e8fb15" :event "VeryLazy" :config (include "config-fzf") }
@@ -85,7 +96,12 @@
     { :name "mini-surround" :url "https://github.com/echasnovski/mini.surround" :commit "ea2e9c4cdbddc826dc6eeac69b035f8220f65de5" :event "VeryLazy" :config (include "config-mini-surround") }
 
     ; fancy notifications
-    { :name "notify" :url "https://github.com/rcarriga/nvim-notify" :tag "v3.11.0" :config (include "config-notify") }
+    {
+      :name "notify" 
+      :url "https://github.com/rcarriga/nvim-notify" 
+      :tag "v3.15.0" 
+      :config (include "config-notify") 
+    }
 
     ; make "." repeat more things out of the box
     { :name "repeat" :url "https://github.com/tpope/vim-repeat" :commit "24afe922e6a05891756ecf331f39a1f6743d3d5a" :event "VeryLazy" :config (fn [] nil) }
@@ -97,7 +113,14 @@
     { :name "surround" :url "https://github.com/tpope/vim-surround" :commit "aeb933272e72617f7c4d35e1f003be16836b948d" :event "VeryLazy" :config (fn [] nil) }
 
     ; treesitter [2023-05-08]
-    { :name "treesitter" :url "https://github.com/nvim-treesitter/nvim-treesitter" :commit "0ec48923e526d55892b7a1564a01b5111e5e9ba0" :build ":TSUpdate" :config (include "config-treesitter") }
+    {
+      :name "treesitter"
+      :url "https://github.com/nvim-treesitter/nvim-treesitter"
+      :commit "v0.10.0"
+      ; :commit "0ec48923e526d55892b7a1564a01b5111e5e9ba0"
+      :build ":TSUpdate"
+      :config (include "config-treesitter")
+    }
     { :name "playground" :url "https://github.com/nvim-treesitter/playground" :commit "2b81a018a49f8e476341dfcb228b7b808baba68b" :cmd "TSPlaygroundToggle" :config (fn [] nil) }
 
     ; show key bindings after a short delay

@@ -373,7 +373,7 @@
           (local current-character (string.sub current-line (+ 1 col) (+ 1 col)))
           (if (and (not= current-character "") (not= current-character " "))
             (do
-              (local position (vim.lsp.util.make_position_params))
+              (local position (vim.lsp.util.make_position_params 0 client.offset_encoding))
               (when (not moved-to-document-highlight) (highlight-thing-under-cursor position))
               (show-hover-somehow position)
             )
@@ -434,6 +434,7 @@
     (local client (vim.lsp.get_client_by_id client-id))
     (if client
       (do
+        (local notify (require "notify"))
         (local token result.token)
         (local value result.value)
         (var start-ms nil)
@@ -454,7 +455,7 @@
                 (when (not (. notifications client-id)) (tset notifications client-id {}))
                 (local
                   notification-id
-                  (vim.notify
+                  (notify.notify
                     (..
                       "        | "
                       client.name
@@ -478,7 +479,7 @@
                 (local { :id old-notification-id :title title } notification)
                 (local
                   new-notification-id
-                  (vim.notify
+                  (notify.notify
                     (..
                       "        | "
                       client.name
@@ -498,7 +499,7 @@
               (when notification
                 (local { :id notification-id :start-ms start-ms :title title } notification)
                 (local stop-ms (vim.loop.now))
-                (vim.notify
+                (notify.notify
                   (..
                     (string.format "%6.2fs" (/ (- stop-ms start-ms) 1000))
                     " | "
@@ -554,7 +555,7 @@
 (macro make-on-init [start-ms notification-id name]
   `(fn [_client# _result#]
     (local stop-ms# (vim.loop.now))
-    (vim.notify
+    ((. (require "notify") "notify")
       (.. (string.format "%6.2fs" (/ (- stop-ms# ,start-ms) 1000)) " | " ,name ": Initialized")
       vim.log.levels.INFO
       { :replace ,notification-id
@@ -569,9 +570,9 @@
     (set ,start-ms (vim.loop.now))
     (set
       ,notification-id
-      (vim.notify
+      ((. (require "notify") "notify")
         (.. "        | " ,name ": Initializing")
-        vim.log.levels.INFO
+        vim.log.levels.WARN
         { :render "minimal"
           :timeout false
         }

@@ -4,5 +4,4 @@
     { :stages "static" ; don't animate, it looks janky
     }
   )
-  (set vim.notify notify)
 )

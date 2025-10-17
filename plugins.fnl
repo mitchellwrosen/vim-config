@@ -74,8 +74,21 @@
     }
 
     ; fuzzy search source code, files, etc
-    { :name "fzf" :url "https://github.com/junegunn/fzf" :commit "96670d5f16dcf23d590eb1d83d1de351b2e8fb15" :event "VeryLazy" :config (include "config-fzf") }
-    { :name "fzf-vim" :url "https://github.com/junegunn/fzf.vim" :commit "d5f1f8641b24c0fd5b10a299824362a2a1b20ae0" :dependencies [ "fzf" ] :event "VeryLazy" :config (include "config-fzf-vim") }
+    {
+      :name "fzf" 
+      :url "https://github.com/junegunn/fzf" 
+      :commit "v0.66.0"
+      :event "VeryLazy" 
+      :config (include "config-fzf") 
+    }
+    { 
+      :name "fzf-vim" 
+      :url "https://github.com/junegunn/fzf.vim" 
+      :commit "879db51d0965515cdaef9b7f6bdeb91c65d2829e" ; 2025/10/17
+      :dependencies [ "fzf" ] 
+      :event "VeryLazy" 
+      :config (include "config-fzf-vim") 
+    }
 
     ; Show markers every 2 columns of leading whitespace
     { :name "indent-blankline" :url "https://github.com/lukas-reineke/indent-blankline.nvim" :tag "v2.20.4" :config (include "config-indent-blankline") }
@@ -97,10 +110,10 @@
 
     ; fancy notifications
     {
-      :name "notify" 
-      :url "https://github.com/rcarriga/nvim-notify" 
-      :tag "v3.15.0" 
-      :config (include "config-notify") 
+      :name "notify"
+      :url "https://github.com/rcarriga/nvim-notify"
+      :tag "v3.15.0"
+      :config (include "config-notify")
     }
 
     ; make "." repeat more things out of the box

@@ -1,2 +1,2 @@
-; Unmap Esc quitting terminal mode, so fzf handles it (result: one Esc closes fzf)
-(vim.keymap.del "t" "<Esc>" { :buffer true })
+; Make one Esc close the fzf window
+(vim.keymap.set "t" "<Esc>" "<C-\\><C-N>:norm q<CR>" { :buffer true :silent true })

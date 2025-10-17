@@ -301,7 +301,8 @@
           (fn [position]
             (vim.lsp.buf.clear_references)
             (set vim.b.document-highlights {})
-            (vim.lsp.buf_request buf "textDocument/documentHighlight" position nil)
+            (client.request "textDocument/documentHighlight" position nil buf)
+            nil
           )
         )
         (case client.name
@@ -330,8 +331,7 @@
         "haskell"
           (fn [position]
             ; try to put a type sig in the virtual text area
-            (vim.lsp.buf_request
-              buf
+            (client.request
               "textDocument/hover"
               position
               (fn [_err result _ctx _config]
@@ -351,7 +351,9 @@
                   )
                 )
               )
+              buf
             )
+            nil
           )
         _ (fn [] nil)
       )
@@ -371,10 +373,14 @@
           (local { : row : col } (get-cursor))
           (local current-line (vim.api.nvim_get_current_line))
           (local current-character (string.sub current-line (+ 1 col) (+ 1 col)))
-          (if (and (not= current-character "") (not= current-character " "))
+          (if
+            (and (not= current-character "") (not= current-character " "))
             (do
               (local position (vim.lsp.util.make_position_params 0 client.offset_encoding))
-              (when (not moved-to-document-highlight) (highlight-thing-under-cursor position))
+              (when
+                (not moved-to-document-highlight)
+                (highlight-thing-under-cursor position)
+              )
               (show-hover-somehow position)
             )
             (do
@@ -548,7 +554,7 @@
 (local lsp-capabilities
   (do
     (local cmp-nvim-lsp (require "cmp_nvim_lsp"))
-    (cmp-nvim-lsp.update_capabilities (vim.lsp.protocol.make_client_capabilities))
+    (vim.tbl_deep_extend "force" (vim.lsp.protocol.make_client_capabilities) (cmp-nvim-lsp.default_capabilities))
   )
 )
 

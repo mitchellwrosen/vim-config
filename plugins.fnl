@@ -47,10 +47,26 @@
     ; improved "ga" for information about the character under the cursor
     { :name "characterize" :url "https://github.com/tpope/vim-characterize" :commit "885a00a3c21dd52ca8f2fd7d62850134934179d9" :keys [ [ "ga" ] ] :config (include "config-characterize") }
 
-    ; autocompletion (22-04-30)
-    { :name "cmp" :url "https://github.com/hrsh7th/nvim-cmp" :commit "f841fa6ced194aa930136a7671439e6bd4c51722" :dependencies [ "cmp-buffer" "cmp-lsp" ] :event "InsertEnter" :config (include "config-nvim-cmp") }
-    { :name "cmp-buffer" :url "https://github.com/hrsh7th/cmp-buffer" :commit "f83773e2f433a923997c5faad7ea689ec24d1785" :lazy true }
-    { :name "cmp-lsp" :url "https://github.com/hrsh7th/cmp-nvim-lsp" :commit "b4251f0fca1daeb6db5d60a23ca81507acf858c2" :lazy true }
+    {
+      :name "cmp"
+      :url "https://github.com/hrsh7th/nvim-cmp"
+      :commit "v0.0.2"
+      :dependencies [ "cmp-buffer" "cmp-lsp" ]
+      :event "InsertEnter"
+      :config (include "config-nvim-cmp")
+    }
+    {
+      :name "cmp-buffer"
+      :url "https://github.com/hrsh7th/cmp-buffer"
+      :commit "b74fab3656eea9de20a9b8116afa3cfc4ec09657" ; 2025-10-17
+      :lazy true
+    }
+    {
+      :name "cmp-lsp"
+      :url "https://github.com/hrsh7th/cmp-nvim-lsp"
+      :commit "bd5a7d6db125d4654b50eeae9f5217f24bb22fd3" ; 2025-10-17
+      :lazy true
+    }
 
     ; quick (un-)commenting
     { :name "commentary" :url "https://github.com/tpope/vim-commentary" :commit "627308e30639be3e2d5402808ce18690557e8292" :event "VeryLazy" :config (fn [] nil) }
@@ -75,19 +91,19 @@
 
     ; fuzzy search source code, files, etc
     {
-      :name "fzf" 
-      :url "https://github.com/junegunn/fzf" 
+      :name "fzf"
+      :url "https://github.com/junegunn/fzf"
       :commit "v0.66.0"
-      :event "VeryLazy" 
-      :config (include "config-fzf") 
+      :event "VeryLazy"
+      :config (include "config-fzf")
     }
-    { 
-      :name "fzf-vim" 
-      :url "https://github.com/junegunn/fzf.vim" 
-      :commit "879db51d0965515cdaef9b7f6bdeb91c65d2829e" ; 2025/10/17
-      :dependencies [ "fzf" ] 
-      :event "VeryLazy" 
-      :config (include "config-fzf-vim") 
+    {
+      :name "fzf-vim"
+      :url "https://github.com/junegunn/fzf.vim"
+      :commit "879db51d0965515cdaef9b7f6bdeb91c65d2829e" ; 2025-10-17
+      :dependencies [ "fzf" ]
+      :event "VeryLazy"
+      :config (include "config-fzf-vim")
     }
 
     ; Show markers every 2 columns of leading whitespace

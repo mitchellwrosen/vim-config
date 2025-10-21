@@ -2017,7 +2017,8 @@ local function _229_()
     local stop_ms_4_auto = vim.loop.now()
     return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "elm" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  return vim.lsp.start({before_init = _230_, capabilities = lsp_capabilities, cmd = {"elm-language-server"}, init_options = {elmAnalyseTrigger = "change"}, name = "elm", on_attach = _231_, on_init = _233_, root_dir = vim.loop.cwd(), settings = {}})
+  vim.lsp.start({before_init = _230_, capabilities = lsp_capabilities, cmd = {"elm-language-server"}, init_options = {elmAnalyseTrigger = "change"}, name = "elm", on_attach = _231_, on_init = _233_, root_dir = vim.loop.cwd(), settings = {}})
+  return nil
 end
 vim.api.nvim_create_autocmd("FileType", {pattern = "elm", callback = _229_, group = "mitchellwrosen"})
 local function _234_()
@@ -2032,7 +2033,8 @@ local function _234_()
     local stop_ms_4_auto = vim.loop.now()
     return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "fennel" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  return vim.lsp.start({before_init = _235_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel", on_init = _236_, root_dir = vim.loop.cwd(), settings = {}})
+  vim.lsp.start({before_init = _235_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel", on_init = _236_, root_dir = vim.loop.cwd(), settings = {}})
+  return nil
 end
 vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _234_, group = "mitchellwrosen"})
 local function _237_()
@@ -2057,7 +2059,8 @@ local function _237_()
       local stop_ms_4_auto = vim.loop.now()
       return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "haskell" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
     end
-    return vim.lsp.start({before_init = _239_, capabilities = lsp_capabilities, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "haskell", on_init = _240_, root_dir = vim.loop.cwd(), settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, retrie = {globalOn = false}, stan = {globalOn = false}}, checkProject = false}}})
+    vim.lsp.start({before_init = _239_, capabilities = lsp_capabilities, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "haskell", on_init = _240_, root_dir = vim.loop.cwd(), settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, retrie = {globalOn = false}, stan = {globalOn = false}}, checkProject = false}}})
+    return nil
   else
     return nil
   end
@@ -2076,7 +2079,8 @@ local function _242_()
       local stop_ms_4_auto = vim.loop.now()
       return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "python" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
     end
-    return vim.lsp.start({before_init = _243_, capabilities = lsp_capabilities, cmd = {"pyls"}, name = "python", on_init = _244_, root_dir = vim.loop.cwd(), settings = {}})
+    vim.lsp.start({before_init = _243_, capabilities = lsp_capabilities, cmd = {"pyls"}, name = "python", on_init = _244_, root_dir = vim.loop.cwd(), settings = {}})
+    return nil
   else
     return nil
   end
@@ -2094,7 +2098,8 @@ local function _246_()
     local stop_ms_4_auto = vim.loop.now()
     return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "zig" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  return vim.lsp.start({before_init = _247_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _248_, root_dir = vim.loop.cwd(), settings = {}})
+  vim.lsp.start({before_init = _247_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _248_, root_dir = vim.loop.cwd(), settings = {}})
+  return nil
 end
 vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _246_, group = "mitchellwrosen"})
 local function _249_()

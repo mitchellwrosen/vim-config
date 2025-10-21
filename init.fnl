@@ -618,6 +618,7 @@
         :settings {}
       }
     )
+    nil
   )
 )
 
@@ -638,6 +639,7 @@
         :settings {}
       }
     )
+    nil
   )
 )
 
@@ -687,6 +689,7 @@
             }
         }
       )
+      nil
     )
   )
 )
@@ -708,6 +711,7 @@
           :settings {}
         }
       )
+      nil
     )
   )
 )
@@ -727,6 +731,7 @@
 ;         :root_dir (vim.loop.cwd)
 ;       }
 ;     )
+;     nil
 ;   )
 ; )
 
@@ -746,6 +751,7 @@
         :settings {}
       }
     )
+    nil
   )
 )
 

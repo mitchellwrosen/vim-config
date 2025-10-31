@@ -119,7 +119,9 @@
           (set i (string.find str "forall"))
           (when (= i 1)
             (set i (string.find str "%.")) ; need to escape '.' in lua pattern
-            (set str (string.sub str (+ i 2)))
+            (when i
+              (set str (string.sub str (+ i 2)))
+            )
           )
           ; render entire type on one line
           (set str (string.gsub str "\n" " "))

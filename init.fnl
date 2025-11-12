@@ -51,22 +51,40 @@
         (when (and (> last_known_line 1) (<= last_known_line (vim.api.nvim_buf_line_count opts.buf)))
           (vim.api.nvim_feedkeys "g`\"" "nx" false)
         )
+        nil
       )
     )
+    nil
   )
 )
 
 ; Disallow edits to read-only files
-(create-autocmd "BufReadPost" {} (fn [] (set vim.bo.modifiable (not vim.bo.readonly))))
+(create-autocmd
+  "BufReadPost"
+  {}
+  (fn []
+    (set vim.bo.modifiable (not vim.bo.readonly))
+  )
+)
 
 ; Briefly highlight yanks
-(create-autocmd "TextYankPost" {} (fn [] (vim.highlight.on_yank { :higroup "IncSearch" :timeout 300 })))
+(create-autocmd
+  "TextYankPost"
+  {}
+  (fn []
+    (vim.highlight.on_yank { :higroup "IncSearch" :timeout 300 })
+    nil
+  )
+)
 
 ; on cursor hold or focus gained, read the buffer in case it has been modified externally
 (create-autocmd
   [ "CursorHold" "FocusGained" ]
   {}
-  (fn [] (when (= (vim.fn.getcmdwintype) "") (vim.cmd.checktime)))
+  (fn []
+    (when (= (vim.fn.getcmdwintype) "") (vim.cmd.checktime))
+    nil
+  )
 )
 
 ; Strip trailing whitespace and save the buffer after changing it
@@ -80,6 +98,7 @@
       (vim.cmd "silent! update")
       (vim.fn.winrestview view)
     )
+    nil
   )
 )
 
@@ -415,12 +434,27 @@
     )
 
     (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
+    nil
   )
 )
 
 ; record macro with !, replay macro with 9
-(create-autocmd [ "RecordingLeave" "VimEnter" ] {} (fn [] (nmap "!" "qz")))
-(create-autocmd "RecordingEnter" {} (fn [] (nmap "!" "q")))
+(create-autocmd
+  [ "RecordingLeave" "VimEnter" ]
+  {}
+  (fn []
+    (nmap "!" "qz")
+    nil
+  )
+)
+(create-autocmd
+  "RecordingEnter"
+  {}
+  (fn []
+    (nmap "!" "q")
+    nil
+  )
+)
 (nmap "9" "@z")
 
 ; neovim's progress handler seems like a bit of a work-in-progress, and I don't think it's a good idea to just
@@ -691,8 +725,8 @@
             }
         }
       )
-      nil
     )
+    nil
   )
 )
 
@@ -713,8 +747,8 @@
           :settings {}
         }
       )
-      nil
     )
+    nil
   )
 )
 
@@ -768,6 +802,8 @@
 
     ; Start in insert mode
     (vim.cmd.startinsert)
+
+    nil
   )
 )
 
@@ -788,5 +824,6 @@
       )
       (vim.cmd { :cmd "source" :args [ "Session.vim" ] :mods { :silent true } })
     )
+    nil
   )
 )

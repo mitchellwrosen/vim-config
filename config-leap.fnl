@@ -41,6 +41,7 @@
       (set vim.g.mitchell-leaping true)
       (local lualine (require "lualine"))
       (lualine.refresh { :place [ "statusline" ] })
+      nil
     )
   )
 
@@ -51,6 +52,7 @@
       (set vim.g.mitchell-leaping false)
       (local lualine (require "lualine"))
       (lualine.refresh { :place [ "statusline" ] })
+      nil
     )
   )
 )

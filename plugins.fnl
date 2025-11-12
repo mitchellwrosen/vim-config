@@ -107,7 +107,12 @@
     }
 
     ; Show markers every 2 columns of leading whitespace
-    { :name "indent-blankline" :url "https://github.com/lukas-reineke/indent-blankline.nvim" :tag "v2.20.4" :config (include "config-indent-blankline") }
+    {
+      :name "indent-blankline"
+      :url "https://github.com/lukas-reineke/indent-blankline.nvim"
+      :tag "v2.20.4"
+      :config (include "config-indent-blankline")
+    }
 
     ; use 's' to move far away
     { :name "leap" :url "https://github.com/ggandor/leap.nvim" :commit "f74473d23ebf60957e0db3ff8172349a82e5a442" :event "VeryLazy" :config (include "config-leap") }

@@ -1,1 +1,1 @@
-return vim.keymap.set("t", "<Esc>", "<C-\\><C-N>:norm q<CR>", {buffer = true, silent = true})
+return vim.keymap.set("t", "<Esc>", "<C-\\><C-N>:lua vim.api.nvim_buf_delete(0, { force = true })<CR>", {buffer = true, silent = true})

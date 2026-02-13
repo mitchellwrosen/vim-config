@@ -2047,80 +2047,96 @@ local function _235_()
 end
 vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _235_, group = "mitchellwrosen"})
 local function _238_()
-  local _239_
+  local initialize_notification_id = nil
+  local start_ms = nil
+  local function _239_(_params_2_auto, _config_3_auto)
+    start_ms = vim.loop.now()
+    initialize_notification_id = require("notify").notify(("        | " .. "go" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
+    return nil
+  end
+  local function _240_(_client_2_auto, _result_3_auto)
+    local stop_ms_4_auto = vim.loop.now()
+    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "go" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
+  end
+  vim.lsp.start({before_init = _239_, capabilities = lsp_capabilities, cmd = {"gopls"}, name = "go", on_init = _240_, root_dir = vim.loop.cwd()})
+  return nil
+end
+vim.api.nvim_create_autocmd("FileType", {pattern = "go", callback = _238_, group = "mitchellwrosen"})
+local function _241_()
+  local _242_
   do
     local acc_2_auto = false
     for name_3_auto, typ_4_auto in vim.fs.dir(".") do
       if acc_2_auto then break end
       acc_2_auto = (((typ_4_auto == "file") and ((name_3_auto == "cabal.project") or (name_3_auto == "stack.yaml") or string.match(name_3_auto, "%.cabal$"))) or acc_2_auto)
     end
-    _239_ = acc_2_auto
+    _242_ = acc_2_auto
   end
-  if _239_ then
+  if _242_ then
     local initialize_notification_id = nil
     local start_ms = nil
-    local function _240_(_params_2_auto, _config_3_auto)
+    local function _243_(_params_2_auto, _config_3_auto)
       start_ms = vim.loop.now()
       initialize_notification_id = require("notify").notify(("        | " .. "haskell" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
       return nil
     end
-    local function _241_(_client_2_auto, _result_3_auto)
+    local function _244_(_client_2_auto, _result_3_auto)
       local stop_ms_4_auto = vim.loop.now()
       return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "haskell" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
     end
-    vim.lsp.start({before_init = _240_, capabilities = lsp_capabilities, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "haskell", on_init = _241_, root_dir = vim.loop.cwd(), settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, retrie = {globalOn = false}, stan = {globalOn = false}}, checkProject = false}}})
+    vim.lsp.start({before_init = _243_, capabilities = lsp_capabilities, cmd = {"haskell-language-server-wrapper", "--lsp"}, name = "haskell", on_init = _244_, root_dir = vim.loop.cwd(), settings = {haskell = {formattingProvider = "ormolu", plugin = {hlint = {globalOn = false}, retrie = {globalOn = false}, stan = {globalOn = false}}, checkProject = false}}})
   else
   end
   return nil
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _238_, group = "mitchellwrosen"})
-local function _243_()
+vim.api.nvim_create_autocmd("FileType", {pattern = "haskell", callback = _241_, group = "mitchellwrosen"})
+local function _246_()
   if (vim.fn.executable("pyls") == 1) then
     local initialize_notification_id = nil
     local start_ms = nil
-    local function _244_(_params_2_auto, _config_3_auto)
+    local function _247_(_params_2_auto, _config_3_auto)
       start_ms = vim.loop.now()
       initialize_notification_id = require("notify").notify(("        | " .. "python" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
       return nil
     end
-    local function _245_(_client_2_auto, _result_3_auto)
+    local function _248_(_client_2_auto, _result_3_auto)
       local stop_ms_4_auto = vim.loop.now()
       return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "python" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
     end
-    vim.lsp.start({before_init = _244_, capabilities = lsp_capabilities, cmd = {"pyls"}, name = "python", on_init = _245_, root_dir = vim.loop.cwd(), settings = {}})
+    vim.lsp.start({before_init = _247_, capabilities = lsp_capabilities, cmd = {"pyls"}, name = "python", on_init = _248_, root_dir = vim.loop.cwd(), settings = {}})
   else
   end
   return nil
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "python", callback = _243_, group = "mitchellwrosen"})
-local function _247_()
+vim.api.nvim_create_autocmd("FileType", {pattern = "python", callback = _246_, group = "mitchellwrosen"})
+local function _250_()
   local initialize_notification_id = nil
   local start_ms = nil
-  local function _248_(_params_2_auto, _config_3_auto)
+  local function _251_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
     initialize_notification_id = require("notify").notify(("        | " .. "zig" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
     return nil
   end
-  local function _249_(_client_2_auto, _result_3_auto)
+  local function _252_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
     return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "zig" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  vim.lsp.start({before_init = _248_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _249_, root_dir = vim.loop.cwd(), settings = {}})
+  vim.lsp.start({before_init = _251_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _252_, root_dir = vim.loop.cwd(), settings = {}})
   return nil
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _247_, group = "mitchellwrosen"})
-local function _250_()
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _250_, group = "mitchellwrosen"})
+local function _253_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
   vim.cmd.startinsert()
   return nil
 end
-vim.api.nvim_create_autocmd("TermOpen", {callback = _250_, group = "mitchellwrosen"})
-local function _251_()
+vim.api.nvim_create_autocmd("TermOpen", {callback = _253_, group = "mitchellwrosen"})
+local function _254_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})
   else
   end
   return nil
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _251_, group = "mitchellwrosen"})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _254_, group = "mitchellwrosen"})

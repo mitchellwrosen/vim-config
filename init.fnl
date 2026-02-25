@@ -698,6 +698,26 @@
 
 (create-autocmd
   "FileType"
+  { :pattern "clojure" }
+  (fn []
+    ; (vim.lsp.set_log_level "TRACE")
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "clojure")
+        :capabilities lsp-capabilities
+        :cmd ["clojure-lsp"]
+        :name "clojure"
+        :on_init (make-on-init start-ms initialize-notification-id "clojure")
+        :root_dir (vim.loop.cwd)
+      }
+    )
+    nil
+  )
+)
+
+(create-autocmd
+  "FileType"
   { :pattern "go" }
   (fn []
     ; (vim.lsp.set_log_level "TRACE")

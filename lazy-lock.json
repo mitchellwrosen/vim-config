@@ -14,7 +14,7 @@
   "gruvbox-material": { "branch": "master", "commit": "834dbf21836862300ced7444db4262b796330ab7" },
   "haskell": { "branch": "master", "commit": "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e" },
   "indent-blankline": { "branch": "master", "commit": "018bd04d80c9a73d399c1061fa0c3b14a7614399" },
-  "lazy.nvim": { "branch": "main", "commit": "1ea3c4085785f460fb0e46d2fe1ee895f5f9e7c1" },
+  "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
   "leap": { "branch": "main", "commit": "f74473d23ebf60957e0db3ff8172349a82e5a442" },
   "leap-spooky": { "branch": "main", "commit": "3e940464b1728b22052dd565accc949c0b02b025" },
   "lsp-lines": { "branch": "main", "commit": "dcff567b3a2d730f31b6da229ca3bb40640ec5a6" },
@@ -28,5 +28,5 @@
   "surround": { "branch": "master", "commit": "aeb933272e72617f7c4d35e1f003be16836b948d" },
   "treesitter": { "branch": "master", "commit": "42fc28ba918343ebfd5565147a42a26580579482" },
   "which-key": { "branch": "main", "commit": "94cb020ff33a1e0e22fac1c41663d2c439741f17" },
-  "zig": { "branch": "master", "commit": "a0d9adedafeb1a33a0159d16ddcdf194b7cea881" }
+  "zig": { "branch": "master", "commit": "366ef4855d22fd1377b81c382542466475b73a01" }
 }

@@ -39,7 +39,7 @@
     }
     { :name "haskell" :url "https://github.com/neovimhaskell/haskell-vim" :commit "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e" :ft "haskell" :config (fn [] nil) }
     { :name "nix" :url "https://github.com/LnL7/vim-nix" :commit "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee" :ft "nix" :config (fn [] nil) }
-    { :name "zig" :url "https://github.com/ziglang/zig.vim" :commit "a0d9adedafeb1a33a0159d16ddcdf194b7cea881" :ft "zig" :config (fn [] nil) }
+    { :name "zig" :url "https://codeberg.org/ziglang/zig.vim" :commit "366ef4855d22fd1377b81c382542466475b73a01" :ft "zig" :config (fn [] nil) }
 
     ; better quickfix with preview
     { :name "bqf" :url "https://github.com/kevinhwang91/nvim-bqf" :tag "v1.1.0" :ft "qf" :config (include "config-nvim-bqf") }

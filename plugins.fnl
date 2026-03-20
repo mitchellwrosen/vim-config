@@ -32,78 +32,148 @@
     ; basic language syntax highlighting, indent, keywords, etc. (does treesitter kinda obviate these?)
     {
       :name "fennel"
-      :url "https://github.com/bakpakin/fennel.vim"
+
       :commit "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89"
-      :ft "fennel"
       :config (fn [] nil)
+      :ft "fennel"
+      :url "https://github.com/bakpakin/fennel.vim"
     }
-    { :name "haskell" :url "https://github.com/neovimhaskell/haskell-vim" :commit "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e" :ft "haskell" :config (fn [] nil) }
-    { :name "nix" :url "https://github.com/LnL7/vim-nix" :commit "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee" :ft "nix" :config (fn [] nil) }
-    { :name "zig" :url "https://codeberg.org/ziglang/zig.vim" :commit "366ef4855d22fd1377b81c382542466475b73a01" :ft "zig" :config (fn [] nil) }
+    {
+      :name "haskell"
+
+      :commit "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e"
+      :config (fn [] nil)
+      :ft "haskell"
+      :url "https://github.com/neovimhaskell/haskell-vim"
+    }
+    {
+      :name "nix"
+
+      :commit "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee"
+      :config (fn [] nil)
+      :ft "nix"
+      :url "https://github.com/LnL7/vim-nix"
+    }
+    {
+      :name "zig"
+
+      :commit "366ef4855d22fd1377b81c382542466475b73a01"
+      :config (fn [] nil)
+      :ft "zig"
+      :url "https://codeberg.org/ziglang/zig.vim"
+    }
 
     ; better quickfix with preview
-    { :name "bqf" :url "https://github.com/kevinhwang91/nvim-bqf" :tag "v1.1.0" :ft "qf" :config (include "config-nvim-bqf") }
+    {
+      :name "bqf"
+
+      :config (include "config-nvim-bqf")
+      :ft "qf"
+      :tag "v1.1.0"
+      :url "https://github.com/kevinhwang91/nvim-bqf"
+    }
 
     ; improved "ga" for information about the character under the cursor
-    { :name "characterize" :url "https://github.com/tpope/vim-characterize" :commit "885a00a3c21dd52ca8f2fd7d62850134934179d9" :keys [ [ "ga" ] ] :config (include "config-characterize") }
+    {
+      :name "characterize"
+
+      :commit "885a00a3c21dd52ca8f2fd7d62850134934179d9"
+      :config (include "config-characterize")
+      :keys [ [ "ga" ] ]
+      :url "https://github.com/tpope/vim-characterize"
+    }
 
     {
       :name "cmp"
-      :url "https://github.com/hrsh7th/nvim-cmp"
+
       :commit "v0.0.2"
+      :config (include "config-nvim-cmp")
       :dependencies [ "cmp-buffer" "cmp-lsp" ]
       :event "InsertEnter"
-      :config (include "config-nvim-cmp")
+      :url "https://github.com/hrsh7th/nvim-cmp"
     }
     {
       :name "cmp-buffer"
-      :url "https://github.com/hrsh7th/cmp-buffer"
+
       :commit "b74fab3656eea9de20a9b8116afa3cfc4ec09657" ; 2025-10-17
       :lazy true
+      :url "https://github.com/hrsh7th/cmp-buffer"
     }
     {
       :name "cmp-lsp"
-      :url "https://github.com/hrsh7th/cmp-nvim-lsp"
+
       :commit "bd5a7d6db125d4654b50eeae9f5217f24bb22fd3" ; 2025-10-17
       :lazy true
+      :url "https://github.com/hrsh7th/cmp-nvim-lsp"
     }
 
     ; quick (un-)commenting
-    { :name "commentary" :url "https://github.com/tpope/vim-commentary" :commit "627308e30639be3e2d5402808ce18690557e8292" :event "VeryLazy" :config (fn [] nil) }
+    {
+      :name "commentary"
+
+      :commit "627308e30639be3e2d5402808ce18690557e8292"
+      :config (fn [] nil)
+      :event "VeryLazy"
+      :url "https://github.com/tpope/vim-commentary"
+    }
 
     ; automatically unhighlight when cursor moves
-    { :name "cool" :url "https://github.com/romainl/vim-cool" :commit "80536b9f2e23292708a64f2e7bcf5e596f9faf24" :event "VeryLazy" :config (fn [] nil) }
+    {
+      :name "cool"
+
+      :commit "80536b9f2e23292708a64f2e7bcf5e596f9faf24"
+      :config (fn [] nil)
+      :event "VeryLazy"
+      :url "https://github.com/romainl/vim-cool"
+    }
 
     ; highlight colorcolumn in insert mode
-    { :name "deadcolumn" :url "https://github.com/Bekaboo/deadcolumn.nvim" :commit "8140fd7cface9592a44b3151203fc6ca95ad9598" :event "InsertEnter" :config (include "config-deadcolumn") }
+    {
+      :name "deadcolumn"
+
+      :commit "8140fd7cface9592a44b3151203fc6ca95ad9598"
+      :config (include "config-deadcolumn")
+      :event "InsertEnter"
+      :url "https://github.com/Bekaboo/deadcolumn.nvim"
+    }
 
     ; :Git
-    { :name "fugitive" :url "https://github.com/tpope/vim-fugitive" :tag "v3.7" :cmd "Git" :config (fn [] nil) }
+    {
+      :name "fugitive"
+
+      :cmd "Git"
+      :config (fn [] nil)
+      :tag "v3.7"
+      :url "https://github.com/tpope/vim-fugitive"
+    }
 
     ; nice low-contrast fork of gruvbox color scheme [2023-05-08]
     ; the lazy.nvim readme recommends colorscheme plugins load first
     {
       :name "gruvbox-material"
-      :url "https://github.com/sainnhe/gruvbox-material"
+
       :commit "834dbf21836862300ced7444db4262b796330ab7" ; 2025-10-16
       :priority 1000
+      :url "https://github.com/sainnhe/gruvbox-material"
     }
 
     ; fuzzy search source code, files, etc
     {
       :name "fzf"
-      :url "https://github.com/junegunn/fzf"
+
       :commit "v0.70.0"
-      :event "VeryLazy"
       :config (include "config-fzf")
+      :event "VeryLazy"
+      :url "https://github.com/junegunn/fzf"
     }
     {
       :name "fzf-vim"
-      :url "https://github.com/junegunn/fzf.vim"
+
       :commit "879db51d0965515cdaef9b7f6bdeb91c65d2829e" ; 2025-10-17
+      :config (include "config-fzf-vim")
       :dependencies [ "fzf" ]
       :event "VeryLazy"
-      :config (include "config-fzf-vim")
+      :url "https://github.com/junegunn/fzf.vim"
     }
 
     ; Show markers every 2 columns of leading whitespace
@@ -121,7 +191,13 @@
     }
 
     ; use 's' to move far away
-    { :name "leap" :url "https://github.com/ggandor/leap.nvim" :commit "f74473d23ebf60957e0db3ff8172349a82e5a442" :event "VeryLazy" :config (include "config-leap") }
+    {
+      :name "leap"
+
+      :commit "774c452da3521d4434f912b6ca6dd97318aca4b0" ; 2026-03-20
+      :config (include "config-leap")
+      :url "https://codeberg.org/andyg/leap.nvim"
+    }
 
     ; [rR]emote and [mM]agnetic text objects (e.g. cirw change inner remote word)
     { :name "leap-spooky" :url "https://github.com/ggandor/leap-spooky.nvim" :commit "3e940464b1728b22052dd565accc949c0b02b025" :event "VeryLazy" :config (include "config-leap-spooky") :dependencies [ "leap" ] }

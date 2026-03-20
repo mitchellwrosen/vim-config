@@ -15,7 +15,7 @@
   "haskell": { "branch": "master", "commit": "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e" },
   "indent-blankline": { "branch": "master", "commit": "d28a3f70721c79e3c5f6693057ae929f3d9c0a03" },
   "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
-  "leap": { "branch": "main", "commit": "f74473d23ebf60957e0db3ff8172349a82e5a442" },
+  "leap": { "branch": "main", "commit": "774c452da3521d4434f912b6ca6dd97318aca4b0" },
   "leap-spooky": { "branch": "main", "commit": "3e940464b1728b22052dd565accc949c0b02b025" },
   "lsp-lines": { "branch": "main", "commit": "dcff567b3a2d730f31b6da229ca3bb40640ec5a6" },
   "lualine": { "branch": "master", "commit": "84ffb80e452d95e2c46fa29a98ea11a240f7843e" },

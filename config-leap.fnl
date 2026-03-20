@@ -9,7 +9,7 @@
       ".`~!@#$%^&*()-_=+[{]}\\|;:'\",<>/?"
     ]
   )
-  (set leap.opts.labels [ "j" "f" "k" "d" "l" "s" "a" "m" "c" "n" "v" "u" "r" "y" "t" "," "x" "i" "e" "." "z" "o" "w" "/" "p" "q" ])
+  (set leap.opts.labels [ "j" "f" "k" "d" "l" "s" ";" "a" "m" "c" "n" "v" "u" "r" "i" "e" "o" "w" "p" "q" "y" "t" "," "x" "." "z" "/" ])
   ; disable auto-jump, requiring three keypresses even for the closest match
   (set leap.opts.safe_labels [])
   (vim.keymap.set

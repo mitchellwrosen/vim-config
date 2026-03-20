@@ -5,8 +5,8 @@
 ; region : { start : position, end : position }
 
 (fn create-autocmd [events opts callback]
-  (tset opts "callback" callback)
-  (tset opts "group" "mitchellwrosen")
+  (set opts.callback callback)
+  (set opts.group "mitchellwrosen")
   `(vim.api.nvim_create_autocmd ,events ,opts)
 )
 

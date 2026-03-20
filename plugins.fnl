@@ -199,8 +199,16 @@
       :url "https://codeberg.org/andyg/leap.nvim"
     }
 
-    ; [rR]emote and [mM]agnetic text objects (e.g. cirw change inner remote word)
-    { :name "leap-spooky" :url "https://github.com/ggandor/leap-spooky.nvim" :commit "3e940464b1728b22052dd565accc949c0b02b025" :event "VeryLazy" :config (include "config-leap-spooky") :dependencies [ "leap" ] }
+    ; remote text objects (e.g. cirw change inner remote word)
+    {
+      :name "spooky"
+
+      :commit "b02df5a81ab22c9ede5caecc227f8b6cbe67940f"
+      :config (include "config-spooky")
+      :dependencies [ "leap" ]
+      :event "VeryLazy"
+      :url "https://github.com/ggandor/spooky.nvim"
+    }
 
     ; show lsp error under cursor in virtual text block
     { :name "lsp-lines" :url "https://git.sr.ht/~whynothugo/lsp_lines.nvim" :commit "dcff567b3a2d730f31b6da229ca3bb40640ec5a6" :event "LspAttach" :config (include "config-lsp-lines") }

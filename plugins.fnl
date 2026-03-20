@@ -17,7 +17,7 @@
         "clone"
         "--filter=blob:none"
         "https://github.com/folke/lazy.nvim"
-        "--branch=v11.17.1"
+        "--branch=v11.17.5"
         lazypath
       ]
     )
@@ -93,7 +93,7 @@
     {
       :name "fzf"
       :url "https://github.com/junegunn/fzf"
-      :commit "v0.66.0"
+      :commit "v0.70.0"
       :event "VeryLazy"
       :config (include "config-fzf")
     }
@@ -109,9 +109,15 @@
     ; Show markers every 2 columns of leading whitespace
     {
       :name "indent-blankline"
+
+      :main "ibl"
+      :opts {
+        :indent {
+          :char [ "│" "┊" ]
+        }
+      }
+      :tag "v3.9.1"
       :url "https://github.com/lukas-reineke/indent-blankline.nvim"
-      :tag "v2.20.4"
-      :config (include "config-indent-blankline")
     }
 
     ; use 's' to move far away

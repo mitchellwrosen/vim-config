@@ -255,9 +255,8 @@
       (nmap "<Space>lf" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
     )
     (when (client.supports_method "textDocument/hover")
-      (tset
-        vim.lsp.handlers
-        "textDocument/hover"
+      (set
+        (. vim.lsp.handlers "textDocument/hover")
         (vim.lsp.with
           vim.lsp.handlers.hover
           { :border "rounded"
@@ -566,13 +565,12 @@
 
     (default-progress-handler err result context config)
   )
-  (tset vim.lsp.handlers "$/progress" my-progress-handler)
+  (set (. vim.lsp.handlers "$/progress") my-progress-handler)
 )
 
 ; default "textDocument/documentHighlight" handler, but save the ranges in a buffer-local variable
-(tset
-  vim.lsp.handlers
-  "textDocument/documentHighlight"
+(set
+  (. vim.lsp.handlers "textDocument/documentHighlight")
   (fn [ _ references context _ ]
     (when references
       (local client-id context.client_id)

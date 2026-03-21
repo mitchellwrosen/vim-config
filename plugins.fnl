@@ -83,28 +83,36 @@
       :url "https://github.com/tpope/vim-characterize"
     }
 
-    {
-      :name "cmp"
+    ; {
+    ;   :name "cmp"
 
-      :commit "v0.0.2"
-      :config (include "config-nvim-cmp")
-      :dependencies [ "cmp-buffer" "cmp-lsp" ]
-      :event "InsertEnter"
-      :url "https://github.com/hrsh7th/nvim-cmp"
-    }
-    {
-      :name "cmp-buffer"
+    ;   :commit "v0.0.2"
+    ;   :config (include "config-nvim-cmp")
+    ;   :dependencies [ "cmp-buffer" "cmp-lsp" ]
+    ;   :event "InsertEnter"
+    ;   :url "https://github.com/hrsh7th/nvim-cmp"
+    ; }
+    ; {
+    ;   :name "cmp-buffer"
 
-      :commit "b74fab3656eea9de20a9b8116afa3cfc4ec09657" ; 2025-10-17
-      :lazy true
-      :url "https://github.com/hrsh7th/cmp-buffer"
-    }
-    {
-      :name "cmp-lsp"
+    ;   :commit "b74fab3656eea9de20a9b8116afa3cfc4ec09657" ; 2025-10-17
+    ;   :lazy true
+    ;   :url "https://github.com/hrsh7th/cmp-buffer"
+    ; }
+    ; {
+    ;   :name "cmp-lsp"
 
-      :commit "bd5a7d6db125d4654b50eeae9f5217f24bb22fd3" ; 2025-10-17
-      :lazy true
-      :url "https://github.com/hrsh7th/cmp-nvim-lsp"
+    ;   :commit "bd5a7d6db125d4654b50eeae9f5217f24bb22fd3" ; 2025-10-17
+    ;   :lazy true
+    ;   :url "https://github.com/hrsh7th/cmp-nvim-lsp"
+    ; }
+
+    {
+      :name "blink.cmp"
+
+      :config (include "config-blink")
+      :tag "v1.10.1"
+      :url "https://github.com/saghen/blink.cmp"
     }
 
     ; quick (un-)commenting
@@ -211,13 +219,33 @@
     }
 
     ; show lsp error under cursor in virtual text block
-    { :name "lsp-lines" :url "https://git.sr.ht/~whynothugo/lsp_lines.nvim" :commit "dcff567b3a2d730f31b6da229ca3bb40640ec5a6" :event "LspAttach" :config (include "config-lsp-lines") }
+    {
+      :name "lsp-lines"
+
+      :commit "a92c755f182b89ea91bd8a6a2227208026f27b4d"
+      :config (include "config-lsp-lines")
+      :event "LspAttach"
+      :url "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
+    }
 
     ; status line
-    { :name "lualine" :url "https://github.com/nvim-lualine/lualine.nvim" :commit "84ffb80e452d95e2c46fa29a98ea11a240f7843e" :config (include "config-lualine") }
+    {
+      :name "lualine"
+
+      :commit "84ffb80e452d95e2c46fa29a98ea11a240f7843e"
+      :config (include "config-lualine")
+      :url "https://github.com/nvim-lualine/lualine.nvim"
+    }
 
     ; surround
-    { :name "mini-surround" :url "https://github.com/echasnovski/mini.surround" :commit "ea2e9c4cdbddc826dc6eeac69b035f8220f65de5" :event "VeryLazy" :config (include "config-mini-surround") }
+    {
+      :name "mini-surround"
+
+      :config (include "config-mini-surround")
+      :event "VeryLazy"
+      :tag "v0.17.0"
+      :url "https://github.com/echasnovski/mini.surround"
+    }
 
     ; fancy notifications
     {
@@ -228,13 +256,34 @@
     }
 
     ; make "." repeat more things out of the box
-    { :name "repeat" :url "https://github.com/tpope/vim-repeat" :commit "24afe922e6a05891756ecf331f39a1f6743d3d5a" :event "VeryLazy" :config (fn [] nil) }
+    {
+      :name "repeat"
+
+      :commit "24afe922e6a05891756ecf331f39a1f6743d3d5a"
+      :config (fn [] nil)
+      :event "VeryLazy"
+      :url "https://github.com/tpope/vim-repeat"
+    }
 
     ; run :StartupTime to profile vim start time
-    { :name "startuptime" :url "https://github.com/dstein64/vim-startuptime" :tag "v4.4.0" :cmd "StartupTime" :config (fn [] nil) }
+    {
+      :name "startuptime"
+
+      :cmd "StartupTime"
+      :config (fn [] nil)
+      :tag "v4.4.0"
+      :url "https://github.com/dstein64/vim-startuptime"
+    }
 
     ; some surround helpers
-    { :name "surround" :url "https://github.com/tpope/vim-surround" :commit "aeb933272e72617f7c4d35e1f003be16836b948d" :event "VeryLazy" :config (fn [] nil) }
+    ; {
+    ;   :name "surround"
+
+    ;   :commit "aeb933272e72617f7c4d35e1f003be16836b948d"
+    ;   :config (fn [] nil)
+    ;   :event "VeryLazy"
+    ;   :url "https://github.com/tpope/vim-surround"
+    ; }
 
     ; treesitter [2023-05-08]
     {

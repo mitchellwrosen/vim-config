@@ -585,12 +585,13 @@
 )
 
 ; lsp capabilities: defaults plus whatever cmp_nvim_lsp wants to say it can do
-(local lsp-capabilities
-  (do
-    (local cmp-nvim-lsp (require "cmp_nvim_lsp"))
-    (vim.tbl_deep_extend "force" (vim.lsp.protocol.make_client_capabilities) (cmp-nvim-lsp.default_capabilities))
-  )
-)
+; (local lsp-capabilities
+;   (do
+;     (local cmp-nvim-lsp (require "cmp_nvim_lsp"))
+;     (vim.tbl_deep_extend "force" (vim.lsp.protocol.make_client_capabilities) (cmp-nvim-lsp.default_capabilities))
+;   )
+; )
+(local lsp-capabilities (vim.lsp.protocol.make_client_capabilities))
 
 (macro make-on-init [start-ms notification-id name]
   `(fn [_client# _result#]

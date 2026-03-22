@@ -622,15 +622,26 @@
   )
 )
 
-; (lsp.elmls.setup
-;   { :capabilities (capabilities lsp.elmls)
-;     :on_attach
-;       (lambda [client buf]
-;         ; https://github.com/elm-tooling/elm-language-server/issues/503
-;         (when client.config.flags (set client.config.flags.allow_incremental_sync true))
-;       )
-;   }
-; )
+(create-autocmd
+  "FileType"
+  { :pattern "clojure" }
+  (fn []
+    ; (vim.lsp.set_log_level "TRACE")
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "clojure")
+        :capabilities lsp-capabilities
+        :cmd ["clojure-lsp"]
+        :name "clojure"
+        :on_init (make-on-init start-ms initialize-notification-id "clojure")
+        :root_dir (vim.loop.cwd)
+      }
+    )
+    nil
+  )
+)
+
 (create-autocmd
   "FileType"
   { :pattern "elm" }
@@ -678,43 +689,6 @@
   )
 )
 
-; seems-like-haskell-project returns true if there's a "cabal.project", "stack.yaml", or "*.cabal" file here
-(macro seems-like-haskell-project []
-  `(accumulate [acc# false name# typ# (vim.fs.dir ".") &until acc#]
-    (or
-      (and
-        (= typ# "file")
-        (or
-          (= name# "cabal.project")
-          (= name# "stack.yaml")
-          (string.match name# "%.cabal$")
-        )
-      )
-      acc#
-    )
-  )
-)
-
-(create-autocmd
-  "FileType"
-  { :pattern "clojure" }
-  (fn []
-    ; (vim.lsp.set_log_level "TRACE")
-    (var initialize-notification-id nil)
-    (var start-ms nil)
-    (vim.lsp.start
-      { :before_init (make-before-init start-ms initialize-notification-id "clojure")
-        :capabilities lsp-capabilities
-        :cmd ["clojure-lsp"]
-        :name "clojure"
-        :on_init (make-on-init start-ms initialize-notification-id "clojure")
-        :root_dir (vim.loop.cwd)
-      }
-    )
-    nil
-  )
-)
-
 (create-autocmd
   "FileType"
   { :pattern "go" }
@@ -732,6 +706,23 @@
       }
     )
     nil
+  )
+)
+
+; seems-like-haskell-project returns true if there's a "cabal.project", "stack.yaml", or "*.cabal" file here
+(macro seems-like-haskell-project []
+  `(accumulate [acc# false name# typ# (vim.fs.dir ".") &until acc#]
+    (or
+      (and
+        (= typ# "file")
+        (or
+          (= name# "cabal.project")
+          (= name# "stack.yaml")
+          (string.match name# "%.cabal$")
+        )
+      )
+      acc#
+    )
   )
 )
 
@@ -786,6 +777,25 @@
           :settings {}
         }
       )
+    )
+    nil
+  )
+)
+
+(create-autocmd
+  "FileType"
+  { :pattern "rust" }
+  (fn []
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "rust")
+        :capabilities lsp-capabilities
+        :cmd ["rust-analyzer"]
+        :name "rust"
+        :on_init (make-on-init start-ms initialize-notification-id "rust")
+        :root_dir (vim.loop.cwd)
+      }
     )
     nil
   )

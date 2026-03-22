@@ -2014,10 +2014,26 @@ local function _232_()
   local start_ms = nil
   local function _233_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
+    initialize_notification_id = require("notify").notify(("        | " .. "clojure" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
+    return nil
+  end
+  local function _234_(_client_2_auto, _result_3_auto)
+    local stop_ms_4_auto = vim.loop.now()
+    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "clojure" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
+  end
+  vim.lsp.start({before_init = _233_, capabilities = lsp_capabilities, cmd = {"clojure-lsp"}, name = "clojure", on_init = _234_, root_dir = vim.loop.cwd()})
+  return nil
+end
+vim.api.nvim_create_autocmd("FileType", {pattern = "clojure", callback = _232_, group = "mitchellwrosen"})
+local function _235_()
+  local initialize_notification_id = nil
+  local start_ms = nil
+  local function _236_(_params_2_auto, _config_3_auto)
+    start_ms = vim.loop.now()
     initialize_notification_id = require("notify").notify(("        | " .. "elm" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
     return nil
   end
-  local function _234_(client, _buf)
+  local function _237_(client, _buf)
     if client.config.flags then
       client.config.flags.allow_incremental_sync = true
       return nil
@@ -2025,46 +2041,30 @@ local function _232_()
       return nil
     end
   end
-  local function _236_(_client_2_auto, _result_3_auto)
+  local function _239_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
     return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "elm" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  vim.lsp.start({before_init = _233_, capabilities = lsp_capabilities, cmd = {"elm-language-server"}, init_options = {elmAnalyseTrigger = "change"}, name = "elm", on_attach = _234_, on_init = _236_, root_dir = vim.loop.cwd(), settings = {}})
+  vim.lsp.start({before_init = _236_, capabilities = lsp_capabilities, cmd = {"elm-language-server"}, init_options = {elmAnalyseTrigger = "change"}, name = "elm", on_attach = _237_, on_init = _239_, root_dir = vim.loop.cwd(), settings = {}})
   return nil
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "elm", callback = _232_, group = "mitchellwrosen"})
-local function _237_()
-  local initialize_notification_id = nil
-  local start_ms = nil
-  local function _238_(_params_2_auto, _config_3_auto)
-    start_ms = vim.loop.now()
-    initialize_notification_id = require("notify").notify(("        | " .. "fennel" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
-    return nil
-  end
-  local function _239_(_client_2_auto, _result_3_auto)
-    local stop_ms_4_auto = vim.loop.now()
-    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "fennel" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
-  end
-  vim.lsp.start({before_init = _238_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel", on_init = _239_, root_dir = vim.loop.cwd(), settings = {}})
-  return nil
-end
-vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _237_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "elm", callback = _235_, group = "mitchellwrosen"})
 local function _240_()
   local initialize_notification_id = nil
   local start_ms = nil
   local function _241_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
-    initialize_notification_id = require("notify").notify(("        | " .. "clojure" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
+    initialize_notification_id = require("notify").notify(("        | " .. "fennel" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
     return nil
   end
   local function _242_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
-    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "clojure" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
+    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "fennel" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  vim.lsp.start({before_init = _241_, capabilities = lsp_capabilities, cmd = {"clojure-lsp"}, name = "clojure", on_init = _242_, root_dir = vim.loop.cwd()})
+  vim.lsp.start({before_init = _241_, capabilities = lsp_capabilities, cmd = {"fennel-ls"}, name = "fennel", on_init = _242_, root_dir = vim.loop.cwd(), settings = {}})
   return nil
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "clojure", callback = _240_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "fennel", callback = _240_, group = "mitchellwrosen"})
 local function _243_()
   local initialize_notification_id = nil
   local start_ms = nil
@@ -2133,29 +2133,45 @@ local function _255_()
   local start_ms = nil
   local function _256_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
-    initialize_notification_id = require("notify").notify(("        | " .. "zig" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
+    initialize_notification_id = require("notify").notify(("        | " .. "rust" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
     return nil
   end
   local function _257_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
-    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "zig" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
+    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "rust" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  vim.lsp.start({before_init = _256_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _257_, root_dir = vim.loop.cwd(), settings = {}})
+  vim.lsp.start({before_init = _256_, capabilities = lsp_capabilities, cmd = {"rust-analyzer"}, name = "rust", on_init = _257_, root_dir = vim.loop.cwd()})
   return nil
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _255_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "rust", callback = _255_, group = "mitchellwrosen"})
 local function _258_()
+  local initialize_notification_id = nil
+  local start_ms = nil
+  local function _259_(_params_2_auto, _config_3_auto)
+    start_ms = vim.loop.now()
+    initialize_notification_id = require("notify").notify(("        | " .. "zig" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
+    return nil
+  end
+  local function _260_(_client_2_auto, _result_3_auto)
+    local stop_ms_4_auto = vim.loop.now()
+    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "zig" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
+  end
+  vim.lsp.start({before_init = _259_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _260_, root_dir = vim.loop.cwd(), settings = {}})
+  return nil
+end
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _258_, group = "mitchellwrosen"})
+local function _261_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
   vim.cmd.startinsert()
   return nil
 end
-vim.api.nvim_create_autocmd("TermOpen", {callback = _258_, group = "mitchellwrosen"})
-local function _259_()
+vim.api.nvim_create_autocmd("TermOpen", {callback = _261_, group = "mitchellwrosen"})
+local function _262_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})
   else
   end
   return nil
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _259_, group = "mitchellwrosen"})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _262_, group = "mitchellwrosen"})

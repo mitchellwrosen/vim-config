@@ -801,6 +801,25 @@
   )
 )
 
+(create-autocmd
+  "FileType"
+  { :pattern "typescript" }
+  (fn []
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "typescript")
+        :capabilities lsp-capabilities
+        :cmd ["vtsls" "--stdio"]
+        :name "typescript"
+        :on_init (make-on-init start-ms initialize-notification-id "typescript")
+        :root_dir (vim.loop.cwd)
+      }
+    )
+    nil
+  )
+)
+
 ; (create-autocmd
 ;   "FileType"
 ;   { :pattern "unison" }

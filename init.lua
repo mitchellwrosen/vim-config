@@ -28,6 +28,7 @@ package.preload["options"] = package.preload["options"] or function(...)
   vim.o.startofline = false
   vim.o.synmaxcol = 300
   vim.o.termguicolors = true
+  vim.o.textwidth = 0
   vim.o.timeoutlen = 1000
   vim.o.title = true
   vim.o.undofile = true
@@ -2149,29 +2150,45 @@ local function _258_()
   local start_ms = nil
   local function _259_(_params_2_auto, _config_3_auto)
     start_ms = vim.loop.now()
-    initialize_notification_id = require("notify").notify(("        | " .. "zig" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
+    initialize_notification_id = require("notify").notify(("        | " .. "typescript" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
     return nil
   end
   local function _260_(_client_2_auto, _result_3_auto)
     local stop_ms_4_auto = vim.loop.now()
-    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "zig" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
+    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "typescript" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
   end
-  vim.lsp.start({before_init = _259_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _260_, root_dir = vim.loop.cwd(), settings = {}})
+  vim.lsp.start({before_init = _259_, capabilities = lsp_capabilities, cmd = {"vtsls", "--stdio"}, name = "typescript", on_init = _260_, root_dir = vim.loop.cwd()})
   return nil
 end
-vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _258_, group = "mitchellwrosen"})
+vim.api.nvim_create_autocmd("FileType", {pattern = "typescript", callback = _258_, group = "mitchellwrosen"})
 local function _261_()
+  local initialize_notification_id = nil
+  local start_ms = nil
+  local function _262_(_params_2_auto, _config_3_auto)
+    start_ms = vim.loop.now()
+    initialize_notification_id = require("notify").notify(("        | " .. "zig" .. ": Initializing"), vim.log.levels.WARN, {render = "minimal", timeout = false})
+    return nil
+  end
+  local function _263_(_client_2_auto, _result_3_auto)
+    local stop_ms_4_auto = vim.loop.now()
+    return require("notify").notify((string.format("%6.2fs", ((stop_ms_4_auto - start_ms) / 1000)) .. " | " .. "zig" .. ": Initialized"), vim.log.levels.INFO, {replace = initialize_notification_id, timeout = 3000})
+  end
+  vim.lsp.start({before_init = _262_, capabilities = lsp_capabilities, cmd = {"zls"}, name = "zig", on_init = _263_, root_dir = vim.loop.cwd(), settings = {}})
+  return nil
+end
+vim.api.nvim_create_autocmd("FileType", {pattern = "zig", callback = _261_, group = "mitchellwrosen"})
+local function _264_()
   vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {buffer = true})
   vim.keymap.set("n", "<C-c>", "i<C-c>", {buffer = true})
   vim.cmd.startinsert()
   return nil
 end
-vim.api.nvim_create_autocmd("TermOpen", {callback = _261_, group = "mitchellwrosen"})
-local function _262_()
+vim.api.nvim_create_autocmd("TermOpen", {callback = _264_, group = "mitchellwrosen"})
+local function _265_()
   if ((vim.fn.argc() == 0) and file_exists("Session.vim")) then
     vim.cmd({cmd = "source", args = {"Session.vim"}, mods = {silent = true}})
   else
   end
   return nil
 end
-return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _262_, group = "mitchellwrosen"})
+return vim.api.nvim_create_autocmd("VimEnter", {nested = true, callback = _265_, group = "mitchellwrosen"})

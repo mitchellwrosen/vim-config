@@ -3,6 +3,7 @@
 set -e
 
 # haha don't want to figure out how to write a for-loop in bash
+fennel --compile after-filetype-rust.fnl > after/ftplugin/rust.lua
 fennel --compile filetype-fzf.fnl > ftplugin/fzf.lua
 fennel --compile filetype-gitcommit.fnl > ftplugin/gitcommit.lua
 fennel --compile filetype-html.fnl > ftplugin/html.lua

@@ -762,6 +762,25 @@
 
 (create-autocmd
   "FileType"
+  { :pattern "javascript" }
+  (fn []
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "javascript")
+        :capabilities lsp-capabilities
+        :cmd ["vtsls" "--stdio"]
+        :name "javascript"
+        :on_init (make-on-init start-ms initialize-notification-id "javascript")
+        :root_dir (vim.loop.cwd)
+      }
+    )
+    nil
+  )
+)
+
+(create-autocmd
+  "FileType"
   { :pattern "python" }
   (fn []
     (when (= (vim.fn.executable "pyls") 1)

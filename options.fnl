@@ -46,3 +46,6 @@
 (set vim.wo.list true) ; show trailing whitespace, tabs, etc.
 (set vim.wo.number true) ; show line number gutter
 (set vim.wo.signcolumn "yes") ; always draw signcolumn because it's jarring when it appears otherwise
+
+; don't persist macros across file close/open
+(vim.opt.shada:remove "!")

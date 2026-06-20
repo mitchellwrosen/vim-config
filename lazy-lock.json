@@ -12,7 +12,7 @@
   "gruvbox-material": { "branch": "master", "commit": "834dbf21836862300ced7444db4262b796330ab7" },
   "haskell": { "branch": "master", "commit": "f35d02204b4813d1dbe8b0e98cc39701a4b8e15e" },
   "indent-blankline": { "branch": "master", "commit": "d28a3f70721c79e3c5f6693057ae929f3d9c0a03" },
-  "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
+  "lazy.nvim": { "branch": "main", "commit": "85c7ff3711b730b4030d03144f6db6375044ae82" },
   "leap": { "branch": "main", "commit": "774c452da3521d4434f912b6ca6dd97318aca4b0" },
   "lsp-lines": { "branch": "main", "commit": "a92c755f182b89ea91bd8a6a2227208026f27b4d" },
   "lualine": { "branch": "master", "commit": "84ffb80e452d95e2c46fa29a98ea11a240f7843e" },
@@ -23,7 +23,7 @@
   "repeat": { "branch": "master", "commit": "24afe922e6a05891756ecf331f39a1f6743d3d5a" },
   "spooky": { "branch": "main", "commit": "b02df5a81ab22c9ede5caecc227f8b6cbe67940f" },
   "startuptime": { "branch": "master", "commit": "daacd02e773944b8de312ddac83f436fae92cbb9" },
-  "treesitter": { "branch": "master", "commit": "42fc28ba918343ebfd5565147a42a26580579482" },
+  "treesitter": { "branch": "main", "commit": "42fc28ba918343ebfd5565147a42a26580579482" },
   "which-key": { "branch": "main", "commit": "94cb020ff33a1e0e22fac1c41663d2c439741f17" },
   "zig": { "branch": "master", "commit": "366ef4855d22fd1377b81c382542466475b73a01" }
 }

@@ -745,7 +745,7 @@
           :settings
             { :haskell
                 { :checkProject false ; Don't typecheck the whole project on initial load
-                  :formattingProvider "ormolu"
+                  :formattingProvider (if (= (vim.fn.filereadable "fourmolu.yaml") 1) "fourmolu" "ormolu")
                   :plugin
                     { :hlint { :globalOn false }
                       :retrie { :globalOn false }

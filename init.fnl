@@ -709,22 +709,25 @@
   )
 )
 
-; seems-like-haskell-project returns true if there's a "cabal.project", "stack.yaml", or "*.cabal" file here
-(macro seems-like-haskell-project []
-  `(accumulate [acc# false name# typ# (vim.fs.dir ".") &until acc#]
-    (or
-      (and
-        (= typ# "file")
-        (or
-          (= name# "cabal.project")
-          (= name# "stack.yaml")
-          (string.match name# "%.cabal$")
-        )
-      )
-      acc#
-    )
-  )
-)
+; seems-like-haskell-project first checks cwd directly, then falls back to walking up
+; from the buffer's directory to the git root, looking for "cabal.project", "stack.yaml", or "*.cabal"
+(fn seems-like-haskell-project []
+  (or
+    (accumulate [found false name _ (vim.fs.dir ".") &until found]
+      (or found
+          (= name "cabal.project")
+          (= name "stack.yaml")
+          (not= nil (string.match name "%.cabal$"))))
+    (let [buf-dir (vim.fn.expand "%:p:h")
+          git-root (vim.fs.root buf-dir ".git")
+          stop (when git-root (vim.fn.fnamemodify git-root ":h"))
+          found (vim.fs.find
+                  (fn [name _]
+                    (or (= name "cabal.project")
+                        (= name "stack.yaml")
+                        (not= nil (string.match name "%.cabal$"))))
+                  {:upward true :path buf-dir :limit 1 :stop stop})]
+      (> (# found) 0))))
 
 (create-autocmd
   "FileType"

@@ -289,8 +289,8 @@
     {
       :name "treesitter"
       :url "https://github.com/nvim-treesitter/nvim-treesitter"
-      :commit "v0.10.0"
-      ; :commit "0ec48923e526d55892b7a1564a01b5111e5e9ba0"
+      ; :commit "v0.10.0"
+      :commit "4916d6592ede8c07973490d9322f187e07dfefac"
       :build ":TSUpdate"
       :config (include "config-treesitter")
     }

@@ -304,7 +304,7 @@ package.preload["config-notify"] = package.preload["config-notify"] or function(
 end
 package.preload["config-treesitter"] = package.preload["config-treesitter"] or function(...)
   local function _45_()
-    local treesitter = require("nvim-treesitter.configs")
+    local treesitter = require("nvim-treesitter")
     return treesitter.setup({highlight = {enable = true}, incremental_selection = {enable = true, keymaps = {node_incremental = "<Enter>", node_decremental = "<BS>", init_selection = false, scope_incremental = false}}, playground = {enable = true}})
   end
   return _45_

@@ -644,6 +644,25 @@
 
 (create-autocmd
   "FileType"
+  { :pattern "cpp" }
+  (fn []
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "clangd")
+        :capabilities lsp-capabilities
+        :cmd ["clangd"]
+        :name "clangd"
+        :on_init (make-on-init start-ms initialize-notification-id "clangd")
+        :root_dir (vim.loop.cwd)
+      }
+    )
+    nil
+  )
+)
+
+(create-autocmd
+  "FileType"
   { :pattern "elm" }
   (fn []
     (var initialize-notification-id nil)

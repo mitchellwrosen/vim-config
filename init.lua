@@ -1566,7 +1566,7 @@ local function _130_(_128_)
       return 1
     end
   end
-  if client.supports_method("textDocument/documentHighlight") then
+  if vim.lsp.util.supports_method(client, buf, "textDocument/documentHighlight") then
     local function _136_()
       local references = (vim.b["document-highlights"] or {})
       if ((vim.v.hlsearch == 0) and not vim.tbl_isempty(references)) then
@@ -1651,11 +1651,11 @@ local function _130_(_128_)
     vim.keymap.set("n", "N", _145_)
   else
   end
-  if client.supports_method("textDocument/codeAction") then
+  if vim.lsp.util.supports_method(client, buf, "textDocument/codeAction") then
     vim.keymap.set("n", "<Space>la", vim.lsp.buf.code_action, {buffer = buf, desc = "Apply code action", silent = true})
   else
   end
-  if client.supports_method("textDocument/codeLens") then
+  if vim.lsp.util.supports_method(client, buf, "textDocument/codeLens") then
     local function _157_()
       return vim.lsp.codelens.refresh()
     end
@@ -1665,12 +1665,12 @@ local function _130_(_128_)
   end
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer = buf, desc = "Go to definition", silent = true})
   vim.keymap.set("n", "<Space>ld", vim.lsp.buf.definition, {buffer = buf, desc = "Go to definition", silent = true})
-  if client.supports_method("textDocument/formatting") then
+  if vim.lsp.util.supports_method(client, buf, "textDocument/formatting") then
     vim.keymap.set("n", "<Space>d", vim.lsp.buf.format, {buffer = buf, desc = "Format code", silent = true})
     vim.keymap.set("n", "<Space>lf", vim.lsp.buf.format, {buffer = buf, desc = "Format code", silent = true})
   else
   end
-  if client.supports_method("textDocument/hover") then
+  if vim.lsp.util.supports_method(client, buf, "textDocument/hover") then
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded", silent = true})
     vim.keymap.set("n", "<Enter>", vim.lsp.buf.hover, {buffer = buf, silent = true})
   else

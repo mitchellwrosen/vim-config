@@ -185,7 +185,7 @@
       )
       (if ref-ix ref-ix 1)
     )
-    (when (client.supports_method "textDocument/documentHighlight")
+    (when (vim.lsp.util.supports_method client buf "textDocument/documentHighlight")
       (nmap
         "n"
         (fn []
@@ -236,10 +236,10 @@
       )
     )
 
-    (when (client.supports_method "textDocument/codeAction")
+    (when (vim.lsp.util.supports_method client buf "textDocument/codeAction")
       (nmap "<Space>la" vim.lsp.buf.code_action { :buffer buf :desc "Apply code action" :silent true })
     )
-    (when (client.supports_method "textDocument/codeLens")
+    (when (vim.lsp.util.supports_method client buf "textDocument/codeLens")
       ; Call vim.lsp.codelens.refresh() now and again, as recommended by the docs
       (create-autocmd
         [ "BufEnter" "CursorHold" "InsertLeave" ]
@@ -250,11 +250,11 @@
     )
     (nmap "gd" vim.lsp.buf.definition { :buffer buf :desc "Go to definition" :silent true })
     (nmap "<Space>ld" vim.lsp.buf.definition { :buffer buf :desc "Go to definition" :silent true })
-    (when (client.supports_method "textDocument/formatting")
+    (when (vim.lsp.util.supports_method client buf "textDocument/formatting")
       (nmap "<Space>d" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
       (nmap "<Space>lf" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
     )
-    (when (client.supports_method "textDocument/hover")
+    (when (vim.lsp.util.supports_method client buf "textDocument/hover")
       (set
         (. vim.lsp.handlers "textDocument/hover")
         (vim.lsp.with

@@ -185,7 +185,7 @@
       )
       (if ref-ix ref-ix 1)
     )
-    (when (vim.lsp.util.supports_method client buf "textDocument/documentHighlight")
+    (when (client:supports_method "textDocument/documentHighlight" buf)
       (nmap
         "n"
         (fn []
@@ -236,10 +236,10 @@
       )
     )
 
-    (when (vim.lsp.util.supports_method client buf "textDocument/codeAction")
+    (when (client:supports_method "textDocument/codeAction" buf)
       (nmap "<Space>la" vim.lsp.buf.code_action { :buffer buf :desc "Apply code action" :silent true })
     )
-    (when (vim.lsp.util.supports_method client buf "textDocument/codeLens")
+    (when (client:supports_method "textDocument/codeLens" buf)
       ; Call vim.lsp.codelens.refresh() now and again, as recommended by the docs
       (create-autocmd
         [ "BufEnter" "CursorHold" "InsertLeave" ]
@@ -250,11 +250,11 @@
     )
     (nmap "gd" vim.lsp.buf.definition { :buffer buf :desc "Go to definition" :silent true })
     (nmap "<Space>ld" vim.lsp.buf.definition { :buffer buf :desc "Go to definition" :silent true })
-    (when (vim.lsp.util.supports_method client buf "textDocument/formatting")
+    (when (client:supports_method "textDocument/formatting" buf)
       (nmap "<Space>d" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
       (nmap "<Space>lf" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
     )
-    (when (vim.lsp.util.supports_method client buf "textDocument/hover")
+    (when (client:supports_method "textDocument/hover" buf)
       (set
         (. vim.lsp.handlers "textDocument/hover")
         (vim.lsp.with
@@ -266,17 +266,17 @@
       )
       (nmap "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
     )
-    (when (client.supports_method "textDocument/prepareCallHierarchy")
+    (when (client:supports_method "textDocument/prepareCallHierarchy")
       (nmap "<Space>li" vim.lsp.buf.incoming_calls { :buffer buf :desc "Incoming calls" :silent true })
       (nmap "<Space>lo" vim.lsp.buf.outgoing_calls { :buffer buf :desc "Outgoing calls" :silent true })
     )
-    (when (client.supports_method "textDocument/references")
+    (when (client:supports_method "textDocument/references")
       (nmap "<Space>lr" vim.lsp.buf.references { :buffer buf :desc "References" :silent true })
     )
-    (when (client.supports_method "textDocument/rename")
+    (when (client:supports_method "textDocument/rename")
       (nmap "<Space>ln" vim.lsp.buf.rename { :buffer buf :desc "Rename" :silent true })
     )
-    (when (client.supports_method "textDocument/typeDefinition")
+    (when (client:supports_method "textDocument/typeDefinition")
       (nmap "gt" vim.lsp.buf.type_definition { :buffer buf :desc "Go to type" :silent true })
       (nmap "<Space>lt" vim.lsp.buf.type_definition { :buffer buf :desc "Go to type" :silent true })
     )

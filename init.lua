@@ -1566,7 +1566,7 @@ local function _130_(_128_)
       return 1
     end
   end
-  if vim.lsp.util.supports_method(client, buf, "textDocument/documentHighlight") then
+  if client:supports_method("textDocument/documentHighlight", buf) then
     local function _136_()
       local references = (vim.b["document-highlights"] or {})
       if ((vim.v.hlsearch == 0) and not vim.tbl_isempty(references)) then
@@ -1651,11 +1651,11 @@ local function _130_(_128_)
     vim.keymap.set("n", "N", _145_)
   else
   end
-  if vim.lsp.util.supports_method(client, buf, "textDocument/codeAction") then
+  if client:supports_method("textDocument/codeAction", buf) then
     vim.keymap.set("n", "<Space>la", vim.lsp.buf.code_action, {buffer = buf, desc = "Apply code action", silent = true})
   else
   end
-  if vim.lsp.util.supports_method(client, buf, "textDocument/codeLens") then
+  if client:supports_method("textDocument/codeLens", buf) then
     local function _157_()
       return vim.lsp.codelens.refresh()
     end
@@ -1665,30 +1665,30 @@ local function _130_(_128_)
   end
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer = buf, desc = "Go to definition", silent = true})
   vim.keymap.set("n", "<Space>ld", vim.lsp.buf.definition, {buffer = buf, desc = "Go to definition", silent = true})
-  if vim.lsp.util.supports_method(client, buf, "textDocument/formatting") then
+  if client:supports_method("textDocument/formatting", buf) then
     vim.keymap.set("n", "<Space>d", vim.lsp.buf.format, {buffer = buf, desc = "Format code", silent = true})
     vim.keymap.set("n", "<Space>lf", vim.lsp.buf.format, {buffer = buf, desc = "Format code", silent = true})
   else
   end
-  if vim.lsp.util.supports_method(client, buf, "textDocument/hover") then
+  if client:supports_method("textDocument/hover", buf) then
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded", silent = true})
     vim.keymap.set("n", "<Enter>", vim.lsp.buf.hover, {buffer = buf, silent = true})
   else
   end
-  if client.supports_method("textDocument/prepareCallHierarchy") then
+  if client:supports_method("textDocument/prepareCallHierarchy") then
     vim.keymap.set("n", "<Space>li", vim.lsp.buf.incoming_calls, {buffer = buf, desc = "Incoming calls", silent = true})
     vim.keymap.set("n", "<Space>lo", vim.lsp.buf.outgoing_calls, {buffer = buf, desc = "Outgoing calls", silent = true})
   else
   end
-  if client.supports_method("textDocument/references") then
+  if client:supports_method("textDocument/references") then
     vim.keymap.set("n", "<Space>lr", vim.lsp.buf.references, {buffer = buf, desc = "References", silent = true})
   else
   end
-  if client.supports_method("textDocument/rename") then
+  if client:supports_method("textDocument/rename") then
     vim.keymap.set("n", "<Space>ln", vim.lsp.buf.rename, {buffer = buf, desc = "Rename", silent = true})
   else
   end
-  if client.supports_method("textDocument/typeDefinition") then
+  if client:supports_method("textDocument/typeDefinition") then
     vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, {buffer = buf, desc = "Go to type", silent = true})
     vim.keymap.set("n", "<Space>lt", vim.lsp.buf.type_definition, {buffer = buf, desc = "Go to type", silent = true})
   else

@@ -240,12 +240,8 @@
       (nmap "<Space>la" vim.lsp.buf.code_action { :buffer buf :desc "Apply code action" :silent true })
     )
     (when (client:supports_method "textDocument/codeLens" buf)
-      ; Call vim.lsp.codelens.refresh() now and again, as recommended by the docs
-      (create-autocmd
-        [ "BufEnter" "CursorHold" "InsertLeave" ]
-        { :buffer buf }
-        (fn [] (vim.lsp.codelens.refresh))
-      )
+      ; enable() installs its own decoration-provider refresh; no autocmd needed
+      (vim.lsp.codelens.enable true { :bufnr buf })
       (nmap "<Space>ll" vim.lsp.codelens.run { :buffer buf :desc "Run code lens" :silent true })
     )
     (nmap "gd" vim.lsp.buf.definition { :buffer buf :desc "Go to definition" :silent true })

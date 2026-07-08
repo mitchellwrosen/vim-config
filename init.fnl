@@ -255,16 +255,17 @@
       (nmap "<Space>lf" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
     )
     (when (client:supports_method "textDocument/hover" buf)
-      (set
-        (. vim.lsp.handlers "textDocument/hover")
-        (vim.lsp.with
-          vim.lsp.handlers.hover
-          { :border "rounded"
-            :silent true ; don't notify "No information available" on empty response
-          }
+      (nmap
+        "<Enter>"
+        (fn []
+          (vim.lsp.buf.hover
+            { :border "rounded"
+              :silent true ; don't notify "No information available" on empty response
+            }
+          )
         )
+        { :buffer buf :silent true }
       )
-      (nmap "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
     )
     (when (client:supports_method "textDocument/prepareCallHierarchy")
       (nmap "<Space>li" vim.lsp.buf.incoming_calls { :buffer buf :desc "Incoming calls" :silent true })

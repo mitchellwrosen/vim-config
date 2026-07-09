@@ -1697,9 +1697,9 @@ local function _130_(_128_)
     local function _165_()
       local num_errors = #vim.diagnostic.get(buf, {severity = vim.diagnostic.severity.ERROR})
       if (num_errors > 0) then
-        return vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR, float = false})
+        return vim.diagnostic.jump({count = -1, severity = vim.diagnostic.severity.ERROR, float = false})
       else
-        return vim.diagnostic.goto_prev({float = false})
+        return vim.diagnostic.jump({count = -1, float = false})
       end
     end
     prev_diagnostic = _165_
@@ -1707,9 +1707,9 @@ local function _130_(_128_)
     local function _167_()
       local num_errors = #vim.diagnostic.get(buf, {severity = vim.diagnostic.severity.ERROR})
       if (num_errors > 0) then
-        return vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR, float = false})
+        return vim.diagnostic.jump({count = 1, severity = vim.diagnostic.severity.ERROR, float = false})
       else
-        return vim.diagnostic.goto_next({float = false})
+        return vim.diagnostic.jump({count = 1, float = false})
       end
     end
     next_diagnostic = _167_

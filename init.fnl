@@ -282,16 +282,16 @@
           (fn []
             (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
             (if (> num-errors 0)
-              (vim.diagnostic.goto_prev { :float false :severity vim.diagnostic.severity.ERROR })
-              (vim.diagnostic.goto_prev { :float false })
+              (vim.diagnostic.jump { :count -1 :float false :severity vim.diagnostic.severity.ERROR })
+              (vim.diagnostic.jump { :count -1 :float false })
             )
           )
         next-diagnostic
           (fn []
             (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
             (if (> num-errors 0)
-              (vim.diagnostic.goto_next { :float false :severity vim.diagnostic.severity.ERROR })
-              (vim.diagnostic.goto_next { :float false })
+              (vim.diagnostic.jump { :count 1 :float false :severity vim.diagnostic.severity.ERROR })
+              (vim.diagnostic.jump { :count 1 :float false })
             )
           )
       ]

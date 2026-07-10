@@ -139,7 +139,7 @@
     {
       :name "deadcolumn"
 
-      :commit "8140fd7cface9592a44b3151203fc6ca95ad9598"
+      :commit "92c86f10bfba2717ca2280e2e759b047135d5288"
       :config (include "config-deadcolumn")
       :event "InsertEnter"
       :url "https://github.com/Bekaboo/deadcolumn.nvim"

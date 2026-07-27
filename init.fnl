@@ -725,31 +725,30 @@
   )
 )
 
-; seems-like-haskell-project first checks cwd directly, then falls back to walking up
-; from the buffer's directory to the git root, looking for "cabal.project", "stack.yaml", or "*.cabal"
-(fn seems-like-haskell-project []
-  (or
-    (accumulate [found false name _ (vim.fs.dir ".") &until found]
-      (or found
-          (= name "cabal.project")
-          (= name "stack.yaml")
-          (not= nil (string.match name "%.cabal$"))))
-    (let [buf-dir (vim.fn.expand "%:p:h")
-          git-root (vim.fs.root buf-dir ".git")
-          stop (when git-root (vim.fn.fnamemodify git-root ":h"))
-          found (vim.fs.find
-                  (fn [name _]
-                    (or (= name "cabal.project")
-                        (= name "stack.yaml")
-                        (not= nil (string.match name "%.cabal$"))))
-                  {:upward true :path buf-dir :limit 1 :stop stop})]
-      (> (# found) 0))))
+; haskell-project-root walks up from the buffer's directory to the git root, looking for
+; "hie.yaml", "cabal.project", "stack.yaml", or "*.cabal", and returns the directory of the
+; first match (or nil). we hand this to HLS as its workspace root; without a hie.yaml, HLS's
+; implicit project discovery only looks at the root we give it, not upward from the file,
+; so rooting at nvim's cwd breaks when the cabal project lives in a subdirectory.
+(fn haskell-project-root []
+  (let [buf-dir (vim.fn.expand "%:p:h")
+        git-root (vim.fs.root buf-dir ".git")
+        stop (when git-root (vim.fn.fnamemodify git-root ":h"))
+        found (vim.fs.find
+                (fn [name _]
+                  (or (= name "hie.yaml")
+                      (= name "cabal.project")
+                      (= name "stack.yaml")
+                      (not= nil (string.match name "%.cabal$"))))
+                {:upward true :path buf-dir :limit 1 :stop stop})]
+    (when (> (# found) 0) (vim.fs.dirname (. found 1)))))
 
 (create-autocmd
   "FileType"
   { :pattern "haskell" }
   (fn []
-    (when (seems-like-haskell-project)
+    (local root (haskell-project-root))
+    (when root
       ; (vim.lsp.set_log_level "TRACE")
       (var initialize-notification-id nil)
       (var start-ms nil)
@@ -758,13 +757,14 @@
           :capabilities lsp-capabilities
           :cmd ["haskell-language-server-wrapper" "--lsp"]
           ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
+          :cmd_cwd root
           :name "haskell"
           :on_init (make-on-init start-ms initialize-notification-id "haskell")
-          :root_dir (vim.loop.cwd)
+          :root_dir root
           :settings
             { :haskell
                 { :checkProject false ; Don't typecheck the whole project on initial load
-                  :formattingProvider (if (= (vim.fn.filereadable "fourmolu.yaml") 1) "fourmolu" "ormolu")
+                  :formattingProvider (if (= (vim.fn.filereadable (.. root "/fourmolu.yaml")) 1) "fourmolu" "ormolu")
                   :plugin
                     { :hlint { :globalOn false }
                       :retrie { :globalOn false }

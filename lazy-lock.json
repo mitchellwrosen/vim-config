@@ -4,7 +4,7 @@
   "characterize": { "branch": "master", "commit": "885a00a3c21dd52ca8f2fd7d62850134934179d9" },
   "commentary": { "branch": "master", "commit": "627308e30639be3e2d5402808ce18690557e8292" },
   "cool": { "branch": "master", "commit": "80536b9f2e23292708a64f2e7bcf5e596f9faf24" },
-  "deadcolumn": { "branch": "master", "commit": "8140fd7cface9592a44b3151203fc6ca95ad9598" },
+  "deadcolumn": { "branch": "master", "commit": "92c86f10bfba2717ca2280e2e759b047135d5288" },
   "fennel": { "branch": "master", "commit": "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89" },
   "fugitive": { "branch": "master", "commit": "96c1009fcf8ce60161cc938d149dd5a66d570756" },
   "fzf": { "branch": "master", "commit": "eacef5ea6e39c6be3fff4e231fc6d10ba2ff9491" },

@@ -37,6 +37,14 @@
 (set vim.o.wildmenu true) ; complete commands with a little menu
 (set vim.o.wildmode "list:longest,full") ; wild menu completion behavior
 (set vim.o.wrap false) ; don't wrap long lines
+(when (or vim.env.SSH_CONNECTION vim.env.SSH_TTY)
+  (local osc52 (require "vim.ui.clipboard.osc52"))
+  (set vim.g.clipboard
+       {:name "OSC 52"
+        :copy {"+" (osc52.copy "+")
+               "*" (osc52.copy "*")}
+        :paste {"+" (fn [] [])
+                "*" (fn [] [])}}))
 (set vim.opt.clipboard [ "unnamed" "unnamedplus" ]) ; yank also copies to both clipboards
 (set vim.opt.completeopt [ "menuone" "noinsert" "noselect" ]) ; sane completion behavior...
 (set vim.opt.listchars { :nbsp "+" :tab "> " :trail "·"}) ; trailing whitespace markers

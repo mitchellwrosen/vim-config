@@ -38,13 +38,22 @@ package.preload["options"] = package.preload["options"] or function(...)
   vim.o.wrap = false
   if (vim.env.SSH_CONNECTION or vim.env.SSH_TTY) then
     local osc52 = require("vim.ui.clipboard.osc52")
-    local function _2_()
-      return {}
+    local copied = {["+"] = {}, ["*"] = {}}
+    local function copy(register)
+      local osc52_copy = osc52.copy(register)
+      local function _2_(lines, regtype)
+        copied[register] = {lines, regtype}
+        return osc52_copy(lines, regtype)
+      end
+      return _2_
     end
-    local function _3_()
-      return {}
+    local function paste(register)
+      local function _3_()
+        return copied[register]
+      end
+      return _3_
     end
-    vim.g.clipboard = {name = "OSC 52", copy = {["+"] = osc52.copy("+"), ["*"] = osc52.copy("*")}, paste = {["+"] = _2_, ["*"] = _3_}}
+    vim.g.clipboard = {name = "OSC 52", copy = {["+"] = copy("+"), ["*"] = copy("*")}, paste = {["+"] = paste("+"), ["*"] = paste("*")}}
   else
   end
   vim.opt.clipboard = {"unnamed", "unnamedplus"}

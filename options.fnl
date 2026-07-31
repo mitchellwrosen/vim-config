@@ -39,12 +39,22 @@
 (set vim.o.wrap false) ; don't wrap long lines
 (when (or vim.env.SSH_CONNECTION vim.env.SSH_TTY)
   (local osc52 (require "vim.ui.clipboard.osc52"))
+  (local copied {"+" [] "*" []})
+  (fn copy [register]
+    (local osc52-copy (osc52.copy register))
+    (fn [lines regtype]
+      (tset copied register [lines regtype])
+      (osc52-copy lines regtype)))
+  (fn paste [register]
+    (fn [] (. copied register)))
   (set vim.g.clipboard
        {:name "OSC 52"
-        :copy {"+" (osc52.copy "+")
-               "*" (osc52.copy "*")}
-        :paste {"+" (fn [] [])
-                "*" (fn [] [])}}))
+        :copy {"+" (copy "+")
+               "*" (copy "*")}
+        ; OSC 52 clipboard reads are not widely supported. Return our last
+        ; copy so unnamed-register pastes still work without querying the terminal.
+        :paste {"+" (paste "+")
+                "*" (paste "*")}}))
 (set vim.opt.clipboard [ "unnamed" "unnamedplus" ]) ; yank also copies to both clipboards
 (set vim.opt.completeopt [ "menuone" "noinsert" "noselect" ]) ; sane completion behavior...
 (set vim.opt.listchars { :nbsp "+" :tab "> " :trail "·"}) ; trailing whitespace markers

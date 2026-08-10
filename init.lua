@@ -34,7 +34,7 @@ package.preload["options"] = package.preload["options"] or function(...)
   vim.o.undofile = true
   vim.o.updatetime = 300
   vim.o.wildmenu = true
-  vim.o.wildmode = "list:longest,full"
+  vim.o.wildmode = "full"
   vim.o.wrap = false
   if (vim.env.SSH_CONNECTION or vim.env.SSH_TTY) then
     local osc52 = require("vim.ui.clipboard.osc52")

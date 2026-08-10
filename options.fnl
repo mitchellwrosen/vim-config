@@ -35,7 +35,7 @@
 (set vim.o.undofile true) ; persist undo history across buffer exits
 (set vim.o.updatetime 300) ; fire CursorHold after this many ms (default 4000ms)
 (set vim.o.wildmenu true) ; complete commands with a little menu
-(set vim.o.wildmode "list:longest,full") ; wild menu completion behavior
+(set vim.o.wildmode "full") ; first tab completes the first match, later tabs cycle
 (set vim.o.wrap false) ; don't wrap long lines
 (when (or vim.env.SSH_CONNECTION vim.env.SSH_TTY)
   (local osc52 (require "vim.ui.clipboard.osc52"))

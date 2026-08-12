@@ -67,9 +67,9 @@
     {
       :name "bqf"
 
+      :commit "c282a62bec6c0621a1ef5132aa3f4c9fc4dcc2c7"
       :config (include "config-nvim-bqf")
       :ft "qf"
-      :tag "v1.1.0"
       :url "https://github.com/kevinhwang91/nvim-bqf"
     }
 

@@ -35,8 +35,26 @@
 (set vim.o.undofile true) ; persist undo history across buffer exits
 (set vim.o.updatetime 300) ; fire CursorHold after this many ms (default 4000ms)
 (set vim.o.wildmenu true) ; complete commands with a little menu
-(set vim.o.wildmode "list:longest,full") ; wild menu completion behavior
+(set vim.o.wildmode "full") ; first tab completes the first match, later tabs cycle
 (set vim.o.wrap false) ; don't wrap long lines
+(when (or vim.env.SSH_CONNECTION vim.env.SSH_TTY)
+  (local osc52 (require "vim.ui.clipboard.osc52"))
+  (local copied {"+" [] "*" []})
+  (fn copy [register]
+    (local osc52-copy (osc52.copy register))
+    (fn [lines regtype]
+      (tset copied register [lines regtype])
+      (osc52-copy lines regtype)))
+  (fn paste [register]
+    (fn [] (. copied register)))
+  (set vim.g.clipboard
+       {:name "OSC 52"
+        :copy {"+" (copy "+")
+               "*" (copy "*")}
+        ; OSC 52 clipboard reads are not widely supported. Return our last
+        ; copy so unnamed-register pastes still work without querying the terminal.
+        :paste {"+" (paste "+")
+                "*" (paste "*")}}))
 (set vim.opt.clipboard [ "unnamed" "unnamedplus" ]) ; yank also copies to both clipboards
 (set vim.opt.completeopt [ "menuone" "noinsert" "noselect" ]) ; sane completion behavior...
 (set vim.opt.listchars { :nbsp "+" :tab "> " :trail "·"}) ; trailing whitespace markers

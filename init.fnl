@@ -185,7 +185,7 @@
       )
       (if ref-ix ref-ix 1)
     )
-    (when (client.supports_method "textDocument/documentHighlight")
+    (when (client:supports_method "textDocument/documentHighlight" buf)
       (nmap
         "n"
         (fn []
@@ -236,47 +236,44 @@
       )
     )
 
-    (when (client.supports_method "textDocument/codeAction")
+    (when (client:supports_method "textDocument/codeAction" buf)
       (nmap "<Space>la" vim.lsp.buf.code_action { :buffer buf :desc "Apply code action" :silent true })
     )
-    (when (client.supports_method "textDocument/codeLens")
-      ; Call vim.lsp.codelens.refresh() now and again, as recommended by the docs
-      (create-autocmd
-        [ "BufEnter" "CursorHold" "InsertLeave" ]
-        { :buffer buf }
-        (fn [] (vim.lsp.codelens.refresh))
-      )
+    (when (client:supports_method "textDocument/codeLens" buf)
+      ; enable() installs its own decoration-provider refresh; no autocmd needed
+      (vim.lsp.codelens.enable true { :bufnr buf })
       (nmap "<Space>ll" vim.lsp.codelens.run { :buffer buf :desc "Run code lens" :silent true })
     )
     (nmap "gd" vim.lsp.buf.definition { :buffer buf :desc "Go to definition" :silent true })
     (nmap "<Space>ld" vim.lsp.buf.definition { :buffer buf :desc "Go to definition" :silent true })
-    (when (client.supports_method "textDocument/formatting")
+    (when (client:supports_method "textDocument/formatting" buf)
       (nmap "<Space>d" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
       (nmap "<Space>lf" vim.lsp.buf.format { :buffer buf :desc "Format code" :silent true })
     )
-    (when (client.supports_method "textDocument/hover")
-      (set
-        (. vim.lsp.handlers "textDocument/hover")
-        (vim.lsp.with
-          vim.lsp.handlers.hover
-          { :border "rounded"
-            :silent true ; don't notify "No information available" on empty response
-          }
+    (when (client:supports_method "textDocument/hover" buf)
+      (nmap
+        "<Enter>"
+        (fn []
+          (vim.lsp.buf.hover
+            { :border "rounded"
+              :silent true ; don't notify "No information available" on empty response
+            }
+          )
         )
+        { :buffer buf :silent true }
       )
-      (nmap "<Enter>" vim.lsp.buf.hover { :buffer buf :silent true })
     )
-    (when (client.supports_method "textDocument/prepareCallHierarchy")
+    (when (client:supports_method "textDocument/prepareCallHierarchy")
       (nmap "<Space>li" vim.lsp.buf.incoming_calls { :buffer buf :desc "Incoming calls" :silent true })
       (nmap "<Space>lo" vim.lsp.buf.outgoing_calls { :buffer buf :desc "Outgoing calls" :silent true })
     )
-    (when (client.supports_method "textDocument/references")
+    (when (client:supports_method "textDocument/references")
       (nmap "<Space>lr" vim.lsp.buf.references { :buffer buf :desc "References" :silent true })
     )
-    (when (client.supports_method "textDocument/rename")
+    (when (client:supports_method "textDocument/rename")
       (nmap "<Space>ln" vim.lsp.buf.rename { :buffer buf :desc "Rename" :silent true })
     )
-    (when (client.supports_method "textDocument/typeDefinition")
+    (when (client:supports_method "textDocument/typeDefinition")
       (nmap "gt" vim.lsp.buf.type_definition { :buffer buf :desc "Go to type" :silent true })
       (nmap "<Space>lt" vim.lsp.buf.type_definition { :buffer buf :desc "Go to type" :silent true })
     )
@@ -285,16 +282,16 @@
           (fn []
             (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
             (if (> num-errors 0)
-              (vim.diagnostic.goto_prev { :float false :severity vim.diagnostic.severity.ERROR })
-              (vim.diagnostic.goto_prev { :float false })
+              (vim.diagnostic.jump { :count -1 :float false :severity vim.diagnostic.severity.ERROR })
+              (vim.diagnostic.jump { :count -1 :float false })
             )
           )
         next-diagnostic
           (fn []
             (local num-errors (length (vim.diagnostic.get buf { :severity vim.diagnostic.severity.ERROR })))
             (if (> num-errors 0)
-              (vim.diagnostic.goto_next { :float false :severity vim.diagnostic.severity.ERROR })
-              (vim.diagnostic.goto_next { :float false })
+              (vim.diagnostic.jump { :count 1 :float false :severity vim.diagnostic.severity.ERROR })
+              (vim.diagnostic.jump { :count 1 :float false })
             )
           )
       ]
@@ -644,6 +641,25 @@
 
 (create-autocmd
   "FileType"
+  { :pattern "cpp" }
+  (fn []
+    (var initialize-notification-id nil)
+    (var start-ms nil)
+    (vim.lsp.start
+      { :before_init (make-before-init start-ms initialize-notification-id "clangd")
+        :capabilities lsp-capabilities
+        :cmd ["clangd"]
+        :name "clangd"
+        :on_init (make-on-init start-ms initialize-notification-id "clangd")
+        :root_dir (vim.loop.cwd)
+      }
+    )
+    nil
+  )
+)
+
+(create-autocmd
+  "FileType"
   { :pattern "elm" }
   (fn []
     (var initialize-notification-id nil)
@@ -709,28 +725,30 @@
   )
 )
 
-; seems-like-haskell-project returns true if there's a "cabal.project", "stack.yaml", or "*.cabal" file here
-(macro seems-like-haskell-project []
-  `(accumulate [acc# false name# typ# (vim.fs.dir ".") &until acc#]
-    (or
-      (and
-        (= typ# "file")
-        (or
-          (= name# "cabal.project")
-          (= name# "stack.yaml")
-          (string.match name# "%.cabal$")
-        )
-      )
-      acc#
-    )
-  )
-)
+; haskell-project-root walks up from the buffer's directory to the git root, looking for
+; "hie.yaml", "cabal.project", "stack.yaml", or "*.cabal", and returns the directory of the
+; first match (or nil). we hand this to HLS as its workspace root; without a hie.yaml, HLS's
+; implicit project discovery only looks at the root we give it, not upward from the file,
+; so rooting at nvim's cwd breaks when the cabal project lives in a subdirectory.
+(fn haskell-project-root []
+  (let [buf-dir (vim.fn.expand "%:p:h")
+        git-root (vim.fs.root buf-dir ".git")
+        stop (when git-root (vim.fn.fnamemodify git-root ":h"))
+        found (vim.fs.find
+                (fn [name _]
+                  (or (= name "hie.yaml")
+                      (= name "cabal.project")
+                      (= name "stack.yaml")
+                      (not= nil (string.match name "%.cabal$"))))
+                {:upward true :path buf-dir :limit 1 :stop stop})]
+    (when (> (# found) 0) (vim.fs.dirname (. found 1)))))
 
 (create-autocmd
   "FileType"
   { :pattern "haskell" }
   (fn []
-    (when (seems-like-haskell-project)
+    (local root (haskell-project-root))
+    (when root
       ; (vim.lsp.set_log_level "TRACE")
       (var initialize-notification-id nil)
       (var start-ms nil)
@@ -739,13 +757,14 @@
           :capabilities lsp-capabilities
           :cmd ["haskell-language-server-wrapper" "--lsp"]
           ; :cmd ["haskell-language-server-wrapper" "--lsp" "--debug" "--logfile" "/home/mitchell/hls.txt"]
+          :cmd_cwd root
           :name "haskell"
           :on_init (make-on-init start-ms initialize-notification-id "haskell")
-          :root_dir (vim.loop.cwd)
+          :root_dir root
           :settings
             { :haskell
                 { :checkProject false ; Don't typecheck the whole project on initial load
-                  :formattingProvider "ormolu"
+                  :formattingProvider (if (= (vim.fn.filereadable (.. root "/fourmolu.yaml")) 1) "fourmolu" "ormolu")
                   :plugin
                     { :hlint { :globalOn false }
                       :retrie { :globalOn false }

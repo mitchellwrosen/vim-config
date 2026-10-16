@@ -67,9 +67,9 @@
     {
       :name "bqf"
 
+      :commit "c282a62bec6c0621a1ef5132aa3f4c9fc4dcc2c7"
       :config (include "config-nvim-bqf")
       :ft "qf"
-      :tag "v1.1.0"
       :url "https://github.com/kevinhwang91/nvim-bqf"
     }
 
@@ -139,7 +139,7 @@
     {
       :name "deadcolumn"
 
-      :commit "8140fd7cface9592a44b3151203fc6ca95ad9598"
+      :commit "92c86f10bfba2717ca2280e2e759b047135d5288"
       :config (include "config-deadcolumn")
       :event "InsertEnter"
       :url "https://github.com/Bekaboo/deadcolumn.nvim"
@@ -289,8 +289,8 @@
     {
       :name "treesitter"
       :url "https://github.com/nvim-treesitter/nvim-treesitter"
-      :commit "v0.10.0"
-      ; :commit "0ec48923e526d55892b7a1564a01b5111e5e9ba0"
+      ; :commit "v0.10.0"
+      :commit "4916d6592ede8c07973490d9322f187e07dfefac"
       :build ":TSUpdate"
       :config (include "config-treesitter")
     }

@@ -318,7 +318,7 @@
           (fn [position]
             (vim.lsp.buf.clear_references)
             (set vim.b.document-highlights {})
-            (client.request "textDocument/documentHighlight" position nil buf)
+            (client:request "textDocument/documentHighlight" position nil buf)
             nil
           )
         )
@@ -348,7 +348,7 @@
         "haskell"
           (fn [position]
             ; try to put a type sig in the virtual text area
-            (client.request
+            (client:request
               "textDocument/hover"
               position
               (fn [_err result _ctx _config]

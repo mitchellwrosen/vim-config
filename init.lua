@@ -1747,7 +1747,7 @@ local function _133_(_131_)
     local function _172_(position)
       vim.lsp.buf.clear_references()
       vim.b["document-highlights"] = {}
-      client.request("textDocument/documentHighlight", position, nil, buf)
+      client:request("textDocument/documentHighlight", position, nil, buf)
       return nil
     end
     do_highlight = _172_
@@ -1809,7 +1809,7 @@ local function _133_(_131_)
             return nil
           end
         end
-        client.request("textDocument/hover", position, _182_, buf)
+        client:request("textDocument/hover", position, _182_, buf)
         return nil
       end
       show_hover_somehow = _181_

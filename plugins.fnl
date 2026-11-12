@@ -47,6 +47,13 @@
       :url "https://github.com/neovimhaskell/haskell-vim"
     }
     {
+      :name "lean"
+      :config (include "config-lean")
+      :event [ "BufNewFile *.lean" "BufReadPre *.lean" ]
+      :tag "v2026.4.1"
+      :url "https://github.com/Julian/lean.nvim"
+    }
+    {
       :name "nix"
 
       :commit "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee"

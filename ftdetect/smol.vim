@@ -1,0 +1,1 @@
+/Users/mitchell/smolang/editor/vim/ftdetect/smol.vim
